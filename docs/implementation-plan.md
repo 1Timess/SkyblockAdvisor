@@ -20,12 +20,23 @@ Both API routes, the combined builder, owned accessories/MP and catalog lists, p
 
 ## Final Phase 1 validation
 
-Exact offline and live HTTP results are recorded in validation.md. Final verification includes production startup, list/normalized routes, explicit profile selection, UUID input, invalid requests, and no live NBT decode failures. Commit the validated checkpoint and STOP.
+Exact offline and live HTTP results are recorded in validation.md. Final verification includes production startup, list/normalized routes, explicit profile selection, UUID input, invalid requests, and no live NBT decode failures.
 
-## Later phases require a new prompt
+## Phase 2 static catalog and local market snapshots
+
+Implemented in this checkpoint:
+
+1. Load and validate a local NEU item snapshot through a narrow repository.
+2. Join NEU lore/reference metadata onto the Hypixel static item resource without requiring complete NEU coverage.
+3. Extract candidate facts and preserve unknown requirement text.
+4. Evaluate only high-confidence requirements supported by normalized profile facts.
+5. Fetch one internally consistent Hypixel auction generation, normalize active BIN listings, and publish a compact local quote snapshot.
+6. Serve single and batch market lookups from the snapshot with no per-candidate network requests.
+7. Validate with offline fixtures plus real Hypixel item and auction data, then commit and stop.
+
+## Remaining phases
 
 1. Phase 1.5: profile viewer UI.
-2. Phase 2: static candidate catalog and local market snapshots.
-3. Phase 3: small deterministic candidate lanes.
-4. Phase 4: Luna advisor consuming the normalized profile.
-5. Phase 5: further domains only from demonstrated demand.
+2. Phase 3: small deterministic candidate lanes.
+3. Phase 4: Luna advisor consuming the normalized profile.
+4. Phase 5: further domains only from demonstrated demand.

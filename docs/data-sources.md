@@ -10,9 +10,19 @@ The original architecture brief defines the product. The Phase 1 Supplemental Da
 | sessionserver.mojang.com/session/minecraft/profile/{uuid} | Resolve UUID to canonical username | 24 hours |
 | api.hypixel.net/v2/skyblock/profiles | Available profiles and selected member | 5 minutes |
 | api.hypixel.net/v2/player | Thin client method available; not fetched until a used field requires it | 5 minutes |
-| api.hypixel.net/v2/resources/skyblock/items | Accessory catalog | 12 hours |
+| api.hypixel.net/v2/resources/skyblock/items | Accessory and candidate item identity | 12 hours |
+| Local NEU snapshot | Canonical lore, wiki metadata, and structured requirement hints | Synchronized explicitly |
+| api.hypixel.net/v2/skyblock/auctions | Full active auction generation used by the sync command | Local snapshot per explicit sync |
 
-The server sends the local HYPIXEL_API_KEY in the API-Key header for authenticated Hypixel requests. The public item resource does not require a key. Caches are bounded in-memory maps. Requests have a 15-second upstream timeout; there is no player polling or persistence.
+The server sends the local HYPIXEL_API_KEY in the API-Key header for authenticated Hypixel requests. The public item resource does not require a key. Caches are bounded in-memory maps. Requests have a 15-second upstream timeout; there is no player polling. Phase 2 persistence is limited to local reference and market snapshot files.
+
+## Phase 2 contracts
+
+Hypixel item IDs are the catalog identity. NEU enriches matching IDs but is not required for an item to remain in the catalog. The loader validates each NEU JSON entry and reports malformed files separately. Requirement parsing recognizes supplied skill, Slayer, Catacombs level/floor, Heart of the Mountain, and Garden forms. Anything ambiguous remains in `unparsedRequirementText`; unavailable profile domains evaluate to `UNKNOWN`.
+
+Auction sync accepts active BIN listings only and verifies that every page has the same Hypixel `lastUpdated`, page count, and total-auction count before publishing. Generic market keys use the canonical item ID. Pets use `PET:<type>:<tier>` because those fields materially affect value. Five or more listings produce the median of the lowest five with high confidence; two to four use the second-lowest with medium confidence; one uses the lowest BIN with low confidence.
+
+`MarketQuote` contains `marketKey`, `coins`, `observedAt`, `basis`, and `confidence`. The application reads quotes from `data/market/latest.json` or `MARKET_SNAPSHOT_PATH`. It does not make remote calls during candidate pricing.
 
 ## Supplied constants
 
@@ -62,4 +72,4 @@ Final real-data verification uses the locally configured key and iTimess, as aut
 
 ## Deferred
 
-NEU lore/stat enrichment, optional Abiphone MP, wardrobe/backpack-icon presentation, personal vault/other bags, detailed mining/Garden/collections, market pricing, net worth, and advisor calls are outside this checkpoint.
+Optional Abiphone MP, wardrobe/backpack-icon presentation, personal vault/other bags, detailed mining/Garden/collections, Bazaar ingestion, net worth, candidate generation, and advisor calls remain outside this checkpoint.

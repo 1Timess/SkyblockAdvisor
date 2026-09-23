@@ -1,4 +1,4 @@
-# Phase 1 validation
+# Validation record
 
 Validated September 23, 2026 with Node.js 24.11.0, npm 11.6.1, Next.js 16.3.5, and React 19.2.8. Both supplied Word documents were read; supplemental contracts take precedence.
 
@@ -55,4 +55,21 @@ The first live source validation found a null optional pet UUID. The source sche
 
 This validates the supplied Phase 1 behavior, not complete SkyBlock mechanics or parity with SkyCrypt. Known stat totals are item-lore sums. Unknown lore remains available. Pet ability/stat enrichment and optional rank/Abiphone adjustments remain deferred. In-memory caches are per process and reset on restart.
 
-No UI beyond the startup page, market ingestion, advisor calls, database infrastructure, or proof systems were added. Phase 1 is complete; later phases require a new prompt.
+No UI beyond the startup page, advisor calls, database infrastructure, or proof systems were added. Phase 1 is complete.
+
+## Phase 2 validation
+
+Validated September 23, 2026 against the supplied project documents and data-contract supplement.
+
+| Command | Result |
+| --- | --- |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed |
+| `npm test` | 34 tests passed, including 8 Phase 2 catalog/market tests |
+| `npm run inspect:catalog -- ASPECT_OF_THE_END SHADOW_ASSASSIN_CHESTPLATE WOLF_TALISMAN` | Loaded 5,655 Hypixel items; enriched 5,053 from NEU; retained 602 without NEU; zero NEU parse failures |
+| `npm run sync:auctions` | Read one consistent 44-page generation with 43,125 auctions; accepted 39,517 active BIN listings; published 2,532 quotes |
+| `npm run inspect:market -- ASPECT_OF_THE_END SHADOW_ASSASSIN_CHESTPLATE PET:ENDER_DRAGON:LEGENDARY` | All three keys resolved from the local snapshot with high-confidence median-lowest-five quotes |
+
+The catalog check used the existing local NEU snapshot and the official Hypixel item resource. Shadow Assassin Chestplate produced a Catacombs Floor V requirement. The market sync completed in about 10.5 seconds. Its generated JSON is ignored and contains aggregate public auction data, so no credential or raw player profile is committed.
+
+Phase 2 stops at validated facts and local quotes. It does not generate candidates, recommendations, proof certificates, or advisor output.

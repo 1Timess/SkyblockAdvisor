@@ -16,7 +16,7 @@ The viewer must remain useful without AI or market services. Unknown abilities a
 
 ## Stack and boundaries
 
-Use Next.js App Router and TypeScript, Zod at source/API boundaries, prismarine-nbt 2.8.x, and a small in-memory TTL cache. PostgreSQL is deferred until persistence is needed. No Redis, queue, worker, ORM, or AI SDK is needed for Phase 1.
+Use Next.js App Router and TypeScript, Zod at source/API boundaries, prismarine-nbt 2.8.x, and a small in-memory TTL cache. Phase 2 adds file-backed reference and market snapshots; PostgreSQL remains deferred until persistence is needed. No Redis, queue, worker, ORM, or AI SDK is needed yet.
 
 Server-only environment handling protects HYPIXEL_API_KEY. The Hypixel client owns HTTP, authentication, errors, and caching. The NBT decoder only decodes; item processors extract facts; domain builders assemble display data. None makes progression recommendations.
 
@@ -32,9 +32,18 @@ Internal ProcessedItem objects retain source, slot, raw/clean lore, ExtraAttribu
 - src/server/skyblock/profile and domains: orchestration and domain transformations.
 - src/schemas: normalized public contracts.
 - src/app/api/skyblock/profiles and profile: HTTP routes.
-- scripts: profile/inventory inspection.
+- src/server/reference/neu and item-catalog: validated NEU loading and the Hypixel/NEU catalog join.
+- src/server/reference/requirements: high-confidence requirement parsing and profile checks.
+- src/server/market: auction normalization, aggregation, snapshot persistence, and local batch lookup.
+- scripts: profile, catalog, and market sync/inspection.
 
-Pet leveling, XP tables, and accessory rules are local constants taken from the supplement. An optional NEU subsystem was not needed. Runtime schemas validate upstream responses and the normalized result; they are not a game-mechanics proof layer.
+Pet leveling, XP tables, and accessory rules are local constants taken from the supplement. NEU is an optional local enrichment source: missing entries do not remove Hypixel items. Runtime schemas validate upstream responses, catalog entries, and snapshots; they are not a game-mechanics proof layer.
+
+## Phase 2 reference and market flow
+
+The catalog loads Hypixel's static item resource as the identity spine, then joins NEU item JSON by canonical item ID. NEU supplies lore, wiki links, and structured requirement hints. Lore parsing extracts display stats, abilities, set bonuses, and only requirement forms that can be identified with high confidence. Unrecognized requirement text is retained explicitly.
+
+Auction ingestion is a batch operation. It reads every page from one Hypixel auction generation, rejects a mixed or incomplete generation, decodes each active BIN once, and groups listings by a stable market key. Generic items use canonical IDs; pets additionally use type and tier. The published JSON snapshot records its timestamps and counts. `MarketService` performs batch lookups only against that local file.
 
 ## API targets
 
@@ -45,4 +54,4 @@ Cache identities for approximately 24 hours, profiles for 5 minutes, and static 
 
 ## Scope guardrails
 
-No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, or recommendation frontier. No market ingestion, Luna integration, UI polish, or database schema in the first milestone. Any future reuse from the old repository must first identify the user-facing problem it solves.
+No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, or recommendation frontier. No Luna integration, UI polish, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.

@@ -1,6 +1,6 @@
 # SkyBlock Advisor
 
-A SkyBlock profile data platform. It resolves Minecraft identity, reads Hypixel profiles, decodes inventories once, and returns readable gear, accessories, pets, economy, and progression data.
+A SkyBlock profile and reference-data platform. It resolves Minecraft identity, reads Hypixel profiles, decodes inventories once, builds a canonical item catalog, and serves prices from local auction snapshots.
 
 This is a fresh project, separate from HypixelProgressionEngine. The original architecture brief and supplemental data contracts at the repository root are the implementation authority; the supplement wins where it narrows Phase 1.
 
@@ -27,6 +27,9 @@ npm run lint
 npm run typecheck
 npm run build
 npm run inspect:profile -- <username> [profile]
+npm run inspect:catalog -- [item-id ...]
+npm run sync:auctions
+npm run inspect:market -- [market-key ...]
 ```
 
 Offline tests need neither credentials nor network access. For the HTTP checkpoint, start the app and run:
@@ -35,11 +38,13 @@ Offline tests need neither credentials nor network access. For the HTTP checkpoi
 npm run validate:live -- <username> http://localhost:3000
 ```
 
-The live scripts output compact summaries. They do not save raw player fixtures.
+The live scripts output compact summaries. They do not save raw player fixtures. `sync:auctions` writes the ignored local file `data/market/latest.json`; application price lookups only read that snapshot and never fetch one auction per item.
+
+NEU enrichment defaults to `data/neu`. Populate it with `npm run sync:neu`, or set `NEU_DATA_DIRECTORY` to an existing synchronized checkout. The loader reads only item JSON and metadata needed by the catalog.
 
 ## Scope
 
-Phase 1 provides the data API and a minimal landing page. Profile UI, market ingestion, candidate lanes, and the advisor are later phases. Pet stat/lore enrichment is optional and currently empty. Unknown item text remains readable; displayed stat totals are not a full game simulation.
+Phases 1 and 2 provide the data API, canonical static item catalog, conservative requirement checks, and a file-backed auction market snapshot. The catalog keeps Hypixel item identity authoritative and uses NEU for reference lore and metadata when present. Profile UI, candidate lanes, and the advisor remain later phases. Unknown item text remains readable; displayed stat totals are not a full game simulation.
 
 - [Architecture](docs/architecture.md)
 - [Data contracts and source mappings](docs/data-sources.md)
