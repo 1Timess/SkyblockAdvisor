@@ -10,17 +10,23 @@
     "typecheck": "tsc --noEmit",
     "test": "node --conditions=react-server --import tsx --test tests/*.test.ts",
     "inspect:profile": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-profile.ts",
-    "validate:live": "node --import tsx scripts/validate-live.ts"
+    "validate:live": "node --import tsx scripts/validate-live.ts",
+    "sync:neu": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/sync-neu.ts",
+    "inspect:catalog": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-catalog.ts",
+    "sync:auctions": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/sync-auctions.ts",
+    "inspect:market": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-market.ts"
   },
   "dependencies": {
+    "adm-zip": "^0.6.1",
     "next": "16.3.5",
+    "prismarine-nbt": "~2.8.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "prismarine-nbt": "~2.8.0",
     "server-only": "^0.0.1",
     "zod": "latest"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

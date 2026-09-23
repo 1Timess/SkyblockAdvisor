@@ -8,4 +8,5 @@ coverage/
 .pnotes/
 .local/
 data/neu/
+data/market/*.json
 *.log

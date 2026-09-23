@@ -8,6 +8,10 @@ const types: Record<string, string[]> = {
   PICKAXE: ["tool", "pickaxe"], DRILL: ["tool", "drill"], AXE: ["tool", "axe"], HOE: ["tool", "hoe"], SHOVEL: ["tool", "shovel"],
 };
 
+export function categoriesForItemType(itemType?: string | null): string[] {
+  return itemType ? types[itemType.toUpperCase().replace(/^DUNGEON\s+/, "").trim()] ?? [] : [];
+}
+
 export function stripFormatting(value: string): string { return value.replace(/§[0-9a-fk-or]/gi, ""); }
 
 export function parseFooter(lore: string[]): { rarity: ItemRarity | null; categories: string[] } {
@@ -18,7 +22,7 @@ export function parseFooter(lore: string[]): { rarity: ItemRarity | null; catego
     if (!match) continue;
     const rarity = match[1].toLowerCase().replaceAll(" ", "_") as ItemRarity;
     const itemType = (match[2] ?? "").toUpperCase().replace(/^DUNGEON\s+/, "").trim();
-    return { rarity, categories: types[itemType] ?? [] };
+    return { rarity, categories: categoriesForItemType(itemType) };
   }
   return { rarity: null, categories: [] };
 }
