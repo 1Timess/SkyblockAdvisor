@@ -16,7 +16,8 @@
     "sync:auctions": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/sync-auctions.ts",
     "inspect:market": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-market.ts",
     "inspect:candidates": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-candidates.ts",
-    "inspect:advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-advisor.ts"
+    "inspect:advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-advisor.ts",
+    "inspect:advisor-context": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-advisor-context.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
