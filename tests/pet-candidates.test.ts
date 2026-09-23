@@ -51,3 +51,30 @@ test("pet rarity and role candidates honor a hard budget when prices are known",
   assert.equal(result.lanes.rarityUpgrade.length, 0);
   assert.deepEqual(result.lanes.roleProgression.map(value => value.id), ["TIGER;2"]);
 });
+
+function ownedRabbit(rarity: string, level: number) {
+  return { uuid: null, type: "RABBIT", name: "Rabbit", rarity, effectiveRarity: rarity, level, maxLevel: 100,
+    xp: 0, xpCurrent: 0, xpForNext: level < 100 ? 1 : 0, progress: 0, active: false, heldItem: null,
+    candyUsed: 0, skin: null, stats: {}, abilityLore: [] };
+}
+
+test("lower-level duplicate pets do not create account progression targets", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.pets.owned = [ownedRabbit("legendary", 1), ownedRabbit("legendary", 100)];
+  const catalog = buildPetCandidateCatalog(new InMemoryNeuRepository([neuPet("RABBIT", 4, "LEGENDARY")], metadata));
+  const result = buildPetLanes({ profile, catalog });
+  assert.equal(result.lanes.owned.length, 2);
+  assert.equal(result.lanes.levelTarget.length, 0);
+});
+
+test("higher rarity is the best pet representative before level", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.pets.owned = [ownedRabbit("epic", 100), ownedRabbit("legendary", 70)];
+  const catalog = buildPetCandidateCatalog(new InMemoryNeuRepository([
+    neuPet("RABBIT", 3, "EPIC"), neuPet("RABBIT", 4, "LEGENDARY"), neuPet("RABBIT", 5, "MYTHIC"),
+  ], metadata));
+  const result = buildPetLanes({ profile, catalog });
+  assert.deepEqual(result.lanes.levelTarget.map(value => value.id), ["RABBIT;4"]);
+  assert.deepEqual(result.lanes.levelTarget[0].knownChanges?.level, { current: 70, candidate: 100 });
+  assert.deepEqual(result.lanes.rarityUpgrade.map(value => value.id), ["RABBIT;5"]);
+});
