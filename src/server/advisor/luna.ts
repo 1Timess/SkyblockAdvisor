@@ -50,30 +50,52 @@ export async function callLunaAdvisor(context: AdvisorContext, fetcher: typeof f
 }
 
 const advisorInstructions = `You are Luna, a Hypixel SkyBlock progression advisor.
-Use only facts in the supplied JSON context. Deterministic code has already built and filtered the candidates.
-You own judgment, prioritization, sequencing, tradeoffs, and explanation. Return an ordered action plan.
-When recommending a supplied item, copy its candidate ID exactly into candidateId. Never invent or alter a candidate ID.
-Use candidateId null only for a prerequisite or non-item progression action.
-Do not invent prices, stats, requirements, or mechanics. Treat warnings and missing values as uncertainty.
-Raw ability and set-bonus text may inform judgment, but acknowledge ambiguity.
-Do not claim mathematical optimality. If the shortlist is insufficient, explain what additional fact would change the advice.`;
+Use only the supplied compact account context. Detailed candidates cover only the current route; other domains are summarized under availableAnalysis.
+If intent is materially ambiguous, return CLARIFICATION. Otherwise return PLAN. You own judgment, priority, sequence, tradeoffs, and explanation.
+Deterministic code owns profile facts, prices, candidates, IDs, known changes, and requirements. Copy supplied candidate IDs exactly and never invent one.
+BUY requires a supplied candidate ID. PROGRESSION and INVESTIGATE may use null. HOLD uses null and is a valid recommendation.
+You may offer another available domain through followUps, but do not claim detailed knowledge or recommend items from a domain whose candidates are not loaded.
+Do not invent prices, stats, requirements, or mechanics. Treat warnings and missing values as uncertainty. Raw ability and set-bonus text may inform judgment, but acknowledge ambiguity.
+Do not claim global mathematical optimality.`;
 
 const stringArray = { type: "array", items: { type: "string" } };
-const advisorJsonSchema = {
-  type: "object",
-  additionalProperties: false,
+const availableAnalysisJsonSchema = {
+  type: "object", additionalProperties: false,
   properties: {
-    headline: { type: "string" },
+    armor: domainAvailabilityJsonSchema(), weapons: domainAvailabilityJsonSchema(),
+    accessories: { type: "object", additionalProperties: false, properties: {
+      available: { type: "boolean" }, candidateCount: { type: "integer", minimum: 0 }, currentMagicalPower: { type: "number", minimum: 0 },
+      missingCount: { type: "integer", minimum: 0 }, upgradeCount: { type: "integer", minimum: 0 },
+    }, required: ["available", "candidateCount", "currentMagicalPower", "missingCount", "upgradeCount"] },
+    pets: { type: "object", additionalProperties: false, properties: {
+      available: { type: "boolean" }, candidateCount: { type: "integer", minimum: 0 }, ownedCount: { type: "integer", minimum: 0 },
+    }, required: ["available", "candidateCount", "ownedCount"] },
+  }, required: ["armor", "weapons", "accessories", "pets"],
+};
+const advisorJsonSchema = { anyOf: [
+  { type: "object", additionalProperties: false, properties: {
+    kind: { type: "string", const: "CLARIFICATION" }, question: { type: "string" },
+    whyNeeded: { anyOf: [{ type: "string" }, { type: "null" }] }, suggestedAnswers: stringArray,
+    availableAnalysis: availableAnalysisJsonSchema,
+  }, required: ["kind", "question", "whyNeeded", "suggestedAnswers", "availableAnalysis"] },
+  { type: "object", additionalProperties: false, properties: {
+    kind: { type: "string", const: "PLAN" }, headline: { type: "string" },
     actions: { type: "array", minItems: 1, maxItems: 5, items: {
       type: "object", additionalProperties: false,
       properties: {
-        rank: { type: "integer", minimum: 1 }, candidateId: { anyOf: [{ type: "string" }, { type: "null" }] },
-        action: { type: "string" }, why: { type: "string" }, tradeoffs: stringArray, prerequisites: stringArray,
-        uncertainty: { anyOf: [{ type: "string" }, { type: "null" }] },
-      },
-      required: ["rank", "candidateId", "action", "why", "tradeoffs", "prerequisites", "uncertainty"],
-    } },
-    caveats: stringArray,
-  },
-  required: ["headline", "actions", "caveats"],
-};
+        rank: { type: "integer", minimum: 1 }, actionType: { type: "string", enum: ["BUY", "PROGRESSION", "HOLD", "INVESTIGATE"] },
+        candidateId: { anyOf: [{ type: "string" }, { type: "null" }] }, action: { type: "string" }, why: { type: "string" },
+        tradeoffs: stringArray, prerequisites: stringArray, uncertainty: { anyOf: [{ type: "string" }, { type: "null" }] },
+      }, required: ["rank", "actionType", "candidateId", "action", "why", "tradeoffs", "prerequisites", "uncertainty"],
+    } }, caveats: stringArray,
+    followUps: { type: "array", items: { type: "object", additionalProperties: false, properties: {
+      domain: { type: "string", enum: ["ARMOR", "WEAPONS", "ACCESSORIES", "PETS"] }, label: { type: "string" }, reason: { type: "string" },
+    }, required: ["domain", "label", "reason"] } },
+  }, required: ["kind", "headline", "actions", "caveats", "followUps"] },
+] };
+
+function domainAvailabilityJsonSchema() {
+  return { type: "object", additionalProperties: false, properties: {
+    available: { type: "boolean" }, candidateCount: { type: "integer", minimum: 0 },
+  }, required: ["available", "candidateCount"] };
+}

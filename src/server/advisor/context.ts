@@ -1,21 +1,22 @@
 import type { AdvisorCandidate } from "../../schemas/candidates";
-import { advisorContextSchema, type AdvisorContext } from "../../schemas/advisor";
-import type { ProfileItem } from "../../schemas/items";
+import { advisorContextSchema, type AdvisorContext, type AdvisorConversationState, type AdvisorRoute, type AnalysisDomain, type AvailableAnalysis } from "../../schemas/advisor";
+import type { ProfileItem, ProfileWarning } from "../../schemas/items";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 
-export type CandidateLaneGroups = Record<"armor" | "weapon" | "accessory" | "pet", readonly (readonly AdvisorCandidate[])[]>;
+export interface TaggedCandidateLane { domain: AnalysisDomain; label: string; candidates: readonly AdvisorCandidate[] }
 
 export function buildAdvisorContext(input: {
   question: string;
   profile: NormalizedSkyBlockProfile;
-  candidateLanes: CandidateLaneGroups;
-  maxCandidates?: number;
+  route: AdvisorRoute;
+  availableAnalysis: AvailableAnalysis;
+  candidates: readonly AdvisorCandidate[];
+  conversationState?: AdvisorConversationState;
 }): AdvisorContext {
-  const candidates = selectCompactCandidates(input.candidateLanes, Math.min(input.maxCandidates ?? 32, 32));
   const compactItem = (item: ProfileItem) => ({ id: item.id, name: item.name, rarity: item.rarity, categories: item.categories,
     stats: item.stats, abilityText: item.abilityText, setBonusText: item.setBonusText });
   return advisorContextSchema.parse({
-    question: input.question,
+    question: input.question, route: input.route, conversationState: input.conversationState ?? null, availableAnalysis: input.availableAnalysis,
     player: {
       economy: input.profile.economy,
       skills: Object.fromEntries(Object.entries(input.profile.progression.skills).map(([id, value]) => [id, { level: value.level, maxLevel: value.maxLevel }])),
@@ -30,28 +31,42 @@ export function buildAdvisorContext(input: {
         level: input.profile.pets.activePet.level, heldItem: input.profile.pets.activePet.heldItem,
         stats: input.profile.pets.activePet.stats, abilityLore: input.profile.pets.activePet.abilityLore,
       }, magicalPower: input.profile.accessories.magicalPower.total },
-    candidates: candidates.map(candidate => ({ id: candidate.id, domain: candidate.domain, name: candidate.item.name,
+    candidates: input.candidates.map(candidate => ({ id: candidate.id, domain: candidate.domain, name: candidate.item.name,
       rarity: candidate.item.rarity, categories: candidate.item.categories, stats: candidate.item.stats, price: candidate.price ?? null,
       knownChanges: candidate.knownChanges ?? {}, requirements: candidate.requirements, abilityText: candidate.abilityText,
       setBonusText: candidate.setBonusText, warnings: candidate.warnings })),
-    warnings: input.profile.warnings.map(warning => warning.message),
+    warnings: compactProfileWarnings(input.profile.warnings),
   });
 }
 
-export function selectCompactCandidates(groups: CandidateLaneGroups, cap = 32): AdvisorCandidate[] {
-  const domains = ["armor", "weapon", "accessory", "pet"] as const, result: AdvisorCandidate[] = [], seen = new Set<string>();
-  const queues = domains.map(domain => groups[domain].map(lane => [...lane]));
+export function selectDetailedCandidates(lanes: readonly TaggedCandidateLane[], cap = 32): AdvisorCandidate[] {
+  const queues = lanes.map(lane => lane.candidates.filter(candidate => !isNoOpPetCandidate(candidate))), result: AdvisorCandidate[] = [], seen = new Set<string>();
   let advanced = true;
-  while (result.length < cap && advanced) {
+  while (result.length < Math.min(cap, 32) && advanced) {
     advanced = false;
-    for (const domain of queues) for (const lane of domain) {
-      const candidate = lane.shift();
+    for (const queue of queues) {
+      const candidate = queue.shift();
       if (!candidate) continue;
       advanced = true;
       if (seen.has(candidate.id)) continue;
       seen.add(candidate.id); result.push(candidate);
-      if (result.length === cap) return result;
+      if (result.length === Math.min(cap, 32)) return result;
     }
   }
   return result;
+}
+
+export function isNoOpPetCandidate(candidate: AdvisorCandidate) {
+  if (candidate.domain !== "pet") return false;
+  const changes = Object.values(candidate.knownChanges ?? {});
+  return changes.length > 0 && changes.every(change => change.current === change.candidate);
+}
+
+export function compactProfileWarnings(warnings: readonly ProfileWarning[]): string[] {
+  const unknownStats = warnings.filter(warning => warning.code === "UNKNOWN_ITEM_STAT").length;
+  const unknownCategories = warnings.filter(warning => warning.code === "UNKNOWN_ITEM_CATEGORY").length;
+  const useful = warnings.filter(warning => warning.code !== "UNKNOWN_ITEM_STAT" && warning.code !== "UNKNOWN_ITEM_CATEGORY")
+    .map(warning => warning.message).filter((message, index, values) => values.indexOf(message) === index);
+  if (unknownStats || unknownCategories) useful.push(`Profile normalization encountered ${unknownStats} unknown stat label${unknownStats === 1 ? "" : "s"} and ${unknownCategories} unknown item categor${unknownCategories === 1 ? "y" : "ies"}; raw item text was preserved.`);
+  return useful;
 }

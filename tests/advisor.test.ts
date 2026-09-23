@@ -1,68 +1,92 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { AdvisorCandidate } from "../src/schemas/candidates";
-import { buildAdvisorContext, selectCompactCandidates, type CandidateLaneGroups } from "../src/server/advisor/context";
+import type { AdvisorRoute, AvailableAnalysis } from "../src/schemas/advisor";
+import { buildAdvisorContext, compactProfileWarnings, selectDetailedCandidates } from "../src/server/advisor/context";
 import { validateAdvisorResponse } from "../src/server/advisor/validate-response";
 import { callLunaAdvisor } from "../src/server/advisor/luna";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
 import { fixtureSources } from "./fixtures/profile";
 
-function candidate(id: string, domain: AdvisorCandidate["domain"]): AdvisorCandidate {
+function candidate(id: string, domain: AdvisorCandidate["domain"], current?: number, target?: number): AdvisorCandidate {
   return { id, domain, item: { id, name: id, rarity: "rare", categories: [domain], stats: {}, lore: ["omitted from context"], abilityText: [], setBonusText: [],
     requirements: [], unparsedRequirementText: [], wiki: null, marketKey: id, sources: { hypixel: true, neu: false } },
+    knownChanges: current === undefined ? undefined : { level: { current, candidate: target ?? current } },
     requirements: [], abilityText: [], setBonusText: [], warnings: [] };
 }
-function groups(): CandidateLaneGroups {
-  return { armor: [[candidate("ARMOR_A", "armor"), candidate("SHARED", "armor")]], weapon: [[candidate("WEAPON_A", "weapon"), candidate("SHARED", "weapon")]],
-    accessory: [[candidate("ACCESSORY_A", "accessory")]], pet: [[candidate("PET_A", "pet")]] };
+const available: AvailableAnalysis = {
+  armor: { available: true, candidateCount: 2 }, weapons: { available: true, candidateCount: 2 },
+  accessories: { available: true, candidateCount: 3, currentMagicalPower: 100, missingCount: 2, upgradeCount: 1 },
+  pets: { available: true, candidateCount: 1, ownedCount: 2 },
+};
+const route: AdvisorRoute = { scope: "GEAR", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [] };
+
+async function context() {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  return buildAdvisorContext({ question: "What should I upgrade?", profile, route, availableAnalysis: available,
+    candidates: [candidate("ARMOR_A", "armor"), candidate("WEAPON_A", "weapon")] });
 }
 
-test("compact selection round-robins domains, deduplicates IDs, and respects the cap", () => {
-  assert.deepEqual(selectCompactCandidates(groups(), 4).map(value => value.id), ["ARMOR_A", "WEAPON_A", "ACCESSORY_A", "PET_A"]);
-  assert.equal(new Set(selectCompactCandidates(groups()).map(value => value.id)).size, 5);
+test("detailed selection does not fill its active scope with unrelated candidates", () => {
+  const active = Array.from({ length: 9 }, (_, index) => candidate(`A${index}`, "armor"));
+  const selected = selectDetailedCandidates([{ domain: "ARMOR", label: "armor:helmet:defense", candidates: active }]);
+  assert.equal(selected.length, 9);
+  assert.ok(selected.every(value => value.domain === "armor"));
 });
 
-test("advisor context keeps decision facts and candidate IDs while dropping full lore", async () => {
-  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
-  const context = buildAdvisorContext({ question: "What should I upgrade?", profile, candidateLanes: groups() });
-  assert.equal(context.question, "What should I upgrade?");
-  assert.deepEqual(context.candidates.map(value => value.id), ["ARMOR_A", "WEAPON_A", "ACCESSORY_A", "PET_A", "SHARED"]);
-  assert.equal("lore" in context.candidates[0], false);
-  assert.equal(context.currentGear.magicalPower, profile.accessories.magicalPower.total);
+test("detailed selection caps 100 relevant candidates at 32", () => {
+  const active = Array.from({ length: 100 }, (_, index) => candidate(`A${index}`, "armor"));
+  assert.equal(selectDetailedCandidates([{ domain: "ARMOR", label: "armor:helmet:defense", candidates: active }]).length, 32);
 });
 
-test("advisor response validation preserves only supplied IDs and contiguous order", async () => {
-  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
-  const context = buildAdvisorContext({ question: "What should I upgrade?", profile, candidateLanes: groups() });
-  const valid = { headline: "Plan", actions: [{ rank: 1, candidateId: "WEAPON_A", action: "Buy it", why: "Known improvement", tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [] };
-  assert.deepEqual(validateAdvisorResponse(valid, context), valid);
-  assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], candidateId: "INVENTED" }] }, context), /unknown candidate ID/);
-  assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], rank: 2 }] }, context), /contiguous/);
+test("no-op pet state does not consume detailed candidate capacity", () => {
+  const selected = selectDetailedCandidates([{ domain: "PETS", label: "pet:owned", candidates: [candidate("LION;4", "pet", 90, 90), candidate("RABBIT;4", "pet", 70, 100)] }]);
+  assert.deepEqual(selected.map(value => value.id), ["RABBIT;4"]);
 });
 
-test("Luna client sends a strict structured request and validates the returned candidate IDs", async () => {
-  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
-  const context = buildAdvisorContext({ question: "What should I upgrade?", profile, candidateLanes: groups() });
-  const advice = { headline: "Plan", actions: [{ rank: 1, candidateId: "WEAPON_A", action: "Upgrade", why: "Matches the goal", tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [] };
+test("advisor warning context compacts diagnostic parser warnings", () => {
+  const warnings = [
+    ...Array.from({ length: 82 }, (_, index) => ({ code: "UNKNOWN_ITEM_STAT" as const, message: `stat ${index}` })),
+    ...Array.from({ length: 79 }, (_, index) => ({ code: "UNKNOWN_ITEM_CATEGORY" as const, message: `category ${index}` })),
+    { code: "PARTIAL_PROFILE" as const, message: "Profile is partial." },
+  ];
+  assert.deepEqual(compactProfileWarnings(warnings), ["Profile is partial.", "Profile normalization encountered 82 unknown stat labels and 79 unknown item categories; raw item text was preserved."]);
+});
+
+test("CLARIFICATION validates without purchase candidates", async () => {
+  const advisorContext = await context();
+  const response = { kind: "CLARIFICATION", question: "Which role do you play?", whyNeeded: "It changes the gear choice.",
+    suggestedAnswers: ["Mage", "Archer", "Berserk"], availableAnalysis: available };
+  assert.deepEqual(validateAdvisorResponse(response, advisorContext), response);
+});
+
+test("PLAN enforces semantic action IDs and contiguous ranks", async () => {
+  const advisorContext = await context();
+  const valid = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "BUY", candidateId: "WEAPON_A", action: "Buy it",
+    why: "Known improvement", tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [],
+    followUps: [{ domain: "ACCESSORIES", label: "Check accessories", reason: "Analysis is available." }] };
+  assert.deepEqual(validateAdvisorResponse(valid, advisorContext), valid);
+  assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], candidateId: "INVENTED" }] }, advisorContext), /unknown candidate ID/);
+  assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], candidateId: null }] }, advisorContext), /BUY actions require/);
+  assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], rank: 2 }] }, advisorContext), /contiguous/);
+  assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], actionType: "HOLD", candidateId: "WEAPON_A" }] }, advisorContext), /HOLD actions/);
+  assert.throws(() => validateAdvisorResponse({ ...valid, followUps: [{ domain: "SKILLS", label: "Skills", reason: "No" }] }, advisorContext));
+});
+
+test("Luna client sends the scoped strict request and validates its response", async () => {
+  const advisorContext = await context();
+  const advice = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "HOLD", candidateId: null, action: "Save coins", why: "Uncertainty",
+    tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [], followUps: [{ domain: "PETS", label: "Inspect pets", reason: "Pet analysis is available." }] };
   let request: RequestInit | undefined;
   const fetcher = async (_input: string | URL | Request, init?: RequestInit) => {
     request = init;
     return new Response(JSON.stringify({ id: "resp_fixture", model: "gpt-6-luna", status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(advice) }] }],
       usage: { input_tokens: 100, output_tokens: 20, total_tokens: 120 } }), { status: 200, headers: { "Content-Type": "application/json" } });
   };
-  const result = await callLunaAdvisor(context, fetcher, "test-token");
-  assert.deepEqual(result.advice, advice); assert.equal(result.meta.totalTokens, 120); assert.equal(result.meta.estimatedCostUsd, 0.00002);
+  const result = await callLunaAdvisor(advisorContext, fetcher, "test-token");
+  assert.deepEqual(result.advice, advice);
   const body = JSON.parse(String(request?.body));
   assert.equal(body.model, "gpt-6-luna"); assert.equal(body.store, false); assert.equal(body.text.format.strict, true);
-  assert.equal(JSON.parse(body.input).candidates[0].id, "ARMOR_A");
+  assert.equal(JSON.parse(body.input).route.scope, "GEAR");
   assert.equal(new Headers(request?.headers).get("Authorization"), "Bearer test-token");
-});
-
-test("Luna client rejects response IDs outside the deterministic shortlist", async () => {
-  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
-  const context = buildAdvisorContext({ question: "What should I upgrade?", profile, candidateLanes: groups() });
-  const fetcher = async () => new Response(JSON.stringify({ id: "resp_fixture", model: "gpt-6-luna", status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify({
-    headline: "Plan", actions: [{ rank: 1, candidateId: "INVENTED", action: "Upgrade", why: "No", tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [],
-  }) }] }] }), { status: 200, headers: { "Content-Type": "application/json" } });
-  await assert.rejects(callLunaAdvisor(context, fetcher, "test-token"), /unknown candidate ID/);
 });
