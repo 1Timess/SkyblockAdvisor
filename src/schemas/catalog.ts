@@ -16,7 +16,7 @@ export const candidateItemSchema = z.object({
   stats: statsSchema, lore: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
   requirements: z.array(itemRequirementSchema), unparsedRequirementText: z.array(z.string()),
   wiki: z.string().url().nullable(), marketKey: z.string().min(1),
-  sources: z.object({ hypixel: z.literal(true), neu: z.boolean() }),
+  sources: z.object({ hypixel: z.boolean(), neu: z.boolean() }),
 });
 export type CandidateItem = z.infer<typeof candidateItemSchema>;
 

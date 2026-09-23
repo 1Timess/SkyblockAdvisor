@@ -51,3 +51,12 @@ export const accessoryCandidateLanesSchema = z.object({
   candidates: z.array(advisorCandidateSchema).max(20),
 });
 export type AccessoryCandidateLanes = z.infer<typeof accessoryCandidateLanesSchema>;
+
+export const petLaneNames = ["owned", "levelTarget", "rarityUpgrade", "roleProgression"] as const;
+export type PetLaneName = typeof petLaneNames[number];
+
+export const petCandidateLanesSchema = z.object({
+  lanes: z.record(z.enum(petLaneNames), z.array(advisorCandidateSchema).max(6)),
+  candidates: z.array(advisorCandidateSchema).max(20),
+});
+export type PetCandidateLanes = z.infer<typeof petCandidateLanesSchema>;
