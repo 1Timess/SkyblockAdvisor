@@ -1,11 +1,11 @@
 # Architecture
 
-The supplied Word brief defines a new TypeScript profile platform, independent of the former HypixelProgressionEngine. This document summarizes its architecture; it does not add game rules.
+The original Word brief defines a new TypeScript profile platform, independent of the former HypixelProgressionEngine. The supplemental data contract supplies exact mappings/constants and takes precedence where it narrows Phase 1. This document summarizes the implemented architecture.
 
 ## Profile pipeline
 
 1. Resolve a username or UUID to canonical identity.
-2. Fetch Hypixel profiles and the player fields actually used, with short-lived caching.
+2. Fetch Hypixel profiles and the static accessory catalog concurrently, with short-lived profile caching. The player client method is available but not requested until a used field needs it.
 3. Select an explicit profile ID or cute name, otherwise the selected profile, otherwise the first profile.
 4. Collect and decode inventories once using prismarine-nbt.
 5. Process items once, preserving raw lore and ExtraAttributes internally.
@@ -22,7 +22,7 @@ Server-only environment handling protects HYPIXEL_API_KEY. The Hypixel client ow
 
 Internal ProcessedItem objects retain source, slot, raw/clean lore, ExtraAttributes, and parsed facts. Public ProfileItem objects expose readable facts, ability/set text, and source without raw NBT. Armor is displayed helmet, chestplate, leggings, boots. Weapons are discovered across processed owned inventories.
 
-## Intended modules
+## Modules
 
 - src/server/minecraft: identity resolution.
 - src/server/hypixel: raw client, profile selection, resource access, and source types.
@@ -34,7 +34,7 @@ Internal ProcessedItem objects retain source, slot, raw/clean lore, ExtraAttribu
 - src/app/api/skyblock/profiles and profile: HTTP routes.
 - scripts: profile/inventory inspection.
 
-Create modules as implementation reaches them; no empty future subsystems are required.
+Pet leveling, XP tables, and accessory rules are local constants taken from the supplement. An optional NEU subsystem was not needed. Runtime schemas validate upstream responses and the normalized result; they are not a game-mechanics proof layer.
 
 ## API targets
 

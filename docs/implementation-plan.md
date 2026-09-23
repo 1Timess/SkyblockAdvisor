@@ -1,32 +1,28 @@
-# Implementation plan
+# Implementation checkpoints
 
-Status: planning baseline; no application code or validation is complete.
+The original brief supplies the product plan. The supplemental data contract resolves the original missing inputs and explicitly permits synthetic offline NBT tests, embedded pet leveling constants, and optional NEU enrichment.
 
-## Required inputs before implementation
+## Phase 0 bootstrap
 
-Resolve the missing inputs in data-sources.md. Sections 17 and 18 of the brief require stopping when necessary external behavior or reference tables are absent. Do not fill those gaps through external research or guessed formulas.
+Next.js App Router, TypeScript, ESLint, Zod, prismarine-nbt, tsx, and server-only environment handling are implemented. Package versions are locked. A minimal landing page is included for startup verification. No persistence is needed, so pg and database infrastructure are deferred.
 
-## Phase 0 bootstrap checkpoint
+## Identity and profiles
 
-Create the Next.js App Router TypeScript foundation in this repository. Add Zod, prismarine-nbt, and tsx; defer database infrastructure. Add server-only environment validation, basic scripts, and the initial module structure. Verify the app starts and lint/typecheck pass. Commit and report the checkpoint.
+Official Mojang identity lookups, Hypixel client, TTL caching, profile summaries, explicit ID/cute-name selection, and selected/first fallbacks are implemented. Only the requested member is used. Client errors do not expose keys or stack traces.
 
-## Phase 1 identity and profiles checkpoint
+## NBT and items
 
-Implement identity resolution, the Hypixel client, TTL caching, profile summaries, and selection by explicit ID/cute name or selected/first fallback. Expose the profiles route. Test identity and selection offline, then verify arbitrary username behavior with configured credentials. Commit and report the checkpoint.
+Inventories are collected, decoded, and processed once. Raw attributes and formatted lore stay internal; public items include readable lore, recognized stats, ability/set text, and provenance. Gear derives from the shared processed collection. Weapons include backpack contents. Synthetic offline fixtures cover decoding, empty slots, malformed blobs, parsing, ordering, and totals.
 
-## Phase 1 NBT and item checkpoint
+## Combined profile
 
-Decode a supplied real inventory fixture. Process ID, UUID, names, raw/clean lore, rarity, categories, known stats, reforge, enchantments, stars, recombobulation, count, source, and slot. Preserve unknown lore. Verify the real fixture, malformed inventory isolation, item parsing, armor order, and stat totals. Commit and report the checkpoint.
+Both API routes, the combined builder, owned accessories/MP and catalog lists, pet leveling, skill levels, Slayers, dungeons, and economy are implemented. Domain tests and schema checks use offline fixtures. The iTimess service check decoded real inventories successfully.
 
-## Phase 1 combined profile checkpoint
+## Final Phase 1 validation
 
-Build gear, accessories/MP, owned pets, skills, slayers, dungeons, and economy using supplied source mappings and reference tables. Decode/process once and share the results. Return warnings for partial sections. Expose the normalized profile endpoint and an inspect-profile script. Validate domain transformations and the public response against offline fixtures. Commit and report the checkpoint.
+Exact offline and live HTTP results are recorded in validation.md. Final verification includes production startup, list/normalized routes, explicit profile selection, UUID input, invalid requests, and no live NBT decode failures. Commit the validated checkpoint and STOP.
 
-## Phase 1 final validation checkpoint
-
-Verify arbitrary usernames and profile selection, real NBT decoding, all required domain sections, retained unknown lore, offline tests, lint, typecheck, and application build. Update architecture and data-source documentation. Report exact commands, results, changed files, and remaining limitations. Commit and STOP; recommendations require a new prompt.
-
-## Later phases from the brief
+## Later phases require a new prompt
 
 1. Phase 1.5: profile viewer UI.
 2. Phase 2: static candidate catalog and local market snapshots.
