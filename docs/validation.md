@@ -102,3 +102,20 @@ Validated September 23, 2026 with the authorized `iTimess` Lemon profile and the
 Luna returned three ordered actions. It first asked the player to reconcile the question's F5 claim with the profile's recorded Floor VI completion, then referenced the supplied `FLOWER_OF_TRUTH` ID as a possible room-clearing complement after its stated prerequisite, and finally recommended retaining the rest of the budget because the shortlist did not justify another purchase. It distinguished room clearing from single-target performance, repeated the snapshot-price caveat, and did not return any unknown candidate ID.
 
 The first local attempt stopped before an OpenAI request because the configured credential used the standard `OPENAI_API_KEY` name while the initial loader expected `OPENAI_API_TOKEN`. The loader now accepts either server-only name. Exactly one real Luna request was made and accepted. Phase 4 stops here; no advisor UI or further recommendation layer was added.
+
+## Phase 4.1 deterministic routing validation
+
+Validated September 23, 2026 against the authorized `iTimess` Lemon profile with a 30,000,000-coin hard budget. No OpenAI request was made. The profile exposed 78 armor, 38 weapon, 14 accessory, and 11 meaningful pet candidates before active-scope selection. Accessory metadata reported 433 Magical Power, 203 missing entries, and 41 upgrades; pet metadata reported 15 owned pets.
+
+| Question | Scope | Clarification | Detailed count and domains |
+| --- | --- | --- | --- |
+| `I just cleared F5 and have 30m coins. What should I upgrade next?` | GEAR | No | 32: 22 armor, 10 weapon |
+| `How should I increase my Magical Power?` | ACCESSORIES | No | 14 accessory |
+| `What pet should I get?` | PETS | No | 11 pet |
+| `What helmet should I get?` | ARMOR, helmet slot | No | 18 armor |
+
+The F5 context contained no detailed accessories or pets; both remained discoverable through `availableAnalysis`. Its exact candidate IDs were:
+
+`PERFECT_HELMET_13`, `TERROR_HELMET`, `WITHER_GOGGLES`, `RACING_HELMET`, `PERFECT_CHESTPLATE_13`, `BERSERKER_CHESTPLATE`, `FANCY_TUXEDO_CHESTPLATE`, `AURORA_CHESTPLATE`, `GLOSSY_MINERAL_CHESTPLATE`, `PERFECT_LEGGINGS_13`, `BERSERKER_LEGGINGS`, `AURORA_LEGGINGS`, `YOUNG_DRAGON_LEGGINGS`, `PERFECT_BOOTS_13`, `ELEGANT_TUXEDO_BOOTS`, `AURORA_BOOTS`, `RANCHERS_BOOTS`, `GIANTS_EYE_SWORD`, `FLOWER_OF_TRUTH`, `STARRED_BAT_WAND`, `ZOMBIE_SOLDIER_CUTLASS`, `GIANT_CLEAVER`, `STARRED_SPIDER_QUEENS_STINGER`, `STARRED_LAST_BREATH`, `DRAGON_SHORTBOW`, `CRYPT_BOW`, `STARRED_BONE_BOOMERANG`, `PERFECT_HELMET_12`, `AURORA_HELMET`, `GLOSSY_MINERAL_HELMET`, `PERFECT_CHESTPLATE_12`, `MYTHOS_CHESTPLATE`.
+
+The live profile had 160 normalization warnings: 82 unknown stat labels and 78 unknown item categories. Advisor context reduced these to one aggregate warning. It detected 15 owned pets across nine types, including a level-100 Rabbit; the lower-level duplicate did not generate a Rabbit level target. Offline coverage includes routing isolation, no quota filling, the 32 cap, duplicate-pet selection, no-op pet removal, warning compaction, clarification/plan validation, semantic action rules, and constrained follow-up domains.

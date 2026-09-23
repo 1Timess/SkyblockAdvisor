@@ -31,6 +31,7 @@ npm run inspect:catalog -- [item-id ...]
 npm run sync:auctions
 npm run inspect:market -- [market-key ...]
 npm run inspect:candidates -- <username> [profile] [budget-coins]
+npm run inspect:advisor-context -- <username> [profile] [budget-coins] [question]
 npm run inspect:advisor -- <username> [profile] [budget-coins] [question]
 ```
 
@@ -46,7 +47,7 @@ NEU enrichment defaults to `data/neu`. Populate it with `npm run sync:neu`, or s
 
 ## Scope
 
-Phases 1 through 4 provide the data API, canonical static item catalog, conservative requirement checks, a file-backed auction market snapshot, small deterministic candidate lanes, and a validated GPT-6 Luna advisor call. Luna receives a compact shortlist and owns prioritization, ordering, tradeoffs, and explanation. Profile UI remains deferred. Unknown item text remains readable; displayed stat totals are not a full game simulation.
+Phases 1 through 4.1 provide the data API, canonical static item catalog, conservative requirement checks, a file-backed auction market snapshot, small deterministic candidate lanes, and a conversational advisor boundary. Deterministic routing loads at most 32 detailed candidates from the active scope while summarizing other available domains. Luna owns prioritization, ordering, tradeoffs, and explanation and may return either a clarification or a plan. Profile UI remains deferred. Unknown item text remains readable; displayed stat totals are not a full game simulation.
 
 - [Architecture](docs/architecture.md)
 - [Data contracts and source mappings](docs/data-sources.md)

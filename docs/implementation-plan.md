@@ -46,3 +46,9 @@ Implemented armor and weapon stat lanes, raw-text weapon ability lanes, accessor
 ## Phase 4 Luna advisor
 
 Implemented a compact 32-candidate context, exact candidate-ID preservation, strict structured response schema, local response and ID validation, token/cost metadata, and an explicit live inspection path. Deterministic code owns data extraction and filtering. Luna owns goal interpretation, prioritization, ordering, tradeoffs, and explanation. No UI or secondary recommendation engine was added. Phase 4 stops after one successful validated live call.
+
+## Phase 4.1 conversational routing and scoped context
+
+Implemented deterministic question routing, optional in-memory conversation facts, compact domain availability metadata, and detailed candidate selection restricted to the active scope. The 32-candidate limit is now a ceiling for relevant scope candidates rather than an all-domain quota. Broad Dungeon progression loads armor and weapons; explicit Magical Power, pet, and armor-slot questions load only their matching details.
+
+The advisor response contract now supports clarification and plan outcomes. Plans use semantic action types and structured follow-up domains. Profile parser warnings are compacted only at the advisor boundary. Duplicate pets remain in the normalized profile, while progression lanes use the best owned representative and detailed context removes no-op owned-pet entries. Deterministic inspection tooling exposes routing, availability, exact IDs, lane provenance, warning compaction, and pet diagnostics without calling OpenAI.

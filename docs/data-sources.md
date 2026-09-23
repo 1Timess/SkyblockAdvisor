@@ -75,4 +75,4 @@ Final real-data verification uses the locally configured key and iTimess, as aut
 
 ## Deferred
 
-Optional Abiphone MP, wardrobe/backpack-icon presentation, personal vault/other bags, detailed mining/Garden/collections, Bazaar ingestion, net worth, candidate generation, and advisor calls remain outside this checkpoint.
+Optional Abiphone MP, wardrobe/backpack-icon presentation, personal vault/other bags, detailed mining/Garden/collections, Bazaar ingestion, net worth, advisor UI, and persisted conversation state remain deferred. Candidate generation and the Luna boundary are implemented; Phase 4.1 context inspection remains deterministic and makes no model request.

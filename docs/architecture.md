@@ -60,12 +60,16 @@ Candidate builders receive the normalized profile, static catalogs, and one alre
 
 Each lane contains at most six entries. Each domain result deduplicates candidate IDs and contains at most twenty entries. The builders do not claim global optimality or interpret unmodeled mechanics.
 
-## Phase 4 advisor flow
+## Phase 4 and 4.1 advisor flow
 
-Deterministic code loads the profile, reference catalogs, and one market snapshot; applies the Phase 3 filters; and round-robins the domain lanes into at most 32 unique candidates. The compact context retains candidate IDs, prices, known stat changes, requirements, ability/set text, and uncertainty warnings while omitting duplicate full lore and internal source objects.
+Deterministic code loads the profile, reference catalogs, and one market snapshot, then routes the user question into a small analysis scope. Explicit accessory, pet, armor, weapon, combat-role, damage, and survivability language selects matching domains and lanes. Dungeon progression language selects gear. Conversation state can retain a role, goal, active scopes, and budget without persistence. A broad question may use the selected Dungeon class or request clarification.
 
-Luna receives this context through the OpenAI Responses API without tools or response storage. It owns judgment, order, tradeoffs, and explanation. Strict Structured Outputs constrain the response, then local validation enforces the Zod contract, contiguous ranks, and exact membership of every non-null candidate ID. Token usage and an estimated standard-processing cost are returned as metadata. There is no recommendation engine beneath the model and no advisor UI in this phase.
+The 32-item limit applies only to detailed candidates within that active scope. The selector neither reserves slots for unrelated domains nor fills unused capacity. Gear uses armor and weapons; accessory and pet details remain unloaded unless selected. Specific armor-slot questions load only that slot. `availableAnalysis` separately summarizes candidate counts, Magical Power, accessory gaps, and owned pets so other domains remain discoverable without their detailed candidates.
+
+The compact context retains exact candidate IDs, prices, known changes, requirements, ability/set text, and candidate warnings while omitting duplicate full lore and internal source objects. Account context contains economy, progression, current gear, active pet, and Magical Power. Repeated parser diagnostics are reduced to one aggregate warning. Pet progression uses the best owned representative by rarity and then level, and no-op owned-pet state does not consume detailed capacity.
+
+Luna receives this context through the OpenAI Responses API without tools or response storage. It owns judgment, order, tradeoffs, and explanation. Strict Structured Outputs allow either `CLARIFICATION` or `PLAN`. Plan actions carry `BUY`, `PROGRESSION`, `HOLD`, or `INVESTIGATE` semantics and structured follow-up domains. Local validation enforces the Zod contract, contiguous ranks, action-specific candidate rules, and exact membership of every non-null candidate ID. There is no recommendation engine beneath the model and no advisor UI in this phase.
 
 ## Scope guardrails
 
-No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, or recommendation frontier. No Luna integration, UI polish, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.
+No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, recommendation frontier, advisor UI, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.
