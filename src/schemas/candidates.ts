@@ -32,3 +32,13 @@ export const armorCandidateLanesSchema = z.object({
   candidates: z.array(advisorCandidateSchema).max(20),
 });
 export type ArmorCandidateLanes = z.infer<typeof armorCandidateLanesSchema>;
+
+export const weaponLaneNames = ["damage", "strength", "critDamage", "intelligence", "attackSpeed", "ability"] as const;
+export type WeaponLaneName = typeof weaponLaneNames[number];
+
+export const weaponCandidateLanesSchema = z.object({
+  weaponType: z.enum(["sword", "bow", "wand", "fishing_rod"]).nullable(),
+  lanes: z.record(z.enum(weaponLaneNames), z.array(advisorCandidateSchema).max(6)),
+  candidates: z.array(advisorCandidateSchema).max(20),
+});
+export type WeaponCandidateLanes = z.infer<typeof weaponCandidateLanesSchema>;
