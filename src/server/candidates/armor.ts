@@ -28,13 +28,14 @@ export function buildArmorLanes(input: {
   profile: NormalizedSkyBlockProfile;
   quotes?: ReadonlyMap<string, MarketQuote>;
   budgetCoins?: number;
+  eligibilityMode?: CandidateFilterOptions["eligibilityMode"];
   laneCap?: number;
   totalCap?: number;
 }): ArmorCandidateLanes {
   const slot = armorSlot(input.current);
   if (!slot) throw new Error(`Current item ${input.current.id ?? input.current.name} does not have a recognized armor slot.`);
   const quotes = input.quotes ?? new Map<string, MarketQuote>();
-  const options: CandidateFilterOptions = { budgetCoins: input.budgetCoins, ownedItemIds: collectOwnedItemIds(input.profile) };
+  const options: CandidateFilterOptions = { budgetCoins: input.budgetCoins, ownedItemIds: collectOwnedItemIds(input.profile), eligibilityMode: input.eligibilityMode };
   const prepared = input.catalog
     .filter(item => item.categories.includes("armor") && armorSlot(item) === slot)
     .map(item => prepareCandidate("armor", item, input.profile, quotes, options))

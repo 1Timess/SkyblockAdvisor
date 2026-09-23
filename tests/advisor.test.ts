@@ -19,7 +19,7 @@ const available: AvailableAnalysis = {
   accessories: { available: true, candidateCount: 3, currentMagicalPower: 100, missingCount: 2, upgradeCount: 1 },
   pets: { available: true, candidateCount: 1, ownedCount: 2 },
 };
-const route: AdvisorRoute = { scope: "GEAR", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [] };
+const route: AdvisorRoute = { scope: "GEAR", goal: "GENERAL_UPGRADE", inferredRole: "berserk", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [] };
 
 async function context() {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
@@ -71,6 +71,19 @@ test("PLAN enforces semantic action IDs and contiguous ranks", async () => {
   assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], rank: 2 }] }, advisorContext), /contiguous/);
   assert.throws(() => validateAdvisorResponse({ ...valid, actions: [{ ...valid.actions[0], actionType: "HOLD", candidateId: "WEAPON_A" }] }, advisorContext), /HOLD actions/);
   assert.throws(() => validateAdvisorResponse({ ...valid, followUps: [{ domain: "SKILLS", label: "Skills", reason: "No" }] }, advisorContext));
+});
+
+test("prerequisite-first and hold-only plans are valid", async () => {
+  const advisorContext = await context();
+  const prerequisite = { kind: "PLAN", headline: "Unlock first", actions: [
+    { rank: 1, actionType: "PROGRESSION", candidateId: null, action: "Complete the prerequisite", why: "The candidate is locked", tradeoffs: [], prerequisites: [], uncertainty: null },
+    { rank: 2, actionType: "BUY", candidateId: "WEAPON_A", action: "Buy after unlocking", why: "Then it is usable", tradeoffs: [], prerequisites: ["Complete the prerequisite"], uncertainty: null },
+  ], caveats: [], followUps: [] };
+  assert.deepEqual(validateAdvisorResponse(prerequisite, advisorContext), prerequisite);
+  const hold = { kind: "PLAN", headline: "Keep saving", actions: [
+    { rank: 1, actionType: "HOLD", candidateId: null, action: "Hold coins", why: "No supplied candidate justifies spending", tradeoffs: [], prerequisites: [], uncertainty: null },
+  ], caveats: [], followUps: [{ domain: "PETS", label: "Inspect pets", reason: "Another domain may be more productive." }] };
+  assert.deepEqual(validateAdvisorResponse(hold, advisorContext), hold);
 });
 
 test("Luna client sends the scoped strict request and validates its response", async () => {

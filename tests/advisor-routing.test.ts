@@ -61,6 +61,7 @@ test("role and conversation state can narrow later questions", async () => {
   const roleless = { ...profile, progression: { ...profile.progression, dungeons: { ...profile.progression.dungeons, selectedClass: null } } };
   assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile: roleless }).scope, "CLARIFY");
   assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile, conversationState: { role: "mage" } }).scope, "MAGE");
+  assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile, conversationState: { role: "berserk", goal: "INTELLIGENCE" } }).scope, "MAGE");
   const archer = routeAdvisorQuestion({ question: "What bow should I get?", profile });
   assert.deepEqual(selectDetailedCandidates(scopeCandidateLanes(lanes, archer)).map(value => value.id), ["BOW"]);
 });

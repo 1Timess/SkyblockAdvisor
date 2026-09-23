@@ -7,15 +7,19 @@ export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
 export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
+export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON"]);
+export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
-  role: advisorRoleSchema.optional(), goal: z.string().trim().min(1).optional(),
+  role: advisorRoleSchema.optional(), goal: advisorGoalSchema.optional(),
   activeScopes: z.array(analysisScopeSchema).optional(), budgetCoins: z.number().nonnegative().optional(),
 });
 export type AdvisorConversationState = z.infer<typeof advisorConversationStateSchema>;
 export const advisorRouteSchema = z.object({
   scope: analysisScopeSchema, activeDomains: z.array(analysisDomainSchema), clarificationRecommended: z.boolean(),
-  reason: z.string(), armorSlots: z.array(z.enum(["helmet", "chestplate", "leggings", "boots"])),
+  reason: z.string(), goal: advisorGoalSchema, inferredRole: advisorRoleSchema.nullable(),
+  armorSlots: z.array(z.enum(["helmet", "chestplate", "leggings", "boots"])),
 });
 export type AdvisorRoute = z.infer<typeof advisorRouteSchema>;
 
@@ -28,8 +32,20 @@ export const compactAdvisorCandidateSchema = z.object({
   categories: z.array(z.string()), stats: statsSchema,
   price: z.object({ coins: z.number().int().nonnegative(), observedAt: z.string().datetime(), confidence: marketConfidenceSchema }).nullable(),
   knownChanges: z.record(z.string(), z.object({ current: z.number().nullable(), candidate: z.number().nullable() })),
+  relevance: z.object({ reason: z.string(), relevantStats: z.array(z.string()) }),
+  feasibility: z.object({
+    priceStatus: z.enum(["WITHIN_BUDGET", "OVER_BUDGET", "UNKNOWN", "NO_BUDGET"]),
+    budgetCoins: z.number().nonnegative().nullable(), priceCoins: z.number().nonnegative().nullable(), budgetDeltaCoins: z.number().nullable(),
+    requirementStatus: z.enum(["MET", "NOT_MET", "UNKNOWN", "MIXED"]),
+    requirements: z.array(z.object({
+      text: z.string(), type: z.enum(["SKILL", "SLAYER", "DUNGEON_LEVEL", "DUNGEON_FLOOR", "HEART_OF_THE_MOUNTAIN", "GARDEN_LEVEL", "UNKNOWN"]),
+      subject: z.string().nullable(), current: z.number().nonnegative().nullable(), required: z.number().nonnegative().nullable(),
+      gap: z.number().nonnegative().nullable(), status: z.enum(["MET", "NOT_MET", "UNKNOWN"]),
+    })),
+  }),
   requirements: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()), warnings: z.array(z.string()),
 });
+export type CompactAdvisorCandidate = z.infer<typeof compactAdvisorCandidateSchema>;
 export const availableAnalysisSchema = z.object({
   armor: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   weapons: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),

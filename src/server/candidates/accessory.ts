@@ -4,7 +4,7 @@ import type { MarketQuote } from "../../schemas/market";
 import { rarities } from "../../schemas/items";
 import type { AccessoryReference, NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { accessoryBaseId, accessoryChains, mpByRarity } from "../reference/accessory-data";
-import { dedupeCandidates, prepareCandidate } from "./common";
+import { dedupeCandidates, prepareCandidate, type CandidateFilterOptions } from "./common";
 
 function magicalPower(id: string, rarity: string | null) {
   if (id === "RIFT_PRISM") return 11;
@@ -39,6 +39,7 @@ export function buildAccessoryLanes(input: {
   references: readonly AccessoryReference[];
   quotes?: ReadonlyMap<string, MarketQuote>;
   budgetCoins?: number;
+  eligibilityMode?: CandidateFilterOptions["eligibilityMode"];
   laneCap?: number;
   totalCap?: number;
 }): AccessoryCandidateLanes {
@@ -49,7 +50,7 @@ export function buildAccessoryLanes(input: {
   const fromReferences = (values: readonly AccessoryReference[]) => values.flatMap(reference => {
     const item = catalog.get(reference.id), target = magicalPower(reference.id, reference.rarity);
     if (!item || target === null) return [];
-    const prepared = prepareCandidate("accessory", item, input.profile, quotes, { budgetCoins: input.budgetCoins });
+    const prepared = prepareCandidate("accessory", item, input.profile, quotes, { budgetCoins: input.budgetCoins, eligibilityMode: input.eligibilityMode });
     return prepared ? [attachPower(prepared, currentPower(reference, input.profile), target)] : [];
   });
   const missing = fromReferences(input.profile.accessories.missing).sort(priceSort);

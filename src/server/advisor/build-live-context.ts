@@ -14,6 +14,7 @@ import { buildPetLanes } from "../candidates/pet";
 import { buildWeaponLanes } from "../candidates/weapon";
 import { buildAdvisorContext, compactProfileWarnings, isNoOpPetCandidate, selectDetailedCandidates, type TaggedCandidateLane } from "./context";
 import { routeAdvisorQuestion } from "./routing";
+import { buildCandidateRelevance, filterCandidateLanesForGoal, mergeCandidateEvidence, uniqueLaneCandidates } from "./relevance";
 
 export interface AdvisorContextDiagnostics {
   profileWarningCount: number;
@@ -24,6 +25,9 @@ export interface AdvisorContextDiagnostics {
   level100RabbitDetected: boolean;
   rabbitLowerLevelTargetSuppressed: boolean;
   rabbitNoOpSuppressed: boolean;
+  rawActiveScopeCandidateCount: number;
+  goalRelevantCandidateCount: number;
+  removedByRelevance: Array<{ id: string; domain: AdvisorCandidate["domain"]; name: string; sourceLanes: string[]; reason: string }>;
 }
 
 export interface AdvisorContextBuildResult {
@@ -55,11 +59,12 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   ]);
   const catalog = buildItemCatalog(items, neu).getAll();
   const quotes = new Map<string, MarketQuote>(Object.entries(snapshot?.quotes ?? {}));
-  const armorResults = profile.gear.armor.items.map(current => buildArmorLanes({ current, catalog, profile, quotes, budgetCoins: input.budgetCoins }));
+  const eligibilityMode = "ADVISOR_DISCOVERY" as const;
+  const armorResults = profile.gear.armor.items.map(current => buildArmorLanes({ current, catalog, profile, quotes, budgetCoins: input.budgetCoins, eligibilityMode }));
   const weaponResults = profile.gear.weapons.map(current => ({ current: current.id ?? current.name,
-    result: buildWeaponLanes({ current, catalog, profile, quotes, budgetCoins: input.budgetCoins }) }));
-  const accessories = buildAccessoryLanes({ profile, catalog, references: buildAccessoryCatalog(items), quotes, budgetCoins: input.budgetCoins });
-  const pets = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu), quotes, budgetCoins: input.budgetCoins, rolePetTypes: input.rolePetTypes });
+    result: buildWeaponLanes({ current, catalog, profile, quotes, budgetCoins: input.budgetCoins, eligibilityMode }) }));
+  const accessories = buildAccessoryLanes({ profile, catalog, references: buildAccessoryCatalog(items), quotes, budgetCoins: input.budgetCoins, eligibilityMode });
+  const pets = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu), quotes, budgetCoins: input.budgetCoins, rolePetTypes: input.rolePetTypes, eligibilityMode });
 
   const lanes: TaggedCandidateLane[] = [
     ...armorResults.flatMap(result => Object.entries(result.lanes).map(([lane, candidates]) => ({ domain: "ARMOR" as const, label: `armor:${result.slot}:${lane}`, candidates }))),
@@ -69,7 +74,10 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   ];
   const route = routeAdvisorQuestion({ question: input.question, profile, conversationState: input.conversationState });
   const scopedLanes = scopeCandidateLanes(lanes, route);
-  const detailedCandidates = selectDetailedCandidates(scopedLanes, 32);
+  const relevantLanes = filterCandidateLanesForGoal(scopedLanes, route);
+  const rawScopedCandidates = uniqueLaneCandidates(scopedLanes).filter(candidate => !isNoOpPetCandidate(candidate));
+  const relevantCandidates = uniqueLaneCandidates(relevantLanes).filter(candidate => !isNoOpPetCandidate(candidate));
+  const detailedCandidates = selectDetailedCandidates(relevantLanes, 32).map(candidate => mergeCandidateEvidence(candidate, relevantLanes));
   const meaningful = (domain: TaggedCandidateLane["domain"]) => uniqueCandidates(lanes.filter(lane => lane.domain === domain)
     .flatMap(lane => lane.candidates).filter(candidate => !isNoOpPetCandidate(candidate)));
   const armorCandidates = meaningful("ARMOR"), weaponCandidates = meaningful("WEAPONS");
@@ -84,9 +92,11 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   const conversationState = input.conversationState || input.budgetCoins !== undefined
     ? { ...input.conversationState, budgetCoins: input.conversationState?.budgetCoins ?? input.budgetCoins }
     : undefined;
-  const context = buildAdvisorContext({ question: input.question, profile, route, availableAnalysis, candidates: detailedCandidates, conversationState });
+  const relevanceById = new Map(detailedCandidates.map(candidate => [candidate.id, buildCandidateRelevance(relevantLanes, candidate.id, route)]));
+  const context = buildAdvisorContext({ question: input.question, profile, route, availableAnalysis, candidates: detailedCandidates, conversationState,
+    relevanceById, budgetCoins: input.budgetCoins });
   const candidateLanes = Object.fromEntries(detailedCandidates.map(candidate => [candidate.id,
-    scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label)]));
+    relevantLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label)]));
   const rabbitPets = profile.pets.owned.filter(pet => pet.type.toUpperCase() === "RABBIT");
   const rabbitNoOpInRawLanes = lanes.some(lane => lane.domain === "PETS" && lane.candidates.some(candidate =>
     candidate.id.toUpperCase().startsWith("RABBIT;") && isNoOpPetCandidate(candidate)));
@@ -94,6 +104,12 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   const level100RabbitDetected = rabbitPets.some(pet => pet.level !== null && pet.maxLevel !== null && pet.level >= pet.maxLevel);
   const lowerRabbitDetected = rabbitPets.some(pet => pet.level !== null && pet.maxLevel !== null && pet.level < pet.maxLevel);
   const rabbitLevelTargetExists = pets.lanes.levelTarget.some(candidate => candidate.id.toUpperCase().startsWith("RABBIT;"));
+  const relevantIds = new Set(relevantCandidates.map(candidate => candidate.id));
+  const removedByRelevance = rawScopedCandidates.filter(candidate => !relevantIds.has(candidate.id)).map(candidate => ({
+    id: candidate.id, domain: candidate.domain, name: candidate.item.name,
+    sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label),
+    reason: "Only appeared in lanes irrelevant to the active goal.",
+  }));
   return {
     context, route, availableAnalysis, detailedCandidates, candidateLanes,
     diagnostics: {
@@ -105,6 +121,9 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
       level100RabbitDetected,
       rabbitLowerLevelTargetSuppressed: level100RabbitDetected && lowerRabbitDetected && !rabbitLevelTargetExists,
       rabbitNoOpSuppressed: rabbitNoOpInRawLanes && !detailedCandidates.some(candidate => candidate.id.toUpperCase().startsWith("RABBIT;") && isNoOpPetCandidate(candidate)),
+      rawActiveScopeCandidateCount: rawScopedCandidates.length,
+      goalRelevantCandidateCount: relevantCandidates.length,
+      removedByRelevance,
     },
   };
 }

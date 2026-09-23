@@ -20,12 +20,13 @@ export function buildWeaponLanes(input: {
   profile: NormalizedSkyBlockProfile;
   quotes?: ReadonlyMap<string, MarketQuote>;
   budgetCoins?: number;
+  eligibilityMode?: CandidateFilterOptions["eligibilityMode"];
   laneCap?: number;
   totalCap?: number;
 }): WeaponCandidateLanes {
   if (!input.current.categories.includes("weapon")) throw new Error(`Current item ${input.current.id ?? input.current.name} is not a weapon.`);
   const currentType = weaponType(input.current), quotes = input.quotes ?? new Map<string, MarketQuote>();
-  const options: CandidateFilterOptions = { budgetCoins: input.budgetCoins, ownedItemIds: collectOwnedItemIds(input.profile) };
+  const options: CandidateFilterOptions = { budgetCoins: input.budgetCoins, ownedItemIds: collectOwnedItemIds(input.profile), eligibilityMode: input.eligibilityMode };
   const prepared = input.catalog
     .filter(item => item.categories.includes("weapon") && (currentType === null || weaponType(item) === currentType))
     .map(item => prepareCandidate("weapon", item, input.profile, quotes, options))

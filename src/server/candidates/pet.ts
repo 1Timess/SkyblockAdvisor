@@ -3,7 +3,7 @@ import { petCandidateLanesSchema, type AdvisorCandidate, type PetCandidateLanes,
 import type { MarketQuote } from "../../schemas/market";
 import type { NormalizedPet } from "../../schemas/pets";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
-import { dedupeCandidates, prepareCandidate } from "./common";
+import { dedupeCandidates, prepareCandidate, type CandidateFilterOptions } from "./common";
 
 const tiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"] as const;
 
@@ -22,6 +22,7 @@ export function buildPetLanes(input: {
   catalog: readonly CandidateItem[];
   quotes?: ReadonlyMap<string, MarketQuote>;
   budgetCoins?: number;
+  eligibilityMode?: CandidateFilterOptions["eligibilityMode"];
   rolePetTypes?: readonly string[];
   laneCap?: number;
   totalCap?: number;
@@ -29,7 +30,7 @@ export function buildPetLanes(input: {
   const catalog = input.catalog.filter(item => item.categories.includes("pet") && petParts(item));
   const quotes = input.quotes ?? new Map<string, MarketQuote>();
   const laneCap = Math.min(input.laneCap ?? 6, 6), totalCap = Math.min(input.totalCap ?? 20, 20);
-  const prepared = (item: CandidateItem) => prepareCandidate("pet", item, input.profile, quotes, { budgetCoins: input.budgetCoins });
+  const prepared = (item: CandidateItem) => prepareCandidate("pet", item, input.profile, quotes, { budgetCoins: input.budgetCoins, eligibilityMode: input.eligibilityMode });
   const bestOwned = selectBestOwnedPets(input.profile.pets.owned);
   const owned = input.profile.pets.owned.flatMap(pet => {
     const item = petItem(catalog, pet), candidate = item && prepared(item);
