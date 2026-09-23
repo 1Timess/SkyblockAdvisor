@@ -30,6 +30,7 @@ npm run inspect:profile -- <username> [profile]
 npm run inspect:catalog -- [item-id ...]
 npm run sync:auctions
 npm run inspect:market -- [market-key ...]
+npm run inspect:candidates -- <username> [profile] [budget-coins]
 ```
 
 Offline tests need neither credentials nor network access. For the HTTP checkpoint, start the app and run:
@@ -44,7 +45,7 @@ NEU enrichment defaults to `data/neu`. Populate it with `npm run sync:neu`, or s
 
 ## Scope
 
-Phases 1 and 2 provide the data API, canonical static item catalog, conservative requirement checks, and a file-backed auction market snapshot. The catalog keeps Hypixel item identity authoritative and uses NEU for reference lore and metadata when present. Profile UI, candidate lanes, and the advisor remain later phases. Unknown item text remains readable; displayed stat totals are not a full game simulation.
+Phases 1 through 3 provide the data API, canonical static item catalog, conservative requirement checks, a file-backed auction market snapshot, and small deterministic armor, weapon, accessory, and pet candidate lanes. Profile UI and the advisor remain later phases. Unknown item text remains readable; displayed stat totals are not a full game simulation.
 
 - [Architecture](docs/architecture.md)
 - [Data contracts and source mappings](docs/data-sources.md)

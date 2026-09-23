@@ -73,3 +73,16 @@ Validated September 23, 2026 against the supplied project documents and data-con
 The catalog check used the existing local NEU snapshot and the official Hypixel item resource. Shadow Assassin Chestplate produced a Catacombs Floor V requirement. The market sync completed in about 10.5 seconds. Its generated JSON is ignored and contains aggregate public auction data, so no credential or raw player profile is committed.
 
 Phase 2 stops at validated facts and local quotes. It does not generate candidates, recommendations, proof certificates, or advisor output.
+
+## Phase 3 validation
+
+Phase 3 adds offline coverage for armor, weapon, accessory, and pet lanes. The tests exercise category matching, ownership, known requirements, hard budgets, unknown-fact retention, known-stat improvements, MP gains, coins per MP, explicit accessory opportunities, NEU pet variants, raw ability text, and fixed caps/deduplication.
+
+| Command | Result |
+| --- | --- |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed |
+| `npm test` | 45 tests passed |
+| `npm run inspect:candidates -- iTimess Lemon 30000000` | Produced capped lanes for four armor slots, four owned weapons, accessories, and pets using the local auction snapshot and NEU data |
+
+The live inspection used snapshot `auction-1790175720881`. Armor and weapon stat/ability lanes, six missing accessories, six rarity upgrades, six coins-per-MP entries, one explicit enrichment opportunity, six owned pets, six pet leveling targets, and six pet rarity upgrades were returned where data supported them. It prints candidate IDs/counts only and does not save a player response.

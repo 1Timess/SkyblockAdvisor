@@ -37,6 +37,9 @@ Implemented in this checkpoint:
 ## Remaining phases
 
 1. Phase 1.5: profile viewer UI.
-2. Phase 3: small deterministic candidate lanes.
-3. Phase 4: Luna advisor consuming the normalized profile.
-4. Phase 5: further domains only from demonstrated demand.
+2. Phase 4: Luna advisor consuming the normalized profile.
+3. Phase 5: further domains only from demonstrated demand.
+
+## Phase 3 lightweight candidate lanes
+
+Implemented armor and weapon stat lanes, raw-text weapon ability lanes, accessory missing/upgrade/coins-per-MP lanes, explicit accessory action opportunities, and owned/level/rarity/role pet lanes. Known hard requirements and quoted hard budgets are filters; unknown facts remain visible with warnings. Every lane is capped at six and every domain union at twenty, with exact-ID deduplication. No recommendation, proof, or global ranking layer was added.

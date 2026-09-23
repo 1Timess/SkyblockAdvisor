@@ -35,6 +35,7 @@ Internal ProcessedItem objects retain source, slot, raw/clean lore, ExtraAttribu
 - src/server/reference/neu and item-catalog: validated NEU loading and the Hypixel/NEU catalog join.
 - src/server/reference/requirements: high-confidence requirement parsing and profile checks.
 - src/server/market: auction normalization, aggregation, snapshot persistence, and local batch lookup.
+- src/server/candidates: capped armor, weapon, accessory, and pet lanes built from known profile/catalog/market facts.
 - scripts: profile, catalog, and market sync/inspection.
 
 Pet leveling, XP tables, and accessory rules are local constants taken from the supplement. NEU is an optional local enrichment source: missing entries do not remove Hypixel items. Runtime schemas validate upstream responses, catalog entries, and snapshots; they are not a game-mechanics proof layer.
@@ -51,6 +52,12 @@ Auction ingestion is a batch operation. It reads every page from one Hypixel auc
 - GET /api/skyblock/profile?username=...&profile=... returns identity, selected profile, economy, gear, accessories, pets, progression, warnings, and metadata.
 
 Cache identities for approximately 24 hours, profiles for 5 minutes, and static resources for 12 hours. Player data fetching is request-driven, without background polling.
+
+## Phase 3 candidate flow
+
+Candidate builders receive the normalized profile, static catalogs, and one already-loaded market snapshot. They filter wrong categories, exact owned duplicates where irrelevant, known unmet requirements, and known over-budget prices. Unknown prices and requirements remain candidates with warnings. Armor and weapon lanes rank only known requested stats; weapon ability candidates retain raw ability text. Accessory lanes use the existing missing/upgrade contract and known MP deltas. Pet lanes use NEU pet variants and explicit caller-supplied role types rather than inventing role assignments.
+
+Each lane contains at most six entries. Each domain result deduplicates candidate IDs and contains at most twenty entries. The builders do not claim global optimality or interpret unmodeled mechanics.
 
 ## Scope guardrails
 

@@ -14,7 +14,8 @@
     "sync:neu": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/sync-neu.ts",
     "inspect:catalog": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-catalog.ts",
     "sync:auctions": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/sync-auctions.ts",
-    "inspect:market": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-market.ts"
+    "inspect:market": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-market.ts",
+    "inspect:candidates": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-candidates.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
