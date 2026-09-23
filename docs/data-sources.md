@@ -13,8 +13,11 @@ The original architecture brief defines the product. The Phase 1 Supplemental Da
 | api.hypixel.net/v2/resources/skyblock/items | Accessory and candidate item identity | 12 hours |
 | Local NEU snapshot | Canonical lore, wiki metadata, and structured requirement hints | Synchronized explicitly |
 | api.hypixel.net/v2/skyblock/auctions | Full active auction generation used by the sync command | Local snapshot per explicit sync |
+| api.openai.com/v1/responses | GPT-6 Luna judgment over a compact, prefiltered context | One request per explicit advisor call |
 
 The server sends the local HYPIXEL_API_KEY in the API-Key header for authenticated Hypixel requests. The public item resource does not require a key. Caches are bounded in-memory maps. Requests have a 15-second upstream timeout; there is no player polling. Phase 2 persistence is limited to local reference and market snapshot files.
+
+The Luna client reads `OPENAI_API_KEY` (or the `OPENAI_API_TOKEN` alias) on the server. Requests use `store: false`, expose no tools, and require strict structured output. The application validates the returned JSON and candidate IDs locally before accepting it.
 
 ## Phase 2 contracts
 

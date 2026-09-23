@@ -51,7 +51,7 @@ test("Luna client sends a strict structured request and validates the returned c
       usage: { input_tokens: 100, output_tokens: 20, total_tokens: 120 } }), { status: 200, headers: { "Content-Type": "application/json" } });
   };
   const result = await callLunaAdvisor(context, fetcher, "test-token");
-  assert.deepEqual(result.advice, advice); assert.equal(result.meta.totalTokens, 120);
+  assert.deepEqual(result.advice, advice); assert.equal(result.meta.totalTokens, 120); assert.equal(result.meta.estimatedCostUsd, 0.00002);
   const body = JSON.parse(String(request?.body));
   assert.equal(body.model, "gpt-6-luna"); assert.equal(body.store, false); assert.equal(body.text.format.strict, true);
   assert.equal(JSON.parse(body.input).candidates[0].id, "ARMOR_A");

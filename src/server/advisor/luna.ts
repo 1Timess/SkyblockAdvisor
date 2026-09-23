@@ -5,6 +5,8 @@ import { getAdvisorEnv } from "./env";
 import { validateAdvisorResponse } from "./validate-response";
 
 const model = "gpt-6-luna";
+// Standard text-token rates documented for GPT-6 Luna on 2026-09-23.
+const pricingPerMillion = { input: 0.10, output: 0.50 } as const;
 const apiResponseSchema = z.object({
   id: z.string(), model: z.string(), status: z.string(), output: z.array(z.object({
     type: z.string(), content: z.array(z.object({ type: z.string(), text: z.string().optional(), refusal: z.string().optional() }).passthrough()).optional(),
@@ -14,7 +16,7 @@ const apiResponseSchema = z.object({
 
 export interface LunaAdvisorResult {
   advice: AdvisorResponse;
-  meta: { responseId: string; model: string; inputTokens: number | null; outputTokens: number | null; totalTokens: number | null };
+  meta: { responseId: string; model: string; inputTokens: number | null; outputTokens: number | null; totalTokens: number | null; estimatedCostUsd: number | null };
 }
 
 export async function callLunaAdvisor(context: AdvisorContext, fetcher: typeof fetch = fetch, apiToken = getAdvisorEnv().OPENAI_API_TOKEN): Promise<LunaAdvisorResult> {
@@ -43,7 +45,8 @@ export async function callLunaAdvisor(context: AdvisorContext, fetcher: typeof f
   try { value = JSON.parse(outputText); } catch { throw new Error("Luna returned unreadable structured output."); }
   const advice = validateAdvisorResponse(value, context), usage = parsed.usage;
   return { advice, meta: { responseId: parsed.id, model: parsed.model, inputTokens: usage?.input_tokens ?? null,
-    outputTokens: usage?.output_tokens ?? null, totalTokens: usage?.total_tokens ?? null } };
+    outputTokens: usage?.output_tokens ?? null, totalTokens: usage?.total_tokens ?? null,
+    estimatedCostUsd: usage ? (usage.input_tokens * pricingPerMillion.input + usage.output_tokens * pricingPerMillion.output) / 1_000_000 : null } };
 }
 
 const advisorInstructions = `You are Luna, a Hypixel SkyBlock progression advisor.

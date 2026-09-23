@@ -36,6 +36,7 @@ Internal ProcessedItem objects retain source, slot, raw/clean lore, ExtraAttribu
 - src/server/reference/requirements: high-confidence requirement parsing and profile checks.
 - src/server/market: auction normalization, aggregation, snapshot persistence, and local batch lookup.
 - src/server/candidates: capped armor, weapon, accessory, and pet lanes built from known profile/catalog/market facts.
+- src/server/advisor: compact context construction, GPT-6 Luna Responses client, and post-response validation.
 - scripts: profile, catalog, and market sync/inspection.
 
 Pet leveling, XP tables, and accessory rules are local constants taken from the supplement. NEU is an optional local enrichment source: missing entries do not remove Hypixel items. Runtime schemas validate upstream responses, catalog entries, and snapshots; they are not a game-mechanics proof layer.
@@ -58,6 +59,12 @@ Cache identities for approximately 24 hours, profiles for 5 minutes, and static 
 Candidate builders receive the normalized profile, static catalogs, and one already-loaded market snapshot. They filter wrong categories, exact owned duplicates where irrelevant, known unmet requirements, and known over-budget prices. Unknown prices and requirements remain candidates with warnings. Armor and weapon lanes rank only known requested stats; weapon ability candidates retain raw ability text. Accessory lanes use the existing missing/upgrade contract and known MP deltas. Pet lanes use NEU pet variants and explicit caller-supplied role types rather than inventing role assignments.
 
 Each lane contains at most six entries. Each domain result deduplicates candidate IDs and contains at most twenty entries. The builders do not claim global optimality or interpret unmodeled mechanics.
+
+## Phase 4 advisor flow
+
+Deterministic code loads the profile, reference catalogs, and one market snapshot; applies the Phase 3 filters; and round-robins the domain lanes into at most 32 unique candidates. The compact context retains candidate IDs, prices, known stat changes, requirements, ability/set text, and uncertainty warnings while omitting duplicate full lore and internal source objects.
+
+Luna receives this context through the OpenAI Responses API without tools or response storage. It owns judgment, order, tradeoffs, and explanation. Strict Structured Outputs constrain the response, then local validation enforces the Zod contract, contiguous ranks, and exact membership of every non-null candidate ID. Token usage and an estimated standard-processing cost are returned as metadata. There is no recommendation engine beneath the model and no advisor UI in this phase.
 
 ## Scope guardrails
 

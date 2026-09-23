@@ -86,3 +86,19 @@ Phase 3 adds offline coverage for armor, weapon, accessory, and pet lanes. The t
 | `npm run inspect:candidates -- iTimess Lemon 30000000` | Produced capped lanes for four armor slots, four owned weapons, accessories, and pets using the local auction snapshot and NEU data |
 
 The live inspection used snapshot `auction-1790175720881`. Armor and weapon stat/ability lanes, six missing accessories, six rarity upgrades, six coins-per-MP entries, one explicit enrichment opportunity, six owned pets, six pet leveling targets, and six pet rarity upgrades were returned where data supported them. It prints candidate IDs/counts only and does not save a player response.
+
+## Phase 4 validation
+
+Validated September 23, 2026 with the authorized `iTimess` Lemon profile and the question: “I just cleared F5 and have 30m coins. What should I upgrade next?”
+
+| Check | Result |
+| --- | --- |
+| Offline suite | 50 tests passed before the live call |
+| Context | 32 unique candidates selected across armor, weapon, accessory, and pet lanes |
+| Model/API | `gpt-6-luna` through `POST /v1/responses`, no tools, `store: false`, strict JSON Schema output |
+| Validation | Zod response accepted; action ranks contiguous; every non-null candidate ID belonged to the supplied context |
+| Usage | 8,669 input tokens; 2,047 output tokens; 10,716 total; estimated standard-processing cost $0.0018904 at the documented rates used by the client |
+
+Luna returned three ordered actions. It first asked the player to reconcile the question's F5 claim with the profile's recorded Floor VI completion, then referenced the supplied `FLOWER_OF_TRUTH` ID as a possible room-clearing complement after its stated prerequisite, and finally recommended retaining the rest of the budget because the shortlist did not justify another purchase. It distinguished room clearing from single-target performance, repeated the snapshot-price caveat, and did not return any unknown candidate ID.
+
+The first local attempt stopped before an OpenAI request because the configured credential used the standard `OPENAI_API_KEY` name while the initial loader expected `OPENAI_API_TOKEN`. The loader now accepts either server-only name. Exactly one real Luna request was made and accepted. Phase 4 stops here; no advisor UI or further recommendation layer was added.
