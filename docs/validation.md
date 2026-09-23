@@ -119,3 +119,29 @@ The F5 context contained no detailed accessories or pets; both remained discover
 `PERFECT_HELMET_13`, `TERROR_HELMET`, `WITHER_GOGGLES`, `RACING_HELMET`, `PERFECT_CHESTPLATE_13`, `BERSERKER_CHESTPLATE`, `FANCY_TUXEDO_CHESTPLATE`, `AURORA_CHESTPLATE`, `GLOSSY_MINERAL_CHESTPLATE`, `PERFECT_LEGGINGS_13`, `BERSERKER_LEGGINGS`, `AURORA_LEGGINGS`, `YOUNG_DRAGON_LEGGINGS`, `PERFECT_BOOTS_13`, `ELEGANT_TUXEDO_BOOTS`, `AURORA_BOOTS`, `RANCHERS_BOOTS`, `GIANTS_EYE_SWORD`, `FLOWER_OF_TRUTH`, `STARRED_BAT_WAND`, `ZOMBIE_SOLDIER_CUTLASS`, `GIANT_CLEAVER`, `STARRED_SPIDER_QUEENS_STINGER`, `STARRED_LAST_BREATH`, `DRAGON_SHORTBOW`, `CRYPT_BOW`, `STARRED_BONE_BOOMERANG`, `PERFECT_HELMET_12`, `AURORA_HELMET`, `GLOSSY_MINERAL_HELMET`, `PERFECT_CHESTPLATE_12`, `MYTHOS_CHESTPLATE`.
 
 The live profile had 160 normalization warnings: 82 unknown stat labels and 78 unknown item categories. Advisor context reduced these to one aggregate warning. It detected 15 owned pets across nine types, including a level-100 Rabbit; the lower-level duplicate did not generate a Rabbit level target. Offline coverage includes routing isolation, no quota filling, the 32 cap, duplicate-pet selection, no-op pet removal, warning compaction, clarification/plan validation, semantic action rules, and constrained follow-up domains.
+
+## Phase 4.2 deterministic validation
+
+Phase 4.2 separates goal relevance from feasibility. All 66 offline tests passed. Coverage includes explicit-goal precedence, query-sensitive single-stat candidates, no quota replenishment, locked nearby and distant candidates, signed budget gaps, mixed and unknown requirements, prerequisite-first plans, hold-only plans, duplicate pets, and warning compaction. Typecheck, lint, and the production build also passed.
+
+| Question | Route / goal / inferred role | Raw scope | Goal-relevant | Final |
+| --- | --- | ---: | ---: | ---: |
+| F5 / 30m upgrade | GEAR / GENERAL_UPGRADE / berserk | 152 | 63 | 32 |
+| Intelligence for AOTE teleporting | MAGE / INTELLIGENCE / berserk | 38 | 31 | 31 |
+| Get much faster | GEAR / SPEED / berserk | 152 | 24 | 24 |
+
+The F5 final IDs are:
+
+`INFERNAL_CRIMSON_HELMET`, `INFERNAL_TERROR_HELMET`, `INFERNAL_CRIMSON_CHESTPLATE`, `INFERNAL_TERROR_CHESTPLATE`, `INFERNAL_CRIMSON_LEGGINGS`, `INFERNAL_TERROR_LEGGINGS`, `INFERNAL_CRIMSON_BOOTS`, `INFERNAL_TERROR_BOOTS`, `TORMENTOR`, `BOUQUET_OF_LIES`, `ZOMBIE_SOLDIER_CUTLASS`, `STARRED_BAT_WAND`, `STARRED_FELTHORN_REAPER`, `FIERY_CRIMSON_HELMET`, `FIERY_TERROR_HELMET`, `BERSERKER_CHESTPLATE`, `ELEGANT_TUXEDO_CHESTPLATE`, `FIERY_CRIMSON_LEGGINGS`, `FIERY_TERROR_LEGGINGS`, `FIERY_CRIMSON_BOOTS`, `FIERY_TERROR_BOOTS`, `DARK_CLAYMORE`, `FLOWER_OF_TRUTH`, `ATOMSPLIT_KATANA`, `GIANT_CLEAVER`, `HEARTFIRE_DAGGER`, `BURNING_TERROR_HELMET`, `FIERY_CRIMSON_CHESTPLATE`, `FIERY_TERROR_CHESTPLATE`, `BERSERKER_LEGGINGS`, `BURNING_TERROR_LEGGINGS`, `BURNING_CRIMSON_BOOTS`.
+
+The Intelligence final IDs are:
+
+`INFERNAL_AURORA_HELMET`, `INFERNAL_AURORA_CHESTPLATE`, `INFERNAL_AURORA_LEGGINGS`, `INFERNAL_AURORA_BOOTS`, `HYPERION`, `CRYPT_BOW`, `FIERY_AURORA_HELMET`, `FIERY_AURORA_CHESTPLATE`, `FIERY_AURORA_LEGGINGS`, `FIERY_AURORA_BOOTS`, `STARRED_BAT_WAND`, `BURNING_AURORA_HELMET`, `ELEGANT_TUXEDO_CHESTPLATE`, `BURNING_AURORA_LEGGINGS`, `BURNING_AURORA_BOOTS`, `ATOMSPLIT_KATANA`, `WISE_WITHER_HELMET`, `BURNING_AURORA_CHESTPLATE`, `REAPER_LEGGINGS`, `REAPER_BOOTS`, `BAT_WAND`, `HOT_AURORA_HELMET`, `REAPER_CHESTPLATE`, `WISE_WITHER_LEGGINGS`, `WISE_WITHER_BOOTS`, `FIRE_FURY_STAFF`, `INFERNAL_HOLLOW_HELMET`, `WISE_WITHER_CHESTPLATE`, `HOT_AURORA_LEGGINGS`, `HOT_AURORA_BOOTS`, `PIGMAN_SWORD`.
+
+The Speed final IDs are:
+
+`RACING_HELMET`, `INFERNAL_TERROR_CHESTPLATE`, `INFERNAL_TERROR_LEGGINGS`, `RANCHERS_BOOTS`, `INFERNAL_TERROR_HELMET`, `SPEED_WITHER_CHESTPLATE`, `SPEED_WITHER_LEGGINGS`, `FARMER_BOOTS`, `SPEED_WITHER_HELMET`, `GLOSSY_MINERAL_CHESTPLATE`, `GLOSSY_MINERAL_LEGGINGS`, `STARRED_THORNS_BOOTS`, `STARRED_SPIRIT_MASK`, `THERMODYNAMIC_CHESTPLATE`, `THERMODYNAMIC_LEGGINGS`, `INFERNAL_TERROR_BOOTS`, `THERMODYNAMIC_HELMET`, `FIERY_TERROR_CHESTPLATE`, `FIERY_TERROR_LEGGINGS`, `SPEED_WITHER_BOOTS`, `FIERY_TERROR_HELMET`, `YOUNG_DRAGON_CHESTPLATE`, `YOUNG_DRAGON_LEGGINGS`, `THERMODYNAMIC_BOOTS`.
+
+In the generic F5 context, Racing Helmet, Rancher's Boots, Glossy Mineral speed pieces, and Intelligence-only Aurora/Storm pieces were removed because their surviving lanes were irrelevant to the Berserk fallback goal. Those Speed items returned for the explicit Speed question, while Intelligence candidates were retained despite the inferred Berserk role. Relevant locked and over-budget candidates also remained. Full per-candidate F5 relevance, known changes, prices, budget gaps, requirement gaps, warnings, and source lanes are recorded in `phase-4.2-f5-candidates.json`. No OpenAI request was made.
+
+The F5 relevance set still contained 63 candidates, so the stable lane selector used the full 32-item ceiling. Several high-stat candidates are distant, expensive, or have partially unknown Kuudra requirements. They remain because Phase 4.2 explicitly keeps relevant feasibility gaps and forbids deterministic “close enough” thresholds. This is the principal review concern before the next Luna call; the model must use those gaps rather than treating shortlist membership as an endorsement.

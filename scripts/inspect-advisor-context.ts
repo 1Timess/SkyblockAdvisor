@@ -35,7 +35,7 @@ async function main() {
       rabbitLowerLevelTargetSuppressed: result.diagnostics.rabbitLowerLevelTargetSuppressed,
       rabbitNoOpSuppressed: result.diagnostics.rabbitNoOpSuppressed,
     },
-    removedByRelevance: result.diagnostics.removedByRelevance,
+    removedByRelevance: summarizeRemoved(result.diagnostics.removedByRelevance),
     detailedCandidates: result.context.candidates.map(candidate => ({
       candidateId: candidate.id,
       domain: candidate.domain,
@@ -49,6 +49,19 @@ async function main() {
       sourceLanes: result.candidateLanes[candidate.id] ?? [],
     })),
   }, null, 2));
+}
+
+function summarizeRemoved(removed: Array<{ id: string; domain: string; name: string; sourceLanes: string[]; reason: string }>) {
+  const groups = new Map<string, typeof removed>();
+  for (const candidate of removed) for (const lane of candidate.sourceLanes) {
+    const parts = lane.split(":"), laneFamily = `${parts[0]}:${parts.at(-1)}`;
+    groups.set(laneFamily, [...(groups.get(laneFamily) ?? []), candidate]);
+  }
+  return { count: removed.length, groups: [...groups].map(([laneFamily, candidates]) => {
+    const examples = [...new Map([...candidates.slice(0, 3), ...candidates.slice(-3)].map(candidate => [candidate.id, candidate])).values()];
+    return { laneFamily, count: new Set(candidates.map(candidate => candidate.id)).size,
+      examples: examples.map(({ id, domain, name, reason }) => ({ id, domain, name, reason })) };
+  }) };
 }
 
 main().catch(error => { console.error(error instanceof Error ? error.message : "Advisor context inspection failed."); process.exitCode = 1; });

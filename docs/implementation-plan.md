@@ -52,3 +52,9 @@ Implemented a compact 32-candidate context, exact candidate-ID preservation, str
 Implemented deterministic question routing, optional in-memory conversation facts, compact domain availability metadata, and detailed candidate selection restricted to the active scope. The 32-candidate limit is now a ceiling for relevant scope candidates rather than an all-domain quota. Broad Dungeon progression loads armor and weapons; explicit Magical Power, pet, and armor-slot questions load only their matching details.
 
 The advisor response contract now supports clarification and plan outcomes. Plans use semantic action types and structured follow-up domains. Profile parser warnings are compacted only at the advisor boundary. Duplicate pets remain in the normalized profile, while progression lanes use the best owned representative and detailed context removes no-op owned-pet entries. Deterministic inspection tooling exposes routing, availability, exact IDs, lane provenance, warning compaction, and pet diagnostics without calling OpenAI.
+
+## Phase 4.2 goal relevance and prerequisite-aware progression
+
+Added a small goal model independent of scope and a query-sensitive relevance pass over existing lanes. Explicit Intelligence, Speed, survivability, and individual-stat requests override inferred role. General progression uses the observed or conversation role only as fallback. Removed lanes do not trigger quota filling.
+
+Advisor discovery retains relevant locked and over-budget candidates while other candidate-lane consumers keep the existing actionable-only behavior. Compact advisor candidates expose structured price and requirement feasibility. Luna instructions now state that candidates are possibilities, locked candidates may follow a progression step, saving may precede a purchase, and a hold-only plan is valid when no candidate justifies spending.

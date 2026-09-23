@@ -70,6 +70,12 @@ The compact context retains exact candidate IDs, prices, known changes, requirem
 
 Luna receives this context through the OpenAI Responses API without tools or response storage. It owns judgment, order, tradeoffs, and explanation. Strict Structured Outputs allow either `CLARIFICATION` or `PLAN`. Plan actions carry `BUY`, `PROGRESSION`, `HOLD`, or `INVESTIGATE` semantics and structured follow-up domains. Local validation enforces the Zod contract, contiguous ranks, action-specific candidate rules, and exact membership of every non-null candidate ID. There is no recommendation engine beneath the model and no advisor UI in this phase.
 
+## Phase 4.2 goal relevance and feasibility
+
+Scope determines which domains are loaded; a separate small goal enum determines which existing stat and ability lanes are relevant. Explicit current goals outrank conversation state and inferred class. General questions use the conversation role or selected Dungeon class as a fallback. Relevance removes candidates that appear only in unrelated lanes before the existing stable 32-item selector runs. It never replenishes removed entries, so fewer than 32 is valid.
+
+Candidate preparation now has an explicit policy. Existing callers default to `ACTIONABLE_ONLY`, preserving the prior hard filters. The advisor uses `ADVISOR_DISCOVERY`, which retains goal-relevant candidates that are over budget or requirement-locked. Compact candidates carry price status, signed budget delta, overall requirement status, and individual parsed requirement gaps with current, required, and gap values. Unsupported and unparsed requirement families remain `UNKNOWN`. Deterministic code does not decide whether a gap is close enough; Luna may sequence progression or saving before a buy, or recommend holding resources.
+
 ## Scope guardrails
 
 No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, recommendation frontier, advisor UI, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.
