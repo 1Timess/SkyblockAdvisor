@@ -42,3 +42,12 @@ export const weaponCandidateLanesSchema = z.object({
   candidates: z.array(advisorCandidateSchema).max(20),
 });
 export type WeaponCandidateLanes = z.infer<typeof weaponCandidateLanesSchema>;
+
+export const accessoryLaneNames = ["missing", "rarityUpgrade", "cheapestMp", "recombobulation", "enrichment"] as const;
+export type AccessoryLaneName = typeof accessoryLaneNames[number];
+
+export const accessoryCandidateLanesSchema = z.object({
+  lanes: z.record(z.enum(accessoryLaneNames), z.array(advisorCandidateSchema).max(6)),
+  candidates: z.array(advisorCandidateSchema).max(20),
+});
+export type AccessoryCandidateLanes = z.infer<typeof accessoryCandidateLanesSchema>;
