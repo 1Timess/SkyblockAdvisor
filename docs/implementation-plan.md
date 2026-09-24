@@ -70,3 +70,9 @@ The selector allocates prompt space and does not recommend items. It preserves e
 Added a diagnostic-only trace from catalog metadata through slot/type pairing, advisor-mode preparation, uncapped lane qualification, top-six lane output, and raw advisor presence. It also records focused category coverage and successful controls. No catalog normalization, preparation rule, lane behavior, relevance filter, or frontier behavior changed.
 
 The investigation found that the expected Necron armor and Midas weapon records are present, correctly typed under current repository rules, prepared successfully, and eligible before lane ranking. They disappear because the Phase 3 top-six lane cap is also acting as a raw-discovery cap. A future reviewed change should expose the qualifying pre-cap pool to the advisor while retaining capped Phase 3 presentation lanes. Effective comparisons involving reforges, stars, and semantic set/ability value remain outside the current fact model.
+
+## Phase 4.5 decoupled advisor discovery
+
+Implemented the Phase 4.4 recommendation as a separate discovery view on armor and weapon candidate results. Existing Phase 3 lane ordering and caps remain intact. Advisor context construction now consumes all prepared candidates with qualifying deterministic evidence, preserves exact IDs and merged lane evidence, then delegates scope, goal relevance, feasibility classification, and the final context budget to the existing Phase 4 pipeline.
+
+Trace output distinguishes qualification, capped Phase 3 presence, advisor-discovery presence, raw scope, relevance, and frontier selection. `LANE_CAP` is now explicitly a Phase 3 presentation exclusion rather than an advisor exclusion. Regression tests cover below-rank-six discovery, exact-ID evidence merging across weapon baselines, and continued exclusion of owned, wrong-category, wrong-slot, and no-evidence candidates. No recommendation scoring, frontier threshold, UI, or Luna call was added.

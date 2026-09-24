@@ -84,6 +84,12 @@ Structural keys use domain, armor slot or weapon category, relevant evidence, an
 
 The full raw scope, goal-relevant universe, and final frontier remain inspectable. Feasibility changes scarce-context priority only; it does not invalidate locked, over-budget, unknown, or distant candidates. Luna is explicitly told that the shortlist is representative and remains responsible for whether any supplied option is worthwhile.
 
+## Phase 4.5 advisor discovery
+
+Armor and weapon builders expose two views over the same prepared candidates. The existing Phase 3 lanes keep their top-six per-lane and total presentation caps. A separate advisor-discovery view retains every candidate that has qualifying deterministic stat or ability evidence before those presentation caps. Wrong slot or weapon type, exact owned IDs, and candidates without qualifying evidence remain excluded. Locked and over-budget candidates remain available under the existing advisor discovery preparation policy.
+
+The advisor composes raw scope from the uncapped discovery lanes, deduplicates only exact candidate IDs, preserves all contributing lane provenance and evidence, and then applies the existing scope, goal-relevance, feasibility, and Phase 4.3 frontier stages. The frontier implementation and its 32-candidate ceiling are unchanged. Phase 3 consumers continue to receive the capped lanes.
+
 ## Scope guardrails
 
 No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, deterministic recommendation rank, advisor UI, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.

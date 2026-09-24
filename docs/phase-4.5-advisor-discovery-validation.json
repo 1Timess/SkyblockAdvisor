@@ -1,0 +1,546 @@
+{
+  "question": "I just cleared F5 and have 30m coins. What should I upgrade next?",
+  "route": {
+    "scope": "GEAR",
+    "activeDomains": [
+      "ARMOR",
+      "WEAPONS"
+    ],
+    "clarificationRecommended": false,
+    "reason": "The question ties a broad upgrade request to dungeon progression.",
+    "goal": "GENERAL_UPGRADE",
+    "inferredRole": "berserk",
+    "armorSlots": []
+  },
+  "currentBaselines": {
+    "armor": [
+      {
+        "id": "BACKWATER_HELMET",
+        "name": "Backwater Helmet",
+        "slot": "helmet"
+      },
+      {
+        "id": "BACKWATER_CHESTPLATE",
+        "name": "Backwater Chestplate",
+        "slot": "chestplate"
+      },
+      {
+        "id": "BACKWATER_LEGGINGS",
+        "name": "Backwater Leggings",
+        "slot": "leggings"
+      },
+      {
+        "id": "BACKWATER_BOOTS",
+        "name": "Backwater Boots",
+        "slot": "boots"
+      }
+    ],
+    "weapons": [
+      {
+        "id": "LIVID_DAGGER",
+        "name": "Fabled Livid Dagger ✪✪✪✪✪",
+        "type": "sword"
+      },
+      {
+        "id": "FLORID_ZOMBIE_SWORD",
+        "name": "Florid Zombie Sword",
+        "type": "sword"
+      },
+      {
+        "id": "ASPECT_OF_THE_END",
+        "name": "Spicy Aspect of the End",
+        "type": "sword"
+      },
+      {
+        "id": "VENOMS_TOUCH",
+        "name": "Grand Venom's Touch",
+        "type": "bow"
+      }
+    ]
+  },
+  "phase43Counts": {
+    "raw": 152,
+    "goalRelevant": 63,
+    "frontierFinal": 28
+  },
+  "phase45Counts": {
+    "catalogConsidered": 1065,
+    "phase3CappedUnique": {
+      "armor": 117,
+      "weapons": 45,
+      "total": 162
+    },
+    "advisorDiscoveryUnique": {
+      "armor": 686,
+      "weapons": 129,
+      "total": 815
+    },
+    "scoped": 815,
+    "goalRelevant": 304,
+    "frontierFinal": 32
+  },
+  "phase3CappedLanes": {
+    "armor": [
+      {
+        "slot": "helmet",
+        "counts": {
+          "defense": 6,
+          "health": 6,
+          "strength": 6,
+          "critDamage": 6,
+          "intelligence": 6,
+          "speed": 6
+        }
+      },
+      {
+        "slot": "chestplate",
+        "counts": {
+          "defense": 6,
+          "health": 6,
+          "strength": 6,
+          "critDamage": 6,
+          "intelligence": 6,
+          "speed": 6
+        }
+      },
+      {
+        "slot": "leggings",
+        "counts": {
+          "defense": 6,
+          "health": 6,
+          "strength": 6,
+          "critDamage": 6,
+          "intelligence": 6,
+          "speed": 6
+        }
+      },
+      {
+        "slot": "boots",
+        "counts": {
+          "defense": 6,
+          "health": 6,
+          "strength": 6,
+          "critDamage": 6,
+          "intelligence": 6,
+          "speed": 6
+        }
+      }
+    ],
+    "weapons": [
+      {
+        "current": "LIVID_DAGGER",
+        "counts": {
+          "damage": 6,
+          "strength": 6,
+          "critDamage": 0,
+          "intelligence": 6,
+          "attackSpeed": 1,
+          "ability": 6
+        }
+      },
+      {
+        "current": "FLORID_ZOMBIE_SWORD",
+        "counts": {
+          "damage": 6,
+          "strength": 6,
+          "critDamage": 6,
+          "intelligence": 6,
+          "attackSpeed": 6,
+          "ability": 6
+        }
+      },
+      {
+        "current": "ASPECT_OF_THE_END",
+        "counts": {
+          "damage": 6,
+          "strength": 6,
+          "critDamage": 6,
+          "intelligence": 6,
+          "attackSpeed": 6,
+          "ability": 6
+        }
+      },
+      {
+        "current": "VENOMS_TOUCH",
+        "counts": {
+          "damage": 6,
+          "strength": 4,
+          "critDamage": 6,
+          "intelligence": 1,
+          "attackSpeed": 1,
+          "ability": 6
+        }
+      }
+    ]
+  },
+  "frontierBucketDistribution": {
+    "ACTIONABLE": 12,
+    "MONEY_GATED": 8,
+    "PROGRESSION_GATED": 8,
+    "DISTANT_OR_UNCERTAIN": 4
+  },
+  "frontierExclusionCounts": {
+    "REDUNDANCY_LIMIT": 15,
+    "BUCKET_LIMIT": 174,
+    "FINAL_CAP": 83,
+    "LOWER_CONTEXT_PRIORITY": 0,
+    "NO_OP": 0,
+    "OTHER": 0
+  },
+  "probes": {
+    "NECRON": {
+      "matchCount": 10,
+      "items": [
+        {
+          "catalogId": "NECRONS_LADDER",
+          "displayName": "Necron's Ladder",
+          "domain": null,
+          "slotOrType": null,
+          "qualifiesBeforePhase3Cap": false,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": false,
+          "presentInRawAdvisorScope": false,
+          "goalRelevant": false,
+          "frontierSelected": false,
+          "frontierBucket": null,
+          "frontierExclusionReason": null,
+          "outcome": "Catalog categories do not identify the item as armor or weapon."
+        },
+        {
+          "catalogId": "POWER_WITHER_BOOTS",
+          "displayName": "Necron's Boots",
+          "domain": "armor",
+          "slotOrType": "boots",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": true,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "PROGRESSION_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the PROGRESSION_GATED context ceiling was reached."
+        },
+        {
+          "catalogId": "POWER_WITHER_CHESTPLATE",
+          "displayName": "Necron's Chestplate",
+          "domain": "armor",
+          "slotOrType": "chestplate",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "PROGRESSION_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the PROGRESSION_GATED context ceiling was reached."
+        },
+        {
+          "catalogId": "GOLD_NECRON_HEAD",
+          "displayName": "Golden Necron Head",
+          "domain": "armor",
+          "slotOrType": "helmet",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "DISTANT_OR_UNCERTAIN",
+          "frontierExclusionReason": "FINAL_CAP",
+          "outcome": "Not selected because the final context ceiling was reached."
+        },
+        {
+          "catalogId": "DUNGEON_DISC_5",
+          "displayName": "Necron Disc",
+          "domain": null,
+          "slotOrType": null,
+          "qualifiesBeforePhase3Cap": false,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": false,
+          "presentInRawAdvisorScope": false,
+          "goalRelevant": false,
+          "frontierSelected": false,
+          "frontierBucket": null,
+          "frontierExclusionReason": null,
+          "outcome": "Catalog categories do not identify the item as armor or weapon."
+        },
+        {
+          "catalogId": "DIAMOND_NECRON_HEAD",
+          "displayName": "Diamond Necron Head",
+          "domain": "armor",
+          "slotOrType": "helmet",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": true,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "DISTANT_OR_UNCERTAIN",
+          "frontierExclusionReason": "FINAL_CAP",
+          "outcome": "Not selected because the final context ceiling was reached."
+        },
+        {
+          "catalogId": "NECRON_HANDLE",
+          "displayName": "Necron's Handle",
+          "domain": null,
+          "slotOrType": null,
+          "qualifiesBeforePhase3Cap": false,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": false,
+          "presentInRawAdvisorScope": false,
+          "goalRelevant": false,
+          "frontierSelected": false,
+          "frontierBucket": null,
+          "frontierExclusionReason": null,
+          "outcome": "Catalog categories do not identify the item as armor or weapon."
+        },
+        {
+          "catalogId": "NECRON_BLADE",
+          "displayName": "Necron's Blade (Unrefined)",
+          "domain": "weapon",
+          "slotOrType": "sword",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "PROGRESSION_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the PROGRESSION_GATED context ceiling was reached."
+        },
+        {
+          "catalogId": "POWER_WITHER_LEGGINGS",
+          "displayName": "Necron's Leggings",
+          "domain": "armor",
+          "slotOrType": "leggings",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "PROGRESSION_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the PROGRESSION_GATED context ceiling was reached."
+        },
+        {
+          "catalogId": "POWER_WITHER_HELMET",
+          "displayName": "Necron's Helmet",
+          "domain": "armor",
+          "slotOrType": "helmet",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": true,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "PROGRESSION_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the PROGRESSION_GATED context ceiling was reached."
+        }
+      ]
+    },
+    "MIDAS": {
+      "matchCount": 5,
+      "items": [
+        {
+          "catalogId": "MIDAS_STAFF",
+          "displayName": "Midas Staff",
+          "domain": "weapon",
+          "slotOrType": "sword",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "ACTIONABLE",
+          "frontierExclusionReason": "REDUNDANCY_LIMIT",
+          "outcome": "Structurally similar candidates already represent weapon:sword:damage+strength:ACTIONABLE."
+        },
+        {
+          "catalogId": "STARRED_MIDAS_STAFF",
+          "displayName": " Midas Staff",
+          "domain": "weapon",
+          "slotOrType": "sword",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "MONEY_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the MONEY_GATED context ceiling was reached."
+        },
+        {
+          "catalogId": "MIDAS_SWORD",
+          "displayName": "Midas' Sword",
+          "domain": "weapon",
+          "slotOrType": "sword",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "ACTIONABLE",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the ACTIONABLE context ceiling was reached."
+        },
+        {
+          "catalogId": "MIDAS_JEWEL",
+          "displayName": "Midas Jewel",
+          "domain": null,
+          "slotOrType": null,
+          "qualifiesBeforePhase3Cap": false,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": false,
+          "presentInRawAdvisorScope": false,
+          "goalRelevant": false,
+          "frontierSelected": false,
+          "frontierBucket": null,
+          "frontierExclusionReason": null,
+          "outcome": "Catalog categories do not identify the item as armor or weapon."
+        },
+        {
+          "catalogId": "STARRED_MIDAS_SWORD",
+          "displayName": " Midas' Sword",
+          "domain": "weapon",
+          "slotOrType": "sword",
+          "qualifiesBeforePhase3Cap": true,
+          "presentInPhase3CappedLane": false,
+          "presentInAdvisorDiscovery": true,
+          "presentInRawAdvisorScope": true,
+          "goalRelevant": true,
+          "frontierSelected": false,
+          "frontierBucket": "MONEY_GATED",
+          "frontierExclusionReason": "BUCKET_LIMIT",
+          "outcome": "Not selected because the MONEY_GATED context ceiling was reached."
+        }
+      ]
+    }
+  },
+  "controls": [
+    {
+      "catalogId": "STARRED_SHADOW_FURY",
+      "displayName": " Shadow Fury",
+      "domain": "weapon",
+      "slotOrType": "sword",
+      "qualifiesBeforePhase3Cap": true,
+      "presentInPhase3CappedLane": true,
+      "presentInAdvisorDiscovery": true,
+      "presentInRawAdvisorScope": true,
+      "goalRelevant": true,
+      "frontierSelected": false,
+      "frontierBucket": "ACTIONABLE",
+      "frontierExclusionReason": "REDUNDANCY_LIMIT",
+      "outcome": "Structurally similar candidates already represent weapon:sword:critDamage+damage+strength:ACTIONABLE."
+    },
+    {
+      "catalogId": "FLOWER_OF_TRUTH",
+      "displayName": "Flower of Truth",
+      "domain": "weapon",
+      "slotOrType": "sword",
+      "qualifiesBeforePhase3Cap": true,
+      "presentInPhase3CappedLane": true,
+      "presentInAdvisorDiscovery": true,
+      "presentInRawAdvisorScope": true,
+      "goalRelevant": true,
+      "frontierSelected": true,
+      "frontierBucket": "ACTIONABLE",
+      "frontierExclusionReason": null,
+      "outcome": "Selected by the progression frontier."
+    },
+    {
+      "catalogId": "GIANTS_SWORD",
+      "displayName": "Giant's Sword",
+      "domain": "weapon",
+      "slotOrType": "sword",
+      "qualifiesBeforePhase3Cap": true,
+      "presentInPhase3CappedLane": true,
+      "presentInAdvisorDiscovery": true,
+      "presentInRawAdvisorScope": true,
+      "goalRelevant": true,
+      "frontierSelected": false,
+      "frontierBucket": "MONEY_GATED",
+      "frontierExclusionReason": "BUCKET_LIMIT",
+      "outcome": "Not selected because the MONEY_GATED context ceiling was reached."
+    },
+    {
+      "catalogId": "BERSERKER_CHESTPLATE",
+      "displayName": "Berserker Chestplate",
+      "domain": "armor",
+      "slotOrType": "chestplate",
+      "qualifiesBeforePhase3Cap": true,
+      "presentInPhase3CappedLane": true,
+      "presentInAdvisorDiscovery": true,
+      "presentInRawAdvisorScope": true,
+      "goalRelevant": true,
+      "frontierSelected": true,
+      "frontierBucket": "DISTANT_OR_UNCERTAIN",
+      "frontierExclusionReason": null,
+      "outcome": "Selected by the progression frontier."
+    },
+    {
+      "catalogId": "BURNING_TERROR_HELMET",
+      "displayName": "Burning Terror Helmet",
+      "domain": "armor",
+      "slotOrType": "helmet",
+      "qualifiesBeforePhase3Cap": true,
+      "presentInPhase3CappedLane": true,
+      "presentInAdvisorDiscovery": true,
+      "presentInRawAdvisorScope": true,
+      "goalRelevant": true,
+      "frontierSelected": false,
+      "frontierBucket": "DISTANT_OR_UNCERTAIN",
+      "frontierExclusionReason": "FINAL_CAP",
+      "outcome": "Not selected because the final context ceiling was reached."
+    }
+  ],
+  "finalDetailedIds": [
+    "GIANT_CLEAVER",
+    "PIGMAN_SWORD",
+    "FLOWER_OF_TRUTH",
+    "YETI_SWORD",
+    "SWORD_OF_BAD_HEALTH",
+    "SUPER_CLEAVER",
+    "ZOMBIE_SOLDIER_CUTLASS",
+    "STARRED_BAT_WAND",
+    "BAT_WAND",
+    "BERSERKER_HELMET",
+    "REKINDLED_EMBER_BOOTS",
+    "REKINDLED_EMBER_CHESTPLATE",
+    "FELTHORN_REAPER",
+    "BOUQUET_OF_LIES",
+    "MYTHOS_LEGGINGS",
+    "STARRED_ICE_SPRAY_WAND",
+    "STARRED_YETI_SWORD",
+    "ELEGANT_TUXEDO_LEGGINGS",
+    "GLACIAL_SCYTHE",
+    "STARRED_FELTHORN_REAPER",
+    "PRIMORDIAL_BOOTS",
+    "HEARTFIRE_DAGGER",
+    "MAGMA_LORD_CHESTPLATE",
+    "HEARTMAW_DAGGER",
+    "ATOMSPLIT_KATANA",
+    "MAGMA_LORD_LEGGINGS",
+    "AXE_OF_THE_SHREDDED",
+    "STING",
+    "ENRAGER",
+    "SCYLLA",
+    "BERSERKER_CHESTPLATE",
+    "CREEPER_HAT"
+  ],
+  "validation": {
+    "finalAtOrBelow32": true,
+    "phase3LaneCapsPreserved": true,
+    "exactIdDeduplicationOnly": true,
+    "frontierChanged": false,
+    "openAIRequestMade": false,
+    "candidateExplosionConcern": "Advisor discovery expanded to 815 unique armor/weapon IDs and 304 goal-relevant IDs for this live F5 context."
+  }
+}

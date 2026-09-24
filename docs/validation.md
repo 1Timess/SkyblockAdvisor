@@ -200,3 +200,24 @@ The category sample found 834 armor records with zero missing recognized slots a
 The trace also exposes a later modeling limit. Equipped item stats include their observed stars/reforges/upgrades, while candidate catalog stats are base reference values. Necron's known strength and crit-damage values do not exceed the equipped observed values, and armor set-bonus text does not nominate a candidate. Midas ability text is eligible, but ability candidates are still capped and ordered by a small numeric tuple. The repository does not contain enough modeled mechanics to claim the probes are better progression choices; the investigation only establishes why they never enter raw scope.
 
 The proposed next change is to expose every prepared item with qualifying deterministic evidence as an advisor-discovery pool before Phase 3's top-six presentation cap. Existing capped Phase 3 results can remain unchanged; Phase 4.2 relevance and Phase 4.3 context ceilings can process the broader pool. Regression coverage should prove below-rank-six armor and weapon candidates enter discovery, while wrong slot/type, owned IDs, and candidates with no qualifying evidence remain excluded. The raw universe will grow, so all three Phase 4.3 live distributions must be revalidated. No production candidate behavior or OpenAI request was part of Phase 4.4. Full per-item evidence is in [`phase-4.4-candidate-coverage-investigation.json`](phase-4.4-candidate-coverage-investigation.json).
+
+## Phase 4.5 decoupled advisor discovery validation
+
+Phase 4.5 separates advisor discovery from Phase 3 presentation caps. The original armor and weapon outputs still contain at most six candidates per lane and retain their existing total caps. The advisor now consumes the uncapped qualifying discovery lanes, merges repeated exact IDs while preserving every contributing lane and known change, and passes that broader raw universe through the unchanged goal-relevance and frontier stages.
+
+| Command | Result |
+| --- | --- |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed with no warnings |
+| `npm test` | 79 offline tests passed |
+| `npm run build` | Production build passed |
+| `npm run inspect:candidate-trace -- iTimess Lemon 30000000 NECRON MIDAS` | Passed; discovery, capped-lane, relevance, and frontier status reported for every probe and control |
+| Three required `inspect:advisor-context` queries | Passed against iTimess / Lemon / 30m; no OpenAI request |
+
+The historical Phase 4.3 F5 run contained 152 raw, 63 goal-relevant, and 28 final candidates. The Phase 4.5 live run contained 815 raw, 304 goal-relevant, and 32 final candidates. The player's equipped armor changed between those runs from the earlier Shadow Assassin loadout to four Backwater pieces, so those historical totals show overall behavior rather than an isolated code-only delta. In the current run, the same builders produced 162 unique candidates through the capped Phase 3 view and 815 through advisor discovery, which directly demonstrates the cap decoupling.
+
+The current F5 frontier contains 12 actionable, 8 money-gated, 8 progression-gated, and 4 distant or uncertain candidates. Exclusions were 15 structural redundancy limits, 174 bucket limits, and 83 final-cap exclusions. This confirms the distant ceiling and structural redundancy limits still operate. The unchanged selector still permits fewer than 32 results, as its regression test confirms; this broader live universe happened to fill all 32 slots. The selected IDs are recorded with probe and control outcomes in [`phase-4.5-advisor-discovery-validation.json`](phase-4.5-advisor-discovery-validation.json).
+
+All four `POWER_WITHER_*` Necron armor pieces and `NECRON_BLADE` now enter raw advisor scope. The base and starred Midas Staff and Midas' Sword entries also enter raw scope. Their absence from the final context is explained by the existing relevance/frontier metadata: bucket limits, final-cap limits, or redundancy limits. Non-gear matches such as Necron's Ladder, Necron's Handle, Dungeon Disc 5, and Midas Jewel remain outside discovery. All five Phase 4.4 controls enter discovery and raw scope; `FLOWER_OF_TRUTH` and `BERSERKER_CHESTPLATE` reach the final frontier in the current run.
+
+The expanded universe is a material review concern: 815 raw candidates and 304 goal-relevant candidates now compete for 32 context slots. This is the intended consequence of removing Phase 3 presentation caps from discovery, and Phase 4.5 does not conceal it with a replacement pre-frontier cap or score. The Intelligence query produced 359 raw, 283 relevant, and 32 final candidates; the Speed query produced 815 raw, 158 relevant, and 32 final candidates. No Luna or OpenAI request was made.
