@@ -1,0 +1,2640 @@
+{
+  "question": "I just cleared F6 and have 30m coins. What should I upgrade next?",
+  "route": {
+    "scope": "GEAR",
+    "activeDomains": [
+      "ARMOR",
+      "WEAPONS"
+    ],
+    "clarificationRecommended": false,
+    "reason": "The question ties a broad upgrade request to dungeon progression.",
+    "goal": "GENERAL_UPGRADE",
+    "inferredRole": "berserk",
+    "armorSlots": []
+  },
+  "conversationState": {
+    "budgetCoins": 30000000
+  },
+  "availableAnalysis": {
+    "armor": {
+      "available": true,
+      "candidateCount": 361
+    },
+    "weapons": {
+      "available": true,
+      "candidateCount": 129
+    },
+    "accessories": {
+      "available": true,
+      "candidateCount": 14,
+      "currentMagicalPower": 433,
+      "missingCount": 203,
+      "upgradeCount": 41
+    },
+    "pets": {
+      "available": true,
+      "candidateCount": 12,
+      "ownedCount": 15
+    }
+  },
+  "player": {
+    "economy": {
+      "purse": 29992556.62125035,
+      "bank": null,
+      "personalBank": 0
+    },
+    "skills": {
+      "farming": {
+        "level": 24,
+        "maxLevel": 50
+      },
+      "mining": {
+        "level": 28,
+        "maxLevel": 60
+      },
+      "combat": {
+        "level": 25,
+        "maxLevel": 60
+      },
+      "foraging": {
+        "level": 20,
+        "maxLevel": 50
+      },
+      "fishing": {
+        "level": 21,
+        "maxLevel": 50
+      },
+      "enchanting": {
+        "level": 23,
+        "maxLevel": 60
+      },
+      "alchemy": {
+        "level": 9,
+        "maxLevel": 50
+      },
+      "taming": {
+        "level": 24,
+        "maxLevel": 51
+      },
+      "carpentry": {
+        "level": 20,
+        "maxLevel": 50
+      },
+      "runecrafting": {
+        "level": 15,
+        "maxLevel": 25
+      },
+      "social": {
+        "level": 1,
+        "maxLevel": 25
+      },
+      "hunting": {
+        "level": 16,
+        "maxLevel": 50
+      }
+    },
+    "slayers": {
+      "zombie": {
+        "level": 5,
+        "xp": 6130
+      },
+      "spider": {
+        "level": 4,
+        "xp": 2655
+      },
+      "wolf": {
+        "level": 3,
+        "xp": 630
+      },
+      "enderman": {
+        "level": 0,
+        "xp": 5
+      },
+      "vampire": {
+        "level": 0,
+        "xp": 0
+      },
+      "blaze": {
+        "level": 0,
+        "xp": 0
+      }
+    },
+    "dungeons": {
+      "catacombsLevel": 21,
+      "selectedClass": "berserk",
+      "highestFloorNormal": 6,
+      "highestFloorMaster": null
+    }
+  },
+  "currentGear": {
+    "armor": [
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_HELMET",
+        "name": " Ancient Shadow Assassin Helmet ✪✪✪✪✪",
+        "rarity": "legendary",
+        "categories": [
+          "armor",
+          "helmet"
+        ],
+        "stats": {
+          "health": 309,
+          "defense": 124,
+          "strength": 58,
+          "critChance": 12,
+          "critDamage": 48.5,
+          "intelligence": 20,
+          "speed": 8.8
+        },
+        "abilityText": [],
+        "setBonusText": [
+          "Piece Bonus: Pursuit",
+          "On teleport, gain invisibility and +20",
+          "Speed for 10 seconds.",
+          "Cooldown: 3s",
+          "Full Set Bonus: Shadow Assassin (4/4)",
+          "Grants +1 Strength for every mob",
+          "you kill in The Catacombs.",
+          "(Strength resets after each run)"
+        ]
+      },
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_CHESTPLATE",
+        "name": " Fierce Shadow Assassin Chestplate ✪✪✪✪",
+        "rarity": "legendary",
+        "categories": [
+          "armor",
+          "chestplate"
+        ],
+        "stats": {
+          "health": 385,
+          "defense": 158.8,
+          "strength": 42.4,
+          "critChance": 6,
+          "critDamage": 45,
+          "speed": 8.64
+        },
+        "abilityText": [],
+        "setBonusText": [
+          "Piece Bonus: Sinew",
+          "On teleport, gain +10 Strength for",
+          "10 seconds.",
+          "Cooldown: 3s",
+          "Full Set Bonus: Shadow Assassin (4/4)",
+          "Grants +1 Strength for every mob",
+          "you kill in The Catacombs.",
+          "(Strength resets after each run)"
+        ]
+      },
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_LEGGINGS",
+        "name": " Fierce Shadow Assassin Leggings ✪✪✪✪",
+        "rarity": "legendary",
+        "categories": [
+          "armor",
+          "leggings"
+        ],
+        "stats": {
+          "health": 312.6,
+          "defense": 122.6,
+          "strength": 42.4,
+          "critChance": 6,
+          "critDamage": 45,
+          "speed": 8.64
+        },
+        "abilityText": [],
+        "setBonusText": [
+          "Piece Bonus: Salubrious",
+          "On kill, heal +15.",
+          "Cooldown: 3s",
+          "Full Set Bonus: Shadow Assassin (4/4)",
+          "Grants +1 Strength for every mob",
+          "you kill in The Catacombs.",
+          "(Strength resets after each run)"
+        ]
+      },
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_BOOTS",
+        "name": " Fierce Shadow Assassin Boots ✪✪✪✪",
+        "rarity": "legendary",
+        "categories": [
+          "armor",
+          "boots"
+        ],
+        "stats": {
+          "health": 220.8,
+          "defense": 79.4,
+          "strength": 42.4,
+          "critChance": 6,
+          "critDamage": 45,
+          "speed": 8.64
+        },
+        "abilityText": [],
+        "setBonusText": [
+          "Piece Bonus: Fluxation",
+          "On teleport, regen 10 Mana.",
+          "Cooldown: 3s",
+          "Full Set Bonus: Shadow Assassin (4/4)",
+          "Grants +1 Strength for every mob",
+          "you kill in The Catacombs.",
+          "(Strength resets after each run)"
+        ]
+      }
+    ],
+    "equipment": [
+      {
+        "id": "STARRED_BONE_NECKLACE",
+        "name": " Bone Necklace ✪✪✪✪✪",
+        "rarity": "epic",
+        "categories": [
+          "equipment",
+          "necklace"
+        ],
+        "stats": {
+          "defense": 49.5,
+          "critChance": 5.5
+        },
+        "abilityText": [
+          "Ability: Gladiator's Will ",
+          "Gain +3 Defense for each enemy",
+          "within 10 blocks up to +30 Defense.",
+          "Range increases to 30 blocks and",
+          "the cap increases to +60 Defense",
+          "when you play as a Tank in dungeons."
+        ],
+        "setBonusText": []
+      },
+      {
+        "id": "ENDER_CLOAK",
+        "name": "Ender Cloak",
+        "rarity": "epic",
+        "categories": [
+          "equipment",
+          "cloak"
+        ],
+        "stats": {
+          "health": 15,
+          "defense": 10
+        },
+        "abilityText": [],
+        "setBonusText": []
+      },
+      {
+        "id": "STARRED_ADAPTIVE_BELT",
+        "name": " Adaptive Belt ✪✪✪✪✪",
+        "rarity": "epic",
+        "categories": [
+          "equipment",
+          "belt"
+        ],
+        "stats": {
+          "health": 16.5,
+          "defense": 11,
+          "strength": 11
+        },
+        "abilityText": [],
+        "setBonusText": []
+      },
+      {
+        "id": "ENDER_GAUNTLET",
+        "name": "Ender Gauntlet",
+        "rarity": "epic",
+        "categories": [
+          "equipment",
+          "gloves"
+        ],
+        "stats": {
+          "health": 15,
+          "defense": 10
+        },
+        "abilityText": [],
+        "setBonusText": []
+      }
+    ],
+    "likelyWeapons": [
+      {
+        "id": "LIVID_DAGGER",
+        "name": "Fabled Livid Dagger ✪✪✪✪✪",
+        "rarity": "mythic",
+        "categories": [
+          "weapon",
+          "sword"
+        ],
+        "stats": {
+          "damage": 251,
+          "strength": 161,
+          "critChance": 110,
+          "critDamage": 175,
+          "attackSpeed": 55
+        },
+        "abilityText": [
+          "Ability: Throw  RIGHT CLICK",
+          "Throw your dagger at your enemies!",
+          "Mana Cost: 149",
+          "Cooldown: 5s"
+        ],
+        "setBonusText": []
+      },
+      {
+        "id": "FLORID_ZOMBIE_SWORD",
+        "name": "Florid Zombie Sword",
+        "rarity": "legendary",
+        "categories": [
+          "weapon",
+          "sword"
+        ],
+        "stats": {
+          "damage": 150,
+          "strength": 80,
+          "intelligence": 100
+        },
+        "abilityText": [
+          "Ability: Instant Heal  RIGHT CLICK",
+          "Heal for 500❤ and heal players within 8",
+          "blocks for 100❤.",
+          "Vitality Cost: 25"
+        ],
+        "setBonusText": []
+      },
+      {
+        "id": "ASPECT_OF_THE_END",
+        "name": "Spicy Aspect of the End",
+        "rarity": "rare",
+        "categories": [
+          "weapon",
+          "sword"
+        ],
+        "stats": {
+          "damage": 100,
+          "strength": 104,
+          "critChance": 1,
+          "critDamage": 95,
+          "attackSpeed": 4
+        },
+        "abilityText": [
+          "Ability: Instant Transmission  RIGHT CLICK",
+          "Teleport 8 blocks ahead of you and",
+          "gain +50  Speed for 3 seconds.",
+          "Mana Cost: 25"
+        ],
+        "setBonusText": []
+      },
+      {
+        "id": "VENOMS_TOUCH",
+        "name": "Grand Venom's Touch",
+        "rarity": "epic",
+        "categories": [
+          "weapon",
+          "bow"
+        ],
+        "stats": {
+          "damage": 250,
+          "strength": 150
+        },
+        "abilityText": [],
+        "setBonusText": []
+      }
+    ],
+    "activePet": {
+      "type": "DOLPHIN",
+      "name": "Dolphin",
+      "rarity": "uncommon",
+      "level": 81,
+      "heldItem": "PET_ITEM_FISHING_SKILL_BOOST_COMMON",
+      "stats": {},
+      "abilityLore": []
+    },
+    "magicalPower": 433
+  },
+  "candidates": [
+    {
+      "id": "GIANT_CLEAVER",
+      "domain": "weapon",
+      "name": "Giant Cleaver",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 235,
+        "strength": 120,
+        "critDamage": 120
+      },
+      "price": {
+        "coins": 6198999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 235
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 120
+        },
+        "critDamage": {
+          "current": 95,
+          "candidate": 120
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 6198999,
+        "budgetDeltaCoins": -23801001,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VI Completion"
+      ],
+      "abilityText": [
+        "Ability: Cleave ",
+        "When hitting an entity, monsters in a 5 block",
+        "range will be hit for a portion of that damage",
+        "too."
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "PIGMAN_SWORD",
+      "domain": "weapon",
+      "name": "Pigman Sword",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 200,
+        "strength": 100,
+        "critChance": 5,
+        "critDamage": 30,
+        "intelligence": 300
+      },
+      "price": {
+        "coins": 7500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 200
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 100
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 30
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 7500000,
+        "budgetDeltaCoins": -22500000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [
+        "Ability: Burning Souls  RIGHT CLICK",
+        "Gain +75 Defense for 5s and cast vortex of",
+        "flames towards enemies, dealing up to 30,000",
+        "over 5 seconds.",
+        "Mana Cost: 400",
+        "Cooldown: 5s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "FLOWER_OF_TRUTH",
+      "domain": "weapon",
+      "name": "Flower of Truth",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 160,
+        "strength": 300
+      },
+      "price": {
+        "coins": 4449999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 4449999,
+        "budgetDeltaCoins": -25550001,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VI Completion"
+      ],
+      "abilityText": [
+        "Ability: Heat-Seeking Rose  RIGHT CLICK",
+        "Shoots a rose that ricochets between enemies,",
+        "damaging up to 3 of your foes! Damage",
+        "multiplies as more enemies are hit.",
+        "Health Cost: 100",
+        "Cooldown: 1s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "YETI_SWORD",
+      "domain": "weapon",
+      "name": "Yeti Sword",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 150,
+        "strength": 170,
+        "intelligence": 50
+      },
+      "price": {
+        "coins": 14499999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 170
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": 50
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 150
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 14499999,
+        "budgetDeltaCoins": -15500001,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [
+        "Ability: Terrain Toss  RIGHT CLICK",
+        "Throws a chunk of terrain in the direction you",
+        "are facing! Deals up to 15,000 damage.",
+        "Mana Cost: 250",
+        "Cooldown: 1s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "SWORD_OF_BAD_HEALTH",
+      "domain": "weapon",
+      "name": "Sword of Bad Health",
+      "rarity": "uncommon",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 200,
+        "strength": 50,
+        "critDamage": 50
+      },
+      "price": {
+        "coins": 690000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 200
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 50
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 50
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 690000,
+        "budgetDeltaCoins": -29310000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Combat Skill 22"
+      ],
+      "abilityText": [
+        "Ability: Bad Health  RIGHT CLICK",
+        "Gain +5 Strength for every 5% of total HP",
+        "you have for 5s. Capped at +100 Strength.",
+        "Health Cost: 100",
+        "Cooldown: 5s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "SUPER_CLEAVER",
+      "domain": "weapon",
+      "name": "Super Cleaver",
+      "rarity": "rare",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 105,
+        "strength": 20,
+        "critDamage": 20
+      },
+      "price": {
+        "coins": 585000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 105
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 20
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 20
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage, damage.",
+        "relevantStats": [
+          "critDamage",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 585000,
+        "budgetDeltaCoins": -29415000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [
+        "Ability: Cleave ",
+        "When hitting an entity, monsters in a 3 block",
+        "range will be hit for a portion of that damage",
+        "too."
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "ZOMBIE_SOLDIER_CUTLASS",
+      "domain": "weapon",
+      "name": "Zombie Soldier Cutlass",
+      "rarity": "rare",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 52,
+        "strength": 26,
+        "attackSpeed": 100
+      },
+      "price": {
+        "coins": 20000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "attackSpeed": {
+          "current": 55,
+          "candidate": 100
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 52
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 26
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 20000,
+        "budgetDeltaCoins": -29980000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Catacombs Skill 5",
+            "type": "DUNGEON_LEVEL",
+            "subject": "catacombs",
+            "current": 21,
+            "required": 5,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Catacombs Skill 5"
+      ],
+      "abilityText": [
+        "Ability: Love Tap ",
+        "Heals you for +10 Health when you hit an",
+        "entity while in Dungeons!"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "STARRED_BAT_WAND",
+      "domain": "weapon",
+      "name": " Spirit Sceptre",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 190,
+        "intelligence": 330
+      },
+      "price": {
+        "coins": 12000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 330
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 190
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 12000000,
+        "budgetDeltaCoins": -18000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor IV Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 4,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor IV Completion"
+      ],
+      "abilityText": [
+        "Ability: Guided Bat  RIGHT CLICK",
+        "Shoots a guided spirit bat, following your aim",
+        "and exploding for 2,250 damage.",
+        "Mana Cost: 200"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "BAT_WAND",
+      "domain": "weapon",
+      "name": "Spirit Sceptre",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 180,
+        "intelligence": 300
+      },
+      "price": {
+        "coins": 8999997,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 180
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 8999997,
+        "budgetDeltaCoins": -21000003,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor IV Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 4,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor IV Completion"
+      ],
+      "abilityText": [
+        "Ability: Guided Bat  RIGHT CLICK",
+        "Shoots a guided spirit bat, following your aim",
+        "and exploding for 2,000 damage.",
+        "Mana Cost: 200"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "GOLEM_SWORD",
+      "domain": "weapon",
+      "name": "Golem Sword",
+      "rarity": "rare",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "defense": 25,
+        "damage": 80,
+        "strength": 125
+      },
+      "price": {
+        "coins": 12000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 80
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 125
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 12000000,
+        "budgetDeltaCoins": -18000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [
+        "Ability: Iron Punch  RIGHT CLICK",
+        "Punch the ground, damaging enemies in a",
+        "hexagon around you for 250 base Magic",
+        "Damage.",
+        "Mana Cost: 70",
+        "Cooldown: 3s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "RECLUSE_FANG",
+      "domain": "weapon",
+      "name": "Recluse Fang",
+      "rarity": "uncommon",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 60,
+        "strength": 30,
+        "critDamage": 10
+      },
+      "price": {
+        "coins": 450000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 60
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 30
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 10
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 450000,
+        "budgetDeltaCoins": -29550000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "slayer_req:SPIDER_3",
+            "type": "SLAYER",
+            "subject": "spider",
+            "current": 4,
+            "required": 3,
+            "gap": 0,
+            "status": "MET"
+          },
+          {
+            "text": "Requires Spider Slayer 2",
+            "type": "SLAYER",
+            "subject": "spider",
+            "current": 4,
+            "required": 2,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "slayer_req:SPIDER_3",
+        "Requires Spider Slayer 2"
+      ],
+      "abilityText": [
+        "Ability: Webcutter ",
+        "This weapon can be used to clear",
+        "webs left by the Tarantula",
+        "Broodfather!"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "SILENT_DEATH",
+      "domain": "weapon",
+      "name": "Silent Death",
+      "rarity": "rare",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 85,
+        "strength": 31,
+        "critChance": 1,
+        "critDamage": 9
+      },
+      "price": {
+        "coins": 299999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 85
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 31
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 9
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 299999,
+        "budgetDeltaCoins": -29700001,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Catacombs Skill 20",
+            "type": "DUNGEON_LEVEL",
+            "subject": "catacombs",
+            "current": 21,
+            "required": 20,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Catacombs Skill 20"
+      ],
+      "abilityText": [
+        "Ability: Shadowstep  RIGHT CLICK",
+        "Teleport behind the enemy you are looking at,",
+        "gaining +25 Strength for 10 seconds. Max",
+        "range of 20 blocks. Cooldown resets on kills.",
+        "Cooldown: 60s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "FELTHORN_REAPER",
+      "domain": "weapon",
+      "name": "Felthorn Reaper",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 275,
+        "critDamage": 115
+      },
+      "price": {
+        "coins": 31000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 275
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        },
+        "critDamage": {
+          "current": 95,
+          "candidate": 115
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 31000000,
+        "budgetDeltaCoins": 1000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VI Completion"
+      ],
+      "abilityText": [
+        "Ability: Reaving Strike  RIGHT CLICK",
+        "Slash in a huge arc, dealing 135% melee",
+        "damage to all enemies hit!"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "BOUQUET_OF_LIES",
+      "domain": "weapon",
+      "name": "Bouquet of Lies",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 220,
+        "strength": 300,
+        "critDamage": 50
+      },
+      "price": {
+        "coins": 31999995,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 220
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 50
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage, critDamage.",
+        "relevantStats": [
+          "strength",
+          "damage",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 31999995,
+        "budgetDeltaCoins": 1999995,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VI Completion"
+      ],
+      "abilityText": [
+        "Ability: Petal Barrage  RIGHT CLICK",
+        "Fire a barrage of 3 roses that ricochets",
+        "between enemies, hitting up to 5 foes. For",
+        "every 10% of your health missing, your roses",
+        "deal 2% more damage.",
+        "Health Cost: 250",
+        "Cooldown: 1s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "STARRED_ICE_SPRAY_WAND",
+      "domain": "weapon",
+      "name": " Ice Spray Wand",
+      "rarity": "rare",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 60,
+        "intelligence": 135
+      },
+      "price": {
+        "coins": 34000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 135
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 60
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 34000000,
+        "budgetDeltaCoins": 4000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Catacombs Skill 20",
+            "type": "DUNGEON_LEVEL",
+            "subject": "catacombs",
+            "current": 21,
+            "required": 20,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Catacombs Skill 20"
+      ],
+      "abilityText": [
+        "Ability: Ice Spray  RIGHT CLICK",
+        "Produces a cone of ice in front of the caster",
+        "that deals 19,114.1 damage to mobs and",
+        "freezes them in place for 5 seconds! Frozen",
+        "mobs take 10% increased damage!",
+        "Mana Cost: 50",
+        "Cooldown: 5s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "STARRED_YETI_SWORD",
+      "domain": "weapon",
+      "name": " Yeti Sword",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 160,
+        "strength": 185,
+        "intelligence": 50
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 185
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": 50
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 35000000,
+        "budgetDeltaCoins": 5000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [
+        "Ability: Terrain Toss  RIGHT CLICK",
+        "Throws a chunk of terrain in the direction you",
+        "are facing! Deals up to 17,000 damage.",
+        "Mana Cost: 250",
+        "Cooldown: 1s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "ELEGANT_TUXEDO_LEGGINGS",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Pants",
+      "rarity": "legendary",
+      "categories": [
+        "armor",
+        "leggings"
+      ],
+      "stats": {
+        "critDamage": 50,
+        "intelligence": 100
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "critDamage": {
+          "current": 45,
+          "candidate": 50
+        }
+      },
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 35000000,
+        "budgetDeltaCoins": 5000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [],
+      "setBonusText": [
+        "Full Set Bonus: Dashing (0/3)",
+        "Max health set to 250❤.",
+        "Deal +150% damage!",
+        "Very stylish."
+      ],
+      "warnings": []
+    },
+    {
+      "id": "GLACIAL_SCYTHE",
+      "domain": "weapon",
+      "name": "Glacial Scythe",
+      "rarity": "epic",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 120,
+        "intelligence": 30
+      },
+      "price": {
+        "coins": 39990000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 30
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 120
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 39990000,
+        "budgetDeltaCoins": 9990000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "requirements": [],
+      "abilityText": [
+        "Ability: Ice Bolt  RIGHT CLICK",
+        "Shoots 1 Ice Bolt that deals 1,500 damage and",
+        "slows enemies hit for 5 seconds! When hitting",
+        "the ground, also creates an explosion of 3",
+        "blocks, dealing the same damage.",
+        "Mana Cost: 75"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "STARRED_FELTHORN_REAPER",
+      "domain": "weapon",
+      "name": " Felthorn Reaper",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 285,
+        "strength": 10,
+        "critDamage": 125
+      },
+      "price": {
+        "coins": 40000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 285
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 10
+        },
+        "critDamage": {
+          "current": 95,
+          "candidate": 125
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 40000000,
+        "budgetDeltaCoins": 10000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VI Completion"
+      ],
+      "abilityText": [
+        "Ability: Reaving Strike  RIGHT CLICK",
+        "Slash in a huge arc, dealing 135% melee",
+        "damage to all enemies hit!"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "EMBER_ROD",
+      "domain": "weapon",
+      "name": "Ember Rod",
+      "rarity": "epic",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 80,
+        "strength": 35,
+        "intelligence": 50
+      },
+      "price": {
+        "coins": 40000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 50
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 80
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 35
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 40000000,
+        "budgetDeltaCoins": 10000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 8",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 8,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Combat Skill 8"
+      ],
+      "abilityText": [
+        "Ability: Fire Blast  RIGHT CLICK",
+        "Shoot 3 Fireballs which deal 30 damage in",
+        "rapid succession in front of you!",
+        "Mana Cost: 150",
+        "Cooldown: 30s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "BURSTMAW_DAGGER",
+      "domain": "weapon",
+      "name": "Mawdredge Dagger",
+      "rarity": "epic",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 130,
+        "strength": 55,
+        "critDamage": 20,
+        "attackSpeed": 10
+      },
+      "price": {
+        "coins": 8500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 130
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 55
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 20
+        },
+        "attackSpeed": {
+          "current": 4,
+          "candidate": 10
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage, attackSpeed, damage.",
+        "relevantStats": [
+          "critDamage",
+          "attackSpeed",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 8500000,
+        "budgetDeltaCoins": -21500000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:BLAZE_4",
+            "type": "SLAYER",
+            "subject": "blaze",
+            "current": 0,
+            "required": 4,
+            "gap": 4,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "slayer_req:BLAZE_4"
+      ],
+      "abilityText": [
+        "Ability: Attunement  RIGHT CLICK",
+        "Swap between Spirit and Crystal mode in order",
+        "to attack through Hellion Shields.",
+        "Ability: Wraith Drain",
+        "On hit, heal for 200 + 4%❤ after 6s",
+        "if the Hellion Shield has switched",
+        "attunement."
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "HEARTFIRE_DAGGER",
+      "domain": "weapon",
+      "name": "Pyrochaos Dagger",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 160,
+        "strength": 75,
+        "critChance": 10,
+        "critDamage": 25,
+        "attackSpeed": 20
+      },
+      "price": {
+        "coins": 49499999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 75
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 25
+        },
+        "attackSpeed": {
+          "current": 4,
+          "candidate": 20
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage, attackSpeed.",
+        "relevantStats": [
+          "damage",
+          "critDamage",
+          "attackSpeed"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 49499999,
+        "budgetDeltaCoins": 19499999,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:BLAZE_6",
+            "type": "SLAYER",
+            "subject": "blaze",
+            "current": 0,
+            "required": 6,
+            "gap": 6,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "slayer_req:BLAZE_6"
+      ],
+      "abilityText": [
+        "Ability: Attunement  RIGHT CLICK",
+        "Swap between Ashen and Auric mode in order",
+        "to attack through Hellion Shields.",
+        "Ability: Burning Vengeance ﬗ",
+        "On hit, repeat the last 8 hits of dealt",
+        "damage after 6s if the Hellion Shield",
+        "has switched attunement."
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "ATOMSPLIT_KATANA",
+      "domain": "weapon",
+      "name": "Atomsplit Katana",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 305,
+        "strength": 100,
+        "critDamage": 50,
+        "intelligence": 300
+      },
+      "price": {
+        "coins": 55999900,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 305
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": 300
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 100
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 50
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 55999900,
+        "budgetDeltaCoins": 25999900,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:EMAN_6",
+            "type": "SLAYER",
+            "subject": "enderman",
+            "current": 0,
+            "required": 6,
+            "gap": 6,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "slayer_req:EMAN_6"
+      ],
+      "abilityText": [
+        "Ability: Soulcry  RIGHT CLICK",
+        "Gain +400 Ferocity against Endermen for 4s",
+        "Soulflow Cost: 2",
+        "Mana Cost: 200",
+        "Cooldown: 4s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "AXE_OF_THE_SHREDDED",
+      "domain": "weapon",
+      "name": "Halberd of the Shredded",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 140,
+        "strength": 115
+      },
+      "price": {
+        "coins": 81000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 140
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 115
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 81000000,
+        "budgetDeltaCoins": 51000000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires Zombie Slayer 8",
+            "type": "SLAYER",
+            "subject": "zombie",
+            "current": 5,
+            "required": 8,
+            "gap": 3,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Zombie Slayer 8"
+      ],
+      "abilityText": [
+        "Ability: Throw  RIGHT CLICK",
+        "Throw your Halberd, damaging all",
+        "enemies in its path, dealing 10% melee",
+        "damage. Consecutive throws cost 2x",
+        "more mana and deal 2x more damage",
+        "than the previous. (max 16x)",
+        "Mana Cost: 20"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "STING",
+      "domain": "weapon",
+      "name": "Sting",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 150,
+        "strength": 75,
+        "critDamage": 40
+      },
+      "price": {
+        "coins": 160000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 150
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 75
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 40
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage, damage.",
+        "relevantStats": [
+          "critDamage",
+          "damage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 160000000,
+        "budgetDeltaCoins": 130000000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:SPIDER_8",
+            "type": "SLAYER",
+            "subject": "spider",
+            "current": 4,
+            "required": 8,
+            "gap": 4,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "slayer_req:SPIDER_8"
+      ],
+      "abilityText": [
+        "Ability: Webcutter ",
+        "This weapon can be used to clear",
+        "webs left by the Tarantula",
+        "Broodfather!",
+        "Ability: Stinger ",
+        "Attacks from this sword will always",
+        "critically strike!"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "HYPERION",
+      "domain": "weapon",
+      "name": "Hyperion",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 260,
+        "strength": 150,
+        "ferocity": 30,
+        "intelligence": 350
+      },
+      "price": {
+        "coins": 497990000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 260
+        },
+        "strength": {
+          "current": 104,
+          "candidate": 150
+        }
+      },
+      "relevance": {
+        "reason": "Improves goal-relevant stats: damage, strength.",
+        "relevantStats": [
+          "damage",
+          "strength"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 497990000,
+        "budgetDeltaCoins": 467990000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VII Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 7,
+            "gap": 1,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VII Completion"
+      ],
+      "abilityText": [],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "POOCH_SWORD",
+      "domain": "weapon",
+      "name": "Pooch Sword",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 160,
+        "strength": 80,
+        "attackSpeed": 5,
+        "speed": 10
+      },
+      "price": {
+        "coins": 7999999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 80
+        },
+        "attackSpeed": {
+          "current": 4,
+          "candidate": 5
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, attackSpeed.",
+        "relevantStats": [
+          "damage",
+          "attackSpeed"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 7999999,
+        "budgetDeltaCoins": -22000001,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires Wolf Slayer 6",
+            "type": "SLAYER",
+            "subject": "wolf",
+            "current": 3,
+            "required": 6,
+            "gap": 3,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Wolf Slayer 6"
+      ],
+      "abilityText": [
+        "Ability: Pack Mentality",
+        "Deal +100%  Damage against Wolves",
+        "when wearing a full set of Armor of",
+        "the Pack or Mastiff Armor."
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "VORPAL_KATANA",
+      "domain": "weapon",
+      "name": "Vorpal Katana",
+      "rarity": "epic",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 190,
+        "strength": 80,
+        "critDamage": 30,
+        "intelligence": 200
+      },
+      "price": {
+        "coins": 7000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 200
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 190
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 80
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 30
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 7000000,
+        "budgetDeltaCoins": -23000000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:EMAN_5",
+            "type": "SLAYER",
+            "subject": "enderman",
+            "current": 0,
+            "required": 5,
+            "gap": 5,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "slayer_req:EMAN_5"
+      ],
+      "abilityText": [
+        "Ability: Soulcry  RIGHT CLICK",
+        "Gain +300 Ferocity against Endermen for 4s",
+        "Soulflow Cost: 1",
+        "Mana Cost: 200",
+        "Cooldown: 4s"
+      ],
+      "setBonusText": [],
+      "warnings": []
+    },
+    {
+      "id": "ENRAGER",
+      "domain": "weapon",
+      "name": "Enrager",
+      "rarity": "epic",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 270,
+        "strength": 150
+      },
+      "price": null,
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 270
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 150
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength.",
+        "relevantStats": [
+          "damage",
+          "strength"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 25",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 25,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Combat Skill 25"
+      ],
+      "abilityText": [
+        "Ability: Enrage  RIGHT CLICK",
+        "Taunt enemies in a 10 block radius and reduce",
+        "their damage against you by 10% for 10s.",
+        "Mana Cost: 500",
+        "Health Cost: 15.6",
+        "Cooldown: 20s"
+      ],
+      "setBonusText": [],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ]
+    },
+    {
+      "id": "SCYLLA",
+      "domain": "weapon",
+      "name": "Scylla",
+      "rarity": "legendary",
+      "categories": [
+        "weapon",
+        "sword"
+      ],
+      "stats": {
+        "damage": 270,
+        "strength": 150,
+        "critChance": 12,
+        "critDamage": 35,
+        "ferocity": 30,
+        "intelligence": 50
+      },
+      "price": null,
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 270
+        },
+        "strength": {
+          "current": 104,
+          "candidate": 150
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 35
+        }
+      },
+      "relevance": {
+        "reason": "Improves goal-relevant stats: damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VII Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 7,
+            "gap": 1,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires The Catacombs Floor VII Completion"
+      ],
+      "abilityText": [],
+      "setBonusText": [],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ]
+    },
+    {
+      "id": "BERSERKER_CHESTPLATE",
+      "domain": "armor",
+      "name": "Berserker Chestplate",
+      "rarity": "epic",
+      "categories": [
+        "armor",
+        "chestplate"
+      ],
+      "stats": {
+        "strength": 60,
+        "critDamage": 60
+      },
+      "price": null,
+      "knownChanges": {
+        "strength": {
+          "current": 42.4,
+          "candidate": 60
+        },
+        "critDamage": {
+          "current": 45,
+          "candidate": 60
+        }
+      },
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Combat Skill 22"
+      ],
+      "abilityText": [],
+      "setBonusText": [
+        "Tiered Bonus: Berserk (0/4)",
+        "Reduces your health and defense by",
+        "half and reduces the cost of",
+        "health-consuming abilities by 20%."
+      ],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ]
+    },
+    {
+      "id": "BERSERKER_LEGGINGS",
+      "domain": "armor",
+      "name": "Berserker Leggings",
+      "rarity": "epic",
+      "categories": [
+        "armor",
+        "leggings"
+      ],
+      "stats": {
+        "strength": 50,
+        "critDamage": 50
+      },
+      "price": null,
+      "knownChanges": {
+        "strength": {
+          "current": 42.4,
+          "candidate": 50
+        },
+        "critDamage": {
+          "current": 45,
+          "candidate": 50
+        }
+      },
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "requirements": [
+        "Requires Combat Skill 22"
+      ],
+      "abilityText": [],
+      "setBonusText": [
+        "Tiered Bonus: Berserk (0/4)",
+        "Reduces your health and defense by",
+        "half and reduces the cost of",
+        "health-consuming abilities by 20%."
+      ],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ]
+    }
+  ],
+  "warnings": [
+    "Profile normalization encountered 82 unknown stat labels and 78 unknown item categories; raw item text was preserved."
+  ]
+}

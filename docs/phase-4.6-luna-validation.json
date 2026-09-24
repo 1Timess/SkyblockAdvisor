@@ -1,0 +1,63 @@
+{
+  "startingHead": "c8fcea84a2624f23979a42af10cc578ae0505d03",
+  "input": {
+    "username": "iTimess",
+    "requestedProfile": "Lemon",
+    "budgetCoins": 30000000,
+    "question": "I just cleared F6 and have 30m coins. What should I upgrade next?"
+  },
+  "liveVerification": {
+    "shadowAssassinArmorVerified": true,
+    "lividDaggerVerified": true,
+    "selectedClass": "berserk",
+    "highestFloorNormal": 6,
+    "f6ClaimSupported": true
+  },
+  "route": {
+    "scope": "GEAR",
+    "goal": "GENERAL_UPGRADE",
+    "inferredRole": "berserk"
+  },
+  "counts": {
+    "rawDiscovery": 490,
+    "goalRelevant": 139,
+    "finalFrontier": 32
+  },
+  "frontierBucketDistribution": {
+    "ACTIONABLE": 12,
+    "MONEY_GATED": 8,
+    "PROGRESSION_GATED": 8,
+    "DISTANT_OR_UNCERTAIN": 4
+  },
+  "request": {
+    "requestedModel": "gpt-6-luna",
+    "realOpenAIRequestCount": 1,
+    "httpStatus": 400,
+    "completed": false,
+    "responseModel": null,
+    "inputTokens": null,
+    "outputTokens": null,
+    "totalTokens": null,
+    "estimatedCostUsd": null,
+    "parsedResponse": null,
+    "responseValidated": false,
+    "error": "Luna request failed with status 400.",
+    "responseBodyCaptured": false
+  },
+  "recommendations": [],
+  "unsupportedOrContradictedClaims": [],
+  "checks": {
+    "typecheck": "PASSED",
+    "lint": "PASSED",
+    "tests": "79 PASSED",
+    "build": "PASSED"
+  },
+  "artifacts": {
+    "exactSanitizedContext": "docs/phase-4.6-luna-input.json",
+    "preflightAndFinalCandidateDetails": "docs/phase-4.6-luna-preflight.json",
+    "requestOutcome": "docs/phase-4.6-luna-output.json"
+  },
+  "deterministicBehaviorChanged": false,
+  "stoppedWithoutRetry": true,
+  "unresolved": "The existing production client reports only the non-success HTTP status and does not retain the error response body. The cause of the HTTP 400 cannot be established from this single completed attempt."
+}

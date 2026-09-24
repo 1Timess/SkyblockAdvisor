@@ -1,0 +1,10 @@
+{
+  "requestAttempted": true,
+  "requestCount": 1,
+  "httpStatus": 400,
+  "requestCompleted": false,
+  "parsedResponse": null,
+  "validated": false,
+  "error": "Luna request failed with status 400.",
+  "responseBodyCaptured": false
+}

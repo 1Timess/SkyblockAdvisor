@@ -1,0 +1,1599 @@
+{
+  "input": {
+    "username": "iTimess",
+    "requestedProfile": "Lemon",
+    "budgetCoins": 30000000,
+    "question": "I just cleared F6 and have 30m coins. What should I upgrade next?"
+  },
+  "verification": {
+    "shadowAssassinVerified": true,
+    "combatWeaponVerified": true,
+    "equippedArmor": [
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_HELMET",
+        "name": " Ancient Shadow Assassin Helmet ✪✪✪✪✪"
+      },
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_CHESTPLATE",
+        "name": " Fierce Shadow Assassin Chestplate ✪✪✪✪"
+      },
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_LEGGINGS",
+        "name": " Fierce Shadow Assassin Leggings ✪✪✪✪"
+      },
+      {
+        "id": "STARRED_SHADOW_ASSASSIN_BOOTS",
+        "name": " Fierce Shadow Assassin Boots ✪✪✪✪"
+      }
+    ],
+    "likelyWeapons": [
+      {
+        "id": "LIVID_DAGGER",
+        "name": "Fabled Livid Dagger ✪✪✪✪✪"
+      },
+      {
+        "id": "FLORID_ZOMBIE_SWORD",
+        "name": "Florid Zombie Sword"
+      },
+      {
+        "id": "ASPECT_OF_THE_END",
+        "name": "Spicy Aspect of the End"
+      },
+      {
+        "id": "VENOMS_TOUCH",
+        "name": "Grand Venom's Touch"
+      }
+    ],
+    "activePet": {
+      "type": "DOLPHIN",
+      "name": "Dolphin",
+      "rarity": "uncommon",
+      "level": 81,
+      "heldItem": "PET_ITEM_FISHING_SKILL_BOOST_COMMON",
+      "stats": {},
+      "abilityLore": []
+    },
+    "selectedClass": "berserk",
+    "highestFloorNormal": 6,
+    "f6ClaimSupported": true
+  },
+  "route": {
+    "scope": "GEAR",
+    "activeDomains": [
+      "ARMOR",
+      "WEAPONS"
+    ],
+    "clarificationRecommended": false,
+    "reason": "The question ties a broad upgrade request to dungeon progression.",
+    "goal": "GENERAL_UPGRADE",
+    "inferredRole": "berserk",
+    "armorSlots": []
+  },
+  "counts": {
+    "rawDiscovery": 490,
+    "goalRelevant": 139,
+    "finalFrontier": 32
+  },
+  "frontierBucketDistribution": {
+    "ACTIONABLE": 12,
+    "MONEY_GATED": 8,
+    "PROGRESSION_GATED": 8,
+    "DISTANT_OR_UNCERTAIN": 4
+  },
+  "finalCandidateIds": [
+    "GIANT_CLEAVER",
+    "PIGMAN_SWORD",
+    "FLOWER_OF_TRUTH",
+    "YETI_SWORD",
+    "SWORD_OF_BAD_HEALTH",
+    "SUPER_CLEAVER",
+    "ZOMBIE_SOLDIER_CUTLASS",
+    "STARRED_BAT_WAND",
+    "BAT_WAND",
+    "GOLEM_SWORD",
+    "RECLUSE_FANG",
+    "SILENT_DEATH",
+    "FELTHORN_REAPER",
+    "BOUQUET_OF_LIES",
+    "STARRED_ICE_SPRAY_WAND",
+    "STARRED_YETI_SWORD",
+    "ELEGANT_TUXEDO_LEGGINGS",
+    "GLACIAL_SCYTHE",
+    "STARRED_FELTHORN_REAPER",
+    "EMBER_ROD",
+    "BURSTMAW_DAGGER",
+    "HEARTFIRE_DAGGER",
+    "ATOMSPLIT_KATANA",
+    "AXE_OF_THE_SHREDDED",
+    "STING",
+    "HYPERION",
+    "POOCH_SWORD",
+    "VORPAL_KATANA",
+    "ENRAGER",
+    "SCYLLA",
+    "BERSERKER_CHESTPLATE",
+    "BERSERKER_LEGGINGS"
+  ],
+  "finalCandidates": [
+    {
+      "candidateId": "GIANT_CLEAVER",
+      "name": "Giant Cleaver",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 235
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 120
+        },
+        "critDamage": {
+          "current": 95,
+          "candidate": 120
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 6198999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -23801001,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VI Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 6,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "PIGMAN_SWORD",
+      "name": "Pigman Sword",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 200
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 100
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 30
+        }
+      },
+      "price": {
+        "coins": 7500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -22500000,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "FLOWER_OF_TRUTH",
+      "name": "Flower of Truth",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 4449999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -25550001,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VI Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 6,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "YETI_SWORD",
+      "name": "Yeti Sword",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 170
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": 50
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 150
+        }
+      },
+      "price": {
+        "coins": 14499999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -15500001,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "SWORD_OF_BAD_HEALTH",
+      "name": "Sword of Bad Health",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 200
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 50
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 50
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 690000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -29310000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Combat Skill 22",
+          "type": "SKILL",
+          "subject": "combat",
+          "current": 25,
+          "required": 22,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "SUPER_CLEAVER",
+      "name": "Super Cleaver",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage, damage.",
+        "relevantStats": [
+          "critDamage",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 105
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 20
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 20
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 585000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -29415000,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "ZOMBIE_SOLDIER_CUTLASS",
+      "name": "Zombie Soldier Cutlass",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "knownChanges": {
+        "attackSpeed": {
+          "current": 55,
+          "candidate": 100
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 52
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 26
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 20000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -29980000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Catacombs Skill 5",
+          "type": "DUNGEON_LEVEL",
+          "subject": "catacombs",
+          "current": 21,
+          "required": 5,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "STARRED_BAT_WAND",
+      "name": " Spirit Sceptre",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 330
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 190
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 12000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -18000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor IV Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 4,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "BAT_WAND",
+      "name": "Spirit Sceptre",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 180
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 8999997,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -21000003,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor IV Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 4,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "GOLEM_SWORD",
+      "name": "Golem Sword",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 80
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 125
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 12000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -18000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "RECLUSE_FANG",
+      "name": "Recluse Fang",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 60
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 30
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 10
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 450000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -29550000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "slayer_req:SPIDER_3",
+          "type": "SLAYER",
+          "subject": "spider",
+          "current": 4,
+          "required": 3,
+          "gap": 0,
+          "status": "MET"
+        },
+        {
+          "text": "Requires Spider Slayer 2",
+          "type": "SLAYER",
+          "subject": "spider",
+          "current": 4,
+          "required": 2,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "SILENT_DEATH",
+      "name": "Silent Death",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 85
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 31
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 9
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 299999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -29700001,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Catacombs Skill 20",
+          "type": "DUNGEON_LEVEL",
+          "subject": "catacombs",
+          "current": 21,
+          "required": 20,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "ACTIONABLE"
+    },
+    {
+      "candidateId": "FELTHORN_REAPER",
+      "name": "Felthorn Reaper",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 275
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        },
+        "critDamage": {
+          "current": 95,
+          "candidate": 115
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 31000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 1000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VI Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 6,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "BOUQUET_OF_LIES",
+      "name": "Bouquet of Lies",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage, critDamage.",
+        "relevantStats": [
+          "strength",
+          "damage",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 300
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 220
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 50
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 31999995,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 1999995,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VI Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 6,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "STARRED_ICE_SPRAY_WAND",
+      "name": " Ice Spray Wand",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 135
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 60
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 34000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 4000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Catacombs Skill 20",
+          "type": "DUNGEON_LEVEL",
+          "subject": "catacombs",
+          "current": 21,
+          "required": 20,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "STARRED_YETI_SWORD",
+      "name": " Yeti Sword",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 161,
+          "candidate": 185
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": 50
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        }
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 5000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_LEGGINGS",
+      "name": "Elegant Tuxedo Pants",
+      "domain": "armor",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "critDamage": {
+          "current": 45,
+          "candidate": 50
+        }
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 5000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "GLACIAL_SCYTHE",
+      "name": "Glacial Scythe",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 30
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 120
+        },
+        "strength": {
+          "current": 161,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 39990000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 9990000,
+      "requirementStatus": "MET",
+      "requirementGaps": [],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "STARRED_FELTHORN_REAPER",
+      "name": " Felthorn Reaper",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 285
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 10
+        },
+        "critDamage": {
+          "current": 95,
+          "candidate": 125
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 40000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 10000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VI Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 6,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "EMBER_ROD",
+      "name": "Ember Rod",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 50
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 80
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 35
+        }
+      },
+      "price": {
+        "coins": 40000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 10000000,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Combat Skill 8",
+          "type": "SKILL",
+          "subject": "combat",
+          "current": 25,
+          "required": 8,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "MONEY_GATED"
+    },
+    {
+      "candidateId": "BURSTMAW_DAGGER",
+      "name": "Mawdredge Dagger",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage, attackSpeed, damage.",
+        "relevantStats": [
+          "critDamage",
+          "attackSpeed",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 130
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 55
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 20
+        },
+        "attackSpeed": {
+          "current": 4,
+          "candidate": 10
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 8500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -21500000,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "slayer_req:BLAZE_4",
+          "type": "SLAYER",
+          "subject": "blaze",
+          "current": 0,
+          "required": 4,
+          "gap": 4,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "HEARTFIRE_DAGGER",
+      "name": "Pyrochaos Dagger",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage, attackSpeed.",
+        "relevantStats": [
+          "damage",
+          "critDamage",
+          "attackSpeed"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 75
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 25
+        },
+        "attackSpeed": {
+          "current": 4,
+          "candidate": 20
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 49499999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 19499999,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "slayer_req:BLAZE_6",
+          "type": "SLAYER",
+          "subject": "blaze",
+          "current": 0,
+          "required": 6,
+          "gap": 6,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "ATOMSPLIT_KATANA",
+      "name": "Atomsplit Katana",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 305
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": 300
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 100
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 50
+        }
+      },
+      "price": {
+        "coins": 55999900,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 25999900,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "slayer_req:EMAN_6",
+          "type": "SLAYER",
+          "subject": "enderman",
+          "current": 0,
+          "required": 6,
+          "gap": 6,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "AXE_OF_THE_SHREDDED",
+      "name": "Halberd of the Shredded",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside strength, damage.",
+        "relevantStats": [
+          "strength",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 140
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 115
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 81000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 51000000,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Zombie Slayer 8",
+          "type": "SLAYER",
+          "subject": "zombie",
+          "current": 5,
+          "required": 8,
+          "gap": 3,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "STING",
+      "name": "Sting",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside critDamage, damage.",
+        "relevantStats": [
+          "critDamage",
+          "damage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 150
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 75
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 40
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 160000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 130000000,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "slayer_req:SPIDER_8",
+          "type": "SLAYER",
+          "subject": "spider",
+          "current": 4,
+          "required": 8,
+          "gap": 4,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "HYPERION",
+      "name": "Hyperion",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: damage, strength.",
+        "relevantStats": [
+          "damage",
+          "strength"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 260
+        },
+        "strength": {
+          "current": 104,
+          "candidate": 150
+        }
+      },
+      "price": {
+        "coins": 497990000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "OVER_BUDGET",
+      "budgetDeltaCoins": 467990000,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VII Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 7,
+          "gap": 1,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "POOCH_SWORD",
+      "name": "Pooch Sword",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, attackSpeed.",
+        "relevantStats": [
+          "damage",
+          "attackSpeed"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 160
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 80
+        },
+        "attackSpeed": {
+          "current": 4,
+          "candidate": 5
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": {
+        "coins": 7999999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -22000001,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Wolf Slayer 6",
+          "type": "SLAYER",
+          "subject": "wolf",
+          "current": 3,
+          "required": 6,
+          "gap": 3,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "VORPAL_KATANA",
+      "name": "Vorpal Katana",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "intelligence": {
+          "current": 100,
+          "candidate": 200
+        },
+        "damage": {
+          "current": 251,
+          "candidate": 190
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 80
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 30
+        }
+      },
+      "price": {
+        "coins": 7000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "priceStatus": "WITHIN_BUDGET",
+      "budgetDeltaCoins": -23000000,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "slayer_req:EMAN_5",
+          "type": "SLAYER",
+          "subject": "enderman",
+          "current": 0,
+          "required": 5,
+          "gap": 5,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [],
+      "frontierBucket": "PROGRESSION_GATED"
+    },
+    {
+      "candidateId": "ENRAGER",
+      "name": "Enrager",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal alongside damage, strength.",
+        "relevantStats": [
+          "damage",
+          "strength"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 270
+        },
+        "strength": {
+          "current": 161,
+          "candidate": 150
+        },
+        "intelligence": {
+          "current": 100,
+          "candidate": null
+        }
+      },
+      "price": null,
+      "priceStatus": "UNKNOWN",
+      "budgetDeltaCoins": null,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Combat Skill 25",
+          "type": "SKILL",
+          "subject": "combat",
+          "current": 25,
+          "required": 25,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ],
+      "frontierBucket": "DISTANT_OR_UNCERTAIN"
+    },
+    {
+      "candidateId": "SCYLLA",
+      "name": "Scylla",
+      "domain": "weapon",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: damage, strength, critDamage.",
+        "relevantStats": [
+          "damage",
+          "strength",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "damage": {
+          "current": 251,
+          "candidate": 270
+        },
+        "strength": {
+          "current": 104,
+          "candidate": 150
+        },
+        "critDamage": {
+          "current": null,
+          "candidate": 35
+        }
+      },
+      "price": null,
+      "priceStatus": "UNKNOWN",
+      "budgetDeltaCoins": null,
+      "requirementStatus": "NOT_MET",
+      "requirementGaps": [
+        {
+          "text": "Requires The Catacombs Floor VII Completion",
+          "type": "DUNGEON_FLOOR",
+          "subject": "normal",
+          "current": 6,
+          "required": 7,
+          "gap": 1,
+          "status": "NOT_MET"
+        }
+      ],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ],
+      "frontierBucket": "DISTANT_OR_UNCERTAIN"
+    },
+    {
+      "candidateId": "BERSERKER_CHESTPLATE",
+      "name": "Berserker Chestplate",
+      "domain": "armor",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 42.4,
+          "candidate": 60
+        },
+        "critDamage": {
+          "current": 45,
+          "candidate": 60
+        }
+      },
+      "price": null,
+      "priceStatus": "UNKNOWN",
+      "budgetDeltaCoins": null,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Combat Skill 22",
+          "type": "SKILL",
+          "subject": "combat",
+          "current": 25,
+          "required": 22,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ],
+      "frontierBucket": "DISTANT_OR_UNCERTAIN"
+    },
+    {
+      "candidateId": "BERSERKER_LEGGINGS",
+      "name": "Berserker Leggings",
+      "domain": "armor",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "knownChanges": {
+        "strength": {
+          "current": 42.4,
+          "candidate": 50
+        },
+        "critDamage": {
+          "current": 45,
+          "candidate": 50
+        }
+      },
+      "price": null,
+      "priceStatus": "UNKNOWN",
+      "budgetDeltaCoins": null,
+      "requirementStatus": "MET",
+      "requirementGaps": [
+        {
+          "text": "Requires Combat Skill 22",
+          "type": "SKILL",
+          "subject": "combat",
+          "current": 25,
+          "required": 22,
+          "gap": 0,
+          "status": "MET"
+        }
+      ],
+      "warnings": [
+        "Price is unknown, so budget feasibility is unknown."
+      ],
+      "frontierBucket": "DISTANT_OR_UNCERTAIN"
+    }
+  ]
+}
