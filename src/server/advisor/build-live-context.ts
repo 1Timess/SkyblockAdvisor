@@ -12,9 +12,10 @@ import { buildAccessoryLanes } from "../candidates/accessory";
 import { buildArmorLanes } from "../candidates/armor";
 import { buildPetLanes } from "../candidates/pet";
 import { buildWeaponLanes } from "../candidates/weapon";
-import { buildAdvisorContext, compactProfileWarnings, isNoOpPetCandidate, selectDetailedCandidates, type TaggedCandidateLane } from "./context";
+import { buildAdvisorContext, buildCandidateFeasibility, compactProfileWarnings, isNoOpPetCandidate, orderDetailedCandidates, type TaggedCandidateLane } from "./context";
 import { routeAdvisorQuestion } from "./routing";
 import { buildCandidateRelevance, filterCandidateLanesForGoal, mergeCandidateEvidence, uniqueLaneCandidates } from "./relevance";
+import { selectProgressionFrontier, type ExclusionReason, type FrontierSelectionCandidate, type SelectionBucket } from "./frontier";
 
 export interface AdvisorContextDiagnostics {
   profileWarningCount: number;
@@ -28,6 +29,9 @@ export interface AdvisorContextDiagnostics {
   rawActiveScopeCandidateCount: number;
   goalRelevantCandidateCount: number;
   removedByRelevance: Array<{ id: string; domain: AdvisorCandidate["domain"]; name: string; sourceLanes: string[]; reason: string }>;
+  selectedBucketCounts: Record<SelectionBucket, number>;
+  exclusionCounts: Record<ExclusionReason, number>;
+  unselectedGoalRelevantCount: number;
 }
 
 export interface AdvisorContextBuildResult {
@@ -36,6 +40,8 @@ export interface AdvisorContextBuildResult {
   availableAnalysis: AvailableAnalysis;
   detailedCandidates: AdvisorCandidate[];
   candidateLanes: Record<string, string[]>;
+  rawScopeCandidates: Array<{ candidateId: string; domain: AdvisorCandidate["domain"]; name: string; sourceLanes: string[] }>;
+  frontierCandidates: FrontierSelectionCandidate[];
   diagnostics: AdvisorContextDiagnostics;
 }
 
@@ -76,8 +82,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   const scopedLanes = scopeCandidateLanes(lanes, route);
   const relevantLanes = filterCandidateLanesForGoal(scopedLanes, route);
   const rawScopedCandidates = uniqueLaneCandidates(scopedLanes).filter(candidate => !isNoOpPetCandidate(candidate));
-  const relevantCandidates = uniqueLaneCandidates(relevantLanes).filter(candidate => !isNoOpPetCandidate(candidate));
-  const detailedCandidates = selectDetailedCandidates(relevantLanes, 32).map(candidate => mergeCandidateEvidence(candidate, relevantLanes));
+  const relevantCandidates = orderDetailedCandidates(relevantLanes).map(candidate => mergeCandidateEvidence(candidate, relevantLanes));
   const meaningful = (domain: TaggedCandidateLane["domain"]) => uniqueCandidates(lanes.filter(lane => lane.domain === domain)
     .flatMap(lane => lane.candidates).filter(candidate => !isNoOpPetCandidate(candidate)));
   const armorCandidates = meaningful("ARMOR"), weaponCandidates = meaningful("WEAPONS");
@@ -92,9 +97,16 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   const conversationState = input.conversationState || input.budgetCoins !== undefined
     ? { ...input.conversationState, budgetCoins: input.conversationState?.budgetCoins ?? input.budgetCoins }
     : undefined;
-  const relevanceById = new Map(detailedCandidates.map(candidate => [candidate.id, buildCandidateRelevance(relevantLanes, candidate.id, route)]));
+  const effectiveBudgetCoins = input.budgetCoins ?? input.conversationState?.budgetCoins;
+  const frontier = selectProgressionFrontier({ route, candidates: relevantCandidates.map((candidate, stableOrder) => ({ candidate, stableOrder,
+    relevance: buildCandidateRelevance(relevantLanes, candidate.id, route),
+    feasibility: buildCandidateFeasibility(candidate, profile, effectiveBudgetCoins),
+    sourceLanes: relevantLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label),
+  })) });
+  const detailedCandidates = frontier.selected.map(candidate => candidate.candidate);
+  const relevanceById = new Map(frontier.selected.map(candidate => [candidate.candidate.id, candidate.relevance]));
   const context = buildAdvisorContext({ question: input.question, profile, route, availableAnalysis, candidates: detailedCandidates, conversationState,
-    relevanceById, budgetCoins: input.budgetCoins });
+    relevanceById, budgetCoins: effectiveBudgetCoins });
   const candidateLanes = Object.fromEntries(detailedCandidates.map(candidate => [candidate.id,
     relevantLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label)]));
   const rabbitPets = profile.pets.owned.filter(pet => pet.type.toUpperCase() === "RABBIT");
@@ -110,8 +122,12 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
     sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label),
     reason: "Only appeared in lanes irrelevant to the active goal.",
   }));
+  const buckets: SelectionBucket[] = ["ACTIONABLE", "MONEY_GATED", "PROGRESSION_GATED", "DISTANT_OR_UNCERTAIN"];
+  const exclusions: ExclusionReason[] = ["REDUNDANCY_LIMIT", "BUCKET_LIMIT", "FINAL_CAP", "LOWER_CONTEXT_PRIORITY", "NO_OP", "OTHER"];
   return {
-    context, route, availableAnalysis, detailedCandidates, candidateLanes,
+    context, route, availableAnalysis, detailedCandidates, candidateLanes, frontierCandidates: frontier.candidates,
+    rawScopeCandidates: rawScopedCandidates.map(candidate => ({ candidateId: candidate.id, domain: candidate.domain, name: candidate.item.name,
+      sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label) })),
     diagnostics: {
       profileWarningCount: profile.warnings.length,
       compactWarningCount: compactProfileWarnings(profile.warnings).length,
@@ -124,6 +140,9 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
       rawActiveScopeCandidateCount: rawScopedCandidates.length,
       goalRelevantCandidateCount: relevantCandidates.length,
       removedByRelevance,
+      selectedBucketCounts: Object.fromEntries(buckets.map(bucket => [bucket, frontier.selected.filter(candidate => candidate.selection.bucket === bucket).length])) as Record<SelectionBucket, number>,
+      exclusionCounts: Object.fromEntries(exclusions.map(reason => [reason, frontier.candidates.filter(candidate => candidate.selection.exclusionReason === reason).length])) as Record<ExclusionReason, number>,
+      unselectedGoalRelevantCount: frontier.candidates.filter(candidate => !candidate.selection.selected).length,
     },
   };
 }

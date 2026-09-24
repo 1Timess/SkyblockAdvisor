@@ -78,9 +78,13 @@ function requirementDetail(requirement: AdvisorCandidate["item"]["requirements"]
 }
 
 export function selectDetailedCandidates(lanes: readonly TaggedCandidateLane[], cap = 32): AdvisorCandidate[] {
-  const queues = lanes.map(lane => lane.candidates.filter(candidate => !isNoOpPetCandidate(candidate))), result: AdvisorCandidate[] = [], seen = new Set<string>();
+  return orderDetailedCandidates(lanes).slice(0, Math.min(cap, 32));
+}
+
+export function orderDetailedCandidates(lanes: readonly TaggedCandidateLane[]): AdvisorCandidate[] {
+  const queues = lanes.map(lane => [...lane.candidates.filter(candidate => !isNoOpPetCandidate(candidate))]), result: AdvisorCandidate[] = [], seen = new Set<string>();
   let advanced = true;
-  while (result.length < Math.min(cap, 32) && advanced) {
+  while (advanced) {
     advanced = false;
     for (const queue of queues) {
       const candidate = queue.shift();
@@ -88,7 +92,6 @@ export function selectDetailedCandidates(lanes: readonly TaggedCandidateLane[], 
       advanced = true;
       if (seen.has(candidate.id)) continue;
       seen.add(candidate.id); result.push(candidate);
-      if (result.length === Math.min(cap, 32)) return result;
     }
   }
   return result;
