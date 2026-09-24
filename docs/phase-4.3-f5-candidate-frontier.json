@@ -1,0 +1,4904 @@
+{
+  "question": "I just cleared F5 and have 30m coins. What should I upgrade next?",
+  "route": {
+    "scope": "GEAR",
+    "activeDomains": [
+      "ARMOR",
+      "WEAPONS"
+    ],
+    "clarificationRecommended": false,
+    "reason": "The question ties a broad upgrade request to dungeon progression.",
+    "goal": "GENERAL_UPGRADE",
+    "inferredRole": "berserk",
+    "armorSlots": []
+  },
+  "goal": "GENERAL_UPGRADE",
+  "inferredRole": "berserk",
+  "rawScopeCandidateCount": 152,
+  "goalRelevantCandidateCount": 63,
+  "finalDetailedCandidateCount": 28,
+  "selectedBucketCounts": {
+    "ACTIONABLE": 11,
+    "MONEY_GATED": 7,
+    "PROGRESSION_GATED": 6,
+    "DISTANT_OR_UNCERTAIN": 4
+  },
+  "exclusionCounts": {
+    "REDUNDANCY_LIMIT": 16,
+    "BUCKET_LIMIT": 19,
+    "FINAL_CAP": 0,
+    "LOWER_CONTEXT_PRIORITY": 0,
+    "NO_OP": 0,
+    "OTHER": 0
+  },
+  "unselectedGoalRelevantCount": 35,
+  "rawScopeCandidates": [
+    {
+      "candidateId": "PERFECT_HELMET_13",
+      "domain": "armor",
+      "name": "Perfect Helmet - Tier XIII",
+      "sourceLanes": [
+        "armor:helmet:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_HELMET_12",
+      "domain": "armor",
+      "name": "Perfect Helmet - Tier XII",
+      "sourceLanes": [
+        "armor:helmet:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_HELMET_11",
+      "domain": "armor",
+      "name": "Perfect Helmet - Tier XI",
+      "sourceLanes": [
+        "armor:helmet:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_HELMET_10",
+      "domain": "armor",
+      "name": "Perfect Helmet - Tier X",
+      "sourceLanes": [
+        "armor:helmet:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_HELMET_9",
+      "domain": "armor",
+      "name": "Perfect Helmet - Tier IX",
+      "sourceLanes": [
+        "armor:helmet:defense"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_FERVOR_HELMET",
+      "domain": "armor",
+      "name": "Infernal Fervor Helmet",
+      "sourceLanes": [
+        "armor:helmet:defense",
+        "armor:helmet:health"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_HOLLOW_HELMET",
+      "domain": "armor",
+      "name": "Infernal Hollow Helmet",
+      "sourceLanes": [
+        "armor:helmet:health",
+        "armor:helmet:intelligence"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_AURORA_HELMET",
+      "domain": "armor",
+      "name": "Infernal Aurora Helmet",
+      "sourceLanes": [
+        "armor:helmet:health",
+        "armor:helmet:intelligence"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_HELMET",
+      "domain": "armor",
+      "name": "Infernal Crimson Helmet",
+      "sourceLanes": [
+        "armor:helmet:health",
+        "armor:helmet:strength",
+        "armor:helmet:critDamage"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Infernal Terror Helmet",
+      "sourceLanes": [
+        "armor:helmet:health",
+        "armor:helmet:critDamage",
+        "armor:helmet:speed"
+      ]
+    },
+    {
+      "candidateId": "FIERY_FERVOR_HELMET",
+      "domain": "armor",
+      "name": "Fiery Fervor Helmet",
+      "sourceLanes": [
+        "armor:helmet:health"
+      ]
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_HELMET",
+      "domain": "armor",
+      "name": "Fiery Crimson Helmet",
+      "sourceLanes": [
+        "armor:helmet:strength"
+      ]
+    },
+    {
+      "candidateId": "FIERY_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Fiery Terror Helmet",
+      "sourceLanes": [
+        "armor:helmet:critDamage",
+        "armor:helmet:speed"
+      ]
+    },
+    {
+      "candidateId": "BURNING_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Burning Terror Helmet",
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ]
+    },
+    {
+      "candidateId": "HOT_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Hot Terror Helmet",
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ]
+    },
+    {
+      "candidateId": "TERROR_HELMET",
+      "domain": "armor",
+      "name": "Terror Helmet",
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ]
+    },
+    {
+      "candidateId": "FIERY_AURORA_HELMET",
+      "domain": "armor",
+      "name": "Fiery Aurora Helmet",
+      "sourceLanes": [
+        "armor:helmet:intelligence"
+      ]
+    },
+    {
+      "candidateId": "BURNING_AURORA_HELMET",
+      "domain": "armor",
+      "name": "Burning Aurora Helmet",
+      "sourceLanes": [
+        "armor:helmet:intelligence"
+      ]
+    },
+    {
+      "candidateId": "WISE_WITHER_HELMET",
+      "domain": "armor",
+      "name": "Storm's Helmet",
+      "sourceLanes": [
+        "armor:helmet:intelligence"
+      ]
+    },
+    {
+      "candidateId": "HOT_AURORA_HELMET",
+      "domain": "armor",
+      "name": "Hot Aurora Helmet",
+      "sourceLanes": [
+        "armor:helmet:intelligence"
+      ]
+    },
+    {
+      "candidateId": "RACING_HELMET",
+      "domain": "armor",
+      "name": "Racing Helmet",
+      "sourceLanes": [
+        "armor:helmet:speed"
+      ]
+    },
+    {
+      "candidateId": "SPEED_WITHER_HELMET",
+      "domain": "armor",
+      "name": "Maxor's Helmet",
+      "sourceLanes": [
+        "armor:helmet:speed"
+      ]
+    },
+    {
+      "candidateId": "STARRED_SPIRIT_MASK",
+      "domain": "armor",
+      "name": " Spirit Mask",
+      "sourceLanes": [
+        "armor:helmet:speed"
+      ]
+    },
+    {
+      "candidateId": "THERMODYNAMIC_HELMET",
+      "domain": "armor",
+      "name": "Thermodynamic Helmet",
+      "sourceLanes": [
+        "armor:helmet:speed"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_CHESTPLATE_13",
+      "domain": "armor",
+      "name": "Perfect Chestplate - Tier XIII",
+      "sourceLanes": [
+        "armor:chestplate:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_CHESTPLATE_12",
+      "domain": "armor",
+      "name": "Perfect Chestplate - Tier XII",
+      "sourceLanes": [
+        "armor:chestplate:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_CHESTPLATE_11",
+      "domain": "armor",
+      "name": "Perfect Chestplate - Tier XI",
+      "sourceLanes": [
+        "armor:chestplate:defense"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_FERVOR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Fervor Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:defense",
+        "armor:chestplate:health"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_CHESTPLATE_10",
+      "domain": "armor",
+      "name": "Perfect Chestplate - Tier X",
+      "sourceLanes": [
+        "armor:chestplate:defense"
+      ]
+    },
+    {
+      "candidateId": "STEEL_CHESTPLATE",
+      "domain": "armor",
+      "name": "Steel Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:defense"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_HOLLOW_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Hollow Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:health"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_AURORA_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Aurora Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:health",
+        "armor:chestplate:intelligence"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Crimson Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:health",
+        "armor:chestplate:strength"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Terror Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:health",
+        "armor:chestplate:critDamage",
+        "armor:chestplate:speed"
+      ]
+    },
+    {
+      "candidateId": "FIERY_FERVOR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fiery Fervor Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:health"
+      ]
+    },
+    {
+      "candidateId": "BERSERKER_CHESTPLATE",
+      "domain": "armor",
+      "name": "Berserker Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ]
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fiery Crimson Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ]
+    },
+    {
+      "candidateId": "MYTHOS_CHESTPLATE",
+      "domain": "armor",
+      "name": "Mythos Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ]
+    },
+    {
+      "candidateId": "BURNING_CRIMSON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Burning Crimson Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ]
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_CHESTPLATE",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Jacket",
+      "sourceLanes": [
+        "armor:chestplate:critDamage",
+        "armor:chestplate:intelligence"
+      ]
+    },
+    {
+      "candidateId": "FIERY_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fiery Terror Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:critDamage",
+        "armor:chestplate:speed"
+      ]
+    },
+    {
+      "candidateId": "FANCY_TUXEDO_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fancy Tuxedo Jacket",
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ]
+    },
+    {
+      "candidateId": "BURNING_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Burning Terror Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ]
+    },
+    {
+      "candidateId": "HOT_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Hot Terror Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ]
+    },
+    {
+      "candidateId": "FIERY_AURORA_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fiery Aurora Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:intelligence"
+      ]
+    },
+    {
+      "candidateId": "BURNING_AURORA_CHESTPLATE",
+      "domain": "armor",
+      "name": "Burning Aurora Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:intelligence"
+      ]
+    },
+    {
+      "candidateId": "REAPER_CHESTPLATE",
+      "domain": "armor",
+      "name": "Reaper Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:intelligence"
+      ]
+    },
+    {
+      "candidateId": "WISE_WITHER_CHESTPLATE",
+      "domain": "armor",
+      "name": "Storm's Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:intelligence"
+      ]
+    },
+    {
+      "candidateId": "SPEED_WITHER_CHESTPLATE",
+      "domain": "armor",
+      "name": "Maxor's Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:speed"
+      ]
+    },
+    {
+      "candidateId": "GLOSSY_MINERAL_CHESTPLATE",
+      "domain": "armor",
+      "name": "Glossy Mineral Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:speed"
+      ]
+    },
+    {
+      "candidateId": "THERMODYNAMIC_CHESTPLATE",
+      "domain": "armor",
+      "name": "Thermodynamic Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:speed"
+      ]
+    },
+    {
+      "candidateId": "YOUNG_DRAGON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Young Dragon Chestplate",
+      "sourceLanes": [
+        "armor:chestplate:speed"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_LEGGINGS_13",
+      "domain": "armor",
+      "name": "Perfect Leggings - Tier XIII",
+      "sourceLanes": [
+        "armor:leggings:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_LEGGINGS_12",
+      "domain": "armor",
+      "name": "Perfect Leggings - Tier XII",
+      "sourceLanes": [
+        "armor:leggings:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_LEGGINGS_11",
+      "domain": "armor",
+      "name": "Perfect Leggings - Tier XI",
+      "sourceLanes": [
+        "armor:leggings:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_LEGGINGS_10",
+      "domain": "armor",
+      "name": "Perfect Leggings - Tier X",
+      "sourceLanes": [
+        "armor:leggings:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_LEGGINGS_9",
+      "domain": "armor",
+      "name": "Perfect Leggings - Tier IX",
+      "sourceLanes": [
+        "armor:leggings:defense"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_FERVOR_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Fervor Leggings",
+      "sourceLanes": [
+        "armor:leggings:defense",
+        "armor:leggings:health"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_HOLLOW_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Hollow Leggings",
+      "sourceLanes": [
+        "armor:leggings:health"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_AURORA_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Aurora Leggings",
+      "sourceLanes": [
+        "armor:leggings:health",
+        "armor:leggings:intelligence"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Crimson Leggings",
+      "sourceLanes": [
+        "armor:leggings:health",
+        "armor:leggings:strength"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Terror Leggings",
+      "sourceLanes": [
+        "armor:leggings:health",
+        "armor:leggings:critDamage",
+        "armor:leggings:speed"
+      ]
+    },
+    {
+      "candidateId": "FIERY_HOLLOW_LEGGINGS",
+      "domain": "armor",
+      "name": "Fiery Hollow Leggings",
+      "sourceLanes": [
+        "armor:leggings:health"
+      ]
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_LEGGINGS",
+      "domain": "armor",
+      "name": "Fiery Crimson Leggings",
+      "sourceLanes": [
+        "armor:leggings:strength"
+      ]
+    },
+    {
+      "candidateId": "BERSERKER_LEGGINGS",
+      "domain": "armor",
+      "name": "Berserker Leggings",
+      "sourceLanes": [
+        "armor:leggings:strength",
+        "armor:leggings:critDamage"
+      ]
+    },
+    {
+      "candidateId": "BURNING_CRIMSON_LEGGINGS",
+      "domain": "armor",
+      "name": "Burning Crimson Leggings",
+      "sourceLanes": [
+        "armor:leggings:strength"
+      ]
+    },
+    {
+      "candidateId": "FIERY_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Fiery Terror Leggings",
+      "sourceLanes": [
+        "armor:leggings:critDamage",
+        "armor:leggings:speed"
+      ]
+    },
+    {
+      "candidateId": "BURNING_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Burning Terror Leggings",
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ]
+    },
+    {
+      "candidateId": "HOT_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Hot Terror Leggings",
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ]
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_LEGGINGS",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Pants",
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ]
+    },
+    {
+      "candidateId": "FIERY_AURORA_LEGGINGS",
+      "domain": "armor",
+      "name": "Fiery Aurora Leggings",
+      "sourceLanes": [
+        "armor:leggings:intelligence"
+      ]
+    },
+    {
+      "candidateId": "BURNING_AURORA_LEGGINGS",
+      "domain": "armor",
+      "name": "Burning Aurora Leggings",
+      "sourceLanes": [
+        "armor:leggings:intelligence"
+      ]
+    },
+    {
+      "candidateId": "REAPER_LEGGINGS",
+      "domain": "armor",
+      "name": "Reaper Leggings",
+      "sourceLanes": [
+        "armor:leggings:intelligence"
+      ]
+    },
+    {
+      "candidateId": "WISE_WITHER_LEGGINGS",
+      "domain": "armor",
+      "name": "Storm's Leggings",
+      "sourceLanes": [
+        "armor:leggings:intelligence"
+      ]
+    },
+    {
+      "candidateId": "HOT_AURORA_LEGGINGS",
+      "domain": "armor",
+      "name": "Hot Aurora Leggings",
+      "sourceLanes": [
+        "armor:leggings:intelligence"
+      ]
+    },
+    {
+      "candidateId": "SPEED_WITHER_LEGGINGS",
+      "domain": "armor",
+      "name": "Maxor's Leggings",
+      "sourceLanes": [
+        "armor:leggings:speed"
+      ]
+    },
+    {
+      "candidateId": "GLOSSY_MINERAL_LEGGINGS",
+      "domain": "armor",
+      "name": "Glossy Mineral Leggings",
+      "sourceLanes": [
+        "armor:leggings:speed"
+      ]
+    },
+    {
+      "candidateId": "THERMODYNAMIC_LEGGINGS",
+      "domain": "armor",
+      "name": "Thermodynamic Leggings",
+      "sourceLanes": [
+        "armor:leggings:speed"
+      ]
+    },
+    {
+      "candidateId": "YOUNG_DRAGON_LEGGINGS",
+      "domain": "armor",
+      "name": "Young Dragon Leggings",
+      "sourceLanes": [
+        "armor:leggings:speed"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_BOOTS_13",
+      "domain": "armor",
+      "name": "Perfect Boots - Tier XIII",
+      "sourceLanes": [
+        "armor:boots:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_BOOTS_12",
+      "domain": "armor",
+      "name": "Perfect Boots - Tier XII",
+      "sourceLanes": [
+        "armor:boots:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_BOOTS_11",
+      "domain": "armor",
+      "name": "Perfect Boots - Tier XI",
+      "sourceLanes": [
+        "armor:boots:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_BOOTS_10",
+      "domain": "armor",
+      "name": "Perfect Boots - Tier X",
+      "sourceLanes": [
+        "armor:boots:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_BOOTS_9",
+      "domain": "armor",
+      "name": "Perfect Boots - Tier IX",
+      "sourceLanes": [
+        "armor:boots:defense"
+      ]
+    },
+    {
+      "candidateId": "PERFECT_BOOTS_8",
+      "domain": "armor",
+      "name": "Perfect Boots - Tier VIII",
+      "sourceLanes": [
+        "armor:boots:defense"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_FERVOR_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Fervor Boots",
+      "sourceLanes": [
+        "armor:boots:health"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_HOLLOW_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Hollow Boots",
+      "sourceLanes": [
+        "armor:boots:health"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_AURORA_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Aurora Boots",
+      "sourceLanes": [
+        "armor:boots:health",
+        "armor:boots:intelligence"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Crimson Boots",
+      "sourceLanes": [
+        "armor:boots:health",
+        "armor:boots:strength",
+        "armor:boots:critDamage"
+      ]
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Terror Boots",
+      "sourceLanes": [
+        "armor:boots:health",
+        "armor:boots:critDamage",
+        "armor:boots:speed"
+      ]
+    },
+    {
+      "candidateId": "FIERY_FERVOR_BOOTS",
+      "domain": "armor",
+      "name": "Fiery Fervor Boots",
+      "sourceLanes": [
+        "armor:boots:health"
+      ]
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_BOOTS",
+      "domain": "armor",
+      "name": "Fiery Crimson Boots",
+      "sourceLanes": [
+        "armor:boots:strength"
+      ]
+    },
+    {
+      "candidateId": "BURNING_CRIMSON_BOOTS",
+      "domain": "armor",
+      "name": "Burning Crimson Boots",
+      "sourceLanes": [
+        "armor:boots:strength"
+      ]
+    },
+    {
+      "candidateId": "FIERY_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Fiery Terror Boots",
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ]
+    },
+    {
+      "candidateId": "BURNING_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Burning Terror Boots",
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ]
+    },
+    {
+      "candidateId": "HOT_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Hot Terror Boots",
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ]
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_BOOTS",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Oxfords",
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ]
+    },
+    {
+      "candidateId": "FIERY_AURORA_BOOTS",
+      "domain": "armor",
+      "name": "Fiery Aurora Boots",
+      "sourceLanes": [
+        "armor:boots:intelligence"
+      ]
+    },
+    {
+      "candidateId": "BURNING_AURORA_BOOTS",
+      "domain": "armor",
+      "name": "Burning Aurora Boots",
+      "sourceLanes": [
+        "armor:boots:intelligence"
+      ]
+    },
+    {
+      "candidateId": "REAPER_BOOTS",
+      "domain": "armor",
+      "name": "Reaper Boots",
+      "sourceLanes": [
+        "armor:boots:intelligence"
+      ]
+    },
+    {
+      "candidateId": "WISE_WITHER_BOOTS",
+      "domain": "armor",
+      "name": "Storm's Boots",
+      "sourceLanes": [
+        "armor:boots:intelligence"
+      ]
+    },
+    {
+      "candidateId": "HOT_AURORA_BOOTS",
+      "domain": "armor",
+      "name": "Hot Aurora Boots",
+      "sourceLanes": [
+        "armor:boots:intelligence"
+      ]
+    },
+    {
+      "candidateId": "RANCHERS_BOOTS",
+      "domain": "armor",
+      "name": "Rancher's Boots",
+      "sourceLanes": [
+        "armor:boots:speed"
+      ]
+    },
+    {
+      "candidateId": "FARMER_BOOTS",
+      "domain": "armor",
+      "name": "Farmer Boots",
+      "sourceLanes": [
+        "armor:boots:speed"
+      ]
+    },
+    {
+      "candidateId": "STARRED_THORNS_BOOTS",
+      "domain": "armor",
+      "name": " Spirit Boots",
+      "sourceLanes": [
+        "armor:boots:speed"
+      ]
+    },
+    {
+      "candidateId": "SPEED_WITHER_BOOTS",
+      "domain": "armor",
+      "name": "Maxor's Boots",
+      "sourceLanes": [
+        "armor:boots:speed"
+      ]
+    },
+    {
+      "candidateId": "THERMODYNAMIC_BOOTS",
+      "domain": "armor",
+      "name": "Thermodynamic Boots",
+      "sourceLanes": [
+        "armor:boots:speed"
+      ]
+    },
+    {
+      "candidateId": "TORMENTOR",
+      "domain": "weapon",
+      "name": "Tormentor",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:damage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ]
+    },
+    {
+      "candidateId": "DARK_CLAYMORE",
+      "domain": "weapon",
+      "name": "Dark Claymore",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:damage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ]
+    },
+    {
+      "candidateId": "GIANTS_EYE_SWORD",
+      "domain": "weapon",
+      "name": "Giant's Eye Sword",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ]
+    },
+    {
+      "candidateId": "GIANTS_SWORD",
+      "domain": "weapon",
+      "name": "Giant's Sword",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ]
+    },
+    {
+      "candidateId": "REAPER_SCYTHE",
+      "domain": "weapon",
+      "name": "Reaper Scythe",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ]
+    },
+    {
+      "candidateId": "STARRED_SHADOW_FURY",
+      "domain": "weapon",
+      "name": " Shadow Fury",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ]
+    },
+    {
+      "candidateId": "BOUQUET_OF_LIES",
+      "domain": "weapon",
+      "name": "Bouquet of Lies",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ]
+    },
+    {
+      "candidateId": "FLOWER_OF_TRUTH",
+      "domain": "weapon",
+      "name": "Flower of Truth",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ]
+    },
+    {
+      "candidateId": "FLAMING_FLAY",
+      "domain": "weapon",
+      "name": "Flaming Flay",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ]
+    },
+    {
+      "candidateId": "STARRED_YETI_SWORD",
+      "domain": "weapon",
+      "name": " Yeti Sword",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ]
+    },
+    {
+      "candidateId": "SOUL_WHIP",
+      "domain": "weapon",
+      "name": "Soul Whip",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ]
+    },
+    {
+      "candidateId": "YETI_SWORD",
+      "domain": "weapon",
+      "name": "Yeti Sword",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ]
+    },
+    {
+      "candidateId": "HYPERION",
+      "domain": "weapon",
+      "name": "Hyperion",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:intelligence",
+        "weapon:FLORID_ZOMBIE_SWORD:intelligence",
+        "weapon:ASPECT_OF_THE_END:intelligence"
+      ]
+    },
+    {
+      "candidateId": "STARRED_BAT_WAND",
+      "domain": "weapon",
+      "name": " Spirit Sceptre",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:intelligence",
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:intelligence",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:intelligence",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ]
+    },
+    {
+      "candidateId": "ATOMSPLIT_KATANA",
+      "domain": "weapon",
+      "name": "Atomsplit Katana",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:intelligence",
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:intelligence",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:intelligence",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ]
+    },
+    {
+      "candidateId": "BAT_WAND",
+      "domain": "weapon",
+      "name": "Spirit Sceptre",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:intelligence",
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:intelligence",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:intelligence",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ]
+    },
+    {
+      "candidateId": "FIRE_FURY_STAFF",
+      "domain": "weapon",
+      "name": "Fire Fury Staff",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:intelligence",
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:intelligence",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:intelligence",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ]
+    },
+    {
+      "candidateId": "PIGMAN_SWORD",
+      "domain": "weapon",
+      "name": "Pigman Sword",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:intelligence",
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:intelligence",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:intelligence",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ]
+    },
+    {
+      "candidateId": "ZOMBIE_SOLDIER_CUTLASS",
+      "domain": "weapon",
+      "name": "Zombie Soldier Cutlass",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:attackSpeed",
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ]
+    },
+    {
+      "candidateId": "STARRED_BONZO_STAFF",
+      "domain": "weapon",
+      "name": " Bonzo's Staff",
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ]
+    },
+    {
+      "candidateId": "STARRED_FELTHORN_REAPER",
+      "domain": "weapon",
+      "name": " Felthorn Reaper",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ]
+    },
+    {
+      "candidateId": "GIANT_CLEAVER",
+      "domain": "weapon",
+      "name": "Giant Cleaver",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ]
+    },
+    {
+      "candidateId": "FELTHORN_REAPER",
+      "domain": "weapon",
+      "name": "Felthorn Reaper",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ]
+    },
+    {
+      "candidateId": "HYPER_CLEAVER",
+      "domain": "weapon",
+      "name": "Hyper Cleaver",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ]
+    },
+    {
+      "candidateId": "HEARTFIRE_DAGGER",
+      "domain": "weapon",
+      "name": "Pyrochaos Dagger",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ]
+    },
+    {
+      "candidateId": "HEARTMAW_DAGGER",
+      "domain": "weapon",
+      "name": "Deathripper Dagger",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ]
+    },
+    {
+      "candidateId": "BURSTFIRE_DAGGER",
+      "domain": "weapon",
+      "name": "Kindlebane Dagger",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ]
+    },
+    {
+      "candidateId": "BURSTMAW_DAGGER",
+      "domain": "weapon",
+      "name": "Mawdredge Dagger",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ]
+    },
+    {
+      "candidateId": "POOCH_SWORD",
+      "domain": "weapon",
+      "name": "Pooch Sword",
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ]
+    },
+    {
+      "candidateId": "STARRED_SPIDER_QUEENS_STINGER",
+      "domain": "weapon",
+      "name": " Spider Queen's Stinger",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:damage"
+      ]
+    },
+    {
+      "candidateId": "SOULS_REBOUND",
+      "domain": "weapon",
+      "name": "Souls Rebound",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:damage"
+      ]
+    },
+    {
+      "candidateId": "STARRED_VENOMS_TOUCH",
+      "domain": "weapon",
+      "name": " Venom's Touch",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:damage",
+        "weapon:VENOMS_TOUCH:strength"
+      ]
+    },
+    {
+      "candidateId": "SPIDER_QUEENS_STINGER",
+      "domain": "weapon",
+      "name": "Spider Queen's Stinger",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:damage"
+      ]
+    },
+    {
+      "candidateId": "STARRED_BONE_BOOMERANG",
+      "domain": "weapon",
+      "name": " Bonemerang",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:damage",
+        "weapon:VENOMS_TOUCH:ability"
+      ]
+    },
+    {
+      "candidateId": "MOSQUITO_BOW",
+      "domain": "weapon",
+      "name": "Mosquito Shortbow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:damage",
+        "weapon:VENOMS_TOUCH:ability"
+      ]
+    },
+    {
+      "candidateId": "STARRED_LAST_BREATH",
+      "domain": "weapon",
+      "name": " Last Breath",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:strength",
+        "weapon:VENOMS_TOUCH:critDamage"
+      ]
+    },
+    {
+      "candidateId": "LAST_BREATH",
+      "domain": "weapon",
+      "name": "Last Breath",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:strength",
+        "weapon:VENOMS_TOUCH:critDamage"
+      ]
+    },
+    {
+      "candidateId": "TERMINATOR",
+      "domain": "weapon",
+      "name": "Terminator",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:critDamage",
+        "weapon:VENOMS_TOUCH:attackSpeed",
+        "weapon:VENOMS_TOUCH:ability"
+      ]
+    },
+    {
+      "candidateId": "JUJU_SHORTBOW",
+      "domain": "weapon",
+      "name": "Juju Shortbow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:critDamage"
+      ]
+    },
+    {
+      "candidateId": "DRAGON_SHORTBOW",
+      "domain": "weapon",
+      "name": "Dragon Shortbow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:critDamage"
+      ]
+    },
+    {
+      "candidateId": "SLIME_BOW",
+      "domain": "weapon",
+      "name": "Slime Bow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:critDamage"
+      ]
+    },
+    {
+      "candidateId": "CRYPT_BOW",
+      "domain": "weapon",
+      "name": "Soulstealer Bow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:intelligence"
+      ]
+    },
+    {
+      "candidateId": "BONE_BOOMERANG",
+      "domain": "weapon",
+      "name": "Bonemerang",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:ability"
+      ]
+    },
+    {
+      "candidateId": "SULPHUR_BOW",
+      "domain": "weapon",
+      "name": "Sulphur Bow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:ability"
+      ]
+    },
+    {
+      "candidateId": "RUNAANS_BOW",
+      "domain": "weapon",
+      "name": "Runaan's Bow",
+      "sourceLanes": [
+        "weapon:VENOMS_TOUCH:ability"
+      ]
+    }
+  ],
+  "goalRelevantCandidates": [
+    {
+      "candidateId": "INFERNAL_CRIMSON_HELMET",
+      "domain": "armor",
+      "name": "Infernal Crimson Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 784999999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 784999999,
+        "budgetDeltaCoins": 754999999,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:strength",
+        "armor:helmet:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:helmet:critDamage+strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 754999999,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 2
+      }
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Infernal Terror Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": null,
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:helmet:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Crimson Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 310000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 310000000,
+        "budgetDeltaCoins": 280000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:chestplate:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 280000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Infernal Terror Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 330000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 330000000,
+        "budgetDeltaCoins": 300000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:chestplate:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 300000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Crimson Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 330000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 330000000,
+        "budgetDeltaCoins": 300000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:leggings:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 300000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Infernal Terror Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 360000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 360000000,
+        "budgetDeltaCoins": 330000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:leggings:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 330000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "INFERNAL_CRIMSON_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Crimson Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 378990000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 378990000,
+        "budgetDeltaCoins": 348990000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:strength",
+        "armor:boots:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:boots:critDamage+strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 348990000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 2
+      }
+    },
+    {
+      "candidateId": "INFERNAL_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Infernal Terror Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 349000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 349000000,
+        "budgetDeltaCoins": 319000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:boots:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 319000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "TORMENTOR",
+      "domain": "weapon",
+      "name": "Tormentor",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 35000000,
+        "budgetDeltaCoins": 5000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 42",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 42,
+            "gap": 17,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Infernal Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:damage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "weapon:sword:critDamage+damage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 5000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 17
+          }
+        ],
+        "relevantEvidenceCount": 2
+      }
+    },
+    {
+      "candidateId": "BOUQUET_OF_LIES",
+      "domain": "weapon",
+      "name": "Bouquet of Lies",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 31999995,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 31999995,
+        "budgetDeltaCoins": 1999995,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:strength:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 1999995,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "ZOMBIE_SOLDIER_CUTLASS",
+      "domain": "weapon",
+      "name": "Zombie Soldier Cutlass",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "price": {
+        "coins": 20000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 20000,
+        "budgetDeltaCoins": -29980000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Catacombs Skill 5",
+            "type": "DUNGEON_LEVEL",
+            "subject": "catacombs",
+            "current": 21,
+            "required": 5,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:attackSpeed",
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:attackSpeed:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "STARRED_BAT_WAND",
+      "domain": "weapon",
+      "name": " Spirit Sceptre",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "price": {
+        "coins": 12000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 12000000,
+        "budgetDeltaCoins": -18000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor IV Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 4,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:ability:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "STARRED_FELTHORN_REAPER",
+      "domain": "weapon",
+      "name": " Felthorn Reaper",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 40000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 40000000,
+        "budgetDeltaCoins": 10000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:critDamage:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 10000000,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_HELMET",
+      "domain": "armor",
+      "name": "Fiery Crimson Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 155000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 155000000,
+        "budgetDeltaCoins": 125000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains a distant representative for the helmet slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:helmet:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 125000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Fiery Terror Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 110000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 110000000,
+        "budgetDeltaCoins": 80000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent armor:helmet:critDamage:DISTANT_OR_UNCERTAIN.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:helmet:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 80000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BERSERKER_CHESTPLATE",
+      "domain": "armor",
+      "name": "Berserker Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": null,
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains three representatives for the chestplate slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:chestplate:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_CHESTPLATE",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Jacket",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 60000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "LOW"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 60000000,
+        "budgetDeltaCoins": 30000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:chestplate:critDamage:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 30000000,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_LEGGINGS",
+      "domain": "armor",
+      "name": "Fiery Crimson Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 126000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 126000000,
+        "budgetDeltaCoins": 96000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains a distant representative for the leggings slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:leggings:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 96000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Fiery Terror Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 185000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 185000000,
+        "budgetDeltaCoins": 155000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:leggings:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 155000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_BOOTS",
+      "domain": "armor",
+      "name": "Fiery Crimson Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 215000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 215000000,
+        "budgetDeltaCoins": 185000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:boots:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 185000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Fiery Terror Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 150000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 150000000,
+        "budgetDeltaCoins": 120000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent armor:boots:critDamage:DISTANT_OR_UNCERTAIN.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:boots:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 120000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "DARK_CLAYMORE",
+      "domain": "weapon",
+      "name": "Dark Claymore",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: damage, critDamage.",
+        "relevantStats": [
+          "damage",
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 168000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 168000000,
+        "budgetDeltaCoins": 138000000,
+        "requirementStatus": "UNKNOWN",
+        "requirements": [
+          {
+            "text": "Requires Master Mode The Catacombs Floor VII",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:damage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": true,
+      "selectionReason": "Selected as a representative distant or uncertain candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:critDamage+damage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 138000000,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 2
+      }
+    },
+    {
+      "candidateId": "FLOWER_OF_TRUTH",
+      "domain": "weapon",
+      "name": "Flower of Truth",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 4449999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 4449999,
+        "budgetDeltaCoins": -25550001,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:strength:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "ATOMSPLIT_KATANA",
+      "domain": "weapon",
+      "name": "Atomsplit Katana",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "price": {
+        "coins": 55999900,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 55999900,
+        "budgetDeltaCoins": 25999900,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:EMAN_6",
+            "type": "SLAYER",
+            "subject": "enderman",
+            "current": 0,
+            "required": 6,
+            "gap": 6,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative progression gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:ability:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 25999900,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "enderman",
+            "gap": 6
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "GIANT_CLEAVER",
+      "domain": "weapon",
+      "name": "Giant Cleaver",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 6198999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 6198999,
+        "budgetDeltaCoins": -23801001,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:critDamage:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HEARTFIRE_DAGGER",
+      "domain": "weapon",
+      "name": "Pyrochaos Dagger",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "price": {
+        "coins": 49499999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 49499999,
+        "budgetDeltaCoins": 19499999,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:BLAZE_6",
+            "type": "SLAYER",
+            "subject": "blaze",
+            "current": 0,
+            "required": 6,
+            "gap": 6,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative progression gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:attackSpeed:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 19499999,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "blaze",
+            "gap": 6
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURNING_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Burning Terror Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 54000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 54000000,
+        "budgetDeltaCoins": 24000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": true,
+      "selectionReason": "Selected as a representative distant or uncertain candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:helmet:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 24000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_CRIMSON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fiery Crimson Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 124000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 124000000,
+        "budgetDeltaCoins": 94000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains three representatives for the chestplate slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:chestplate:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 94000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIERY_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fiery Terror Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 115000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "LOW"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 115000000,
+        "budgetDeltaCoins": 85000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 37",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 37,
+            "gap": 12,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Fiery Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains three representatives for the chestplate slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:chestplate:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 85000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 12
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BERSERKER_LEGGINGS",
+      "domain": "armor",
+      "name": "Berserker Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stats: strength, critDamage.",
+        "relevantStats": [
+          "strength",
+          "critDamage"
+        ]
+      },
+      "price": null,
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:strength",
+        "armor:leggings:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": true,
+      "selectionReason": "Selected as a representative distant or uncertain candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:leggings:critDamage+strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 2
+      }
+    },
+    {
+      "candidateId": "BURNING_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Burning Terror Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 41000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 41000000,
+        "budgetDeltaCoins": 11000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains a distant representative for the leggings slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:leggings:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 11000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURNING_CRIMSON_BOOTS",
+      "domain": "armor",
+      "name": "Burning Crimson Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 114911111,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "LOW"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 114911111,
+        "budgetDeltaCoins": 84911111,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains a distant representative for the boots slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:boots:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 84911111,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURNING_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Burning Terror Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 40000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 40000000,
+        "budgetDeltaCoins": 10000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": true,
+      "selectionReason": "Selected as a representative distant or uncertain candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:boots:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 10000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "GIANTS_EYE_SWORD",
+      "domain": "weapon",
+      "name": "Giant's Eye Sword",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "price": null,
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "UNKNOWN",
+        "requirements": [
+          {
+            "text": "Requires Master Mode",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "weapon:sword:damage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FLAMING_FLAY",
+      "domain": "weapon",
+      "name": "Flaming Flay",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 87000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 87000000,
+        "budgetDeltaCoins": 57000000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires Fishing Skill 47",
+            "type": "SKILL",
+            "subject": "fishing",
+            "current": 21,
+            "required": 47,
+            "gap": 26,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative progression gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:strength:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 57000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "fishing",
+            "gap": 26
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "PIGMAN_SWORD",
+      "domain": "weapon",
+      "name": "Pigman Sword",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "price": {
+        "coins": 7500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 7500000,
+        "budgetDeltaCoins": -22500000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:ability:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FELTHORN_REAPER",
+      "domain": "weapon",
+      "name": "Felthorn Reaper",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 31000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 31000000,
+        "budgetDeltaCoins": 1000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:critDamage:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 1000000,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HEARTMAW_DAGGER",
+      "domain": "weapon",
+      "name": "Deathripper Dagger",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "price": {
+        "coins": 51800000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 51800000,
+        "budgetDeltaCoins": 21800000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:BLAZE_6",
+            "type": "SLAYER",
+            "subject": "blaze",
+            "current": 0,
+            "required": 6,
+            "gap": 6,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative progression gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:attackSpeed:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 21800000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "blaze",
+            "gap": 6
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HOT_TERROR_HELMET",
+      "domain": "armor",
+      "name": "Hot Terror Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 17000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 17000000,
+        "budgetDeltaCoins": -13000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 27",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 27,
+            "gap": 2,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Hot Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:helmet:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 2
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "MYTHOS_CHESTPLATE",
+      "domain": "armor",
+      "name": "Mythos Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 10000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 10000000,
+        "budgetDeltaCoins": -20000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:chestplate:strength:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FANCY_TUXEDO_CHESTPLATE",
+      "domain": "armor",
+      "name": "Fancy Tuxedo Jacket",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 17500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 17500000,
+        "budgetDeltaCoins": -12500000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:chestplate:critDamage:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURNING_CRIMSON_LEGGINGS",
+      "domain": "armor",
+      "name": "Burning Crimson Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 70000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 70000000,
+        "budgetDeltaCoins": 40000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:leggings:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 40000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HOT_TERROR_LEGGINGS",
+      "domain": "armor",
+      "name": "Hot Terror Leggings",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 16000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 16000000,
+        "budgetDeltaCoins": -14000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 27",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 27,
+            "gap": 2,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Hot Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:leggings:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 2
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HOT_TERROR_BOOTS",
+      "domain": "armor",
+      "name": "Hot Terror Boots",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": null,
+      "feasibility": {
+        "priceStatus": "UNKNOWN",
+        "budgetCoins": 30000000,
+        "priceCoins": null,
+        "budgetDeltaCoins": null,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 27",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 27,
+            "gap": 2,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Hot Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:boots:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 2
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "GIANTS_SWORD",
+      "domain": "weapon",
+      "name": "Giant's Sword",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "price": {
+        "coins": 69911067,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 69911067,
+        "budgetDeltaCoins": 39911067,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor VI Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 6,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:damage:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 39911067,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "STARRED_YETI_SWORD",
+      "domain": "weapon",
+      "name": " Yeti Sword",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 35000000,
+        "budgetDeltaCoins": 5000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:strength:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 5000000,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BAT_WAND",
+      "domain": "weapon",
+      "name": "Spirit Sceptre",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "price": {
+        "coins": 8999997,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 8999997,
+        "budgetDeltaCoins": -21000003,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor IV Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 4,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent weapon:sword:ability:ACTIONABLE.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "weapon:sword:ability:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURSTFIRE_DAGGER",
+      "domain": "weapon",
+      "name": "Kindlebane Dagger",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "price": {
+        "coins": 8000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 8000000,
+        "budgetDeltaCoins": -22000000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:BLAZE_4",
+            "type": "SLAYER",
+            "subject": "blaze",
+            "current": 0,
+            "required": 4,
+            "gap": 4,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent weapon:sword:attackSpeed:PROGRESSION_GATED.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "weapon:sword:attackSpeed:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "blaze",
+            "gap": 4
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURNING_CRIMSON_CHESTPLATE",
+      "domain": "armor",
+      "name": "Burning Crimson Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 95999999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 95999999,
+        "budgetDeltaCoins": 65999999,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:strength"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:chestplate:strength:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 65999999,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURNING_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Burning Terror Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 98000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 98000000,
+        "budgetDeltaCoins": 68000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 32",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 32,
+            "gap": 7,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Burning Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:chestplate:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": 68000000,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 7
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_BOOTS",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Oxfords",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 30000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 30000000,
+        "budgetDeltaCoins": 0,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "armor:boots:critDamage"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:boots:critDamage:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "REAPER_SCYTHE",
+      "domain": "weapon",
+      "name": "Reaper Scythe",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "price": {
+        "coins": 20000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 20000000,
+        "budgetDeltaCoins": -10000000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:ZOMBIE_7",
+            "type": "SLAYER",
+            "subject": "zombie",
+            "current": 5,
+            "required": 7,
+            "gap": 2,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative progression gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:damage:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "zombie",
+            "gap": 2
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "SOUL_WHIP",
+      "domain": "weapon",
+      "name": "Soul Whip",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 15700000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 15700000,
+        "budgetDeltaCoins": -14300000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires Fishing Skill 26",
+            "type": "SKILL",
+            "subject": "fishing",
+            "current": 21,
+            "required": 26,
+            "gap": 5,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative progression gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:strength:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "fishing",
+            "gap": 5
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "STARRED_BONZO_STAFF",
+      "domain": "weapon",
+      "name": " Bonzo's Staff",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "price": {
+        "coins": 3500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 3500000,
+        "budgetDeltaCoins": -26500000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor I Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 1,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent weapon:sword:ability:ACTIONABLE.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "weapon:sword:ability:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HYPER_CLEAVER",
+      "domain": "weapon",
+      "name": "Hyper Cleaver",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 1499996,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 1499996,
+        "budgetDeltaCoins": -28500004,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor III Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 3,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:critDamage",
+        "weapon:ASPECT_OF_THE_END:critDamage"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:critDamage:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "BURSTMAW_DAGGER",
+      "domain": "weapon",
+      "name": "Mawdredge Dagger",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "price": {
+        "coins": 8500000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 8500000,
+        "budgetDeltaCoins": -21500000,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "slayer_req:BLAZE_4",
+            "type": "SLAYER",
+            "subject": "blaze",
+            "current": 0,
+            "required": 4,
+            "gap": 4,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent weapon:sword:attackSpeed:PROGRESSION_GATED.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "weapon:sword:attackSpeed:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "blaze",
+            "gap": 4
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "TERROR_HELMET",
+      "domain": "armor",
+      "name": "Terror Helmet",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 400000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 400000,
+        "budgetDeltaCoins": -29600000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          },
+          {
+            "text": "Requires Kuudra Basic Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:helmet:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "Not selected because the DISTANT_OR_UNCERTAIN context ceiling was reached.",
+      "exclusionReason": "BUCKET_LIMIT",
+      "redundancyKey": "armor:helmet:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "HOT_TERROR_CHESTPLATE",
+      "domain": "armor",
+      "name": "Hot Terror Chestplate",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 14000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "MEDIUM"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 14000000,
+        "budgetDeltaCoins": -16000000,
+        "requirementStatus": "MIXED",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 27",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 27,
+            "gap": 2,
+            "status": "NOT_MET"
+          },
+          {
+            "text": "Requires Kuudra Hot Tier Completion",
+            "type": "UNKNOWN",
+            "subject": null,
+            "current": null,
+            "required": null,
+            "gap": null,
+            "status": "UNKNOWN"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "armor:chestplate:critDamage"
+      ],
+      "selectionBucket": "DISTANT_OR_UNCERTAIN",
+      "selected": false,
+      "selectionReason": "The broad gear context already contains three representatives for the chestplate slot.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "armor:chestplate:critDamage:DISTANT_OR_UNCERTAIN",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 1,
+        "knownRequirementGaps": [
+          {
+            "type": "SKILL",
+            "subject": "combat",
+            "gap": 2
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "ELEGANT_TUXEDO_LEGGINGS",
+      "domain": "armor",
+      "name": "Elegant Tuxedo Pants",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: critDamage.",
+        "relevantStats": [
+          "critDamage"
+        ]
+      },
+      "price": {
+        "coins": 35000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "OVER_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 35000000,
+        "budgetDeltaCoins": 5000000,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "armor:leggings:critDamage"
+      ],
+      "selectionBucket": "MONEY_GATED",
+      "selected": true,
+      "selectionReason": "Selected as a representative money gated candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "armor:leggings:critDamage:MONEY_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": 5000000,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "STARRED_SHADOW_FURY",
+      "domain": "weapon",
+      "name": " Shadow Fury",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: damage.",
+        "relevantStats": [
+          "damage"
+        ]
+      },
+      "price": {
+        "coins": 23000000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 23000000,
+        "budgetDeltaCoins": -7000000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires The Catacombs Floor V Completion",
+            "type": "DUNGEON_FLOOR",
+            "subject": "normal",
+            "current": 6,
+            "required": 5,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:damage",
+        "weapon:FLORID_ZOMBIE_SWORD:damage",
+        "weapon:ASPECT_OF_THE_END:damage"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:damage:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "YETI_SWORD",
+      "domain": "weapon",
+      "name": "Yeti Sword",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: strength.",
+        "relevantStats": [
+          "strength"
+        ]
+      },
+      "price": {
+        "coins": 14499999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 14499999,
+        "budgetDeltaCoins": -15500001,
+        "requirementStatus": "MET",
+        "requirements": []
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:strength",
+        "weapon:FLORID_ZOMBIE_SWORD:strength",
+        "weapon:ASPECT_OF_THE_END:strength"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": true,
+      "selectionReason": "Selected as a representative actionable candidate by lexicographic context priority.",
+      "exclusionReason": null,
+      "redundancyKey": "weapon:sword:strength:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "FIRE_FURY_STAFF",
+      "domain": "weapon",
+      "name": "Fire Fury Staff",
+      "relevance": {
+        "reason": "Ability evidence is relevant to the general upgrade goal.",
+        "relevantStats": []
+      },
+      "price": {
+        "coins": 6450000,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 6450000,
+        "budgetDeltaCoins": -23550000,
+        "requirementStatus": "MET",
+        "requirements": [
+          {
+            "text": "Requires Combat Skill 22",
+            "type": "SKILL",
+            "subject": "combat",
+            "current": 25,
+            "required": 22,
+            "gap": 0,
+            "status": "MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:LIVID_DAGGER:ability",
+        "weapon:FLORID_ZOMBIE_SWORD:ability",
+        "weapon:ASPECT_OF_THE_END:ability"
+      ],
+      "selectionBucket": "ACTIONABLE",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent weapon:sword:ability:ACTIONABLE.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "weapon:sword:ability:ACTIONABLE",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 0,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [],
+        "relevantEvidenceCount": 1
+      }
+    },
+    {
+      "candidateId": "POOCH_SWORD",
+      "domain": "weapon",
+      "name": "Pooch Sword",
+      "relevance": {
+        "reason": "Improves goal-relevant stat: attackSpeed.",
+        "relevantStats": [
+          "attackSpeed"
+        ]
+      },
+      "price": {
+        "coins": 7999999,
+        "observedAt": "2026-09-23T15:02:00.881Z",
+        "confidence": "HIGH"
+      },
+      "feasibility": {
+        "priceStatus": "WITHIN_BUDGET",
+        "budgetCoins": 30000000,
+        "priceCoins": 7999999,
+        "budgetDeltaCoins": -22000001,
+        "requirementStatus": "NOT_MET",
+        "requirements": [
+          {
+            "text": "Requires Wolf Slayer 6",
+            "type": "SLAYER",
+            "subject": "wolf",
+            "current": 3,
+            "required": 6,
+            "gap": 3,
+            "status": "NOT_MET"
+          }
+        ]
+      },
+      "sourceLanes": [
+        "weapon:FLORID_ZOMBIE_SWORD:attackSpeed",
+        "weapon:ASPECT_OF_THE_END:attackSpeed"
+      ],
+      "selectionBucket": "PROGRESSION_GATED",
+      "selected": false,
+      "selectionReason": "Structurally similar candidates already represent weapon:sword:attackSpeed:PROGRESSION_GATED.",
+      "exclusionReason": "REDUNDANCY_LIMIT",
+      "redundancyKey": "weapon:sword:attackSpeed:PROGRESSION_GATED",
+      "priorityFacts": {
+        "positiveBudgetGap": null,
+        "unmetRequirementCount": 1,
+        "unknownRequirementCount": 0,
+        "knownRequirementGaps": [
+          {
+            "type": "SLAYER",
+            "subject": "wolf",
+            "gap": 3
+          }
+        ],
+        "relevantEvidenceCount": 1
+      }
+    }
+  ],
+  "finalDetailedCandidates": [
+    "ZOMBIE_SOLDIER_CUTLASS",
+    "STARRED_BAT_WAND",
+    "FLOWER_OF_TRUTH",
+    "GIANT_CLEAVER",
+    "PIGMAN_SWORD",
+    "MYTHOS_CHESTPLATE",
+    "FANCY_TUXEDO_CHESTPLATE",
+    "ELEGANT_TUXEDO_BOOTS",
+    "HYPER_CLEAVER",
+    "STARRED_SHADOW_FURY",
+    "YETI_SWORD",
+    "FELTHORN_REAPER",
+    "BOUQUET_OF_LIES",
+    "STARRED_YETI_SWORD",
+    "ELEGANT_TUXEDO_LEGGINGS",
+    "STARRED_FELTHORN_REAPER",
+    "ELEGANT_TUXEDO_CHESTPLATE",
+    "GIANTS_SWORD",
+    "HEARTFIRE_DAGGER",
+    "HEARTMAW_DAGGER",
+    "ATOMSPLIT_KATANA",
+    "SOUL_WHIP",
+    "FLAMING_FLAY",
+    "REAPER_SCYTHE",
+    "BERSERKER_LEGGINGS",
+    "BURNING_TERROR_BOOTS",
+    "BURNING_TERROR_HELMET",
+    "DARK_CLAYMORE"
+  ]
+}

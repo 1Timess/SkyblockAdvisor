@@ -145,3 +145,37 @@ The Speed final IDs are:
 In the generic F5 context, Racing Helmet, Rancher's Boots, Glossy Mineral speed pieces, and Intelligence-only Aurora/Storm pieces were removed because their surviving lanes were irrelevant to the Berserk fallback goal. Those Speed items returned for the explicit Speed question, while Intelligence candidates were retained despite the inferred Berserk role. Relevant locked and over-budget candidates also remained. Full per-candidate F5 relevance, known changes, prices, budget gaps, requirement gaps, warnings, and source lanes are recorded in `phase-4.2-f5-candidates.json`. No OpenAI request was made.
 
 The F5 relevance set still contained 63 candidates, so the stable lane selector used the full 32-item ceiling. Several high-stat candidates are distant, expensive, or have partially unknown Kuudra requirements. They remain because Phase 4.2 explicitly keeps relevant feasibility gaps and forbids deterministic “close enough” thresholds. This is the principal review concern before the next Luna call; the model must use those gaps rather than treating shortlist membership as an endorsement.
+
+## Phase 4.3 deterministic validation
+
+Phase 4.3 keeps Phase 4.2 goal relevance intact and spends the context budget on a representative progression frontier. Broad general gear uses bucket ceilings of 12 actionable, 8 money-gated, 8 progression-gated, and 4 distant or uncertain candidates. Structural ceilings cap broad armor at three candidates per slot, distant armor at one per slot, repeated distant keys at one, non-distant armor keys at three, and weapon keys at two. Selection is lexicographic and uses no weighted recommendation score.
+
+| Command | Result |
+| --- | --- |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed |
+| `npm test` | 74 offline tests passed |
+| `npm run build` | Production build passed |
+| Three required `inspect:advisor-context` queries | Passed against iTimess / Lemon / 30m; no OpenAI request |
+
+| Question | Route / goal / inferred role | Raw | Relevant | Final | Final bucket counts |
+| --- | --- | ---: | ---: | ---: | --- |
+| F5 / 30m upgrade | GEAR / GENERAL_UPGRADE / berserk | 152 | 63 | 28 | 11 actionable, 7 money, 6 progression, 4 distant |
+| Intelligence for AOTE teleporting | MAGE / INTELLIGENCE / berserk | 38 | 31 | 17 | 3 actionable, 1 money, 9 progression, 4 distant |
+| Get much faster | GEAR / SPEED / berserk | 152 | 24 | 20 | 6 actionable, 2 money, 8 progression, 4 distant |
+
+For F5, 35 goal-relevant candidates remained unselected: 16 hit structural redundancy limits and 19 hit the distant bucket ceiling. None hit the final cap. The final IDs are:
+
+`ZOMBIE_SOLDIER_CUTLASS`, `STARRED_BAT_WAND`, `FLOWER_OF_TRUTH`, `GIANT_CLEAVER`, `PIGMAN_SWORD`, `MYTHOS_CHESTPLATE`, `FANCY_TUXEDO_CHESTPLATE`, `ELEGANT_TUXEDO_BOOTS`, `HYPER_CLEAVER`, `STARRED_SHADOW_FURY`, `YETI_SWORD`, `FELTHORN_REAPER`, `BOUQUET_OF_LIES`, `STARRED_YETI_SWORD`, `ELEGANT_TUXEDO_LEGGINGS`, `STARRED_FELTHORN_REAPER`, `ELEGANT_TUXEDO_CHESTPLATE`, `GIANTS_SWORD`, `HEARTFIRE_DAGGER`, `HEARTMAW_DAGGER`, `ATOMSPLIT_KATANA`, `SOUL_WHIP`, `FLAMING_FLAY`, `REAPER_SCYTHE`, `BERSERKER_LEGGINGS`, `BURNING_TERROR_BOOTS`, `BURNING_TERROR_HELMET`, `DARK_CLAYMORE`.
+
+The old flood probe fell from 20 matching entries in the Phase 4.2 final context to three: two Burning Terror pieces and Dark Claymore. Infernal Crimson, Infernal Terror, Fiery Crimson/Terror, and Burning Crimson contributed zero final entries. These strings are validation probes only and do not appear in selection logic. `NECRON*` and `MIDAS*` were absent from the entire raw generated F5 scope, so neither reached goal relevance or selection; code was not changed to force them in.
+
+The Intelligence final IDs are:
+
+`CRYPT_BOW`, `STARRED_BAT_WAND`, `BAT_WAND`, `ELEGANT_TUXEDO_CHESTPLATE`, `ATOMSPLIT_KATANA`, `HYPERION`, `WISE_WITHER_HELMET`, `REAPER_LEGGINGS`, `REAPER_BOOTS`, `REAPER_CHESTPLATE`, `WISE_WITHER_LEGGINGS`, `WISE_WITHER_BOOTS`, `WISE_WITHER_CHESTPLATE`, `HOT_AURORA_LEGGINGS`, `HOT_AURORA_HELMET`, `HOT_AURORA_BOOTS`, `BURNING_AURORA_CHESTPLATE`.
+
+The Speed final IDs are:
+
+`RANCHERS_BOOTS`, `FARMER_BOOTS`, `GLOSSY_MINERAL_CHESTPLATE`, `STARRED_THORNS_BOOTS`, `YOUNG_DRAGON_CHESTPLATE`, `YOUNG_DRAGON_LEGGINGS`, `GLOSSY_MINERAL_LEGGINGS`, `STARRED_SPIRIT_MASK`, `THERMODYNAMIC_CHESTPLATE`, `THERMODYNAMIC_LEGGINGS`, `THERMODYNAMIC_HELMET`, `THERMODYNAMIC_BOOTS`, `SPEED_WITHER_CHESTPLATE`, `SPEED_WITHER_LEGGINGS`, `SPEED_WITHER_HELMET`, `SPEED_WITHER_BOOTS`, `RACING_HELMET`, `FIERY_TERROR_CHESTPLATE`, `FIERY_TERROR_LEGGINGS`, `INFERNAL_TERROR_BOOTS`.
+
+The committed artifact [`phase-4.3-f5-candidate-frontier.json`](phase-4.3-f5-candidate-frontier.json) records all raw-scope candidates, all 63 goal-relevant candidates with feasibility and selection metadata, and the final 28 IDs. Fewer than 32 is explicitly supported and four aspirational candidates survived. No Luna or OpenAI request was made.

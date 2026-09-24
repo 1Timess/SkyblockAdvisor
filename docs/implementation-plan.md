@@ -58,3 +58,9 @@ The advisor response contract now supports clarification and plan outcomes. Plan
 Added a small goal model independent of scope and a query-sensitive relevance pass over existing lanes. Explicit Intelligence, Speed, survivability, and individual-stat requests override inferred role. General progression uses the observed or conversation role only as fallback. Removed lanes do not trigger quota filling.
 
 Advisor discovery retains relevant locked and over-budget candidates while other candidate-lane consumers keep the existing actionable-only behavior. Compact advisor candidates expose structured price and requirement feasibility. Luna instructions now state that candidates are possibilities, locked candidates may follow a progression step, saving may precede a purchase, and a hold-only plan is valid when no candidate justifies spending.
+
+## Phase 4.3 progression frontier and context budget
+
+Implemented a deterministic post-relevance context selector with four feasibility buckets, family-aware numeric-gap ordering, positive budget-distance ordering, structural redundancy keys, broad-gear bucket ceilings of 12/8/8/4, per-slot diversity, and a four-candidate aspirational reserve. The selector records a reason and small exclusion enum for every goal-relevant candidate. The full raw, relevant, and final sets are exposed by inspection tooling and captured in `docs/phase-4.3-f5-candidate-frontier.json`.
+
+The selector allocates prompt space and does not recommend items. It preserves exact candidate IDs, does not compare unlike requirement families, does not use weighted scoring, and permits any final count from zero through 32. Luna receives the same compact facts plus one short instruction that the supplied frontier is representative rather than exhaustive. Phase 4.3 ends after deterministic validation, with no OpenAI call.

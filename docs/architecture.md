@@ -76,6 +76,14 @@ Scope determines which domains are loaded; a separate small goal enum determines
 
 Candidate preparation now has an explicit policy. Existing callers default to `ACTIONABLE_ONLY`, preserving the prior hard filters. The advisor uses `ADVISOR_DISCOVERY`, which retains goal-relevant candidates that are over budget or requirement-locked. Compact candidates carry price status, signed budget delta, overall requirement status, and individual parsed requirement gaps with current, required, and gap values. Unsupported and unparsed requirement families remain `UNKNOWN`. Deterministic code does not decide whether a gap is close enough; Luna may sequence progression or saving before a buy, or recommend holding resources.
 
+## Phase 4.3 progression frontier
+
+After goal relevance, every candidate receives descriptive feasibility and one context-selection bucket: `ACTIONABLE`, `MONEY_GATED`, `PROGRESSION_GATED`, or `DISTANT_OR_UNCERTAIN`. Broad `GEAR` / `GENERAL_UPGRADE` analysis uses soft representation ceilings of 12, 8, 8, and 4 respectively, with 32 as a hard ceiling rather than a target. Ordering is lexicographic: known requirement state, real numeric gaps within the same requirement family, positive budget distance, relevant evidence count, then stable lane order and ID. There is no weighted utility score and no comparison across unlike requirement units.
+
+Structural keys use domain, armor slot or weapon category, relevant evidence, and bucket. Broad gear permits at most three candidates per armor slot and one distant armor representative per slot. A repeated distant structural key is capped at one; non-distant armor and weapon keys are capped at three and two. Narrow accessory and pet queries retain their domain behavior, while focused armor and stat queries still remove obvious distant repetition. Selection metadata and exclusion reasons stay diagnostic and are not added to Luna's compact payload.
+
+The full raw scope, goal-relevant universe, and final frontier remain inspectable. Feasibility changes scarce-context priority only; it does not invalidate locked, over-budget, unknown, or distant candidates. Luna is explicitly told that the shortlist is representative and remains responsible for whether any supplied option is worthwhile.
+
 ## Scope guardrails
 
-No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, recommendation frontier, advisor UI, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.
+No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, deterministic recommendation rank, advisor UI, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.

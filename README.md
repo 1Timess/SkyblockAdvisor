@@ -47,7 +47,7 @@ NEU enrichment defaults to `data/neu`. Populate it with `npm run sync:neu`, or s
 
 ## Scope
 
-Phases 1 through 4.2 provide the data API, canonical static item catalog, conservative requirement checks, a file-backed auction market snapshot, small deterministic candidate lanes, and a conversational advisor boundary. Deterministic routing loads at most 32 goal-relevant candidates from the active scope while summarizing other available domains. Relevant locked and over-budget possibilities remain visible with structured requirement and budget gaps. Luna owns prioritization, ordering, tradeoffs, and explanation and may return either a clarification or a plan. Profile UI remains deferred. Unknown item text remains readable; displayed stat totals are not a full game simulation.
+Phases 1 through 4.3 provide the data API, canonical static item catalog, conservative requirement checks, a file-backed auction market snapshot, small deterministic candidate lanes, and a conversational advisor boundary. Deterministic routing keeps the full goal-relevant candidate universe inspectable, then selects a representative progression frontier of at most 32 candidates using feasibility buckets and structural redundancy limits. Relevant locked and over-budget possibilities remain valid with structured requirement and budget gaps. Luna owns prioritization, ordering, tradeoffs, and explanation and may return either a clarification or a plan. Profile UI remains deferred. Unknown item text remains readable; displayed stat totals are not a full game simulation.
 
 - [Architecture](docs/architecture.md)
 - [Data contracts and source mappings](docs/data-sources.md)
