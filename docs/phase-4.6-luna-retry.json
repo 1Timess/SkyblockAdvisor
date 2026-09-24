@@ -1,0 +1,21 @@
+{
+  "input": {
+    "username": "iTimess",
+    "profile": "Lemon",
+    "budgetCoins": 30000000,
+    "question": "I just cleared F6 and have 30m coins. What should I upgrade next?"
+  },
+  "retryCount": 1,
+  "succeeded": false,
+  "httpStatus": 400,
+  "errorBody": {
+    "error": {
+      "message": "Invalid schema for response_format 'skyblock_advice': schema must be a JSON Schema of 'type: \"object\"', got 'type: \"None\"'.",
+      "type": "invalid_request_error",
+      "param": "text.format.schema",
+      "code": "invalid_json_schema"
+    }
+  },
+  "additionalCallMade": false,
+  "deterministicAdvisorBehaviorChanged": false
+}

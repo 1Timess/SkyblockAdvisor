@@ -103,3 +103,15 @@ test("Luna client sends the scoped strict request and validates its response", a
   assert.equal(JSON.parse(body.input).route.scope, "GEAR");
   assert.equal(new Headers(request?.headers).get("Authorization"), "Bearer test-token");
 });
+
+test("Luna client reports sanitized error response bodies", async () => {
+  const advisorContext = await context();
+  const fetcher = async () => new Response('{"error":{"message":"invalid request for test-token"}}', { status: 400 });
+  await assert.rejects(callLunaAdvisor(advisorContext, fetcher, "test-token"), error => {
+    assert.ok(error instanceof Error);
+    assert.match(error.message, /status 400/);
+    assert.match(error.message, /invalid request for \[REDACTED\]/);
+    assert.doesNotMatch(error.message, /test-token/);
+    return true;
+  });
+});

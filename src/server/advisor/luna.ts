@@ -5,6 +5,7 @@ import { getAdvisorEnv } from "./env";
 import { validateAdvisorResponse } from "./validate-response";
 
 const model = "gpt-6-luna";
+const maxErrorBodyLength = 4_000;
 // Standard text-token rates documented for GPT-6 Luna on 2026-09-23.
 const pricingPerMillion = { input: 0.10, output: 0.50 } as const;
 const apiResponseSchema = z.object({
@@ -34,7 +35,12 @@ export async function callLunaAdvisor(context: AdvisorContext, fetcher: typeof f
     }),
     signal: AbortSignal.timeout(60_000),
   });
-  if (!response.ok) throw new Error(`Luna request failed with status ${response.status}.`);
+  if (!response.ok) {
+    const rawBody = await response.text();
+    const sanitizedBody = rawBody.split(apiToken).join("[REDACTED]").replace(/Bearer\s+\S+/gi, "Bearer [REDACTED]");
+    const body = sanitizedBody.length > maxErrorBodyLength ? `${sanitizedBody.slice(0, maxErrorBodyLength)}… [truncated]` : sanitizedBody;
+    throw new Error(`Luna request failed with status ${response.status}: ${body || "<empty response body>"}`);
+  }
   const parsed = apiResponseSchema.parse(await response.json());
   if (parsed.status !== "completed") throw new Error(`Luna response did not complete (status: ${parsed.status}).`);
   const refusal = parsed.output.flatMap(item => item.content ?? []).find(content => content.type === "refusal")?.refusal;
