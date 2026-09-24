@@ -79,4 +79,10 @@ Optional Abiphone MP, wardrobe/backpack-icon presentation, personal vault/other 
 
 ## Phase 5 domain coverage
 
-The normalized inventory now remains available as `inventoryItems`, allowing the same fetched profile to identify rods, drills, pickaxes, and stat-bearing equipped items. Fishing Speed, Sea Creature Chance, Mining Speed, Mining Fortune, and Pristine are included only when parsed from supplied item data. The current member contract does not expose Heart of the Mountain level, Mithril Powder, Gemstone Powder, or pet effect data, so the domain payloads mark those facts unavailable rather than deriving them.
+The normalized inventory remains available as `inventoryItems`, allowing the same fetched profile to identify rods, drills, pickaxes, and stat-bearing equipped items. Fishing Speed, Sea Creature Chance, Mining Speed, Mining Fortune, and Pristine are included only when parsed from supplied item data. Pet effect data remains unavailable; player-state mining values are covered by the Phase 5.1 expansion below.
+
+## Phase 5.1 player-state expansion
+
+The same profile response now directly preserves mining and foraging skill-tree XP, dynamic node levels/toggles, mining powders and core state, accessory powers and tuning slots, fishing counters and trophy-fish counters, attributes, shards, collections, crafted generators, grouped player statistics, Bestiary maps, and tolerant raw state for several larger progression subsystems. No new Hypixel endpoint or request was added.
+
+HOTM level remains null because the repository does not contain a HOTM XP table. Node effects, effective aggregate stats, shard mechanics, accessory effects, and progression recommendations remain reference or derived-layer work.

@@ -17,6 +17,26 @@ test("combined profile validates and shares items across all required domains", 
   assert.equal(profile.progression.skills.combat.level, 2);
   assert.equal(profile.progression.slayers.zombie.level, 3);
   assert.equal(profile.progression.dungeons.catacombs?.level, 2);
+  assert.equal(profile.progression.mining.powder.mithril, 12345);
+  assert.equal(profile.progression.mining.powder.gemstone, 6789);
+  assert.equal(profile.progression.mining.treeExperience, 4242);
+  assert.equal(profile.progression.mining.nodes.mining_speed.level, 12);
+  assert.equal(profile.progression.mining.nodes.mining_speed.enabled, true);
+  assert.equal(profile.progression.mining.nodes.arbitrary_toggle.enabled, false);
+  assert.equal(profile.progression.mining.selectedAbilities.mining, "mining_speed_boost");
+  assert.equal(profile.progression.mining.selectedTreeSlots.mining, 1);
+  assert.equal(profile.progression.mining.tokensSpentByTree.mountain, 7);
+  assert.equal(profile.progression.foraging.sweepLevel, 4);
+  assert.equal(profile.progression.foraging.foragingFortuneNodeLevel, 6);
+  assert.equal(profile.progression.foraging.nodes.arbitrary_foraging_node.state.toggle, true);
+  assert.equal(profile.accessories.selectedPower, "fortuitous");
+  assert.deepEqual(profile.accessories.tuning.slots.slot_0, { strength: 5, critical_damage: 2 });
+  assert.deepEqual(profile.progression.fishing.itemsFished, { total: 321, normal: 300 });
+  assert.equal(profile.progression.fishing.seaCreatureKills, 45);
+  assert.deepEqual(profile.progression.fishing.trophyFish, { blobfish_bronze: 2, karate_fish_silver: 1 });
+  assert.deepEqual(profile.attributes, { veteran: 4, mana_pool: 2 });
+  assert.equal(profile.collections.COBBLESTONE, 1234);
+  assert.deepEqual(profile.craftedGenerators, ["COBBLESTONE_1", "WHEAT_2"]);
   assert.equal(profile.warnings.length, 0);
   assert.equal(JSON.stringify(profile).includes("ExtraAttributes"), false);
 });
@@ -34,6 +54,11 @@ test("missing API sections return partial data instead of invented levels/balanc
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources({}));
   assert.equal(profile.economy.purse, null); assert.deepEqual(profile.progression.skills, {});
   assert.equal(profile.progression.dungeons.catacombs, null);
+  assert.equal(profile.progression.mining.treeExperience, null);
+  assert.deepEqual(profile.progression.mining.nodes, {});
+  assert.deepEqual(profile.progression.foraging.nodes, {});
+  assert.deepEqual(profile.collections, {});
+  assert.deepEqual(profile.craftedGenerators, []);
   assert.ok(profile.warnings.some(w => w.code === "API_DATA_DISABLED"));
 });
 test("selection never silently substitutes a different coop member", async () => {

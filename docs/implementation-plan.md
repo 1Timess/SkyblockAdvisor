@@ -84,3 +84,10 @@ Trace output distinguishes qualification, capped Phase 3 presence, advisor-disco
 - Retain server-owned conversation state so follow-ups reuse snapshot identity and budget.
 - Send canonical facts, one routed domain payload, and that domain's candidate frontier.
 - Preserve the existing Dungeon candidate pipeline and use bounded stat/category discovery for fishing and mining.
+
+## Phase 5.1 — expanded profile normalization
+
+- Add tolerant raw member contracts for mining, skill trees, foraging, accessories, fishing, attributes, shards, collections, player stats, Bestiary, and selected larger progression subsystems.
+- Normalize dynamic node/counter maps without encoding node effects or other static game knowledge.
+- Feed direct mining, fishing, and accessory player state into the existing Phase 5 domain payloads.
+- Keep HOTM level null until a supported XP table is added in a derived layer.

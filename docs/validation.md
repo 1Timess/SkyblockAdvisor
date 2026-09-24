@@ -227,3 +227,7 @@ The expanded universe is a material review concern: 815 raw candidates and 304 g
 Offline coverage verifies multi-domain derivation from one normalized profile, snapshot reuse, explicit domain routing, clarification, question-relative context, relative budget distance, and the existing Dungeon advisor suite. Live deterministic validation is recorded in `phase-5-domain-routing-validation.json`; it performs no Luna request.
 
 The Phase 5 live rerun on iTimess / Lemon succeeded. The first Dungeon question populated the snapshot cache; the accessory, fishing, and mining questions reused the same snapshot and 30m budget. Each context included canonical facts plus its one routed domain, and no Luna request was made.
+
+## Phase 5.1 validation
+
+The expanded fixture covers direct powders, mining and foraging tree XP, arbitrary node levels/toggles, accessory tuning, fishing and trophy-fish counters, attributes, collections, crafted generators, and absent optional subsystems. Live values and cache reuse are recorded in `phase-5.1-live-validation.json`. The validation makes no Luna request.

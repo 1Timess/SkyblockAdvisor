@@ -17,6 +17,7 @@ import { buildSkills } from "../domains/skills";
 import { buildSlayers } from "../domains/slayers";
 import { buildDungeons } from "../domains/dungeons";
 import { buildEconomy } from "./economy";
+import { buildExtendedPlayerState } from "../domains/player-state";
 
 type Sources = {
   resolvePlayer: typeof resolvePlayer;
@@ -58,12 +59,17 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   }));
   const items = decoded.flatMap(result => result.items);
   warnings.push(...decoded.flatMap(result => result.warnings));
+  const extended = buildExtendedPlayerState(member);
   const result = {
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
     economy: buildEconomy(member, selected, warnings), gear: buildGear(items), inventoryItems: items.map(toProfileItem),
     accessories: buildAccessories(items, member, buildAccessoryCatalog(catalogResult.items), warnings),
     pets: buildPets(member, warnings),
-    progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings) },
+    progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings),
+      mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing },
+    attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
+    unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
+    playerStats: extended.playerStats, bestiary: extended.bestiary, otherProgression: extended.otherProgression,
     warnings, meta: { fetchedAt: new Date().toISOString() },
   };
   return normalizedProfileSchema.parse(result);

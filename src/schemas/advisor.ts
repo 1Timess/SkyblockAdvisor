@@ -68,18 +68,27 @@ const compactPetSchema = z.object({ type: z.string(), name: z.string(), rarity: 
   heldItem: z.string().nullable(), stats: statsSchema, abilityLore: z.array(z.string()) });
 const compactAccessorySchema = compactItemSchema.extend({ active: z.boolean(), inactiveReason: z.string().nullable() });
 const domainKnownStatsSchema = z.object({ totals: statsSchema, supportedStats: z.array(z.string()) });
+const compactNodeSchema = z.object({ level: z.number().nullable(), value: z.number().nullable(), enabled: z.boolean().nullable(),
+  state: z.record(z.string(), z.union([z.number(), z.boolean()])) });
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
     highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),
     weapons: z.array(compactItemSchema), equipment: z.array(compactItemSchema), activePet: compactPetSchema.nullable() }),
-  z.object({ domain: z.literal("ACCESSORIES"), selectedPower: z.string().nullable(), magicalPower: z.number(),
+  z.object({ domain: z.literal("ACCESSORIES"), selectedPower: z.string().nullable(), magicalPower: z.number(), highestMagicalPower: z.number().nullable(),
+    unlockedPowers: z.array(z.string()), bagUpgradesPurchased: z.number().nullable(),
+    tuning: z.object({ highestUnlockedSlot: z.number().nullable(), slots: z.record(z.string(), statsSchema) }),
     owned: z.array(compactAccessorySchema), missing: z.array(z.object({ id: z.string(), name: z.string(), rarity: raritySchema.nullable() })),
     upgrades: z.array(z.object({ id: z.string(), name: z.string(), rarity: raritySchema.nullable() })) }),
   z.object({ domain: z.literal("FISHING"), fishingLevel: compactLevelSchema.nullable(), tools: z.array(compactItemSchema),
+    itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), trophyFish: statsSchema,
     armor: z.array(compactItemSchema), equipment: z.array(compactItemSchema), pets: z.array(compactPetSchema), knownStats: domainKnownStatsSchema,
     unavailableFacts: z.array(z.string()) }),
   z.object({ domain: z.literal("MINING"), miningLevel: compactLevelSchema.nullable(), hotmLevel: z.number().nullable(),
-    mithrilPowder: z.number().nullable(), gemstonePowder: z.number().nullable(), tools: z.array(compactItemSchema),
+    treeExperience: z.number().nullable(), nodes: z.record(z.string(), compactNodeSchema), selectedAbility: z.string().nullable(),
+    selectedAbilities: z.record(z.string(), z.string()), selectedTreeSlot: z.union([z.string(), z.number()]).nullable(),
+    selectedTreeSlots: statsSchema, tokensSpent: z.number().nullable(), tokensSpentByTree: statsSchema,
+    mithrilPowder: z.number().nullable(), gemstonePowder: z.number().nullable(), crystals: z.record(z.string(), z.unknown()), biomes: z.record(z.string(), z.unknown()),
+    tools: z.array(compactItemSchema),
     armor: z.array(compactItemSchema), equipment: z.array(compactItemSchema), pets: z.array(compactPetSchema), knownStats: domainKnownStatsSchema,
     unavailableFacts: z.array(z.string()) }),
 ]);

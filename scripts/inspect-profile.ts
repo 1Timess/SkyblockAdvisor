@@ -11,6 +11,13 @@ async function main() {
     weapons: profile.gear.weapons.length, accessories: profile.accessories.owned.length,
     pets: profile.pets.owned.length, skills: Object.keys(profile.progression.skills).length,
   }, magicalPower: profile.accessories.magicalPower,
+  mining: profile.progression.mining,
+  foraging: { level: profile.progression.skills.foraging ?? null, ...profile.progression.foraging },
+  accessories: { selectedPower: profile.accessories.selectedPower, highestMagicalPower: profile.accessories.highestMagicalPower,
+    unlockedPowers: profile.accessories.unlockedPowers, bagUpgradesPurchased: profile.accessories.bagUpgradesPurchased, tuning: profile.accessories.tuning },
+  fishing: { level: profile.progression.skills.fishing ?? null, ...profile.progression.fishing },
+  extendedCounts: { attributes: Object.keys(profile.attributes).length, collections: Object.keys(profile.collections).length,
+    craftedGenerators: profile.craftedGenerators.length, bestiaryKills: Object.keys(profile.bestiary.kills).length },
   warningCounts: profile.warnings.reduce<Record<string, number>>((counts, warning) => {
     counts[warning.code] = (counts[warning.code] ?? 0) + 1; return counts;
   }, {}),

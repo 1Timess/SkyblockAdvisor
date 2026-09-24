@@ -3,6 +3,7 @@ import type { AccessoryReference, AccessorySummary } from "../../../schemas/norm
 import type { RawMember } from "../../hypixel/types";
 import { accessoryBaseId, accessoryChains, mpByRarity } from "../../reference/accessory-data";
 import { toProfileItem } from "../items/process-item";
+import { buildAccessoryPlayerState } from "./player-state";
 
 export function buildAccessories(items: ProcessedItem[], member: RawMember, catalog: AccessoryReference[], warnings: ProfileWarning[]): AccessorySummary {
   const owned = items.filter(item => item.categories.includes("accessory") &&
@@ -63,6 +64,6 @@ export function buildAccessories(items: ProcessedItem[], member: RawMember, cata
     } else missing.push(reference);
   }
   const riftPrism = consumedPrism ? 11 : 0;
-  return { selectedPower: member.accessory_bag_storage?.selected_power ?? null,
+  return { selectedPower: member.accessory_bag_storage?.selected_power ?? null, ...buildAccessoryPlayerState(member),
     magicalPower: { total: accessories + riftPrism, accessories, riftPrism, byRarity }, owned, missing, upgrades };
 }

@@ -16,7 +16,16 @@ test("one normalized profile derives all four profile-intelligence domains", asy
   assert.equal(intelligence.domains.MINING.domain, "MINING");
   if (intelligence.domains.MINING.domain !== "MINING") throw new Error("unreachable");
   assert.equal(intelligence.domains.MINING.hotmLevel, null);
-  assert.ok(intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("Heart of the Mountain")));
+  assert.equal(intelligence.domains.MINING.treeExperience, 4242);
+  assert.equal(intelligence.domains.MINING.mithrilPowder, 12345);
+  assert.equal(intelligence.domains.MINING.gemstonePowder, 6789);
+  assert.equal(intelligence.domains.MINING.nodes.mining_speed.level, 12);
+  assert.ok(intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("XP table")));
+  if (intelligence.domains.FISHING.domain !== "FISHING") throw new Error("unreachable");
+  assert.deepEqual(intelligence.domains.FISHING.itemsFished, { total: 321, normal: 300 });
+  assert.equal(intelligence.domains.FISHING.seaCreatureKills, 45);
+  if (intelligence.domains.ACCESSORIES.domain !== "ACCESSORIES") throw new Error("unreachable");
+  assert.equal(intelligence.domains.ACCESSORIES.tuning.slots.slot_0.strength, 5);
 });
 
 test("snapshot cache reuses the normalized profile across domain questions", async () => {

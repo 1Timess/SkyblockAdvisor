@@ -1,0 +1,184 @@
+{
+  "generatedAt": "2026-09-24T23:40:30.485Z",
+  "lunaCalls": 0,
+  "normalizedProfileFetchesInProcess": 1,
+  "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-24T23:40:10.904Z",
+  "mining": {
+    "skillLevel": 28,
+    "treeExperience": 104330,
+    "hotmLevel": null,
+    "powder": {
+      "mithril": 372455,
+      "mithrilTotal": 197566,
+      "mithrilSpent": 206754,
+      "gemstone": 17645,
+      "gemstoneTotal": 17645,
+      "gemstoneSpent": 14972,
+      "nonRefundableMithrilSpent": 150000,
+      "nonRefundableMithrilSpent2": 150000
+    },
+    "selectedAbility": null,
+    "selectedAbilities": {
+      "mining": "pickobulus",
+      "mining_2": "mining_speed_boost"
+    },
+    "selectedTreeSlot": null,
+    "selectedTreeSlots": {
+      "mining": 1
+    },
+    "tokensSpent": null,
+    "tokensSpentByTree": {
+      "mountain": 10,
+      "forest": 4,
+      "forest_2": 0,
+      "forest_3": 0,
+      "forest_4": 0,
+      "forest_5": 0,
+      "mountain_2": 7
+    },
+    "sampleNodes": {
+      "mining_speed": {
+        "level": 20,
+        "value": 20,
+        "enabled": null,
+        "state": {
+          "level": 20
+        }
+      },
+      "toggle_mining_speed": {
+        "level": null,
+        "value": null,
+        "enabled": true,
+        "state": {
+          "enabled": true
+        }
+      },
+      "precision_mining": {
+        "level": 1,
+        "value": 1,
+        "enabled": null,
+        "state": {
+          "level": 1
+        }
+      },
+      "toggle_precision_mining": {
+        "level": null,
+        "value": null,
+        "enabled": true,
+        "state": {
+          "enabled": true
+        }
+      },
+      "pickobulus": {
+        "level": 1,
+        "value": 1,
+        "enabled": null,
+        "state": {
+          "level": 1
+        }
+      },
+      "toggle_pickobulus": {
+        "level": null,
+        "value": null,
+        "enabled": true,
+        "state": {
+          "enabled": true
+        }
+      },
+      "efficient_miner": {
+        "level": 30,
+        "value": 30,
+        "enabled": null,
+        "state": {
+          "level": 30
+        }
+      },
+      "toggle_efficient_miner": {
+        "level": null,
+        "value": null,
+        "enabled": true,
+        "state": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "foraging": {
+    "skillLevel": 20,
+    "treeExperience": 12180,
+    "sweepLevel": 18,
+    "foragingFortuneNodeLevel": 12
+  },
+  "accessories": {
+    "magicalPower": 433,
+    "highestMagicalPower": 421,
+    "selectedPower": "bloody",
+    "unlockedPowers": [
+      "bloody"
+    ],
+    "bagUpgradesPurchased": 3,
+    "tuning": {
+      "highestUnlockedSlot": 1,
+      "slots": {
+        "slot_0": {
+          "health": 2,
+          "defense": 15,
+          "walk_speed": 0,
+          "strength": 15,
+          "critical_damage": 0,
+          "critical_chance": 0,
+          "attack_speed": 10,
+          "intelligence": 0
+        },
+        "slot_1": {
+          "purchase_ts": 1789431717097,
+          "attack_speed": 10,
+          "critical_chance": 0,
+          "critical_damage": 0,
+          "defense": 10,
+          "health": 1,
+          "intelligence": 0,
+          "strength": 15,
+          "walk_speed": 0
+        }
+      }
+    }
+  },
+  "fishing": {
+    "skillLevel": 22,
+    "itemsFished": {
+      "total": 1494,
+      "normal": 1189,
+      "treasure": 270,
+      "large_treasure": 24,
+      "trophy_fish": 8,
+      "outstanding": 3
+    },
+    "seaCreatureKills": 1136,
+    "trophyFishCounters": 15,
+    "trophyFishTotalCaught": 21
+  },
+  "contexts": [
+    {
+      "question": "What should I upgrade for mining?",
+      "domain": "MINING",
+      "cacheReused": true,
+      "domainPayload": "MINING",
+      "candidateCount": 8
+    },
+    {
+      "question": "I'm looking for fishing gear. What's the best upgrade available to me?",
+      "domain": "FISHING",
+      "cacheReused": true,
+      "domainPayload": "FISHING",
+      "candidateCount": 17
+    },
+    {
+      "question": "Okay, what about my MP then?",
+      "domain": "ACCESSORIES",
+      "cacheReused": true,
+      "domainPayload": "ACCESSORIES",
+      "candidateCount": 14
+    }
+  ]
+}
