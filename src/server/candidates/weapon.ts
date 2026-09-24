@@ -4,7 +4,7 @@ import type { MarketQuote } from "../../schemas/market";
 import type { ProfileItem } from "../../schemas/items";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { collectOwnedItemIds } from "./armor";
-import { dedupeCandidates, prepareCandidate, type CandidateFilterOptions } from "./common";
+import { buildAdvisorDiscovery, dedupeCandidates, prepareCandidate, type AdvisorCandidateDiscovery, type CandidateFilterOptions } from "./common";
 
 const weaponTypes = ["sword", "bow", "wand", "fishing_rod"] as const;
 type WeaponType = typeof weaponTypes[number];
@@ -23,7 +23,7 @@ export function buildWeaponLanes(input: {
   eligibilityMode?: CandidateFilterOptions["eligibilityMode"];
   laneCap?: number;
   totalCap?: number;
-}): WeaponCandidateLanes {
+}): WeaponCandidateLanes & { discovery: AdvisorCandidateDiscovery<WeaponLaneName> } {
   if (!input.current.categories.includes("weapon")) throw new Error(`Current item ${input.current.id ?? input.current.name} is not a weapon.`);
   const currentType = weaponType(input.current), quotes = input.quotes ?? new Map<string, MarketQuote>();
   const options: CandidateFilterOptions = { budgetCoins: input.budgetCoins, ownedItemIds: collectOwnedItemIds(input.profile), eligibilityMode: input.eligibilityMode };
@@ -36,30 +36,35 @@ export function buildWeaponLanes(input: {
     ...statLanes.map(stat => [stat, rankStatLane(prepared, input.current, stat, laneCap)] as const),
     ["ability", rankAbilityLane(prepared, input.current, laneCap)] as const,
   ]) as Record<WeaponLaneName, AdvisorCandidate[]>;
-  return weaponCandidateLanesSchema.parse({ weaponType: currentType, lanes, candidates: dedupeCandidates(lanes, totalCap) });
+  const discoveryLanes = Object.fromEntries([
+    ...statLanes.map(stat => [stat, rankStatLane(prepared, input.current, stat)] as const),
+    ["ability", rankAbilityLane(prepared, input.current)] as const,
+  ]) as Record<WeaponLaneName, AdvisorCandidate[]>;
+  const capped = weaponCandidateLanesSchema.parse({ weaponType: currentType, lanes, candidates: dedupeCandidates(lanes, totalCap) });
+  return { ...capped, discovery: buildAdvisorDiscovery(discoveryLanes, input.current.id ?? input.current.name) };
 }
 
-function rankStatLane(candidates: readonly AdvisorCandidate[], current: ProfileItem, stat: Exclude<WeaponLaneName, "ability">, cap: number) {
+function rankStatLane(candidates: readonly AdvisorCandidate[], current: ProfileItem, stat: Exclude<WeaponLaneName, "ability">, cap?: number) {
   const currentValue = current.stats[stat] ?? null;
-  return candidates
+  const ranked = candidates
     .filter(candidate => candidate.item.stats[stat] !== undefined && (currentValue === null || candidate.item.stats[stat] > currentValue))
     .sort((a, b) => (b.item.stats[stat] ?? 0) - (a.item.stats[stat] ?? 0) || a.id.localeCompare(b.id))
-    .slice(0, cap)
     .map(candidate => ({ ...candidate, knownChanges: { [stat]: { current: currentValue, candidate: candidate.item.stats[stat] } } }));
+  return cap === undefined ? ranked : ranked.slice(0, cap);
 }
 
-function rankAbilityLane(candidates: readonly AdvisorCandidate[], current: ProfileItem, cap: number) {
+function rankAbilityLane(candidates: readonly AdvisorCandidate[], current: ProfileItem, cap?: number) {
   const comparisonStats = ["abilityDamage", "intelligence", "damage", "strength"] as const;
   const score = (candidate: AdvisorCandidate) => comparisonStats.map(stat => candidate.item.stats[stat] ?? 0);
-  return candidates
+  const ranked = candidates
     .filter(candidate => candidate.abilityText.length > 0)
     .sort((a, b) => {
       const left = score(a), right = score(b);
       for (let index = 0; index < left.length; index++) if (right[index] !== left[index]) return right[index] - left[index];
       return a.id.localeCompare(b.id);
     })
-    .slice(0, cap)
     .map(candidate => ({ ...candidate, knownChanges: Object.fromEntries(comparisonStats
       .filter(stat => candidate.item.stats[stat] !== undefined || current.stats[stat] !== undefined)
       .map(stat => [stat, { current: current.stats[stat] ?? null, candidate: candidate.item.stats[stat] ?? null }])) }));
+  return cap === undefined ? ranked : ranked.slice(0, cap);
 }

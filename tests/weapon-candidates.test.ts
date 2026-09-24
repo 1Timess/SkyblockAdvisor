@@ -4,6 +4,8 @@ import type { CandidateItem } from "../src/schemas/catalog";
 import type { MarketQuote } from "../src/schemas/market";
 import type { ProfileItem } from "../src/schemas/items";
 import { buildWeaponLanes } from "../src/server/candidates/weapon";
+import { orderDetailedCandidates, type TaggedCandidateLane } from "../src/server/advisor/context";
+import { mergeCandidateEvidence } from "../src/server/advisor/relevance";
 import { parseRequirementText } from "../src/server/reference/requirements";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
 import { fixtureSources } from "./fixtures/profile";
@@ -58,4 +60,35 @@ test("weapon lanes cap and deduplicate their candidate union", async () => {
   for (const lane of Object.values(result.lanes)) assert.equal(lane.length, 6);
   assert.ok(result.candidates.length <= 20);
   assert.equal(new Set(result.candidates.map(value => value.id)).size, result.candidates.length);
+  assert.ok(!result.lanes.damage.some(value => value.id === "WEAPON_00"));
+  assert.ok(result.discovery.candidates.some(value => value.id === "WEAPON_00"));
+});
+
+test("weapon advisor discovery preserves filters, locked and over-budget candidates", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const locked = candidate("LOCKED", { damage: 200 }, { requirements: [parseRequirementText("Requires Combat Skill 99")!] });
+  const overBudget = candidate("OVER_BUDGET", { damage: 180 });
+  const catalog = [locked, overBudget, candidate("NO_FACTS", { damage: 100 }),
+    candidate("WRONG_TYPE", { damage: 500 }, { categories: ["weapon", "bow"] }), candidate("TEST_SWORD", { damage: 500 })];
+  const result = buildWeaponLanes({ current: currentWeapon(), catalog, profile,
+    quotes: new Map([["OVER_BUDGET", quote("OVER_BUDGET", 2_000)]]), budgetCoins: 1_000, eligibilityMode: "ADVISOR_DISCOVERY" });
+  assert.deepEqual(new Set(result.discovery.candidates.map(value => value.id)), new Set(["LOCKED", "OVER_BUDGET"]));
+});
+
+test("weapon discovery deduplicates and merges evidence from multiple baselines", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const target = candidate("TARGET", { damage: 130, strength: 60 });
+  const first = buildWeaponLanes({ current: currentWeapon(), catalog: [target], profile, eligibilityMode: "ADVISOR_DISCOVERY" });
+  const secondCurrent = { ...currentWeapon(), id: "CURRENT_TWO", stats: { damage: 120, strength: 20 } };
+  const second = buildWeaponLanes({ current: secondCurrent, catalog: [target], profile, eligibilityMode: "ADVISOR_DISCOVERY" });
+  const lanes: TaggedCandidateLane[] = [first, second].flatMap((result, index) => Object.entries(result.discovery.lanes)
+    .map(([lane, candidates]) => ({ domain: "WEAPONS" as const, label: `weapon:CURRENT_${index}:${lane}`, candidates })));
+  const ordered = orderDetailedCandidates(lanes);
+  assert.equal(ordered.length, 1);
+  const merged = mergeCandidateEvidence(ordered[0], lanes);
+  assert.deepEqual(merged.knownChanges, {
+    damage: { current: 120, candidate: 130 }, strength: { current: 50, candidate: 60 },
+  });
+  assert.deepEqual(lanes.filter(lane => lane.candidates.some(value => value.id === "TARGET")).map(lane => lane.label),
+    ["weapon:CURRENT_0:damage", "weapon:CURRENT_0:strength", "weapon:CURRENT_1:damage", "weapon:CURRENT_1:strength"]);
 });

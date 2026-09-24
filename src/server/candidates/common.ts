@@ -10,6 +10,12 @@ export interface CandidateFilterOptions {
   eligibilityMode?: "ACTIONABLE_ONLY" | "ADVISOR_DISCOVERY";
 }
 
+export interface AdvisorCandidateDiscovery<Lane extends string> {
+  lanes: Record<Lane, AdvisorCandidate[]>;
+  candidates: AdvisorCandidate[];
+  evidenceById: Record<string, { sourceLanes: Lane[]; comparedAgainst: string[] }>;
+}
+
 export function prepareCandidate(
   domain: AdvisorCandidate["domain"],
   item: CandidateItem,
@@ -47,4 +53,20 @@ export function dedupeCandidates(lanes: Readonly<Record<string, readonly Advisor
     if (result.length === cap) return result;
   }
   return result;
+}
+
+export function buildAdvisorDiscovery<Lane extends string>(lanes: Record<Lane, AdvisorCandidate[]>, comparedAgainst: string): AdvisorCandidateDiscovery<Lane> {
+  const byId = new Map<string, AdvisorCandidate>(), evidence = new Map<string, { sourceLanes: Lane[]; comparedAgainst: string[] }>();
+  for (const [lane, candidates] of Object.entries(lanes) as Array<[Lane, AdvisorCandidate[]]>) for (const candidate of candidates) {
+    const existing = byId.get(candidate.id);
+    byId.set(candidate.id, existing ? { ...existing,
+      knownChanges: { ...(existing.knownChanges ?? {}), ...(candidate.knownChanges ?? {}) },
+      warnings: [...new Set([...existing.warnings, ...candidate.warnings])],
+    } : candidate);
+    const current = evidence.get(candidate.id) ?? { sourceLanes: [], comparedAgainst: [] };
+    if (!current.sourceLanes.includes(lane)) current.sourceLanes.push(lane);
+    if (!current.comparedAgainst.includes(comparedAgainst)) current.comparedAgainst.push(comparedAgainst);
+    evidence.set(candidate.id, current);
+  }
+  return { lanes, candidates: [...byId.values()], evidenceById: Object.fromEntries(evidence) };
 }

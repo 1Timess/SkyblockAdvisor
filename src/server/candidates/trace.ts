@@ -22,8 +22,15 @@ export interface CandidateCoverageTrace {
   pairedCurrentItems: PairTrace[];
   consideredByBuilder: boolean;
   prepareCandidateSucceeded: boolean;
+  qualifiesBeforeCap: boolean;
+  presentInPhase3CappedLane: boolean;
+  presentInAdvisorDiscovery: boolean;
+  presentInRawAdvisorScope: boolean;
+  goalRelevant: boolean | null;
+  frontierSelected: boolean | null;
   nominatedLanes: string[];
   rawAdvisorPresence: boolean;
+  phase3PresentationExclusion: "LANE_CAP" | null;
   firstExclusionStage: TraceExclusionStage;
   exclusionReason: string | null;
   rootCauseClassification: RootCauseClassification;
@@ -37,6 +44,7 @@ export interface PairTrace {
   prepareCandidateNullReason: string | null;
   qualifyingLanesBeforeCap: string[];
   nominatedLanesAfterCap: string[];
+  advisorDiscoveryLanes: string[];
 }
 
 export function traceCandidateCoverage(input: {
@@ -57,12 +65,17 @@ export function traceCandidateCoverage(input: {
     : inferredDomain === "weapon" ? pairs.some(pair => pair.compatibility) : false;
   const compatible = pairs.filter(pair => pair.compatibility);
   const prepared = compatible.filter(pair => pair.prepareCandidateResult === "CANDIDATE");
-  const nominatedLanes = [...new Set(pairs.flatMap(pair => pair.nominatedLanesAfterCap))];
-  const rawAdvisorPresence = nominatedLanes.length > 0;
+  const cappedLanes = [...new Set(pairs.flatMap(pair => pair.nominatedLanesAfterCap))];
+  const nominatedLanes = [...new Set(pairs.flatMap(pair => pair.advisorDiscoveryLanes))];
+  const qualifiesBeforeCap = pairs.some(pair => pair.qualifyingLanesBeforeCap.length > 0);
+  const presentInPhase3CappedLane = cappedLanes.length > 0, presentInAdvisorDiscovery = nominatedLanes.length > 0;
+  const rawAdvisorPresence = presentInAdvisorDiscovery;
   const exclusion = exclusionDetails({ item: input.item, inferredDomain, armorSlot, weaponType, pairs, consideredByBuilder, compatible, prepared, rawAdvisorPresence });
   return { catalog: catalogSummary(input.item), inferredDomain, slotOrType: armorSlot ?? weaponType,
     pairedCurrentItems: pairs, consideredByBuilder, prepareCandidateSucceeded: prepared.length > 0,
-    nominatedLanes, rawAdvisorPresence, ...exclusion };
+    qualifiesBeforeCap, presentInPhase3CappedLane, presentInAdvisorDiscovery, presentInRawAdvisorScope: rawAdvisorPresence,
+    goalRelevant: null, frontierSelected: null, nominatedLanes, rawAdvisorPresence,
+    phase3PresentationExclusion: qualifiesBeforeCap && !presentInPhase3CappedLane ? "LANE_CAP" : null, ...exclusion };
 }
 
 export function catalogCoverageSummary(catalog: readonly CandidateItem[]) {
@@ -89,19 +102,20 @@ function tracePair(input: {
     : compatible ? `Candidate subtype ${input.weaponType ?? "unrecognized"} matches baseline subtype ${typeOf(input.current) ?? "unrecognized"}.`
       : `Candidate subtype ${input.weaponType ?? "unrecognized"} does not match baseline subtype ${typeOf(input.current) ?? "unrecognized"}.`;
   if (!compatible || !input.inferredDomain) return { currentItem: current, compatibility: false, compatibilityReason,
-    prepareCandidateResult: "NOT_REACHED", prepareCandidateNullReason: null, qualifyingLanesBeforeCap: [], nominatedLanesAfterCap: [] };
+    prepareCandidateResult: "NOT_REACHED", prepareCandidateNullReason: null, qualifyingLanesBeforeCap: [], nominatedLanesAfterCap: [], advisorDiscoveryLanes: [] };
   const prepared = prepareCandidate(input.inferredDomain, input.item, input.profile, input.quotes,
     { budgetCoins: input.budgetCoins, ownedItemIds: input.owned, eligibilityMode: "ADVISOR_DISCOVERY" });
   const nullReason = prepared ? null : input.owned.has(input.item.id) ? "The exact candidate ID is already owned." : "prepareCandidate returned null for an unclassified reason.";
   if (!prepared) return { currentItem: current, compatibility: true, compatibilityReason,
-    prepareCandidateResult: "NULL", prepareCandidateNullReason: nullReason, qualifyingLanesBeforeCap: [], nominatedLanesAfterCap: [] };
+    prepareCandidateResult: "NULL", prepareCandidateNullReason: nullReason, qualifyingLanesBeforeCap: [], nominatedLanesAfterCap: [], advisorDiscoveryLanes: [] };
   const qualifyingLanesBeforeCap = input.inferredDomain === "armor" ? qualifyingArmorLanes(input.item, input.current) : qualifyingWeaponLanes(input.item, input.current);
   const output = input.inferredDomain === "armor"
-    ? buildArmorLanes({ current: input.current, catalog: input.catalog, profile: input.profile, quotes: input.quotes, budgetCoins: input.budgetCoins, eligibilityMode: "ADVISOR_DISCOVERY" }).lanes
-    : buildWeaponLanes({ current: input.current, catalog: input.catalog, profile: input.profile, quotes: input.quotes, budgetCoins: input.budgetCoins, eligibilityMode: "ADVISOR_DISCOVERY" }).lanes;
-  const nominatedLanesAfterCap = Object.entries(output).filter(([, candidates]) => candidates.some(candidate => candidate.id === input.item.id)).map(([lane]) => lane);
+    ? buildArmorLanes({ current: input.current, catalog: input.catalog, profile: input.profile, quotes: input.quotes, budgetCoins: input.budgetCoins, eligibilityMode: "ADVISOR_DISCOVERY" })
+    : buildWeaponLanes({ current: input.current, catalog: input.catalog, profile: input.profile, quotes: input.quotes, budgetCoins: input.budgetCoins, eligibilityMode: "ADVISOR_DISCOVERY" });
+  const nominatedLanesAfterCap = Object.entries(output.lanes).filter(([, candidates]) => candidates.some(candidate => candidate.id === input.item.id)).map(([lane]) => lane);
+  const advisorDiscoveryLanes = Object.entries(output.discovery.lanes).filter(([, candidates]) => candidates.some(candidate => candidate.id === input.item.id)).map(([lane]) => lane);
   return { currentItem: current, compatibility: true, compatibilityReason, prepareCandidateResult: "CANDIDATE", prepareCandidateNullReason: null,
-    qualifyingLanesBeforeCap, nominatedLanesAfterCap };
+    qualifyingLanesBeforeCap, nominatedLanesAfterCap, advisorDiscoveryLanes };
 }
 
 function qualifyingArmorLanes(candidate: CandidateItem, current: ProfileItem) {
@@ -134,7 +148,7 @@ function exclusionDetails(input: {
       : "No supported weapon stat improves on a compatible baseline and no ability text is present.", rootCauseClassification: "E" };
   }
   if (input.prepared.some(pair => pair.qualifyingLanesBeforeCap.length > 0) && !input.rawAdvisorPresence) {
-    return { firstExclusionStage: "LANE_CAP", exclusionReason: "The item qualifies before ranking but does not enter any capped top-six lane.", rootCauseClassification: "I" };
+    return { firstExclusionStage: "RAW_SCOPE", exclusionReason: "The item qualifies before ranking but did not enter advisor discovery.", rootCauseClassification: "I" };
   }
   if (!input.rawAdvisorPresence) return { firstExclusionStage: "RAW_SCOPE", exclusionReason: "The item was lane-nominated but did not enter the raw advisor scope.", rootCauseClassification: "H" };
   return { firstExclusionStage: "NONE", exclusionReason: null, rootCauseClassification: null };

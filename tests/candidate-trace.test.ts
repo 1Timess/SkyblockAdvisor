@@ -23,9 +23,10 @@ test("coverage trace distinguishes pre-cap qualification from raw lane inclusion
   const trace = traceCandidateCoverage({ item: target, profile, catalog, quotes: new Map() });
   assert.equal(trace.prepareCandidateSucceeded, true);
   assert.deepEqual(trace.pairedCurrentItems[0].qualifyingLanesBeforeCap, ["defense"]);
-  assert.equal(trace.rawAdvisorPresence, false);
-  assert.equal(trace.firstExclusionStage, "LANE_CAP");
-  assert.equal(trace.rootCauseClassification, "I");
+  assert.equal(trace.presentInPhase3CappedLane, false);
+  assert.equal(trace.presentInAdvisorDiscovery, true);
+  assert.equal(trace.phase3PresentationExclusion, "LANE_CAP");
+  assert.equal(trace.firstExclusionStage, "NONE");
 });
 
 test("coverage trace reports lane nomination limits and category coverage", async () => {

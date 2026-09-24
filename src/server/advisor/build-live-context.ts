@@ -73,8 +73,8 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildInput):
   const pets = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu), quotes, budgetCoins: input.budgetCoins, rolePetTypes: input.rolePetTypes, eligibilityMode });
 
   const lanes: TaggedCandidateLane[] = [
-    ...armorResults.flatMap(result => Object.entries(result.lanes).map(([lane, candidates]) => ({ domain: "ARMOR" as const, label: `armor:${result.slot}:${lane}`, candidates }))),
-    ...weaponResults.flatMap(({ current, result }) => Object.entries(result.lanes).map(([lane, candidates]) => ({ domain: "WEAPONS" as const, label: `weapon:${current}:${lane}`, candidates }))),
+    ...armorResults.flatMap(result => Object.entries(result.discovery.lanes).map(([lane, candidates]) => ({ domain: "ARMOR" as const, label: `armor:${result.slot}:${lane}`, candidates }))),
+    ...weaponResults.flatMap(({ current, result }) => Object.entries(result.discovery.lanes).map(([lane, candidates]) => ({ domain: "WEAPONS" as const, label: `weapon:${current}:${lane}`, candidates }))),
     ...Object.entries(accessories.lanes).map(([lane, candidates]) => ({ domain: "ACCESSORIES" as const, label: `accessory:${lane}`, candidates })),
     ...Object.entries(pets.lanes).map(([lane, candidates]) => ({ domain: "PETS" as const, label: `pet:${lane}`, candidates })),
   ];

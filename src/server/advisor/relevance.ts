@@ -30,9 +30,19 @@ export function buildCandidateRelevance(lanes: readonly TaggedCandidateLane[], c
 export function mergeCandidateEvidence(candidate: AdvisorCandidate, lanes: readonly TaggedCandidateLane[]): AdvisorCandidate {
   const occurrences = lanes.flatMap(lane => lane.candidates.filter(value => value.id === candidate.id));
   return { ...candidate,
-    knownChanges: Object.assign({}, ...occurrences.map(value => value.knownChanges ?? {})),
+    knownChanges: mergeKnownChanges(occurrences),
     warnings: [...new Set(occurrences.flatMap(value => value.warnings))],
   };
+}
+
+function mergeKnownChanges(candidates: readonly AdvisorCandidate[]) {
+  const changes: NonNullable<AdvisorCandidate["knownChanges"]> = {};
+  for (const candidate of candidates) for (const [stat, change] of Object.entries(candidate.knownChanges ?? {})) {
+    const previous = changes[stat];
+    const currents = [previous?.current, change.current].filter((value): value is number => value !== null && value !== undefined);
+    changes[stat] = { current: currents.length ? Math.max(...currents) : null, candidate: change.candidate ?? previous?.candidate ?? null };
+  }
+  return changes;
 }
 
 export function uniqueLaneCandidates(lanes: readonly TaggedCandidateLane[]) {

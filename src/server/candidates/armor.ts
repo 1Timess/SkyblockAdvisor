@@ -3,7 +3,7 @@ import { armorCandidateLanesSchema, armorLaneNames, type AdvisorCandidate, type 
 import type { MarketQuote } from "../../schemas/market";
 import type { ProfileItem } from "../../schemas/items";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
-import { dedupeCandidates, prepareCandidate, type CandidateFilterOptions } from "./common";
+import { buildAdvisorDiscovery, dedupeCandidates, prepareCandidate, type AdvisorCandidateDiscovery, type CandidateFilterOptions } from "./common";
 
 const armorSlots = ["helmet", "chestplate", "leggings", "boots"] as const;
 type ArmorSlot = typeof armorSlots[number];
@@ -31,7 +31,7 @@ export function buildArmorLanes(input: {
   eligibilityMode?: CandidateFilterOptions["eligibilityMode"];
   laneCap?: number;
   totalCap?: number;
-}): ArmorCandidateLanes {
+}): ArmorCandidateLanes & { discovery: AdvisorCandidateDiscovery<ArmorLaneName> } {
   const slot = armorSlot(input.current);
   if (!slot) throw new Error(`Current item ${input.current.id ?? input.current.name} does not have a recognized armor slot.`);
   const quotes = input.quotes ?? new Map<string, MarketQuote>();
@@ -42,14 +42,16 @@ export function buildArmorLanes(input: {
     .filter((candidate): candidate is AdvisorCandidate => candidate !== null);
   const laneCap = Math.min(input.laneCap ?? 6, 6), totalCap = Math.min(input.totalCap ?? 20, 20);
   const lanes = Object.fromEntries(armorLaneNames.map(stat => [stat, rankLane(prepared, input.current, stat, laneCap)])) as Record<ArmorLaneName, AdvisorCandidate[]>;
-  return armorCandidateLanesSchema.parse({ slot, lanes, candidates: dedupeCandidates(lanes, totalCap) });
+  const discoveryLanes = Object.fromEntries(armorLaneNames.map(stat => [stat, rankLane(prepared, input.current, stat)])) as Record<ArmorLaneName, AdvisorCandidate[]>;
+  const capped = armorCandidateLanesSchema.parse({ slot, lanes, candidates: dedupeCandidates(lanes, totalCap) });
+  return { ...capped, discovery: buildAdvisorDiscovery(discoveryLanes, input.current.id ?? input.current.name) };
 }
 
-function rankLane(candidates: readonly AdvisorCandidate[], current: ProfileItem, stat: ArmorLaneName, cap: number) {
+function rankLane(candidates: readonly AdvisorCandidate[], current: ProfileItem, stat: ArmorLaneName, cap?: number) {
   const currentValue = current.stats[stat] ?? null;
-  return candidates
+  const ranked = candidates
     .filter(candidate => candidate.item.stats[stat] !== undefined && (currentValue === null || candidate.item.stats[stat] > currentValue))
     .sort((a, b) => (b.item.stats[stat] ?? 0) - (a.item.stats[stat] ?? 0) || a.id.localeCompare(b.id))
-    .slice(0, cap)
     .map(candidate => ({ ...candidate, knownChanges: { [stat]: { current: currentValue, candidate: candidate.item.stats[stat] } } }));
+  return cap === undefined ? ranked : ranked.slice(0, cap);
 }

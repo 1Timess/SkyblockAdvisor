@@ -62,4 +62,21 @@ test("armor lanes cap each stat at six and deduplicate the union at twenty", asy
   for (const lane of Object.values(result.lanes)) assert.equal(lane.length, 6);
   assert.ok(result.candidates.length <= 20);
   assert.equal(new Set(result.candidates.map(value => value.id)).size, result.candidates.length);
+  assert.ok(!result.lanes.defense.some(value => value.id === "ITEM_00"));
+  assert.ok(result.discovery.candidates.some(value => value.id === "ITEM_00"));
+});
+
+test("armor advisor discovery merges evidence and preserves preparation rules", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const locked = candidate("LOCKED", { defense: 200 }, { requirements: [parseRequirementText("Requires Combat Skill 99")!] });
+  const overBudget = candidate("OVER_BUDGET", { defense: 180 });
+  const multi = candidate("MULTI", { strength: 20, critDamage: 30 });
+  const catalog = [locked, overBudget, multi, candidate("NO_FACTS", { defense: 100 }),
+    candidate("WRONG_SLOT", { defense: 500 }, { categories: ["armor", "helmet"] }), candidate("TEST_CHESTPLATE", { defense: 500 })];
+  const quotes = new Map([["OVER_BUDGET", quote("OVER_BUDGET", 2_000)]]);
+  const result = buildArmorLanes({ current: currentArmor(), catalog, profile, quotes, budgetCoins: 1_000, eligibilityMode: "ADVISOR_DISCOVERY" });
+  assert.deepEqual(new Set(result.discovery.candidates.map(value => value.id)), new Set(["LOCKED", "OVER_BUDGET", "MULTI"]));
+  assert.deepEqual(result.discovery.candidates.find(value => value.id === "MULTI")?.knownChanges, {
+    strength: { current: null, candidate: 20 }, critDamage: { current: null, candidate: 30 },
+  });
 });
