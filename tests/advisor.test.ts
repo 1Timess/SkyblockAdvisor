@@ -100,6 +100,9 @@ test("Luna client sends the scoped strict request and validates its response", a
   assert.deepEqual(result.advice, advice);
   const body = JSON.parse(String(request?.body));
   assert.equal(body.model, "gpt-6-luna"); assert.equal(body.store, false); assert.equal(body.text.format.strict, true);
+  assert.equal(body.text.format.schema.type, "object");
+  assert.deepEqual(body.text.format.schema.properties.kind.enum, ["CLARIFICATION", "PLAN"]);
+  assert.ok(body.text.format.schema.required.includes("actions"));
   assert.equal(JSON.parse(body.input).route.scope, "GEAR");
   assert.equal(new Headers(request?.headers).get("Authorization"), "Bearer test-token");
 });

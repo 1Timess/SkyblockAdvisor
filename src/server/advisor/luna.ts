@@ -65,6 +65,7 @@ Use supplied budget and requirement gaps to judge whether saving or a prerequisi
 BUY requires a supplied candidate ID. PROGRESSION and INVESTIGATE may use null. HOLD uses null and is valid when this domain does not justify spending.
 You may offer another available domain through followUps, but do not claim detailed knowledge or recommend items from a domain whose candidates are not loaded.
 Do not invent prices, stats, requirements, or mechanics. Treat warnings and missing values as uncertainty. Raw ability and set-bonus text may inform judgment, but acknowledge ambiguity.
+The response schema contains fields for both outcome kinds. For CLARIFICATION, set headline to null and plan arrays to empty. For PLAN, set question, whyNeeded, and availableAnalysis to null and suggestedAnswers to empty.
 Do not claim global mathematical optimality.`;
 
 const stringArray = { type: "array", items: { type: "string" } };
@@ -81,27 +82,30 @@ const availableAnalysisJsonSchema = {
     }, required: ["available", "candidateCount", "ownedCount"] },
   }, required: ["armor", "weapons", "accessories", "pets"],
 };
-const advisorJsonSchema = { anyOf: [
-  { type: "object", additionalProperties: false, properties: {
-    kind: { type: "string", const: "CLARIFICATION" }, question: { type: "string" },
-    whyNeeded: { anyOf: [{ type: "string" }, { type: "null" }] }, suggestedAnswers: stringArray,
-    availableAnalysis: availableAnalysisJsonSchema,
-  }, required: ["kind", "question", "whyNeeded", "suggestedAnswers", "availableAnalysis"] },
-  { type: "object", additionalProperties: false, properties: {
-    kind: { type: "string", const: "PLAN" }, headline: { type: "string" },
-    actions: { type: "array", minItems: 1, maxItems: 5, items: {
+const advisorJsonSchema = {
+  type: "object", additionalProperties: false,
+  properties: {
+    kind: { type: "string", enum: ["CLARIFICATION", "PLAN"] },
+    question: { anyOf: [{ type: "string" }, { type: "null" }] },
+    whyNeeded: { anyOf: [{ type: "string" }, { type: "null" }] },
+    suggestedAnswers: stringArray,
+    availableAnalysis: { anyOf: [availableAnalysisJsonSchema, { type: "null" }] },
+    headline: { anyOf: [{ type: "string" }, { type: "null" }] },
+    actions: { type: "array", maxItems: 5, items: {
       type: "object", additionalProperties: false,
       properties: {
         rank: { type: "integer", minimum: 1 }, actionType: { type: "string", enum: ["BUY", "PROGRESSION", "HOLD", "INVESTIGATE"] },
         candidateId: { anyOf: [{ type: "string" }, { type: "null" }] }, action: { type: "string" }, why: { type: "string" },
         tradeoffs: stringArray, prerequisites: stringArray, uncertainty: { anyOf: [{ type: "string" }, { type: "null" }] },
       }, required: ["rank", "actionType", "candidateId", "action", "why", "tradeoffs", "prerequisites", "uncertainty"],
-    } }, caveats: stringArray,
+    } },
+    caveats: stringArray,
     followUps: { type: "array", items: { type: "object", additionalProperties: false, properties: {
       domain: { type: "string", enum: ["ARMOR", "WEAPONS", "ACCESSORIES", "PETS"] }, label: { type: "string" }, reason: { type: "string" },
     }, required: ["domain", "label", "reason"] } },
-  }, required: ["kind", "headline", "actions", "caveats", "followUps"] },
-] };
+  },
+  required: ["kind", "question", "whyNeeded", "suggestedAnswers", "availableAnalysis", "headline", "actions", "caveats", "followUps"],
+};
 
 function domainAvailabilityJsonSchema() {
   return { type: "object", additionalProperties: false, properties: {
