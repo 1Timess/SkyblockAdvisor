@@ -1,0 +1,2051 @@
+{
+  "input": {
+    "username": "iTimess",
+    "requestedProfile": "Lemon",
+    "budgetCoins": 30000000,
+    "probes": [
+      "NECRON",
+      "MIDAS"
+    ]
+  },
+  "pipeline": {
+    "armor": [
+      "catalog armor + recognized slot",
+      "pair with equipped item in that slot",
+      "prepareCandidate in ADVISOR_DISCOVERY mode",
+      "known stat must improve",
+      "rank within top six of a stat lane",
+      "lane enters raw GEAR scope"
+    ],
+    "weapon": [
+      "catalog weapon + recognized subtype",
+      "pair with each current compatible weapon subtype",
+      "prepareCandidate in ADVISOR_DISCOVERY mode",
+      "known stat improves or ability text exists",
+      "rank within top six of a stat/ability lane",
+      "lane enters raw GEAR scope"
+    ],
+    "armorSetBonusNomination": false,
+    "weaponAbilityTextNomination": true
+  },
+  "categoryCoverage": {
+    "armor": {
+      "total": 834,
+      "missingRecognizedSlot": 0,
+      "bySlot": {
+        "helmet": 269,
+        "chestplate": 191,
+        "leggings": 183,
+        "boots": 191
+      }
+    },
+    "weapons": {
+      "total": 231,
+      "missingRecognizedSubtype": 0,
+      "bySubtype": {
+        "sword": 162,
+        "bow": 44,
+        "wand": 25,
+        "fishing_rod": 0
+      }
+    }
+  },
+  "probes": {
+    "NECRON": {
+      "matchCount": 10,
+      "items": [
+        {
+          "catalog": {
+            "itemId": "NECRONS_LADDER",
+            "displayName": "Necron's Ladder",
+            "rarity": "rare",
+            "categories": [],
+            "stats": {},
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [],
+            "unparsedRequirementText": [],
+            "marketKey": "NECRONS_LADDER",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": null,
+          "slotOrType": null,
+          "pairedCurrentItems": [],
+          "consideredByBuilder": false,
+          "prepareCandidateSucceeded": false,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "CATEGORY_OR_DOMAIN",
+          "exclusionReason": "Catalog categories do not identify the item as armor or weapon.",
+          "rootCauseClassification": "C"
+        },
+        {
+          "catalog": {
+            "itemId": "POWER_WITHER_BOOTS",
+            "displayName": "Necron's Boots",
+            "rarity": "legendary",
+            "categories": [
+              "armor",
+              "boots"
+            ],
+            "stats": {
+              "health": 145,
+              "defense": 85,
+              "strength": 40,
+              "critDamage": 30,
+              "intelligence": 10
+            },
+            "abilityText": [],
+            "setBonusText": [
+              "Full Set Bonus: Witherborn (0/4)",
+              "Spawns a wither minion every 30",
+              "seconds up to a maximum 1 wither.",
+              "Your withers will travel to and",
+              "explode on nearby enemies."
+            ],
+            "requirements": [
+              {
+                "kind": "DUNGEON_FLOOR",
+                "floor": 7,
+                "sourceText": "Requires The Catacombs Floor VII Completion"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "POWER_WITHER_BOOTS",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": "boots",
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": "armor",
+          "slotOrType": "boots",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "STARRED_SHADOW_ASSASSIN_BOOTS",
+                "name": " Fierce Shadow Assassin Boots ✪✪✪✪",
+                "categories": [
+                  "armor",
+                  "boots"
+                ],
+                "stats": {
+                  "health": 220.8,
+                  "defense": 79.4,
+                  "strength": 42.4,
+                  "critChance": 6,
+                  "critDamage": 45,
+                  "speed": 8.64
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Both items use the boots slot.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "defense",
+                "intelligence"
+              ],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "POWER_WITHER_CHESTPLATE",
+            "displayName": "Necron's Chestplate",
+            "rarity": "legendary",
+            "categories": [
+              "armor",
+              "chestplate"
+            ],
+            "stats": {
+              "health": 260,
+              "defense": 140,
+              "strength": 40,
+              "critDamage": 30,
+              "intelligence": 10
+            },
+            "abilityText": [],
+            "setBonusText": [
+              "Full Set Bonus: Witherborn (0/4)",
+              "Spawns a wither minion every 30",
+              "seconds up to a maximum 1 wither.",
+              "Your withers will travel to and",
+              "explode on nearby enemies."
+            ],
+            "requirements": [
+              {
+                "kind": "DUNGEON_FLOOR",
+                "floor": 7,
+                "sourceText": "Requires The Catacombs Floor VII Completion"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "POWER_WITHER_CHESTPLATE",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": "chestplate",
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": "armor",
+          "slotOrType": "chestplate",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "STARRED_SHADOW_ASSASSIN_CHESTPLATE",
+                "name": " Fierce Shadow Assassin Chestplate ✪✪✪✪",
+                "categories": [
+                  "armor",
+                  "chestplate"
+                ],
+                "stats": {
+                  "health": 385,
+                  "defense": 158.8,
+                  "strength": 42.4,
+                  "critChance": 6,
+                  "critDamage": 45,
+                  "speed": 8.64
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Both items use the chestplate slot.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "intelligence"
+              ],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "GOLD_NECRON_HEAD",
+            "displayName": "Golden Necron Head",
+            "rarity": "special",
+            "categories": [
+              "armor",
+              "helmet"
+            ],
+            "stats": {
+              "health": 80,
+              "defense": 40,
+              "strength": 15
+            },
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [
+              {
+                "kind": "DUNGEON_FLOOR",
+                "floor": 7,
+                "sourceText": "Requires The Catacombs Floor VII Completion"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "GOLD_NECRON_HEAD",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": "helmet",
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": "armor",
+          "slotOrType": "helmet",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "STARRED_SHADOW_ASSASSIN_HELMET",
+                "name": " Ancient Shadow Assassin Helmet ✪✪✪✪✪",
+                "categories": [
+                  "armor",
+                  "helmet"
+                ],
+                "stats": {
+                  "health": 309,
+                  "defense": 124,
+                  "strength": 58,
+                  "critChance": 12,
+                  "critDamage": 48.5,
+                  "intelligence": 20,
+                  "speed": 8.8
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Both items use the helmet slot.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_NOMINATION",
+          "exclusionReason": "No supported armor stat is known and greater than the paired current item. Armor set-bonus text does not nominate candidates.",
+          "rootCauseClassification": "E"
+        },
+        {
+          "catalog": {
+            "itemId": "DUNGEON_DISC_5",
+            "displayName": "Necron Disc",
+            "rarity": "epic",
+            "categories": [],
+            "stats": {},
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [],
+            "unparsedRequirementText": [],
+            "marketKey": "DUNGEON_DISC_5",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": null,
+          "slotOrType": null,
+          "pairedCurrentItems": [],
+          "consideredByBuilder": false,
+          "prepareCandidateSucceeded": false,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "CATEGORY_OR_DOMAIN",
+          "exclusionReason": "Catalog categories do not identify the item as armor or weapon.",
+          "rootCauseClassification": "C"
+        },
+        {
+          "catalog": {
+            "itemId": "DIAMOND_NECRON_HEAD",
+            "displayName": "Diamond Necron Head",
+            "rarity": "special",
+            "categories": [
+              "armor",
+              "helmet"
+            ],
+            "stats": {
+              "health": 220,
+              "defense": 80,
+              "strength": 40
+            },
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [],
+            "unparsedRequirementText": [
+              "Requires Maxor, Storm, Goldor, and Necron"
+            ],
+            "marketKey": "DIAMOND_NECRON_HEAD",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": "helmet",
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": "armor",
+          "slotOrType": "helmet",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "STARRED_SHADOW_ASSASSIN_HELMET",
+                "name": " Ancient Shadow Assassin Helmet ✪✪✪✪✪",
+                "categories": [
+                  "armor",
+                  "helmet"
+                ],
+                "stats": {
+                  "health": 309,
+                  "defense": 124,
+                  "strength": 58,
+                  "critChance": 12,
+                  "critDamage": 48.5,
+                  "intelligence": 20,
+                  "speed": 8.8
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Both items use the helmet slot.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_NOMINATION",
+          "exclusionReason": "No supported armor stat is known and greater than the paired current item. Armor set-bonus text does not nominate candidates.",
+          "rootCauseClassification": "E"
+        },
+        {
+          "catalog": {
+            "itemId": "NECRON_HANDLE",
+            "displayName": "Necron's Handle",
+            "rarity": "legendary",
+            "categories": [],
+            "stats": {},
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [],
+            "unparsedRequirementText": [],
+            "marketKey": "NECRON_HANDLE",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": null,
+          "slotOrType": null,
+          "pairedCurrentItems": [],
+          "consideredByBuilder": false,
+          "prepareCandidateSucceeded": false,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "CATEGORY_OR_DOMAIN",
+          "exclusionReason": "Catalog categories do not identify the item as armor or weapon.",
+          "rootCauseClassification": "C"
+        },
+        {
+          "catalog": {
+            "itemId": "NECRON_BLADE",
+            "displayName": "Necron's Blade (Unrefined)",
+            "rarity": "legendary",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 260,
+              "strength": 110,
+              "ferocity": 30,
+              "intelligence": 50
+            },
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [
+              {
+                "kind": "DUNGEON_FLOOR",
+                "floor": 7,
+                "sourceText": "Requires The Catacombs Floor VII Completion"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "NECRON_BLADE",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": "sword"
+          },
+          "inferredDomain": "weapon",
+          "slotOrType": "sword",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "LIVID_DAGGER",
+                "name": "Fabled Livid Dagger ✪✪✪✪✪",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 269,
+                  "strength": 179,
+                  "critChance": 110,
+                  "critDamage": 175,
+                  "attackSpeed": 55
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "intelligence"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "FLORID_ZOMBIE_SWORD",
+                "name": "Florid Zombie Sword",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 168,
+                  "strength": 98,
+                  "intelligence": 100
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "strength"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "ASPECT_OF_THE_END",
+                "name": "Spicy Aspect of the End",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 118,
+                  "strength": 122,
+                  "critChance": 1,
+                  "critDamage": 95,
+                  "attackSpeed": 4
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "intelligence"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "VENOMS_TOUCH",
+                "name": "Grand Venom's Touch",
+                "categories": [
+                  "weapon",
+                  "bow"
+                ],
+                "stats": {
+                  "damage": 268,
+                  "strength": 168
+                }
+              },
+              "compatibility": false,
+              "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+              "prepareCandidateResult": "NOT_REACHED",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "POWER_WITHER_LEGGINGS",
+            "displayName": "Necron's Leggings",
+            "rarity": "legendary",
+            "categories": [
+              "armor",
+              "leggings"
+            ],
+            "stats": {
+              "health": 230,
+              "defense": 125,
+              "strength": 40,
+              "critDamage": 30,
+              "intelligence": 10
+            },
+            "abilityText": [],
+            "setBonusText": [
+              "Full Set Bonus: Witherborn (0/4)",
+              "Spawns a wither minion every 30",
+              "seconds up to a maximum 1 wither.",
+              "Your withers will travel to and",
+              "explode on nearby enemies."
+            ],
+            "requirements": [
+              {
+                "kind": "DUNGEON_FLOOR",
+                "floor": 7,
+                "sourceText": "Requires The Catacombs Floor VII Completion"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "POWER_WITHER_LEGGINGS",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": "leggings",
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": "armor",
+          "slotOrType": "leggings",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "STARRED_SHADOW_ASSASSIN_LEGGINGS",
+                "name": " Fierce Shadow Assassin Leggings ✪✪✪✪",
+                "categories": [
+                  "armor",
+                  "leggings"
+                ],
+                "stats": {
+                  "health": 312.6,
+                  "defense": 122.6,
+                  "strength": 42.4,
+                  "critChance": 6,
+                  "critDamage": 45,
+                  "speed": 8.64
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Both items use the leggings slot.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "defense",
+                "intelligence"
+              ],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "POWER_WITHER_HELMET",
+            "displayName": "Necron's Helmet",
+            "rarity": "legendary",
+            "categories": [
+              "armor",
+              "helmet"
+            ],
+            "stats": {
+              "health": 180,
+              "defense": 100,
+              "strength": 40,
+              "critDamage": 30,
+              "intelligence": 30
+            },
+            "abilityText": [],
+            "setBonusText": [
+              "Full Set Bonus: Witherborn (0/4)",
+              "Spawns a wither minion every 30",
+              "seconds up to a maximum 1 wither.",
+              "Your withers will travel to and",
+              "explode on nearby enemies."
+            ],
+            "requirements": [
+              {
+                "kind": "DUNGEON_FLOOR",
+                "floor": 7,
+                "sourceText": "Requires The Catacombs Floor VII Completion"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "POWER_WITHER_HELMET",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": "helmet",
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": "armor",
+          "slotOrType": "helmet",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "STARRED_SHADOW_ASSASSIN_HELMET",
+                "name": " Ancient Shadow Assassin Helmet ✪✪✪✪✪",
+                "categories": [
+                  "armor",
+                  "helmet"
+                ],
+                "stats": {
+                  "health": 309,
+                  "defense": 124,
+                  "strength": 58,
+                  "critChance": 12,
+                  "critDamage": 48.5,
+                  "intelligence": 20,
+                  "speed": 8.8
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Both items use the helmet slot.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "intelligence"
+              ],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        }
+      ]
+    },
+    "MIDAS": {
+      "matchCount": 5,
+      "items": [
+        {
+          "catalog": {
+            "itemId": "MIDAS_STAFF",
+            "displayName": "Midas Staff",
+            "rarity": "legendary",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 130,
+              "strength": 150,
+              "intelligence": 50
+            },
+            "abilityText": [
+              "Ability: Molten Wave  RIGHT CLICK",
+              "Cast a wave of molten gold in the direction",
+              "you are facing! Deals up to 12,000 damage.",
+              "Mana Cost: 500",
+              "Cooldown: 1s",
+              "Ability: Greed ",
+              "The ability damage bonus of this item",
+              "is dependent on the price paid for it",
+              "at the Dark Auction!",
+              "The maximum bonus of this item is",
+              "26,000 if the bid was 100,000,000",
+              "Coins or higher!"
+            ],
+            "setBonusText": [],
+            "requirements": [],
+            "unparsedRequirementText": [],
+            "marketKey": "MIDAS_STAFF",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": "sword"
+          },
+          "inferredDomain": "weapon",
+          "slotOrType": "sword",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "LIVID_DAGGER",
+                "name": "Fabled Livid Dagger ✪✪✪✪✪",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 269,
+                  "strength": 179,
+                  "critChance": 110,
+                  "critDamage": 175,
+                  "attackSpeed": 55
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "intelligence",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "FLORID_ZOMBIE_SWORD",
+                "name": "Florid Zombie Sword",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 168,
+                  "strength": 98,
+                  "intelligence": 100
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "strength",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "ASPECT_OF_THE_END",
+                "name": "Spicy Aspect of the End",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 118,
+                  "strength": 122,
+                  "critChance": 1,
+                  "critDamage": 95,
+                  "attackSpeed": 4
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "strength",
+                "intelligence",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "VENOMS_TOUCH",
+                "name": "Grand Venom's Touch",
+                "categories": [
+                  "weapon",
+                  "bow"
+                ],
+                "stats": {
+                  "damage": 268,
+                  "strength": 168
+                }
+              },
+              "compatibility": false,
+              "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+              "prepareCandidateResult": "NOT_REACHED",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "STARRED_MIDAS_STAFF",
+            "displayName": " Midas Staff",
+            "rarity": "legendary",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 130,
+              "strength": 150,
+              "intelligence": 50
+            },
+            "abilityText": [
+              "Ability: Molten Wave  RIGHT CLICK",
+              "Cast a wave of molten gold in the direction",
+              "you are facing! Deals up to 12,096.2 damage.",
+              "Mana Cost: 500",
+              "Cooldown: 1s",
+              "Ability: Greed ",
+              "The ability damage bonus of this item",
+              "is dependent on the price paid for it",
+              "at the Dark Auction!",
+              "The maximum bonus of this item is",
+              "34,000 if the bid was 500,000,000",
+              "Coins or higher!"
+            ],
+            "setBonusText": [],
+            "requirements": [],
+            "unparsedRequirementText": [],
+            "marketKey": "STARRED_MIDAS_STAFF",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": "sword"
+          },
+          "inferredDomain": "weapon",
+          "slotOrType": "sword",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "LIVID_DAGGER",
+                "name": "Fabled Livid Dagger ✪✪✪✪✪",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 269,
+                  "strength": 179,
+                  "critChance": 110,
+                  "critDamage": 175,
+                  "attackSpeed": 55
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "intelligence",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "FLORID_ZOMBIE_SWORD",
+                "name": "Florid Zombie Sword",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 168,
+                  "strength": 98,
+                  "intelligence": 100
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "strength",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "ASPECT_OF_THE_END",
+                "name": "Spicy Aspect of the End",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 118,
+                  "strength": 122,
+                  "critChance": 1,
+                  "critDamage": 95,
+                  "attackSpeed": 4
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "strength",
+                "intelligence",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "VENOMS_TOUCH",
+                "name": "Grand Venom's Touch",
+                "categories": [
+                  "weapon",
+                  "bow"
+                ],
+                "stats": {
+                  "damage": 268,
+                  "strength": 168
+                }
+              },
+              "compatibility": false,
+              "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+              "prepareCandidateResult": "NOT_REACHED",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "MIDAS_SWORD",
+            "displayName": "Midas' Sword",
+            "rarity": "legendary",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 170
+            },
+            "abilityText": [
+              "Ability: Greed ",
+              "The strength and damage bonus of",
+              "this item is dependent on the price",
+              "paid for it at the Dark Auction!",
+              "The maximum bonus of this item is 120",
+              "if the bid was 50,000,000 Coins or",
+              "higher!"
+            ],
+            "setBonusText": [],
+            "requirements": [
+              {
+                "kind": "SKILL_LEVEL",
+                "skill": "combat",
+                "level": 20,
+                "sourceText": "Requires Combat Skill 20"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "MIDAS_SWORD",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": "sword"
+          },
+          "inferredDomain": "weapon",
+          "slotOrType": "sword",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "LIVID_DAGGER",
+                "name": "Fabled Livid Dagger ✪✪✪✪✪",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 269,
+                  "strength": 179,
+                  "critChance": 110,
+                  "critDamage": 175,
+                  "attackSpeed": 55
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "FLORID_ZOMBIE_SWORD",
+                "name": "Florid Zombie Sword",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 168,
+                  "strength": 98,
+                  "intelligence": 100
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "ASPECT_OF_THE_END",
+                "name": "Spicy Aspect of the End",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 118,
+                  "strength": 122,
+                  "critChance": 1,
+                  "critDamage": 95,
+                  "attackSpeed": 4
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "VENOMS_TOUCH",
+                "name": "Grand Venom's Touch",
+                "categories": [
+                  "weapon",
+                  "bow"
+                ],
+                "stats": {
+                  "damage": 268,
+                  "strength": 168
+                }
+              },
+              "compatibility": false,
+              "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+              "prepareCandidateResult": "NOT_REACHED",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        },
+        {
+          "catalog": {
+            "itemId": "MIDAS_JEWEL",
+            "displayName": "Midas Jewel",
+            "rarity": "rare",
+            "categories": [],
+            "stats": {
+              "damage": 75,
+              "strength": 75,
+              "abilityDamage": 8
+            },
+            "abilityText": [],
+            "setBonusText": [],
+            "requirements": [
+              {
+                "kind": "SKILL_LEVEL",
+                "skill": "mining",
+                "level": 25,
+                "sourceText": "Requires Mining Skill 25"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "MIDAS_JEWEL",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": null
+          },
+          "inferredDomain": null,
+          "slotOrType": null,
+          "pairedCurrentItems": [],
+          "consideredByBuilder": false,
+          "prepareCandidateSucceeded": false,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "CATEGORY_OR_DOMAIN",
+          "exclusionReason": "Catalog categories do not identify the item as armor or weapon.",
+          "rootCauseClassification": "C"
+        },
+        {
+          "catalog": {
+            "itemId": "STARRED_MIDAS_SWORD",
+            "displayName": " Midas' Sword",
+            "rarity": "legendary",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 170
+            },
+            "abilityText": [
+              "Ability: Greed ",
+              "The strength and damage bonus of",
+              "this item is dependent on the price",
+              "paid for it at the Dark Auction!",
+              "The maximum bonus of this item is 225",
+              "if the bid was 250,000,000 Coins or",
+              "higher!"
+            ],
+            "setBonusText": [],
+            "requirements": [
+              {
+                "kind": "SKILL_LEVEL",
+                "skill": "combat",
+                "level": 20,
+                "sourceText": "Requires Combat Skill 20"
+              }
+            ],
+            "unparsedRequirementText": [],
+            "marketKey": "STARRED_MIDAS_SWORD",
+            "sources": {
+              "hypixel": true,
+              "neu": true
+            },
+            "slotIndicator": null,
+            "weaponTypeIndicator": "sword"
+          },
+          "inferredDomain": "weapon",
+          "slotOrType": "sword",
+          "pairedCurrentItems": [
+            {
+              "currentItem": {
+                "id": "LIVID_DAGGER",
+                "name": "Fabled Livid Dagger ✪✪✪✪✪",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 269,
+                  "strength": 179,
+                  "critChance": 110,
+                  "critDamage": 175,
+                  "attackSpeed": 55
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "FLORID_ZOMBIE_SWORD",
+                "name": "Florid Zombie Sword",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 168,
+                  "strength": 98,
+                  "intelligence": 100
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "ASPECT_OF_THE_END",
+                "name": "Spicy Aspect of the End",
+                "categories": [
+                  "weapon",
+                  "sword"
+                ],
+                "stats": {
+                  "damage": 118,
+                  "strength": 122,
+                  "critChance": 1,
+                  "critDamage": 95,
+                  "attackSpeed": 4
+                }
+              },
+              "compatibility": true,
+              "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+              "prepareCandidateResult": "CANDIDATE",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [
+                "damage",
+                "ability"
+              ],
+              "nominatedLanesAfterCap": []
+            },
+            {
+              "currentItem": {
+                "id": "VENOMS_TOUCH",
+                "name": "Grand Venom's Touch",
+                "categories": [
+                  "weapon",
+                  "bow"
+                ],
+                "stats": {
+                  "damage": 268,
+                  "strength": 168
+                }
+              },
+              "compatibility": false,
+              "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+              "prepareCandidateResult": "NOT_REACHED",
+              "prepareCandidateNullReason": null,
+              "qualifyingLanesBeforeCap": [],
+              "nominatedLanesAfterCap": []
+            }
+          ],
+          "consideredByBuilder": true,
+          "prepareCandidateSucceeded": true,
+          "nominatedLanes": [],
+          "rawAdvisorPresence": false,
+          "firstExclusionStage": "LANE_CAP",
+          "exclusionReason": "The item qualifies before ranking but does not enter any capped top-six lane.",
+          "rootCauseClassification": "I"
+        }
+      ]
+    }
+  },
+  "controls": [
+    {
+      "catalog": {
+        "itemId": "STARRED_SHADOW_FURY",
+        "displayName": " Shadow Fury",
+        "rarity": "legendary",
+        "categories": [
+          "weapon",
+          "sword"
+        ],
+        "stats": {
+          "damage": 310,
+          "strength": 160,
+          "critDamage": 60,
+          "speed": 40
+        },
+        "abilityText": [
+          "Ability: Shadow Fury  RIGHT CLICK",
+          "Rapidly teleports you to up to 5 enemies within",
+          "12 blocks, rooting each of them and allowing",
+          "you to hit them.",
+          "Cooldown: 15s"
+        ],
+        "setBonusText": [],
+        "requirements": [
+          {
+            "kind": "DUNGEON_FLOOR",
+            "floor": 5,
+            "sourceText": "Requires The Catacombs Floor V Completion"
+          }
+        ],
+        "unparsedRequirementText": [],
+        "marketKey": "STARRED_SHADOW_FURY",
+        "sources": {
+          "hypixel": true,
+          "neu": true
+        },
+        "slotIndicator": null,
+        "weaponTypeIndicator": "sword"
+      },
+      "inferredDomain": "weapon",
+      "slotOrType": "sword",
+      "pairedCurrentItems": [
+        {
+          "currentItem": {
+            "id": "LIVID_DAGGER",
+            "name": "Fabled Livid Dagger ✪✪✪✪✪",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 269,
+              "strength": 179,
+              "critChance": 110,
+              "critDamage": 175,
+              "attackSpeed": 55
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "damage"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "FLORID_ZOMBIE_SWORD",
+            "name": "Florid Zombie Sword",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 168,
+              "strength": 98,
+              "intelligence": 100
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "strength",
+            "critDamage",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "damage"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "ASPECT_OF_THE_END",
+            "name": "Spicy Aspect of the End",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 118,
+              "strength": 122,
+              "critChance": 1,
+              "critDamage": 95,
+              "attackSpeed": 4
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "strength",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "damage"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "VENOMS_TOUCH",
+            "name": "Grand Venom's Touch",
+            "categories": [
+              "weapon",
+              "bow"
+            ],
+            "stats": {
+              "damage": 268,
+              "strength": 168
+            }
+          },
+          "compatibility": false,
+          "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+          "prepareCandidateResult": "NOT_REACHED",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [],
+          "nominatedLanesAfterCap": []
+        }
+      ],
+      "consideredByBuilder": true,
+      "prepareCandidateSucceeded": true,
+      "nominatedLanes": [
+        "damage"
+      ],
+      "rawAdvisorPresence": true,
+      "firstExclusionStage": "NONE",
+      "exclusionReason": null,
+      "rootCauseClassification": null
+    },
+    {
+      "catalog": {
+        "itemId": "FLOWER_OF_TRUTH",
+        "displayName": "Flower of Truth",
+        "rarity": "legendary",
+        "categories": [
+          "weapon",
+          "sword"
+        ],
+        "stats": {
+          "damage": 160,
+          "strength": 300
+        },
+        "abilityText": [
+          "Ability: Heat-Seeking Rose  RIGHT CLICK",
+          "Shoots a rose that ricochets between enemies,",
+          "damaging up to 3 of your foes! Damage",
+          "multiplies as more enemies are hit.",
+          "Health Cost: 100",
+          "Cooldown: 1s"
+        ],
+        "setBonusText": [],
+        "requirements": [
+          {
+            "kind": "DUNGEON_FLOOR",
+            "floor": 6,
+            "sourceText": "Requires The Catacombs Floor VI Completion"
+          }
+        ],
+        "unparsedRequirementText": [],
+        "marketKey": "FLOWER_OF_TRUTH",
+        "sources": {
+          "hypixel": true,
+          "neu": true
+        },
+        "slotIndicator": null,
+        "weaponTypeIndicator": "sword"
+      },
+      "inferredDomain": "weapon",
+      "slotOrType": "sword",
+      "pairedCurrentItems": [
+        {
+          "currentItem": {
+            "id": "LIVID_DAGGER",
+            "name": "Fabled Livid Dagger ✪✪✪✪✪",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 269,
+              "strength": 179,
+              "critChance": 110,
+              "critDamage": 175,
+              "attackSpeed": 55
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "strength",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "strength"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "FLORID_ZOMBIE_SWORD",
+            "name": "Florid Zombie Sword",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 168,
+              "strength": 98,
+              "intelligence": 100
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "strength",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "strength"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "ASPECT_OF_THE_END",
+            "name": "Spicy Aspect of the End",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 118,
+              "strength": 122,
+              "critChance": 1,
+              "critDamage": 95,
+              "attackSpeed": 4
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "strength",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "strength"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "VENOMS_TOUCH",
+            "name": "Grand Venom's Touch",
+            "categories": [
+              "weapon",
+              "bow"
+            ],
+            "stats": {
+              "damage": 268,
+              "strength": 168
+            }
+          },
+          "compatibility": false,
+          "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+          "prepareCandidateResult": "NOT_REACHED",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [],
+          "nominatedLanesAfterCap": []
+        }
+      ],
+      "consideredByBuilder": true,
+      "prepareCandidateSucceeded": true,
+      "nominatedLanes": [
+        "strength"
+      ],
+      "rawAdvisorPresence": true,
+      "firstExclusionStage": "NONE",
+      "exclusionReason": null,
+      "rootCauseClassification": null
+    },
+    {
+      "catalog": {
+        "itemId": "GIANTS_SWORD",
+        "displayName": "Giant's Sword",
+        "rarity": "legendary",
+        "categories": [
+          "weapon",
+          "sword"
+        ],
+        "stats": {
+          "damage": 500
+        },
+        "abilityText": [
+          "Ability: Giant's Slam  RIGHT CLICK",
+          "Slam your sword into the ground dealing",
+          "100,000 damage to nearby enemies.",
+          "Mana Cost: 100",
+          "Cooldown: 30s"
+        ],
+        "setBonusText": [],
+        "requirements": [
+          {
+            "kind": "DUNGEON_FLOOR",
+            "floor": 6,
+            "sourceText": "Requires The Catacombs Floor VI Completion"
+          }
+        ],
+        "unparsedRequirementText": [],
+        "marketKey": "GIANTS_SWORD",
+        "sources": {
+          "hypixel": true,
+          "neu": true
+        },
+        "slotIndicator": null,
+        "weaponTypeIndicator": "sword"
+      },
+      "inferredDomain": "weapon",
+      "slotOrType": "sword",
+      "pairedCurrentItems": [
+        {
+          "currentItem": {
+            "id": "LIVID_DAGGER",
+            "name": "Fabled Livid Dagger ✪✪✪✪✪",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 269,
+              "strength": 179,
+              "critChance": 110,
+              "critDamage": 175,
+              "attackSpeed": 55
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "damage"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "FLORID_ZOMBIE_SWORD",
+            "name": "Florid Zombie Sword",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 168,
+              "strength": 98,
+              "intelligence": 100
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "damage"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "ASPECT_OF_THE_END",
+            "name": "Spicy Aspect of the End",
+            "categories": [
+              "weapon",
+              "sword"
+            ],
+            "stats": {
+              "damage": 118,
+              "strength": 122,
+              "critChance": 1,
+              "critDamage": 95,
+              "attackSpeed": 4
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Candidate subtype sword matches baseline subtype sword.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "damage",
+            "ability"
+          ],
+          "nominatedLanesAfterCap": [
+            "damage"
+          ]
+        },
+        {
+          "currentItem": {
+            "id": "VENOMS_TOUCH",
+            "name": "Grand Venom's Touch",
+            "categories": [
+              "weapon",
+              "bow"
+            ],
+            "stats": {
+              "damage": 268,
+              "strength": 168
+            }
+          },
+          "compatibility": false,
+          "compatibilityReason": "Candidate subtype sword does not match baseline subtype bow.",
+          "prepareCandidateResult": "NOT_REACHED",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [],
+          "nominatedLanesAfterCap": []
+        }
+      ],
+      "consideredByBuilder": true,
+      "prepareCandidateSucceeded": true,
+      "nominatedLanes": [
+        "damage"
+      ],
+      "rawAdvisorPresence": true,
+      "firstExclusionStage": "NONE",
+      "exclusionReason": null,
+      "rootCauseClassification": null
+    },
+    {
+      "catalog": {
+        "itemId": "BERSERKER_CHESTPLATE",
+        "displayName": "Berserker Chestplate",
+        "rarity": "epic",
+        "categories": [
+          "armor",
+          "chestplate"
+        ],
+        "stats": {
+          "strength": 60,
+          "critDamage": 60
+        },
+        "abilityText": [],
+        "setBonusText": [
+          "Tiered Bonus: Berserk (0/4)",
+          "Reduces your health and defense by",
+          "half and reduces the cost of",
+          "health-consuming abilities by 20%."
+        ],
+        "requirements": [
+          {
+            "kind": "SKILL_LEVEL",
+            "skill": "combat",
+            "level": 22,
+            "sourceText": "Requires Combat Skill 22"
+          }
+        ],
+        "unparsedRequirementText": [],
+        "marketKey": "BERSERKER_CHESTPLATE",
+        "sources": {
+          "hypixel": true,
+          "neu": true
+        },
+        "slotIndicator": "chestplate",
+        "weaponTypeIndicator": null
+      },
+      "inferredDomain": "armor",
+      "slotOrType": "chestplate",
+      "pairedCurrentItems": [
+        {
+          "currentItem": {
+            "id": "STARRED_SHADOW_ASSASSIN_CHESTPLATE",
+            "name": " Fierce Shadow Assassin Chestplate ✪✪✪✪",
+            "categories": [
+              "armor",
+              "chestplate"
+            ],
+            "stats": {
+              "health": 385,
+              "defense": 158.8,
+              "strength": 42.4,
+              "critChance": 6,
+              "critDamage": 45,
+              "speed": 8.64
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Both items use the chestplate slot.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "strength",
+            "critDamage"
+          ],
+          "nominatedLanesAfterCap": [
+            "strength"
+          ]
+        }
+      ],
+      "consideredByBuilder": true,
+      "prepareCandidateSucceeded": true,
+      "nominatedLanes": [
+        "strength"
+      ],
+      "rawAdvisorPresence": true,
+      "firstExclusionStage": "NONE",
+      "exclusionReason": null,
+      "rootCauseClassification": null
+    },
+    {
+      "catalog": {
+        "itemId": "BURNING_TERROR_HELMET",
+        "displayName": "Burning Terror Helmet",
+        "rarity": "legendary",
+        "categories": [
+          "armor",
+          "helmet"
+        ],
+        "stats": {
+          "health": 254,
+          "defense": 79,
+          "critDamage": 79,
+          "intelligence": 24,
+          "speed": 19
+        },
+        "abilityText": [],
+        "setBonusText": [
+          "Tiered Bonus: Hydra Strike (0/4)",
+          "Every 0.2s, arrow attacks grant 1",
+          "stack of ⁑ Hydra Strike. Lose 1 stack",
+          "after 4s of not gaining a stack."
+        ],
+        "requirements": [
+          {
+            "kind": "SKILL_LEVEL",
+            "skill": "combat",
+            "level": 32,
+            "sourceText": "Requires Combat Skill 32"
+          }
+        ],
+        "unparsedRequirementText": [
+          "Requires Kuudra Burning Tier Completion"
+        ],
+        "marketKey": "BURNING_TERROR_HELMET",
+        "sources": {
+          "hypixel": true,
+          "neu": true
+        },
+        "slotIndicator": "helmet",
+        "weaponTypeIndicator": null
+      },
+      "inferredDomain": "armor",
+      "slotOrType": "helmet",
+      "pairedCurrentItems": [
+        {
+          "currentItem": {
+            "id": "STARRED_SHADOW_ASSASSIN_HELMET",
+            "name": " Ancient Shadow Assassin Helmet ✪✪✪✪✪",
+            "categories": [
+              "armor",
+              "helmet"
+            ],
+            "stats": {
+              "health": 309,
+              "defense": 124,
+              "strength": 58,
+              "critChance": 12,
+              "critDamage": 48.5,
+              "intelligence": 20,
+              "speed": 8.8
+            }
+          },
+          "compatibility": true,
+          "compatibilityReason": "Both items use the helmet slot.",
+          "prepareCandidateResult": "CANDIDATE",
+          "prepareCandidateNullReason": null,
+          "qualifyingLanesBeforeCap": [
+            "critDamage",
+            "intelligence",
+            "speed"
+          ],
+          "nominatedLanesAfterCap": [
+            "critDamage"
+          ]
+        }
+      ],
+      "consideredByBuilder": true,
+      "prepareCandidateSucceeded": true,
+      "nominatedLanes": [
+        "critDamage"
+      ],
+      "rawAdvisorPresence": true,
+      "firstExclusionStage": "NONE",
+      "exclusionReason": null,
+      "rootCauseClassification": null
+    }
+  ],
+  "rootCauseSummary": {
+    "necronArmor": {
+      "presentInCatalog": true,
+      "correctlyCategorized": true,
+      "consideredByArmorBuilder": true,
+      "nominatableBeforeCap": true,
+      "firstExclusionStage": "LANE_CAP",
+      "rootCauseClassification": "I",
+      "conclusion": "All four POWER_WITHER Necron armor pieces prepare successfully and qualify before ranking, but none ranks within a top-six armor lane. Set-bonus text cannot nominate armor."
+    },
+    "midasWeapons": {
+      "presentInCatalog": true,
+      "correctlyCategorized": true,
+      "consideredByWeaponBuilder": true,
+      "nominatableBeforeCap": true,
+      "firstExclusionStage": "LANE_CAP",
+      "rootCauseClassification": "I",
+      "conclusion": "Base and starred Midas Staff/Sword entries prepare successfully as swords and qualify through stats and ability text, but none ranks within a top-six weapon lane."
+    }
+  },
+  "recommendedNextImplementation": {
+    "files": [
+      "src/server/candidates/armor.ts",
+      "src/server/candidates/weapon.ts",
+      "src/server/advisor/build-live-context.ts",
+      "tests/armor-candidates.test.ts",
+      "tests/weapon-candidates.test.ts"
+    ],
+    "behavior": "Expose an advisor-discovery lane/pool containing every prepared item with qualifying deterministic evidence before the Phase 3 top-six presentation cap. Keep existing capped Phase 3 outputs unchanged and pass the broader pool through Phase 4.2 relevance and Phase 4.3 frontier selection.",
+    "scope": "Armor and weapons; shared preparation behavior does not need to change.",
+    "tests": [
+      "A qualifying armor item below rank six is absent from capped Phase 3 lanes but present in advisor discovery.",
+      "Qualifying base and starred weapons below rank six remain visible to advisor discovery.",
+      "Wrong slot/type, owned exact IDs, and items with no qualifying facts remain excluded.",
+      "The Phase 4.3 final context remains at or below 32 and existing goal-relevance regressions pass."
+    ],
+    "falsePositiveRisk": "The raw/relevant universes will grow and may include many weak numeric improvements. Existing goal relevance and structural frontier ceilings should control prompt size, but distributions must be revalidated.",
+    "frontierChangeRequired": false
+  },
+  "productionCandidateBehaviorChanged": false,
+  "openAIRequestMade": false,
+  "unresolvedExternalFact": "The repository does not model like-for-like candidate reforges/stars or semantic set/ability value, so this investigation cannot establish whether Necron or Midas should be recommended. That fact is not needed to identify the raw-scope exclusion stage."
+}

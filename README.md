@@ -31,6 +31,7 @@ npm run inspect:catalog -- [item-id ...]
 npm run sync:auctions
 npm run inspect:market -- [market-key ...]
 npm run inspect:candidates -- <username> [profile] [budget-coins]
+npm run inspect:candidate-trace -- <username> [profile] [budget-coins] [catalog-name-or-id probes...]
 npm run inspect:advisor-context -- <username> [profile] [budget-coins] [question]
 npm run inspect:advisor -- <username> [profile] [budget-coins] [question]
 ```

@@ -179,3 +179,24 @@ The Speed final IDs are:
 `RANCHERS_BOOTS`, `FARMER_BOOTS`, `GLOSSY_MINERAL_CHESTPLATE`, `STARRED_THORNS_BOOTS`, `YOUNG_DRAGON_CHESTPLATE`, `YOUNG_DRAGON_LEGGINGS`, `GLOSSY_MINERAL_LEGGINGS`, `STARRED_SPIRIT_MASK`, `THERMODYNAMIC_CHESTPLATE`, `THERMODYNAMIC_LEGGINGS`, `THERMODYNAMIC_HELMET`, `THERMODYNAMIC_BOOTS`, `SPEED_WITHER_CHESTPLATE`, `SPEED_WITHER_LEGGINGS`, `SPEED_WITHER_HELMET`, `SPEED_WITHER_BOOTS`, `RACING_HELMET`, `FIERY_TERROR_CHESTPLATE`, `FIERY_TERROR_LEGGINGS`, `INFERNAL_TERROR_BOOTS`.
 
 The committed artifact [`phase-4.3-f5-candidate-frontier.json`](phase-4.3-f5-candidate-frontier.json) records all raw-scope candidates, all 63 goal-relevant candidates with feasibility and selection metadata, and the final 28 IDs. Fewer than 32 is explicitly supported and four aspirational candidates survived. No Luna or OpenAI request was made.
+
+## Phase 4.4 candidate coverage investigation
+
+| Command | Result |
+| --- | --- |
+| `npm run typecheck` | Passed |
+| `npm run lint` | Passed with no warnings |
+| `npm test` | 76 offline tests passed |
+| `npm run build` | Production build passed |
+| `npm run inspect:candidate-trace -- iTimess Lemon 30000000 NECRON MIDAS` | 10 Necron-name matches, 5 Midas-name matches, and 5 successful controls traced |
+| F5 `inspect:advisor-context` command | Production counts remained 152 raw, 63 goal-relevant, and 28 final |
+
+The diagnostic trace found 10 catalog records matching `NECRON` by ID or display name and five matching `MIDAS`. The four Necron armor pieces use alternate `POWER_WITHER_*` IDs. They have correct armor/slot categories, pair with the corresponding equipped Shadow Assassin pieces, and survive advisor-mode preparation. Each qualifies before lane capping: boots and leggings through defense/intelligence, and chestplate and helmet through intelligence. None reaches a top-six lane, so the first raw-scope exclusion is `LANE_CAP` (classification I). Golden and Diamond Necron Heads have no supported known stat above the equipped helmet and stop at `LANE_NOMINATION` (E). Necron's Blade qualifies before caps but also stops at `LANE_CAP`; the remaining Necron-named records are neither armor nor weapons.
+
+The base and starred Midas Staff and Midas' Sword entries are present and currently categorized as `weapon,sword`. They pair with all three current sword baselines, survive preparation, and qualify through numeric stats and ability text. None ranks within the top six of any qualifying lane, so their first exclusion is `LANE_CAP` (I). Midas Jewel is not categorized as armor or weapon and is correctly outside these candidate builders.
+
+The category sample found 834 armor records with zero missing recognized slots and 231 weapon records with zero missing recognized supported subtypes. Probe category metadata is therefore not the coverage failure. All five controls entered raw scope: `STARRED_SHADOW_FURY` and `GIANTS_SWORD` through damage, `FLOWER_OF_TRUTH` and `BERSERKER_CHESTPLATE` through strength, and `BURNING_TERROR_HELMET` through crit damage.
+
+The trace also exposes a later modeling limit. Equipped item stats include their observed stars/reforges/upgrades, while candidate catalog stats are base reference values. Necron's known strength and crit-damage values do not exceed the equipped observed values, and armor set-bonus text does not nominate a candidate. Midas ability text is eligible, but ability candidates are still capped and ordered by a small numeric tuple. The repository does not contain enough modeled mechanics to claim the probes are better progression choices; the investigation only establishes why they never enter raw scope.
+
+The proposed next change is to expose every prepared item with qualifying deterministic evidence as an advisor-discovery pool before Phase 3's top-six presentation cap. Existing capped Phase 3 results can remain unchanged; Phase 4.2 relevance and Phase 4.3 context ceilings can process the broader pool. Regression coverage should prove below-rank-six armor and weapon candidates enter discovery, while wrong slot/type, owned IDs, and candidates with no qualifying evidence remain excluded. The raw universe will grow, so all three Phase 4.3 live distributions must be revalidated. No production candidate behavior or OpenAI request was part of Phase 4.4. Full per-item evidence is in [`phase-4.4-candidate-coverage-investigation.json`](phase-4.4-candidate-coverage-investigation.json).
