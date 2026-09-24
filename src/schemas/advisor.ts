@@ -2,24 +2,29 @@ import { z } from "zod";
 import { raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING"]);
+export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
-export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON"]);
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "FORAGING"]);
 export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
   role: advisorRoleSchema.optional(), goal: advisorGoalSchema.optional(),
   activeScopes: z.array(analysisScopeSchema).optional(), budgetCoins: z.number().nonnegative().optional(),
+  profileSnapshotId: z.string().optional(), previousDomain: profileIntelligenceDomainSchema.optional(),
+  currentDomain: profileIntelligenceDomainSchema.optional(), previousGoal: advisorGoalSchema.optional(),
 });
 export type AdvisorConversationState = z.infer<typeof advisorConversationStateSchema>;
 export const advisorRouteSchema = z.object({
   scope: analysisScopeSchema, activeDomains: z.array(analysisDomainSchema), clarificationRecommended: z.boolean(),
   reason: z.string(), goal: advisorGoalSchema, inferredRole: advisorRoleSchema.nullable(),
-  armorSlots: z.array(z.enum(["helmet", "chestplate", "leggings", "boots"])),
+  armorSlots: z.array(z.enum(["helmet", "chestplate", "leggings", "boots"])), domain: profileIntelligenceDomainSchema.nullable(),
+  mechanics: z.array(z.string()),
 });
 export type AdvisorRoute = z.infer<typeof advisorRouteSchema>;
 
@@ -28,7 +33,7 @@ const compactItemSchema = z.object({
   abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
 });
 export const compactAdvisorCandidateSchema = z.object({
-  id: z.string(), domain: z.enum(["armor", "weapon", "accessory", "pet"]), name: z.string(), rarity: raritySchema.nullable(),
+  id: z.string(), domain: z.enum(["armor", "weapon", "accessory", "pet", "tool"]), name: z.string(), rarity: raritySchema.nullable(),
   categories: z.array(z.string()), stats: statsSchema,
   price: z.object({ coins: z.number().int().nonnegative(), observedAt: z.string().datetime(), confidence: marketConfidenceSchema }).nullable(),
   knownChanges: z.record(z.string(), z.object({ current: z.number().nullable(), candidate: z.number().nullable() })),
@@ -36,6 +41,7 @@ export const compactAdvisorCandidateSchema = z.object({
   feasibility: z.object({
     priceStatus: z.enum(["WITHIN_BUDGET", "OVER_BUDGET", "UNKNOWN", "NO_BUDGET"]),
     budgetCoins: z.number().nonnegative().nullable(), priceCoins: z.number().nonnegative().nullable(), budgetDeltaCoins: z.number().nullable(),
+    overBudgetPercent: z.number().nonnegative().nullable(),
     requirementStatus: z.enum(["MET", "NOT_MET", "UNKNOWN", "MIXED"]),
     requirements: z.array(z.object({
       text: z.string(), type: z.enum(["SKILL", "SLAYER", "DUNGEON_LEVEL", "DUNGEON_FLOOR", "HEART_OF_THE_MOUNTAIN", "GARDEN_LEVEL", "UNKNOWN"]),
@@ -51,23 +57,48 @@ export const availableAnalysisSchema = z.object({
   weapons: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   accessories: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative(), currentMagicalPower: z.number().nonnegative(), missingCount: z.number().int().nonnegative(), upgradeCount: z.number().int().nonnegative() }),
   pets: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative(), ownedCount: z.number().int().nonnegative() }),
+  dungeons: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  fishing: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  mining: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
 });
 export type AvailableAnalysis = z.infer<typeof availableAnalysisSchema>;
+
+const compactLevelSchema = z.object({ level: z.number(), maxLevel: z.number() });
+const compactPetSchema = z.object({ type: z.string(), name: z.string(), rarity: z.string(), level: z.number().nullable(),
+  heldItem: z.string().nullable(), stats: statsSchema, abilityLore: z.array(z.string()) });
+const compactAccessorySchema = compactItemSchema.extend({ active: z.boolean(), inactiveReason: z.string().nullable() });
+const domainKnownStatsSchema = z.object({ totals: statsSchema, supportedStats: z.array(z.string()) });
+export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
+  z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
+    highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),
+    weapons: z.array(compactItemSchema), equipment: z.array(compactItemSchema), activePet: compactPetSchema.nullable() }),
+  z.object({ domain: z.literal("ACCESSORIES"), selectedPower: z.string().nullable(), magicalPower: z.number(),
+    owned: z.array(compactAccessorySchema), missing: z.array(z.object({ id: z.string(), name: z.string(), rarity: raritySchema.nullable() })),
+    upgrades: z.array(z.object({ id: z.string(), name: z.string(), rarity: raritySchema.nullable() })) }),
+  z.object({ domain: z.literal("FISHING"), fishingLevel: compactLevelSchema.nullable(), tools: z.array(compactItemSchema),
+    armor: z.array(compactItemSchema), equipment: z.array(compactItemSchema), pets: z.array(compactPetSchema), knownStats: domainKnownStatsSchema,
+    unavailableFacts: z.array(z.string()) }),
+  z.object({ domain: z.literal("MINING"), miningLevel: compactLevelSchema.nullable(), hotmLevel: z.number().nullable(),
+    mithrilPowder: z.number().nullable(), gemstonePowder: z.number().nullable(), tools: z.array(compactItemSchema),
+    armor: z.array(compactItemSchema), equipment: z.array(compactItemSchema), pets: z.array(compactPetSchema), knownStats: domainKnownStatsSchema,
+    unavailableFacts: z.array(z.string()) }),
+]);
+export type AdvisorDomainContext = z.infer<typeof advisorDomainContextSchema>;
 
 export const advisorContextSchema = z.object({
   question: z.string().trim().min(1).max(1000), route: advisorRouteSchema,
   conversationState: advisorConversationStateSchema.nullable(), availableAnalysis: availableAnalysisSchema,
-  player: z.object({
+  canonical: z.object({
+    identity: z.object({ username: z.string(), uuid: z.string() }),
+    profile: z.object({ id: z.string(), cuteName: z.string(), selected: z.boolean(), gameMode: z.string().nullable(),
+      snapshotId: z.string(), fetchedAt: z.string() }),
     economy: z.object({ purse: z.number().nullable(), bank: z.number().nullable(), personalBank: z.number().nullable() }),
     skills: z.record(z.string(), z.object({ level: z.number(), maxLevel: z.number() })),
     slayers: z.record(z.string(), z.object({ level: z.number(), xp: z.number() })),
     dungeons: z.object({ catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(), highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable() }),
-  }),
-  currentGear: z.object({
-    armor: z.array(compactItemSchema), equipment: z.array(compactItemSchema), likelyWeapons: z.array(compactItemSchema),
-    activePet: z.object({ type: z.string(), name: z.string(), rarity: z.string(), level: z.number().nullable(), heldItem: z.string().nullable(), stats: statsSchema, abilityLore: z.array(z.string()) }).nullable(),
     magicalPower: z.number(),
   }),
+  domainContext: advisorDomainContextSchema.nullable(),
   candidates: z.array(compactAdvisorCandidateSchema).max(32), warnings: z.array(z.string()),
 });
 export type AdvisorContext = z.infer<typeof advisorContextSchema>;

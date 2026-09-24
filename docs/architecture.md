@@ -93,3 +93,9 @@ The advisor composes raw scope from the uncapped discovery lanes, deduplicates o
 ## Scope guardrails
 
 No source/mechanic closure, certificates, pairwise dominance, comparison witnesses, provider-state proofs, deterministic recommendation rank, advisor UI, or database schema has been added. Any future reuse from the old repository must first identify the user-facing problem it solves.
+
+## Phase 5 profile intelligence
+
+The advisor performs one normalized profile load and stores the normalized profile plus derived canonical and domain payloads in a five-minute in-memory cache. The versioned snapshot key combines player UUID, profile ID, and source update or fetch time; a username/profile alias points to that version. Session state carries the snapshot ID, budget, explicit role, current/previous domain, and current/previous goal.
+
+Every advisor request contains a canonical payload (identity, economy, skills, slayers, basic Dungeon progress, and Magical Power) plus at most one payload for DUNGEONS, ACCESSORIES, FISHING, or MINING. Candidate discovery follows the routed domain. Dungeon routing retains the Phase 4.5 armor/weapon discovery, relevance, feasibility, and frontier path. Fishing and mining discovery only uses item categories and parsed domain stats already supported by the repository.

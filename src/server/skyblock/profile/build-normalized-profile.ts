@@ -8,7 +8,7 @@ import { selectProfile, summarizeProfile } from "../../hypixel/profiles";
 import { AppError } from "../../errors";
 import { collectInventories } from "./inventory-sources";
 import { decodeInventory } from "../nbt/decode-inventory";
-import { processItem } from "../items/process-item";
+import { processItem, toProfileItem } from "../items/process-item";
 import { buildGear } from "../domains/gear";
 import { buildAccessories } from "../domains/accessories";
 import { buildAccessoryCatalog } from "../../reference/accessory-data";
@@ -60,7 +60,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   warnings.push(...decoded.flatMap(result => result.warnings));
   const result = {
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
-    economy: buildEconomy(member, selected, warnings), gear: buildGear(items),
+    economy: buildEconomy(member, selected, warnings), gear: buildGear(items), inventoryItems: items.map(toProfileItem),
     accessories: buildAccessories(items, member, buildAccessoryCatalog(catalogResult.items), warnings),
     pets: buildPets(member, warnings),
     progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings) },

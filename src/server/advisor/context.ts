@@ -1,9 +1,10 @@
 import type { AdvisorCandidate } from "../../schemas/candidates";
-import { advisorContextSchema, type AdvisorContext, type AdvisorConversationState, type AdvisorRoute, type AnalysisDomain, type AvailableAnalysis, type CompactAdvisorCandidate } from "../../schemas/advisor";
-import type { ProfileItem, ProfileWarning } from "../../schemas/items";
+import { advisorContextSchema, type AdvisorContext, type AdvisorConversationState, type AdvisorDomainContext, type AdvisorRoute, type AnalysisDomain, type AvailableAnalysis, type CompactAdvisorCandidate } from "../../schemas/advisor";
+import type { ProfileWarning } from "../../schemas/items";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { checkItemRequirements } from "../reference/requirements";
 import type { CandidateRelevance } from "./relevance";
+import { buildProfileIntelligence, type ProfileIntelligenceSnapshot } from "./profile-intelligence";
 
 export interface TaggedCandidateLane { domain: AnalysisDomain; label: string; candidates: readonly AdvisorCandidate[] }
 
@@ -16,25 +17,14 @@ export function buildAdvisorContext(input: {
   relevanceById?: ReadonlyMap<string, CandidateRelevance>;
   budgetCoins?: number;
   conversationState?: AdvisorConversationState;
+  intelligence?: ProfileIntelligenceSnapshot;
+  domainContext?: AdvisorDomainContext | null;
 }): AdvisorContext {
-  const compactItem = (item: ProfileItem) => ({ id: item.id, name: item.name, rarity: item.rarity, categories: item.categories,
-    stats: item.stats, abilityText: item.abilityText, setBonusText: item.setBonusText });
+  const intelligence = input.intelligence ?? buildProfileIntelligence(input.profile);
   return advisorContextSchema.parse({
     question: input.question, route: input.route, conversationState: input.conversationState ?? null, availableAnalysis: input.availableAnalysis,
-    player: {
-      economy: input.profile.economy,
-      skills: Object.fromEntries(Object.entries(input.profile.progression.skills).map(([id, value]) => [id, { level: value.level, maxLevel: value.maxLevel }])),
-      slayers: Object.fromEntries(Object.entries(input.profile.progression.slayers).map(([id, value]) => [id, { level: value.level, xp: value.xp }])),
-      dungeons: { catacombsLevel: input.profile.progression.dungeons.catacombs?.level ?? null,
-        selectedClass: input.profile.progression.dungeons.selectedClass, highestFloorNormal: input.profile.progression.dungeons.highestFloorNormal,
-        highestFloorMaster: input.profile.progression.dungeons.highestFloorMaster },
-    },
-    currentGear: { armor: input.profile.gear.armor.items.map(compactItem), equipment: input.profile.gear.equipment.items.map(compactItem),
-      likelyWeapons: input.profile.gear.weapons.map(compactItem), activePet: input.profile.pets.activePet && {
-        type: input.profile.pets.activePet.type, name: input.profile.pets.activePet.name, rarity: input.profile.pets.activePet.rarity,
-        level: input.profile.pets.activePet.level, heldItem: input.profile.pets.activePet.heldItem,
-        stats: input.profile.pets.activePet.stats, abilityLore: input.profile.pets.activePet.abilityLore,
-      }, magicalPower: input.profile.accessories.magicalPower.total },
+    canonical: intelligence.canonical,
+    domainContext: input.domainContext === undefined ? (input.route.domain ? intelligence.domains[input.route.domain] : null) : input.domainContext,
     candidates: input.candidates.map(candidate => ({ id: candidate.id, domain: candidate.domain, name: candidate.item.name,
       rarity: candidate.item.rarity, categories: candidate.item.categories, stats: candidate.item.stats, price: candidate.price ?? null,
       knownChanges: candidate.knownChanges ?? {}, requirements: candidate.requirements, abilityText: candidate.abilityText,
@@ -65,6 +55,7 @@ export function buildCandidateFeasibility(candidate: AdvisorCandidate, profile: 
       : statuses.size === 1 && statuses.has("UNKNOWN") ? "UNKNOWN" as const : "MIXED" as const;
   return { priceStatus, budgetCoins: budgetCoins ?? null, priceCoins,
     budgetDeltaCoins: budgetCoins === undefined || priceCoins === null ? null : priceCoins - budgetCoins,
+    overBudgetPercent: budgetCoins === undefined || priceCoins === null || budgetCoins <= 0 ? null : Math.max(priceCoins - budgetCoins, 0) / budgetCoins * 100,
     requirementStatus, requirements };
 }
 

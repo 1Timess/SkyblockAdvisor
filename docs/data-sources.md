@@ -76,3 +76,7 @@ Final real-data verification uses the locally configured key and iTimess, as aut
 ## Deferred
 
 Optional Abiphone MP, wardrobe/backpack-icon presentation, personal vault/other bags, detailed mining/Garden/collections, Bazaar ingestion, net worth, advisor UI, and persisted conversation state remain deferred. Candidate generation and the Luna boundary are implemented; Phase 4.1 context inspection remains deterministic and makes no model request.
+
+## Phase 5 domain coverage
+
+The normalized inventory now remains available as `inventoryItems`, allowing the same fetched profile to identify rods, drills, pickaxes, and stat-bearing equipped items. Fishing Speed, Sea Creature Chance, Mining Speed, Mining Fortune, and Pristine are included only when parsed from supplied item data. The current member contract does not expose Heart of the Mountain level, Mithril Powder, Gemstone Powder, or pet effect data, so the domain payloads mark those facts unavailable rather than deriving them.

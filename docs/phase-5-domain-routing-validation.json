@@ -1,0 +1,161 @@
+{
+  "generatedAt": "2026-09-24T18:35:20.796Z",
+  "lunaCalls": 0,
+  "profile": {
+    "username": "iTimess",
+    "cuteName": "Lemon"
+  },
+  "reports": [
+    {
+      "question": "I just cleared F6 and have 30m coins. What should I upgrade next?",
+      "resolvedDomain": "DUNGEONS",
+      "goal": "GENERAL_UPGRADE",
+      "cacheReused": false,
+      "canonicalPayloadIncluded": true,
+      "domainPayloadIncluded": "DUNGEONS",
+      "unrelatedDomainsExcluded": [
+        "ACCESSORIES",
+        "FISHING",
+        "MINING"
+      ],
+      "rawCandidateCount": 802,
+      "goalRelevantCandidateCount": 303,
+      "finalContextCount": 32,
+      "finalCandidateIds": [
+        "GIANT_CLEAVER",
+        "PIGMAN_SWORD",
+        "FLOWER_OF_TRUTH",
+        "YETI_SWORD",
+        "SWORD_OF_BAD_HEALTH",
+        "SUPER_CLEAVER",
+        "ZOMBIE_SOLDIER_CUTLASS",
+        "STARRED_BAT_WAND",
+        "BAT_WAND",
+        "BERSERKER_HELMET",
+        "REKINDLED_EMBER_BOOTS",
+        "REKINDLED_EMBER_CHESTPLATE",
+        "FELTHORN_REAPER",
+        "BOUQUET_OF_LIES",
+        "MYTHOS_LEGGINGS",
+        "STARRED_ICE_SPRAY_WAND",
+        "STARRED_YETI_SWORD",
+        "ELEGANT_TUXEDO_LEGGINGS",
+        "GLACIAL_SCYTHE",
+        "STARRED_FELTHORN_REAPER",
+        "PRIMORDIAL_BOOTS",
+        "HEARTFIRE_DAGGER",
+        "MAGMA_LORD_CHESTPLATE",
+        "HEARTMAW_DAGGER",
+        "ATOMSPLIT_KATANA",
+        "MAGMA_LORD_LEGGINGS",
+        "AXE_OF_THE_SHREDDED",
+        "STING",
+        "ENRAGER",
+        "SCYLLA",
+        "BERSERKER_CHESTPLATE",
+        "CREEPER_HAT"
+      ],
+      "budgetCoins": 30000000,
+      "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-24T18:35:02.842Z"
+    },
+    {
+      "question": "Okay, what about my MP then?",
+      "resolvedDomain": "ACCESSORIES",
+      "goal": "MAGICAL_POWER",
+      "cacheReused": true,
+      "canonicalPayloadIncluded": true,
+      "domainPayloadIncluded": "ACCESSORIES",
+      "unrelatedDomainsExcluded": [
+        "DUNGEONS",
+        "FISHING",
+        "MINING"
+      ],
+      "rawCandidateCount": 14,
+      "goalRelevantCandidateCount": 14,
+      "finalContextCount": 14,
+      "finalCandidateIds": [
+        "NETHERRACK_LOOKING_SUNSHADE",
+        "ACCRETION_TALISMAN",
+        "LUCKY_HOOF",
+        "AGARIMOO_TALISMAN",
+        "LUMBERJACK_RING",
+        "WITCH_TALISMAN",
+        "SCARF_GRIMOIRE",
+        "TREASURE_ARTIFACT",
+        "RELIC_OF_COINS",
+        "SOULFLOW_PILE",
+        "RED_CLAW_ARTIFACT",
+        "SAFETY_BADGE",
+        "VOTER_BADGE_SUPREME",
+        "POWER_RELIC"
+      ],
+      "budgetCoins": 30000000,
+      "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-24T18:35:02.842Z"
+    },
+    {
+      "question": "I'm looking for fishing gear. What's the best upgrade available to me?",
+      "resolvedDomain": "FISHING",
+      "goal": "FISHING",
+      "cacheReused": true,
+      "canonicalPayloadIncluded": true,
+      "domainPayloadIncluded": "FISHING",
+      "unrelatedDomainsExcluded": [
+        "DUNGEONS",
+        "ACCESSORIES",
+        "MINING"
+      ],
+      "rawCandidateCount": 24,
+      "goalRelevantCandidateCount": 24,
+      "finalContextCount": 17,
+      "finalCandidateIds": [
+        "FINWAVE_CLOAK",
+        "FINWAVE_BELT",
+        "GILLSPLASH_CLOAK",
+        "ROD_OF_THE_SEA",
+        "SLUG_BOOTS",
+        "MOOGMA_LEGGINGS",
+        "FLAMING_CHESTPLATE",
+        "HELLFIRE_ROD",
+        "THUNDER_BOOTS",
+        "THUNDER_CHESTPLATE",
+        "THUNDER_HELMET",
+        "THUNDER_LEGGINGS",
+        "MAGMA_LORD_CHESTPLATE",
+        "MAGMA_LORD_LEGGINGS",
+        "MAGMA_LORD_BOOTS",
+        "MAGMA_LORD_HELMET",
+        "THE_SHREDDER"
+      ],
+      "budgetCoins": 30000000,
+      "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-24T18:35:02.842Z"
+    },
+    {
+      "question": "What should I upgrade for mining?",
+      "resolvedDomain": "MINING",
+      "goal": "MINING",
+      "cacheReused": true,
+      "canonicalPayloadIncluded": true,
+      "domainPayloadIncluded": "MINING",
+      "unrelatedDomainsExcluded": [
+        "DUNGEONS",
+        "ACCESSORIES",
+        "FISHING"
+      ],
+      "rawCandidateCount": 17,
+      "goalRelevantCandidateCount": 17,
+      "finalContextCount": 8,
+      "finalCandidateIds": [
+        "DWARVEN_HANDWARMERS",
+        "GEMSTONE_DRILL_4",
+        "TITANIUM_DRILL_2",
+        "TITANIUM_DRILL_3",
+        "DIVAN_PENDANT",
+        "DIVAN_BOOTS",
+        "DIVAN_CHESTPLATE",
+        "DIVAN_HELMET"
+      ],
+      "budgetCoins": 30000000,
+      "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-24T18:35:02.842Z"
+    }
+  ]
+}

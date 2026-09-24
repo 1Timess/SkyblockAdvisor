@@ -12,7 +12,7 @@ const statChangeSchema = z.object({ current: z.number().nullable(), candidate: z
 
 export const advisorCandidateSchema = z.object({
   id: z.string().min(1),
-  domain: z.enum(["armor", "weapon", "accessory", "pet"]),
+  domain: z.enum(["armor", "weapon", "accessory", "pet", "tool"]),
   item: candidateItemSchema,
   price: candidatePriceSchema.optional(),
   knownChanges: z.record(z.string(), statChangeSchema).optional(),

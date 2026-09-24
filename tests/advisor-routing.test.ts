@@ -29,6 +29,7 @@ test("Magical Power routes to accessory details only", async () => {
   const route = routeAdvisorQuestion({ question: "How should I increase my Magical Power?", profile: await fixture() });
   const selected = selectDetailedCandidates(scopeCandidateLanes(lanes, route));
   assert.equal(route.scope, "ACCESSORIES");
+  assert.equal(route.domain, "ACCESSORIES");
   assert.deepEqual(selected.map(value => value.id), ["TALISMAN"]);
 });
 
@@ -42,7 +43,7 @@ test("pet question routes to pet details only", async () => {
 test("F5 progression routes to gear without accessory or pet quota filling", async () => {
   const route = routeAdvisorQuestion({ question: "I just cleared F5 and have 30m coins. What should I upgrade next?", profile: await fixture() });
   const selected = selectDetailedCandidates(scopeCandidateLanes(lanes, route));
-  assert.equal(route.scope, "GEAR");
+  assert.equal(route.domain, "DUNGEONS");
   assert.deepEqual(new Set(selected.map(value => value.domain)), new Set(["armor", "weapon"]));
   assert.ok(!selected.some(value => value.domain === "accessory" || value.domain === "pet"));
 });
@@ -55,13 +56,23 @@ test("specific helmet question loads only helmet armor lanes", async () => {
   assert.deepEqual(selected.map(value => value.id), ["HELMET"]);
 });
 
-test("role and conversation state can narrow later questions", async () => {
+test("ambiguous requests clarify while explicit and follow-up domains route", async () => {
   const profile = await fixture();
-  assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile }).scope, "ARCHER");
-  const roleless = { ...profile, progression: { ...profile.progression, dungeons: { ...profile.progression.dungeons, selectedClass: null } } };
-  assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile: roleless }).scope, "CLARIFY");
-  assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile, conversationState: { role: "mage" } }).scope, "MAGE");
-  assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile, conversationState: { role: "berserk", goal: "INTELLIGENCE" } }).scope, "MAGE");
+  assert.equal(routeAdvisorQuestion({ question: "What should I upgrade?", profile }).scope, "CLARIFY");
+  const followUp = routeAdvisorQuestion({ question: "Okay, what about that next?", profile,
+    conversationState: { currentDomain: "MINING", goal: "MINING" } });
+  assert.equal(followUp.domain, "MINING");
+  assert.equal(followUp.scope, "MINING");
   const archer = routeAdvisorQuestion({ question: "What bow should I get?", profile });
   assert.deepEqual(selectDetailedCandidates(scopeCandidateLanes(lanes, archer)).map(value => value.id), ["BOW"]);
+});
+
+test("profile-intelligence domains route explicitly", async () => {
+  const profile = await fixture();
+  assert.equal(routeAdvisorQuestion({ question: "What fishing gear should I use?", profile }).domain, "FISHING");
+  assert.equal(routeAdvisorQuestion({ question: "What should I do for mining?", profile }).domain, "MINING");
+  const accessories = routeAdvisorQuestion({ question: "Give me an accessory sweep for foraging", profile });
+  assert.equal(accessories.domain, "ACCESSORIES");
+  assert.equal(accessories.goal, "FORAGING");
+  assert.deepEqual(accessories.mechanics, ["SWEEP"]);
 });

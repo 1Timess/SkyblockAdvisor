@@ -28,6 +28,7 @@ export const normalizedProfileSchema = z.object({
   profile: profileSummarySchema.extend({ availableProfiles: z.array(profileSummarySchema) }),
   economy: z.object({ purse: z.number().nullable(), bank: z.number().nullable(), personalBank: z.number().nullable() }),
   gear: z.object({ armor: gearSection, equipment: gearSection, weapons: z.array(profileItemSchema) }),
+  inventoryItems: z.array(profileItemSchema),
   accessories: accessorySchema,
   pets: z.object({ owned: z.array(petSchema), activePet: petSchema.nullable() }),
   progression: z.object({ skills: z.record(z.string(), levelSchema), slayers: z.record(z.string(), slayerSchema), dungeons: dungeonSchema }),

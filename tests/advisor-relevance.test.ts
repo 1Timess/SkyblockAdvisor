@@ -24,7 +24,7 @@ function candidate(id: string, stat: string, value: number, options: Partial<Adv
 }
 
 function route(goal: AdvisorRoute["goal"], inferredRole: AdvisorRoute["inferredRole"] = "berserk"): AdvisorRoute {
-  return { scope: "GEAR", goal, inferredRole, activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [] };
+  return { scope: "GEAR", goal, inferredRole, activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "DUNGEONS", mechanics: [] };
 }
 
 test("explicit Intelligence overrides Berserk and excludes strength-only filler", async () => {

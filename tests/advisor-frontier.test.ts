@@ -6,7 +6,7 @@ import type { FrontierInputCandidate } from "../src/server/advisor/frontier";
 import { selectProgressionFrontier } from "../src/server/advisor/frontier";
 
 const route: AdvisorRoute = { scope: "GEAR", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false,
-  reason: "fixture", goal: "GENERAL_UPGRADE", inferredRole: "berserk", armorSlots: [] };
+  reason: "fixture", goal: "GENERAL_UPGRADE", inferredRole: "berserk", armorSlots: [], domain: "DUNGEONS", mechanics: [] };
 
 function input(id: string, options: {
   domain?: AdvisorCandidate["domain"]; slot?: string; category?: string; stats?: string[]; priceStatus?: CompactAdvisorCandidate["feasibility"]["priceStatus"];
@@ -24,6 +24,7 @@ function input(id: string, options: {
     feasibility: { priceStatus, budgetCoins: 30_000_000,
       priceCoins: options.budgetDeltaCoins == null ? priceStatus === "UNKNOWN" ? null : 1_000_000 : 30_000_000 + options.budgetDeltaCoins,
       budgetDeltaCoins: options.budgetDeltaCoins ?? (priceStatus === "UNKNOWN" ? null : -29_000_000),
+      overBudgetPercent: null,
       requirementStatus: requirements.some(value => value.status === "UNKNOWN") ? "UNKNOWN" : requirements.some(value => value.status === "NOT_MET") ? "NOT_MET" : "MET",
       requirements } };
 }

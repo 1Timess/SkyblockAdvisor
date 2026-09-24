@@ -76,3 +76,11 @@ The investigation found that the expected Necron armor and Midas weapon records 
 Implemented the Phase 4.4 recommendation as a separate discovery view on armor and weapon candidate results. Existing Phase 3 lane ordering and caps remain intact. Advisor context construction now consumes all prepared candidates with qualifying deterministic evidence, preserves exact IDs and merged lane evidence, then delegates scope, goal relevance, feasibility classification, and the final context budget to the existing Phase 4 pipeline.
 
 Trace output distinguishes qualification, capped Phase 3 presence, advisor-discovery presence, raw scope, relevance, and frontier selection. `LANE_CAP` is now explicitly a Phase 3 presentation exclusion rather than an advisor exclusion. Regression tests cover below-rank-six discovery, exact-ID evidence merging across weapon baselines, and continued exclusion of owned, wrong-category, wrong-slot, and no-evidence candidates. No recommendation scoring, frontier threshold, UI, or Luna call was added.
+
+## Phase 5 — profile intelligence and routing
+
+- Build and cache one normalized profile snapshot with canonical and four domain payloads.
+- Route Dungeon, accessory, fishing, and mining questions explicitly; clarify ambiguous requests.
+- Retain server-owned conversation state so follow-ups reuse snapshot identity and budget.
+- Send canonical facts, one routed domain payload, and that domain's candidate frontier.
+- Preserve the existing Dungeon candidate pipeline and use bounded stat/category discovery for fishing and mining.

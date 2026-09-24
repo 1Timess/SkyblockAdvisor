@@ -18,8 +18,9 @@ const available: AvailableAnalysis = {
   armor: { available: true, candidateCount: 2 }, weapons: { available: true, candidateCount: 2 },
   accessories: { available: true, candidateCount: 3, currentMagicalPower: 100, missingCount: 2, upgradeCount: 1 },
   pets: { available: true, candidateCount: 1, ownedCount: 2 },
+  dungeons: { available: true, candidateCount: 4 }, fishing: { available: true, candidateCount: 0 }, mining: { available: true, candidateCount: 0 },
 };
-const route: AdvisorRoute = { scope: "GEAR", goal: "GENERAL_UPGRADE", inferredRole: "berserk", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [] };
+const route: AdvisorRoute = { scope: "GEAR", goal: "GENERAL_UPGRADE", inferredRole: "berserk", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "DUNGEONS", mechanics: [] };
 
 async function context() {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
@@ -51,6 +52,22 @@ test("advisor warning context compacts diagnostic parser warnings", () => {
     { code: "PARTIAL_PROFILE" as const, message: "Profile is partial." },
   ];
   assert.deepEqual(compactProfileWarnings(warnings), ["Profile is partial.", "Profile normalization encountered 82 unknown stat labels and 79 unknown item categories; raw item text was preserved."]);
+});
+
+test("advisor context contains canonical plus only the routed domain payload", async () => {
+  const advisorContext = await context();
+  assert.equal(advisorContext.canonical.identity.username, "FixturePlayer");
+  assert.equal(advisorContext.domainContext?.domain, "DUNGEONS");
+  assert.equal("ACCESSORIES" in (advisorContext.domainContext ?? {}), false);
+  assert.equal(JSON.stringify(advisorContext).includes('"domain":"FISHING"'), false);
+});
+
+test("budget feasibility reports relative overage", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const priced = { ...candidate("PRICE", "weapon"), price: { coins: 31_000_000, observedAt: new Date(0).toISOString(), confidence: "HIGH" as const } };
+  const { buildCandidateFeasibility } = await import("../src/server/advisor/context");
+  assert.equal(buildCandidateFeasibility(priced, profile, 30_000_000).overBudgetPercent, 100 / 30);
+  assert.equal(buildCandidateFeasibility({ ...priced, price: { ...priced.price, coins: 2_000_000 } }, profile, 1_000_000).overBudgetPercent, 100);
 });
 
 test("CLARIFICATION validates without purchase candidates", async () => {

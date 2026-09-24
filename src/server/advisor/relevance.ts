@@ -8,7 +8,7 @@ export interface CandidateRelevance {
 }
 
 export function filterCandidateLanesForGoal(lanes: readonly TaggedCandidateLane[], route: AdvisorRoute): TaggedCandidateLane[] {
-  if (route.goal === "MAGICAL_POWER" || route.goal === "PET") return [...lanes];
+  if (["ACCESSORIES", "PETS", "FISHING", "MINING"].some(domain => route.activeDomains.includes(domain as never))) return [...lanes];
   const allowed = relevantLaneNames(route.goal, route.inferredRole);
   return lanes.flatMap(lane => {
     const laneName = laneNameOf(lane.label);
@@ -23,6 +23,9 @@ export function buildCandidateRelevance(lanes: readonly TaggedCandidateLane[], c
   const stats = laneNames.filter(lane => lane !== "ability" && !accessoryOrPetLane(lane));
   if (route.goal === "MAGICAL_POWER") return { reason: "Accessory progression is directly relevant to the Magical Power goal.", relevantStats: ["magicalPower"] };
   if (route.goal === "PET") return { reason: "Pet progression is directly relevant to the requested pet scope.", relevantStats: laneNames };
+  if (route.goal === "FISHING") return { reason: "The candidate has repo-supported fishing progression evidence.", relevantStats: laneNames };
+  if (route.goal === "MINING") return { reason: "The candidate has repo-supported mining progression evidence.", relevantStats: laneNames };
+  if (route.activeDomains.includes("ACCESSORIES")) return { reason: "Accessory progression is relevant to the requested goal and mechanic.", relevantStats: ["magicalPower"] };
   if (laneNames.includes("ability")) return { reason: `Ability evidence is relevant to the ${goalLabel(route.goal)} goal${stats.length ? ` alongside ${stats.join(", ")}` : ""}.`, relevantStats: stats };
   return { reason: `Improves goal-relevant ${stats.length === 1 ? "stat" : "stats"}: ${stats.join(", ")}.`, relevantStats: stats };
 }

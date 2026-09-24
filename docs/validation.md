@@ -221,3 +221,9 @@ The current F5 frontier contains 12 actionable, 8 money-gated, 8 progression-gat
 All four `POWER_WITHER_*` Necron armor pieces and `NECRON_BLADE` now enter raw advisor scope. The base and starred Midas Staff and Midas' Sword entries also enter raw scope. Their absence from the final context is explained by the existing relevance/frontier metadata: bucket limits, final-cap limits, or redundancy limits. Non-gear matches such as Necron's Ladder, Necron's Handle, Dungeon Disc 5, and Midas Jewel remain outside discovery. All five Phase 4.4 controls enter discovery and raw scope; `FLOWER_OF_TRUTH` and `BERSERKER_CHESTPLATE` reach the final frontier in the current run.
 
 The expanded universe is a material review concern: 815 raw candidates and 304 goal-relevant candidates now compete for 32 context slots. This is the intended consequence of removing Phase 3 presentation caps from discovery, and Phase 4.5 does not conceal it with a replacement pre-frontier cap or score. The Intelligence query produced 359 raw, 283 relevant, and 32 final candidates; the Speed query produced 815 raw, 158 relevant, and 32 final candidates. No Luna or OpenAI request was made.
+
+## Phase 5 validation
+
+Offline coverage verifies multi-domain derivation from one normalized profile, snapshot reuse, explicit domain routing, clarification, question-relative context, relative budget distance, and the existing Dungeon advisor suite. Live deterministic validation is recorded in `phase-5-domain-routing-validation.json`; it performs no Luna request.
+
+The Phase 5 live rerun on iTimess / Lemon succeeded. The first Dungeon question populated the snapshot cache; the accessory, fishing, and mining questions reused the same snapshot and 30m budget. Each context included canonical facts plus its one routed domain, and no Luna request was made.

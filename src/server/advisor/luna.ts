@@ -80,7 +80,8 @@ const availableAnalysisJsonSchema = {
     pets: { type: "object", additionalProperties: false, properties: {
       available: { type: "boolean" }, candidateCount: { type: "integer", minimum: 0 }, ownedCount: { type: "integer", minimum: 0 },
     }, required: ["available", "candidateCount", "ownedCount"] },
-  }, required: ["armor", "weapons", "accessories", "pets"],
+    dungeons: domainAvailabilityJsonSchema(), fishing: domainAvailabilityJsonSchema(), mining: domainAvailabilityJsonSchema(),
+  }, required: ["armor", "weapons", "accessories", "pets", "dungeons", "fishing", "mining"],
 };
 const advisorJsonSchema = {
   type: "object", additionalProperties: false,
@@ -101,7 +102,7 @@ const advisorJsonSchema = {
     } },
     caveats: stringArray,
     followUps: { type: "array", items: { type: "object", additionalProperties: false, properties: {
-      domain: { type: "string", enum: ["ARMOR", "WEAPONS", "ACCESSORIES", "PETS"] }, label: { type: "string" }, reason: { type: "string" },
+      domain: { type: "string", enum: ["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "DUNGEONS"] }, label: { type: "string" }, reason: { type: "string" },
     }, required: ["domain", "label", "reason"] } },
   },
   required: ["kind", "question", "whyNeeded", "suggestedAnswers", "availableAnalysis", "headline", "actions", "caveats", "followUps"],
