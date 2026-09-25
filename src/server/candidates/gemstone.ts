@@ -31,15 +31,18 @@ export function buildMiningGemstoneUpgradeLanes(profile: NormalizedSkyBlockProfi
 
 function gemstoneCandidate(item: ProfileItem, slot: NonNullable<ProfileItem["gemstones"]>["slots"][number],
   gemstone: keyof typeof miningStatByGemstone, stat: string, quotes: ReadonlyMap<string, MarketQuote>): AdvisorCandidate | null {
-  let operation: string, warning: string;
+  let operation: string, warning: string, mutationOperation: "UNLOCK_AND_FILL" | "FILL" | "UPGRADE_QUALITY";
   if (slot.status === "LOCKED") {
     operation = `Unlock and fill ${slot.id}`;
+    mutationOperation = "UNLOCK_AND_FILL";
     warning = `${item.name} has a locked ${slot.slotType} gemstone slot. This Divan slot needs a Gemstone Chamber before a ${gemstone} gemstone can be installed.`;
   } else if (slot.status === "UNLOCKED_EMPTY") {
     operation = `Fill empty ${slot.id}`;
+    mutationOperation = "FILL";
     warning = `${item.name} has an unlocked but empty ${slot.slotType} gemstone slot that can accept ${gemstone}.`;
   } else if (slot.status === "FILLED" && slot.quality && qualityRank[slot.quality] < qualityRank.PERFECT) {
     operation = `Upgrade ${slot.id} to PERFECT`;
+    mutationOperation = "UPGRADE_QUALITY";
     warning = `${item.name} has ${slot.quality} ${gemstone} in ${slot.id}; PERFECT is a higher gemstone quality.`;
   } else return null;
 
@@ -65,6 +68,16 @@ function gemstoneCandidate(item: ProfileItem, slot: NonNullable<ProfileItem["gem
         : [gemQuote, chamberQuote].filter(Boolean).some(value => value?.confidence === "MEDIUM") ? "MEDIUM" : "HIGH",
     } : undefined,
     knownChanges: { [stat]: { current, candidate } }, requirements: [], abilityText: [], setBonusText: [],
+    mutation: {
+      kind: "GEMSTONE",
+      parentItemKey: item.uuid ?? `${item.id ?? item.name}:${item.source}`,
+      parentItemId: item.id,
+      parentItemName: item.name,
+      slotId: slot.id,
+      operation: mutationOperation,
+      currentQuality: slot.quality,
+      targetQuality: "PERFECT",
+    },
     warnings: [
       warning,
       priceKnown
