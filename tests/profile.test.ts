@@ -38,6 +38,14 @@ test("combined profile validates and shares items across all required domains", 
   assert.deepEqual(profile.progression.mining.crystalHollows.nucleus.missing, ["amber", "topaz"]);
   assert.equal(profile.progression.mining.crystalHollows.nucleus.ready, false);
   assert.equal(profile.progression.mining.crystalHollows.nucleus.complete, false);
+  assert.equal(profile.progression.mining.powder.glacite, 4321);
+  assert.equal(profile.progression.mining.glaciteTunnels.available, true);
+  assert.equal(profile.progression.mining.glaciteTunnels.mineshaftsEntered, 19);
+  assert.deepEqual(profile.progression.mining.glaciteTunnels.corpsesLooted, { lapis: 12, tungsten: 3, umber: 2, vanguard: 1 });
+  assert.equal(profile.progression.mining.glaciteTunnels.totalCorpsesLooted, 18);
+  assert.deepEqual(profile.progression.mining.glaciteTunnels.fossilsDonated, ["CLUBBED", "UGLY"]);
+  assert.equal(profile.progression.mining.glaciteTunnels.fossilDust, 7);
+  assert.equal(profile.progression.mining.glaciteTunnels.coldResistance, 24);
   assert.equal(profile.progression.foraging.sweepLevel, 4);
   assert.equal(profile.progression.foraging.foragingFortuneNodeLevel, 6);
   assert.equal(profile.progression.foraging.nodes.arbitrary_foraging_node.state.toggle, true);
@@ -74,6 +82,10 @@ test("missing API sections return partial data instead of invented levels/balanc
   assert.deepEqual(profile.progression.mining.crystalHollows.nucleus.acquired, []);
   assert.deepEqual(profile.progression.mining.crystalHollows.nucleus.missing, []);
   assert.equal(profile.progression.mining.crystalHollows.nucleus.ready, false);
+  assert.equal(profile.progression.mining.glaciteTunnels.available, false);
+  assert.equal(profile.progression.mining.glaciteTunnels.mineshaftsEntered, null);
+  assert.equal(profile.progression.mining.glaciteTunnels.totalCorpsesLooted, null);
+  assert.deepEqual(profile.progression.mining.glaciteTunnels.fossilsDonated, []);
   assert.deepEqual(profile.progression.foraging.nodes, {});
   assert.deepEqual(profile.collections, {});
   assert.deepEqual(profile.craftedGenerators, []);
