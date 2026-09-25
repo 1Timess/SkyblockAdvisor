@@ -3,21 +3,20 @@ import { writeFile } from "node:fs/promises";
 import { buildAdvisorContextInspectionForPlayer } from "../src/server/advisor/build-live-context";
 
 async function main() {
-  const [firstUsername = "iTimess", firstProfile = "Lemon", secondUsername = "ShinyFloa", secondProfile = "-", rawBudget = "30000000", ...questionParts] = process.argv.slice(2);
-  const budgetCoins = Number(rawBudget);
-  if (!Number.isFinite(budgetCoins) || budgetCoins < 0) throw new Error("Budget must be a non-negative number of coins.");
+  const [firstUsername = "iTimess", firstProfile = "Lemon", firstRawBudget = "30000000", secondUsername = "ShinyFloa", secondProfile = "-", secondRawBudget = "2000000000", ...questionParts] = process.argv.slice(2);
+  const firstBudgetCoins = budget(firstRawBudget), secondBudgetCoins = budget(secondRawBudget);
   const question = questionParts.join(" ").trim() || "What should I upgrade for mining?";
   const inputs = [
-    { usernameOrUuid: firstUsername, requestedProfile: normalizeProfile(firstProfile) },
-    { usernameOrUuid: secondUsername, requestedProfile: normalizeProfile(secondProfile) },
+    { usernameOrUuid: firstUsername, requestedProfile: normalizeProfile(firstProfile), budgetCoins: firstBudgetCoins },
+    { usernameOrUuid: secondUsername, requestedProfile: normalizeProfile(secondProfile), budgetCoins: secondBudgetCoins },
   ];
   const reports = [];
   for (const input of inputs) {
-    const result = await buildAdvisorContextInspectionForPlayer({ ...input, question, budgetCoins });
+    const result = await buildAdvisorContextInspectionForPlayer({ ...input, question });
     if (result.context.domainContext?.domain !== "MINING") throw new Error(`Expected MINING context for ${input.usernameOrUuid}.`);
     const mining = result.context.domainContext;
     reports.push({
-      player: { username: result.context.canonical.identity.username, profile: result.context.canonical.profile.cuteName },
+      player: { username: result.context.canonical.identity.username, profile: result.context.canonical.profile.cuteName, budgetCoins: input.budgetCoins },
       progression: {
         miningLevel: mining.miningLevel?.level ?? null,
         hotmLevel: mining.hotmLevel,
@@ -50,6 +49,7 @@ async function main() {
 }
 
 function normalizeProfile(value: string) { return value === "-" || value.toLowerCase() === "selected" ? undefined : value; }
+function budget(value: string) { const parsed = Number(value); if (!Number.isFinite(parsed) || parsed < 0) throw new Error("Budgets must be non-negative numbers of coins."); return parsed; }
 function laneCounts(candidates: Array<{ sourceLanes: string[] }>) {
   const counts: Record<string, number> = {};
   for (const candidate of candidates) for (const lane of candidate.sourceLanes) counts[lane] = (counts[lane] ?? 0) + 1;
