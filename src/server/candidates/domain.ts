@@ -5,6 +5,7 @@ import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile
 import { miningRelevantStats } from "../reference/mining-knowledge";
 import { prepareCandidate } from "./common";
 import { buildMiningGemstoneUpgradeLanes } from "./gemstone";
+import { buildMiningDrillComponentUpgradeLanes } from "./drill-components";
 
 const fishingStats = ["fishingSpeed", "seaCreatureChance"] as const;
 const unavailableArmorLoadoutWarning = "Armor loadout data is unavailable, so the owned armor baseline for this slot is unknown.";
@@ -44,7 +45,9 @@ export function buildActivityDomainLanes(input: {
   }));
   if (input.domain !== "MINING") return replacementLanes;
   const gemstoneLanes = buildMiningGemstoneUpgradeLanes(input.profile, input.quotes);
-  return Object.fromEntries(stats.map(stat => [stat, [...(gemstoneLanes[stat] ?? []), ...(replacementLanes[stat] ?? [])]]));
+  const componentLanes = buildMiningDrillComponentUpgradeLanes(input);
+  const laneNames = new Set([...stats, ...Object.keys(componentLanes)]);
+  return Object.fromEntries([...laneNames].map(stat => [stat, [...(gemstoneLanes[stat] ?? []), ...(componentLanes[stat] ?? []), ...(replacementLanes[stat] ?? [])]]));
 }
 
 function withinBoundary(domain: "FISHING" | "MINING", item: CandidateItem) {
