@@ -5,6 +5,7 @@ import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile
 
 const qualityRank: Record<GemstoneQuality, number> = { ROUGH: 0, FLAWED: 1, FINE: 2, FLAWLESS: 3, PERFECT: 4 };
 const miningStatByGemstone = { AMBER: "miningSpeed", JADE: "miningFortune", TOPAZ: "pristine" } as const;
+const miningImpactPriority = { TOPAZ: 0, JADE: 1, AMBER: 2 } as const;
 const statByQuality: Record<keyof typeof miningStatByGemstone, Record<GemstoneQuality, number>> = {
   AMBER: { ROUGH: 4, FLAWED: 8, FINE: 16, FLAWLESS: 32, PERFECT: 40 },
   JADE: { ROUGH: 2, FLAWED: 4, FINE: 8, FLAWLESS: 16, PERFECT: 20 },
@@ -77,6 +78,7 @@ function gemstoneCandidate(item: ProfileItem, slot: NonNullable<ProfileItem["gem
       operation: mutationOperation,
       currentQuality: slot.quality,
       targetQuality: "PERFECT",
+      impactPriority: miningImpactPriority[gemstone],
     },
     warnings: [
       warning,
