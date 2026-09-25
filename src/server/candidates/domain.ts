@@ -2,12 +2,10 @@ import type { CandidateItem } from "../../schemas/catalog";
 import type { AdvisorCandidate } from "../../schemas/candidates";
 import type { MarketQuote } from "../../schemas/market";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import { miningRelevantStats } from "../reference/mining-knowledge";
 import { prepareCandidate } from "./common";
 
-const domainStats = {
-  FISHING: ["fishingSpeed", "seaCreatureChance"],
-  MINING: ["miningSpeed", "miningFortune", "pristine"],
-} as const;
+const fishingStats = ["fishingSpeed", "seaCreatureChance"] as const;
 
 export function buildActivityDomainLanes(input: {
   domain: "FISHING" | "MINING";
@@ -16,7 +14,7 @@ export function buildActivityDomainLanes(input: {
   quotes: ReadonlyMap<string, MarketQuote>;
   budgetCoins?: number;
 }): Record<string, AdvisorCandidate[]> {
-  const stats = domainStats[input.domain];
+  const stats = input.domain === "MINING" ? miningRelevantStats(input.profile) : [...fishingStats];
   const owned = new Set(input.profile.inventoryItems.flatMap(item => item.id ? [item.id] : []));
   const eligible = input.catalog.filter(item => withinBoundary(input.domain, item));
   return Object.fromEntries(stats.map(stat => {
@@ -36,7 +34,7 @@ export function buildActivityDomainLanes(input: {
 }
 
 function withinBoundary(domain: "FISHING" | "MINING", item: CandidateItem) {
-  const stats = domainStats[domain];
+  const stats = domain === "MINING" ? ["miningSpeed", "miningFortune", "gemstoneFortune", "pristine", "coldResistance"] : fishingStats;
   if (domain === "FISHING" && item.categories.includes("fishing_rod")) return true;
   if (domain === "MINING" && item.categories.some(category => category === "pickaxe" || category === "drill")) return true;
   return item.categories.some(category => ["armor", "helmet", "chestplate", "leggings", "boots", "equipment", "tool"].includes(category))
