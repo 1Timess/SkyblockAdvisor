@@ -107,3 +107,25 @@ test("structured mutations favor domain impact and diversify by parent operation
   assert.deepEqual(selected.selected.map(value => value.candidate.id), ["topaz-empty", "topaz-locked", "amber-upgrade"]);
   assert.equal(selected.candidates.find(value => value.candidate.id === "jade-locked")?.selection.exclusionReason, "REDUNDANCY_LIMIT");
 });
+
+
+test("structured mutation context is representative rather than exhaustive", () => {
+  const candidates = Array.from({ length: 10 }, (_, index) => input(`mutation-${index}`, {
+    stats: [index < 7 ? "pristine" : "miningFortune"],
+    mutation: {
+      kind: "GEMSTONE",
+      parentItemKey: `parent-${index}`,
+      parentItemId: `ITEM_${index}`,
+      parentItemName: `Parent ${index}`,
+      slotId: `SLOT_${index}`,
+      operation: index < 4 ? "FILL" : index < 7 ? "UNLOCK_AND_FILL" : "UPGRADE_QUALITY",
+      currentQuality: null,
+      targetQuality: "PERFECT",
+      impactPriority: index < 7 ? 0 : 1,
+    },
+  }, index));
+  const result = selectProgressionFrontier({ route, candidates });
+  assert.equal(result.selected.length, 6);
+  assert.ok(result.selected.every(value => value.candidate.mutation?.kind === "GEMSTONE"));
+  assert.equal(result.candidates.filter(value => value.selection.exclusionReason === "REDUNDANCY_LIMIT").length, 4);
+});
