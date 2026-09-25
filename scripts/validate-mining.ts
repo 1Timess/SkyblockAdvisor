@@ -69,7 +69,7 @@ function miningItem(categories: string[], stats: Record<string, number>) {
   return categories.some(category => ["pickaxe", "drill", "helmet", "chestplate", "leggings", "boots", "equipment", "necklace", "cloak", "belt", "gloves", "bracelet"].includes(category))
     && Object.keys(miningStats(stats)).length > 0;
 }
-function miningLoadoutSets(sets: Record<string, Record<string, { id: string | null; name: string; source: string; categories: string[]; stats: Record<string, number> }>>) {
+function miningLoadoutSets(sets: Record<string, Record<string, { id: string | null; name: string; source: string; categories: string[]; stats: Record<string, number>; gemstones?: { source: "NBT"; slots: unknown[] } }>>) {
   return Object.fromEntries(Object.entries(sets).map(([setId, slots]) => [setId, Object.fromEntries(Object.entries(slots)
     .filter(([, item]) => miningItem(item.categories, item.stats)).map(([slot, item]) => [slot, { id: item.id, name: item.name, source: item.source, stats: miningStats(item.stats), gemstones: item.gemstones ?? null }]))]));
 }
