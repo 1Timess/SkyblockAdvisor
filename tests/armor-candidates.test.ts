@@ -44,12 +44,12 @@ test("armor lanes enforce slot, known requirement, ownership, budget, and known-
 
 test("armor lanes retain unknown requirements and unknown prices with warnings", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
-  const hotm = parseRequirementText("Requires Heart of the Mountain Tier 5")!;
-  const item = candidate("UNKNOWN_FACTS", { defense: 120 }, { requirements: [hotm], unparsedRequirementText: ["Requires Mysterious Access"] });
+  const garden = parseRequirementText("Requires Garden Level 5")!;
+  const item = candidate("UNKNOWN_FACTS", { defense: 120 }, { requirements: [garden], unparsedRequirementText: ["Requires Mysterious Access"] });
   const result = buildArmorLanes({ current: currentArmor(), catalog: [item], profile, budgetCoins: 1_000 });
   assert.equal(result.lanes.defense.length, 1);
   assert.equal(result.lanes.defense[0].warnings.length, 3);
-  assert.deepEqual(result.lanes.defense[0].requirements, [hotm.sourceText, "Requires Mysterious Access"]);
+  assert.deepEqual(result.lanes.defense[0].requirements, [garden.sourceText, "Requires Mysterious Access"]);
 });
 
 test("armor lanes cap each stat at six and deduplicate the union at twenty", async () => {
