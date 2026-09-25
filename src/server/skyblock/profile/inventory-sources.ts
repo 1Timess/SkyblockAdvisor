@@ -8,6 +8,8 @@ export function collectInventories(member: RawMember, warnings: ProfileWarning[]
     { source: "equipment", encoded: inventory?.equipment_contents },
     { source: "inventory", encoded: inventory?.inv_contents },
     { source: "enderchest", encoded: inventory?.ender_chest_contents },
+    { source: "wardrobe", encoded: inventory?.wardrobe_contents },
+    { source: "personal_vault", encoded: inventory?.personal_vault_contents },
     { source: "talisman_bag", encoded: inventory?.bag_contents?.talisman_bag },
     ...Object.entries(inventory?.backpack_contents ?? {}).map(([key, encoded]) => ({ source: `backpack:${key}`, encoded })),
   ];
