@@ -40,7 +40,7 @@ export async function callLunaAdvisor(context: AdvisorContext, fetcher: typeof f
       model,
       store: false,
       reasoning: { effort: "medium" },
-      max_output_tokens: 2500,
+      max_output_tokens: 5000,
       instructions: advisorInstructions,
       input: JSON.stringify(context),
       text: { format: { type: "json_schema", name: "skyblock_advice", strict: true, schema: advisorJsonSchema } },
