@@ -11,6 +11,8 @@ test("combined profile validates and shares items across all required domains", 
   assert.equal(profile.economy.purse, 1234); assert.equal(profile.economy.personalBank, 0);
   assert.equal(profile.gear.armor.items.length, 4); assert.equal(profile.gear.equipment.items.length, 1);
   assert.deepEqual(profile.gear.weapons.map(i => i.id), ["TEST_SWORD", "TEST_BOW"]);
+  assert.ok(profile.inventoryItems.some(item => item.id === "WARDROBE_MINING_HELMET" && item.source === "wardrobe"));
+  assert.ok(profile.inventoryItems.some(item => item.id === "VAULT_DRILL" && item.source === "personal_vault"));
   assert.equal(profile.gear.weapons[0].abilityText[1], "A mysterious ability remains readable.");
   assert.equal(profile.accessories.magicalPower.total, 32);
   assert.equal(profile.pets.activePet?.level, 2);
