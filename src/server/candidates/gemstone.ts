@@ -17,7 +17,9 @@ const gemMarketId: Record<keyof typeof miningStatByGemstone, string> = {
 
 export function buildMiningGemstoneUpgradeLanes(profile: NormalizedSkyBlockProfile, quotes: ReadonlyMap<string, MarketQuote>): Record<string, AdvisorCandidate[]> {
   const lanes: Record<string, AdvisorCandidate[]> = {};
+  const relevantParents = miningRelevantMutationParents(profile.inventoryItems);
   for (const item of profile.inventoryItems) {
+    if (!relevantParents.has(itemKey(item))) continue;
     if (!item.gemstones) continue;
     for (const slot of item.gemstones.slots) {
       const fixedGemstone = slot.slotType in miningStatByGemstone ? slot.slotType as keyof typeof miningStatByGemstone : null;
@@ -93,4 +95,58 @@ function gemstoneCandidate(item: ProfileItem, slot: NonNullable<ProfileItem["gem
 
 function newestObservedAt(quotes: readonly MarketQuote[]) {
   return quotes.map(quote => quote.observedAt).sort().at(-1) ?? new Date(0).toISOString();
+}
+
+
+function miningRelevantMutationParents(items: readonly ProfileItem[]) {
+  const gemstoneItems = items.filter(item => item.gemstones && item.gemstones.slots.some(slot => miningGemstoneFor(slot) !== null));
+  const vectors = new Map(gemstoneItems.map(item => [itemKey(item), miningPotentialVector(item)]));
+  return new Set(gemstoneItems.filter(item => {
+    const family = mutationFamily(item);
+    const vector = vectors.get(itemKey(item))!;
+    return !gemstoneItems.some(other => other !== item && mutationFamily(other) === family
+      && dominates(vectors.get(itemKey(other))!, vector));
+  }).map(itemKey));
+}
+
+function miningPotentialVector(item: ProfileItem) {
+  const vector: Record<string, number> = Object.fromEntries(
+    Object.values(miningStatByGemstone).map(stat => [stat, item.stats[stat] ?? 0]),
+  );
+  for (const slot of item.gemstones?.slots ?? []) {
+    const gemstone = miningGemstoneFor(slot);
+    if (!gemstone) continue;
+    const stat = miningStatByGemstone[gemstone];
+    const current = slot.status === "FILLED" && slot.quality ? statByQuality[gemstone][slot.quality] : 0;
+    vector[stat] = (vector[stat] ?? 0) + statByQuality[gemstone].PERFECT - current;
+  }
+  return vector;
+}
+
+function miningGemstoneFor(slot: NonNullable<ProfileItem["gemstones"]>["slots"][number]): keyof typeof miningStatByGemstone | null {
+  const fixed = slot.slotType in miningStatByGemstone ? slot.slotType as keyof typeof miningStatByGemstone : null;
+  return slot.gemstoneType && slot.gemstoneType in miningStatByGemstone
+    ? slot.gemstoneType as keyof typeof miningStatByGemstone : fixed;
+}
+
+function dominates(left: Readonly<Record<string, number>>, right: Readonly<Record<string, number>>) {
+  const stats = Object.values(miningStatByGemstone);
+  return stats.every(stat => (left[stat] ?? 0) >= (right[stat] ?? 0))
+    && stats.some(stat => (left[stat] ?? 0) > (right[stat] ?? 0));
+}
+
+function mutationFamily(item: ProfileItem) {
+  const categories = item.categories;
+  if (categories.includes("helmet")) return "armor:helmet";
+  if (categories.includes("chestplate")) return "armor:chestplate";
+  if (categories.includes("leggings")) return "armor:leggings";
+  if (categories.includes("boots")) return "armor:boots";
+  if (categories.includes("drill") || categories.includes("pickaxe")) return "tool:mining";
+  for (const category of ["necklace", "cloak", "belt", "gloves", "bracelet"]) if (categories.includes(category)) return `equipment:${category}`;
+  if (categories.includes("equipment")) return "equipment:other";
+  return `other:${[...categories].sort().join("|") || item.id || item.name}`;
+}
+
+function itemKey(item: ProfileItem) {
+  return item.uuid ?? `${item.id ?? item.name}:${item.source}`;
 }
