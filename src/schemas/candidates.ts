@@ -10,6 +10,17 @@ export const candidatePriceSchema = z.object({
 
 const statChangeSchema = z.object({ current: z.number().nullable(), candidate: z.number().nullable() });
 
+export const candidateMutationSchema = z.object({
+  kind: z.literal("GEMSTONE"),
+  parentItemKey: z.string().min(1),
+  parentItemId: z.string().nullable(),
+  parentItemName: z.string().min(1),
+  slotId: z.string().min(1),
+  operation: z.enum(["UNLOCK_AND_FILL", "FILL", "UPGRADE_QUALITY"]),
+  currentQuality: z.string().nullable(),
+  targetQuality: z.string().min(1),
+});
+
 export const advisorCandidateSchema = z.object({
   id: z.string().min(1),
   domain: z.enum(["armor", "weapon", "accessory", "pet", "tool"]),
@@ -20,6 +31,7 @@ export const advisorCandidateSchema = z.object({
   abilityText: z.array(z.string()),
   setBonusText: z.array(z.string()),
   warnings: z.array(z.string()),
+  mutation: candidateMutationSchema.optional(),
 });
 export type AdvisorCandidate = z.infer<typeof advisorCandidateSchema>;
 
