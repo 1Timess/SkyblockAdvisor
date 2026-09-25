@@ -110,7 +110,9 @@ test("structured mutations favor domain impact and diversify by parent operation
 
 
 test("structured mutation context is representative rather than exhaustive", () => {
+  const slots = ["helmet", "chestplate", "leggings", "boots"] as const;
   const candidates = Array.from({ length: 10 }, (_, index) => input(`mutation-${index}`, {
+    slot: slots[index % slots.length],
     stats: [index < 7 ? "pristine" : "miningFortune"],
     mutation: {
       kind: "GEMSTONE",
