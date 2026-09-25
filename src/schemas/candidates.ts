@@ -10,7 +10,7 @@ export const candidatePriceSchema = z.object({
 
 const statChangeSchema = z.object({ current: z.number().nullable(), candidate: z.number().nullable() });
 
-export const candidateMutationSchema = z.object({
+const gemstoneMutationSchema = z.object({
   kind: z.literal("GEMSTONE"),
   parentItemKey: z.string().min(1),
   parentItemId: z.string().nullable(),
@@ -21,6 +21,12 @@ export const candidateMutationSchema = z.object({
   targetQuality: z.string().min(1),
   impactPriority: z.number().int().nonnegative(),
 });
+const drillComponentMutationSchema = z.object({
+  kind: z.literal("DRILL_COMPONENT"), parentItemKey: z.string().min(1), parentItemId: z.string().nullable(), parentItemName: z.string().min(1),
+  slotId: z.enum(["ENGINE", "FUEL_TANK", "UPGRADE_MODULE"]), operation: z.enum(["INSTALL", "REPLACE"]), currentPartId: z.string().nullable(),
+  targetPartId: z.string().min(1), impactPriority: z.number().int().nonnegative(),
+});
+export const candidateMutationSchema = z.discriminatedUnion("kind", [gemstoneMutationSchema, drillComponentMutationSchema]);
 
 export const advisorCandidateSchema = z.object({
   id: z.string().min(1),
