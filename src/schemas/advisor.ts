@@ -70,6 +70,10 @@ const compactAccessorySchema = compactItemSchema.extend({ active: z.boolean(), i
 const domainKnownStatsSchema = z.object({ totals: statsSchema, supportedStats: z.array(z.string()) });
 const compactNodeSchema = z.object({ level: z.number().nullable(), value: z.number().nullable(), enabled: z.boolean().nullable(),
   state: z.record(z.string(), z.union([z.number(), z.boolean()])) });
+const compactMiningCrystalSchema = z.object({ rawId: z.string(), state: z.string().nullable(), totalFound: z.number().nullable(), totalPlaced: z.number().nullable() });
+const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals: z.record(z.string(), compactMiningCrystalSchema),
+  nucleus: z.object({ required: z.array(z.string()), acquired: z.array(z.string()), placed: z.array(z.string()),
+    missing: z.array(z.string()), ready: z.boolean(), complete: z.boolean() }), biomes: z.record(z.string(), z.unknown()) });
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
     highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),
@@ -87,7 +91,8 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     treeExperience: z.number().nullable(), nodes: z.record(z.string(), compactNodeSchema), selectedAbility: z.string().nullable(),
     selectedAbilities: z.record(z.string(), z.string()), selectedTreeSlot: z.union([z.string(), z.number()]).nullable(),
     selectedTreeSlots: statsSchema, tokensSpent: z.number().nullable(), tokensSpentByTree: statsSchema,
-    mithrilPowder: z.number().nullable(), gemstonePowder: z.number().nullable(), crystals: z.record(z.string(), z.unknown()), biomes: z.record(z.string(), z.unknown()),
+    mithrilPowder: z.number().nullable(), gemstonePowder: z.number().nullable(), crystalHollows: compactCrystalHollowsSchema,
+    crystals: z.record(z.string(), z.unknown()), biomes: z.record(z.string(), z.unknown()),
     tools: z.array(compactItemSchema),
     armor: z.array(compactItemSchema), equipment: z.array(compactItemSchema), pets: z.array(compactPetSchema), knownStats: domainKnownStatsSchema,
     unavailableFacts: z.array(z.string()) }),
