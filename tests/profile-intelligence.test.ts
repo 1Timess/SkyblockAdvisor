@@ -34,6 +34,8 @@ test("one normalized profile derives all four profile-intelligence domains", asy
   assert.equal(intelligence.domains.MINING.miningKnowledge.access.crystalHollowsHotmRequirement, 4);
   assert.equal(intelligence.domains.MINING.miningKnowledge.access.glaciteTunnelsHotmRequirement, 7);
   assert.equal(intelligence.domains.MINING.miningKnowledge.activity.glaciteTunnels, true);
+  assert.ok(intelligence.domains.MINING.armor.some(item => item.id === "LOADOUT_MINING_HELMET"));
+  assert.ok(intelligence.domains.MINING.equipment.some(item => item.id === "LOADOUT_MINING_GLOVES"));
   assert.deepEqual(intelligence.domains.MINING.miningKnowledge.relevantStats,
     ["miningSpeed", "miningFortune", "gemstoneFortune", "pristine", "coldResistance"]);
   assert.ok(!intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("XP table")));
