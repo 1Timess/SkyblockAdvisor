@@ -32,11 +32,13 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
   const dungeon = profile.progression.dungeons;
   const fishingTools = byCategory(profile.inventoryItems, ["fishing_rod"]);
   const miningTools = byCategory(profile.inventoryItems, ["pickaxe", "drill"]);
-  const fishingArmor = withStats(profile.gear.armor.items, fishingStats);
-  const fishingEquipment = withStats(profile.gear.equipment.items, fishingStats);
+  const ownedArmor = profile.inventoryItems.filter(item => item.categories.includes("armor"));
+  const ownedEquipment = profile.inventoryItems.filter(item => item.categories.includes("equipment"));
+  const fishingArmor = withStats(ownedArmor, fishingStats);
+  const fishingEquipment = withStats(ownedEquipment, fishingStats);
   const miningStats = miningRelevantStats(profile), miningKnowledge = buildMiningKnowledge(profile);
-  const miningArmor = withStats(profile.gear.armor.items, miningStats);
-  const miningEquipment = withStats(profile.gear.equipment.items, miningStats);
+  const miningArmor = withStats(ownedArmor, miningStats);
+  const miningEquipment = withStats(ownedEquipment, miningStats);
   const fishingPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, fishingStats));
   const miningPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, miningStats));
   return {
