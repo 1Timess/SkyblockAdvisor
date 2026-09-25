@@ -86,7 +86,8 @@ function annotate(input: FrontierInputCandidate): FrontierSelectionCandidate {
 function classifyBucket(input: FrontierInputCandidate, unmetCount: number, unknownCount: number): SelectionBucket {
   if (unknownCount > 0 || input.feasibility.priceStatus === "UNKNOWN") return "DISTANT_OR_UNCERTAIN";
   if (unmetCount > 0) return "PROGRESSION_GATED";
-  if (input.candidate.warnings.some(warning => warning.includes("owned armor baseline for this slot is unknown"))) return "DISTANT_OR_UNCERTAIN";
+  if (input.candidate.warnings.some(warning => warning.includes("owned armor baseline for this slot is unknown")
+    || warning.includes("owned equipment baseline for this slot is unknown"))) return "DISTANT_OR_UNCERTAIN";
   if (input.feasibility.priceStatus === "OVER_BUDGET") return "MONEY_GATED";
   return "ACTIONABLE";
 }
