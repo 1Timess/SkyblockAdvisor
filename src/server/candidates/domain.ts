@@ -66,11 +66,16 @@ function itemFamily(categories: readonly string[]) {
 }
 
 function comparisonVector(item: CandidateItem, familyItems: readonly NormalizedSkyBlockProfile["inventoryItems"][number][],
-  stats: readonly string[], baselineUnknown: boolean) {
-  return Object.fromEntries(stats.flatMap(stat => {
+  stats: readonly string[], baselineUnknown: boolean): NonNullable<AdvisorCandidate["knownChanges"]> {
+  const changes: NonNullable<AdvisorCandidate["knownChanges"]> = {};
+  for (const stat of stats) {
     const candidate = item.stats[stat] ?? 0;
-    if (baselineUnknown) return candidate !== 0 ? [[stat, { current: null, candidate }]] : [];
+    if (baselineUnknown) {
+      if (candidate !== 0) changes[stat] = { current: null, candidate };
+      continue;
+    }
     const current = Math.max(0, ...familyItems.map(ownedItem => ownedItem.stats[stat] ?? 0));
-    return current !== 0 || candidate !== 0 ? [[stat, { current, candidate }]] : [];
-  }));
+    if (current !== 0 || candidate !== 0) changes[stat] = { current, candidate };
+  }
+  return changes;
 }
