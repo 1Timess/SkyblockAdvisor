@@ -176,7 +176,13 @@ test("Mining discovery emits owned-item gemstone upgrades alongside replacements
     ] },
   });
   profile.progression.mining.hotmLevel = 7;
-  const lanes = buildActivityDomainLanes({ domain: "MINING", profile, catalog: [], quotes: new Map() });
+  const gemstoneQuotes = new Map([
+    ["PERFECT_AMBER_GEM", { marketKey: "PERFECT_AMBER_GEM", coins: 10_000_000, observedAt: "2026-09-25T00:00:00.000Z", basis: "BAZAAR" as const, confidence: "HIGH" as const }],
+    ["PERFECT_JADE_GEM", { marketKey: "PERFECT_JADE_GEM", coins: 8_000_000, observedAt: "2026-09-25T00:00:00.000Z", basis: "BAZAAR" as const, confidence: "HIGH" as const }],
+    ["PERFECT_TOPAZ_GEM", { marketKey: "PERFECT_TOPAZ_GEM", coins: 12_000_000, observedAt: "2026-09-25T00:00:00.000Z", basis: "BAZAAR" as const, confidence: "HIGH" as const }],
+    ["GEMSTONE_CHAMBER", { marketKey: "GEMSTONE_CHAMBER", coins: 5_000_000, observedAt: "2026-09-25T00:00:00.000Z", basis: "BAZAAR" as const, confidence: "HIGH" as const }],
+  ]);
+  const lanes = buildActivityDomainLanes({ domain: "MINING", profile, catalog: [], quotes: gemstoneQuotes });
   assert.ok(lanes.miningFortune.some(value => value.id.includes(":JADE_0:PERFECT")));
   assert.ok(lanes.miningFortune.some(value => value.id.includes(":JADE_1:PERFECT")));
   assert.ok(lanes.pristine.some(value => value.id.includes(":TOPAZ_0:PERFECT")));
@@ -184,4 +190,9 @@ test("Mining discovery emits owned-item gemstone upgrades alongside replacements
   assert.ok(lanes.miningSpeed.some(value => value.id.includes(":AMBER_1:PERFECT")));
   const topaz = lanes.pristine.find(value => value.id.includes(":TOPAZ_0:PERFECT"));
   assert.ok(topaz?.warnings.some(warning => warning.includes("unlocked but empty")));
+  assert.deepEqual(topaz?.knownChanges.pristine, { current: 0, candidate: 2 });
+  assert.equal(topaz?.price?.coins, 12_000_000);
+  const lockedJade = lanes.miningFortune.find(value => value.id.includes(":JADE_0:PERFECT"));
+  assert.deepEqual(lockedJade?.knownChanges.miningFortune, { current: 0, candidate: 20 });
+  assert.equal(lockedJade?.price?.coins, 13_000_000);
 });
