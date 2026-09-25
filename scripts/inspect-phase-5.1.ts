@@ -4,13 +4,14 @@ import { buildAdvisorContextInspectionForPlayer } from "../src/server/advisor/bu
 import { advisorProfileSnapshotCache } from "../src/server/advisor/profile-intelligence";
 
 async function main() {
-  const loaded = await advisorProfileSnapshotCache.getOrLoad({ usernameOrUuid: "iTimess", requestedProfile: "Lemon" });
+  const usernameOrUuid = process.env.INSPECT_USERNAME?.trim() || "iTimess", requestedProfile = process.env.INSPECT_PROFILE?.trim() || undefined;
+  const loaded = await advisorProfileSnapshotCache.getOrLoad({ usernameOrUuid, requestedProfile });
   const profile = loaded.snapshot.profile;
   let state: AdvisorConversationState = { profileSnapshotId: loaded.snapshot.snapshotId, budgetCoins: 30_000_000 };
   const queries = ["What should I upgrade for mining?", "I'm looking for fishing gear. What's the best upgrade available to me?", "Okay, what about my MP then?"];
   const contexts = [];
   for (const question of queries) {
-    const result = await buildAdvisorContextInspectionForPlayer({ usernameOrUuid: "iTimess", requestedProfile: "Lemon", question, conversationState: state });
+    const result = await buildAdvisorContextInspectionForPlayer({ usernameOrUuid, requestedProfile, question, conversationState: state });
     state = result.nextConversationState;
     contexts.push({ question, domain: result.route.domain, cacheReused: result.diagnostics.cacheReused,
       domainPayload: result.context.domainContext?.domain ?? null, candidateCount: result.context.candidates.length });
@@ -21,7 +22,7 @@ async function main() {
     mining: { skillLevel: profile.progression.skills.mining?.level ?? null, treeExperience: mining.treeExperience, hotmLevel: mining.hotmLevel,
       powder: mining.powder, selectedAbility: mining.selectedAbility, selectedAbilities: mining.selectedAbilities,
       selectedTreeSlot: mining.selectedTreeSlot, selectedTreeSlots: mining.selectedTreeSlots, tokensSpent: mining.tokensSpent,
-      tokensSpentByTree: mining.tokensSpentByTree, crystalHollows: mining.crystalHollows,
+      tokensSpentByTree: mining.tokensSpentByTree, crystalHollows: mining.crystalHollows, glaciteTunnels: mining.glaciteTunnels,
       sampleNodes: Object.fromEntries(Object.entries(mining.nodes).slice(0, 8)) },
     foraging: { skillLevel: profile.progression.skills.foraging?.level ?? null, treeExperience: foraging.treeExperience,
       sweepLevel: foraging.sweepLevel, foragingFortuneNodeLevel: foraging.foragingFortuneNodeLevel },
@@ -31,7 +32,7 @@ async function main() {
     fishing: { skillLevel: profile.progression.skills.fishing?.level ?? null, itemsFished: fishing.itemsFished,
       seaCreatureKills: fishing.seaCreatureKills, trophyFishCounters: Object.keys(fishing.trophyFish).length,
       trophyFishTotalCaught: fishing.trophyFish.total_caught ?? null }, contexts };
-  await writeFile("docs/phase-5.1-live-validation.json", `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
+  if (process.env.WRITE_VALIDATION_ARTIFACT === "1") await writeFile("docs/phase-5.1-live-validation.json", `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
   console.log(JSON.stringify(artifact, null, 2));
 }
 main().catch(error => { console.error(error instanceof Error ? error.message : "Phase 5.1 inspection failed."); process.exitCode = 1; });
