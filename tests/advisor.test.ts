@@ -6,6 +6,7 @@ import { buildAdvisorContext, compactProfileWarnings, selectDetailedCandidates }
 import { validateAdvisorResponse } from "../src/server/advisor/validate-response";
 import { callLunaAdvisor } from "../src/server/advisor/luna";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
+import { buildActivityDomainLanes } from "../src/server/candidates/domain";
 import { fixtureSources } from "./fixtures/profile";
 
 function candidate(id: string, domain: AdvisorCandidate["domain"], current?: number, target?: number): AdvisorCandidate {
@@ -133,5 +134,28 @@ test("Luna client reports sanitized error response bodies", async () => {
     assert.match(error.message, /invalid request for \[REDACTED\]/);
     assert.doesNotMatch(error.message, /test-token/);
     return true;
+  });
+});
+
+test("Mining candidates preserve same-family stat regressions for Luna", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.inventoryItems.push({
+    id: "CURRENT_DRILL", name: "Current Drill", source: "inventory", slotIndex: 0, count: 1, rarity: "epic",
+    categories: ["tool", "drill"], stats: { miningSpeed: 500, miningFortune: 63, gemstoneFortune: 100, pristine: 1.5 },
+    enchantments: {}, attributes: {}, lore: [], abilityText: [], setBonusText: [], warnings: [],
+  });
+  const catalog = [{
+    id: "TRADEOFF_DRILL", name: "Tradeoff Drill", rarity: "epic" as const, categories: ["tool", "drill"],
+    stats: { miningSpeed: 750 }, lore: [], abilityText: [], setBonusText: [], requirements: [], unparsedRequirementText: [],
+    wiki: null, marketKey: "TRADEOFF_DRILL", sources: { hypixel: true, neu: true },
+  }];
+  const lanes = buildActivityDomainLanes({ domain: "MINING", profile, catalog, quotes: new Map(), budgetCoins: 30_000_000 });
+  const tradeoff = Object.values(lanes).flat().find(value => value.id === "TRADEOFF_DRILL");
+  assert.ok(tradeoff);
+  assert.deepEqual(tradeoff.knownChanges, {
+    miningSpeed: { current: 500, candidate: 750 },
+    miningFortune: { current: 63, candidate: 0 },
+    gemstoneFortune: { current: 100, candidate: 0 },
+    pristine: { current: 1.5, candidate: 0 },
   });
 });
