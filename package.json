@@ -22,7 +22,8 @@
     "inspect:phase-5": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-phase-5.ts",
     "inspect:phase-5.1": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-phase-5.1.ts",
     "inspect:mining-state": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-mining-state.ts",
-    "validate:mining": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining.ts"
+    "validate:mining": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining.ts",
+    "validate:mining-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining-luna.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
