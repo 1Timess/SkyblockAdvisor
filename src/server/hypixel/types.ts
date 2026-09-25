@@ -42,6 +42,8 @@ export const memberSchema = z.object({
   mining_core: z.object({
     powder_mithril: tolerantNumber, powder_mithril_total: tolerantNumber, powder_spent_mithril: tolerantNumber,
     powder_gemstone: tolerantNumber, powder_gemstone_total: tolerantNumber, powder_spent_gemstone: tolerantNumber,
+    powder_glacite: tolerantNumber, powder_glacite_total: tolerantNumber, powder_spent_glacite: tolerantNumber,
+    powder_spent_glacite_2: tolerantNumber, powder_spent_non_refundable_glacite: tolerantNumber, powder_spent_non_refundable_glacite_2: tolerantNumber,
     powder_spent_non_refundable_mithril: tolerantNumber, powder_spent_non_refundable_mithril_2: tolerantNumber,
     daily_ores_mined: tolerantNumber, daily_ores_mined_gemstone: tolerantNumber, daily_ores_mined_glacite: tolerantNumber,
     daily_ores_mined_mithril_ore: tolerantNumber, crystals: dynamicObject.optional().catch(undefined), biomes: dynamicObject.optional().catch(undefined),
@@ -50,6 +52,8 @@ export const memberSchema = z.object({
     experience: dynamicObject.optional(), tokens_spent: z.unknown().optional(), selected_ability: z.unknown().optional(),
     selected_skill_tree_slot: z.unknown().optional(), last_reset: tolerantNumber,
   }).passthrough().optional(),
+  glacite_player_data: z.object({ fossils_donated: z.array(z.string()).optional().catch(undefined), fossil_dust: tolerantNumber,
+    corpses_looted: dynamicObject.optional().catch(undefined), mineshafts_entered: tolerantNumber }).passthrough().optional(),
   foraging_core: dynamicObject.optional(), foraging: dynamicObject.optional(),
   accessory_bag_storage: z.object({ selected_power: z.string().optional(), highest_magical_power: tolerantNumber,
     unlocked_powers: z.unknown().optional(), bag_upgrades_purchased: tolerantNumber,
