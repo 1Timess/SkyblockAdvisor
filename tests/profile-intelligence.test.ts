@@ -63,9 +63,11 @@ test("fishing and mining discovery stays inside repo-supported category and stat
     stats, lore: [], abilityText: [], setBonusText: [], requirements: [], unparsedRequirementText: [], wiki: null, marketKey: id,
     sources: { hypixel: true, neu: true } });
   const catalog = [item("ROD", ["weapon", "fishing_rod"], { fishingSpeed: 10 }), item("DRILL", ["tool", "drill"], { miningSpeed: 100 }),
+    item("GEM_DRILL", ["tool", "drill"], { gemstoneFortune: 60, pristine: 1 }), item("COLD_HELMET", ["armor", "helmet"], { coldResistance: 8 }),
     item("SWORD_WITH_FISHING_STAT", ["weapon", "sword"], { fishingSpeed: 999 }), item("HELMET_WITH_MINING_STAT", ["armor", "helmet"], { miningFortune: 5 })];
   const fishing = buildActivityDomainLanes({ domain: "FISHING", profile, catalog, quotes: new Map() });
   const mining = buildActivityDomainLanes({ domain: "MINING", profile, catalog, quotes: new Map() });
   assert.deepEqual(fishing.fishingSpeed.map(candidate => candidate.id), ["ROD"]);
-  assert.deepEqual(new Set(Object.values(mining).flat().map(candidate => candidate.id)), new Set(["DRILL", "HELMET_WITH_MINING_STAT"]));
+  assert.deepEqual(new Set(Object.values(mining).flat().map(candidate => candidate.id)),
+    new Set(["DRILL", "GEM_DRILL", "COLD_HELMET", "HELMET_WITH_MINING_STAT"]));
 });
