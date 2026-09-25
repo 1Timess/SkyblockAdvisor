@@ -19,6 +19,7 @@ export const candidateMutationSchema = z.object({
   operation: z.enum(["UNLOCK_AND_FILL", "FILL", "UPGRADE_QUALITY"]),
   currentQuality: z.string().nullable(),
   targetQuality: z.string().min(1),
+  impactPriority: z.number().int().nonnegative(),
 });
 
 export const advisorCandidateSchema = z.object({
