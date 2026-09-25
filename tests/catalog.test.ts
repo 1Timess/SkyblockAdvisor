@@ -44,6 +44,6 @@ test("requirement checks use profile facts and leave deferred domains unknown", 
     parseRequirementText("Requires The Catacombs Floor VI Completion")!, parseRequirementText("Requires Heart of the Mountain Tier 2")!,
   ];
   const checks = checkItemRequirements({ requirements }, profile);
-  assert.deepEqual(checks.map(check => check.status), ["MET", "UNKNOWN", "NOT_MET", "UNKNOWN"]);
-  assert.deepEqual(checks.map(check => check.actual), [2, null, 5, null]);
+  assert.deepEqual(checks.map(check => check.status), ["MET", "UNKNOWN", "NOT_MET", "MET"]);
+  assert.deepEqual(checks.map(check => check.actual), [2, null, 5, 2]);
 });
