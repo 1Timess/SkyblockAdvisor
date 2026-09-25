@@ -19,13 +19,17 @@ export const gemstoneStateSchema = z.object({
 export type GemstoneQuality = z.infer<typeof gemstoneQualitySchema>;
 export type GemstoneSlot = z.infer<typeof gemstoneSlotSchema>;
 export type GemstoneState = z.infer<typeof gemstoneStateSchema>;
+export const drillComponentStateSchema = z.object({
+  engine: z.string().nullable(), fuelTank: z.string().nullable(), upgradeModule: z.string().nullable(), fuel: z.number().int().nonnegative().nullable(), source: z.literal("NBT"),
+});
+export type DrillComponentState = z.infer<typeof drillComponentStateSchema>;
 
 export const profileItemSchema = z.object({
   id: z.string().nullable(), uuid: z.string().nullable(), name: z.string(), count: z.number().int().nonnegative(),
   rarity: raritySchema.nullable(), categories: z.array(z.string()), stats: statsSchema,
   reforge: z.string().nullable(), enchantments: statsSchema, stars: z.number().nullable(), recombobulated: z.boolean(),
   lore: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
-  source: z.string(), gemstones: gemstoneStateSchema.optional(), texture: z.string().nullable().optional(),
+  source: z.string(), gemstones: gemstoneStateSchema.optional(), drillComponents: drillComponentStateSchema.optional(), texture: z.string().nullable().optional(),
 });
 export type ItemRarity = z.infer<typeof raritySchema>;
 export type ProfileItem = z.infer<typeof profileItemSchema>;
