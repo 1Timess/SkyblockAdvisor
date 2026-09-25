@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { raritySchema, statsSchema } from "./items";
+import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 
 export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
@@ -30,7 +30,7 @@ export type AdvisorRoute = z.infer<typeof advisorRouteSchema>;
 
 const compactItemSchema = z.object({
   id: z.string().nullable(), name: z.string(), rarity: raritySchema.nullable(), categories: z.array(z.string()), stats: statsSchema,
-  abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
+  abilityText: z.array(z.string()), setBonusText: z.array(z.string()), gemstones: gemstoneStateSchema.optional(),
 });
 export const compactAdvisorCandidateSchema = z.object({
   id: z.string(), domain: z.enum(["armor", "weapon", "accessory", "pet", "tool"]), name: z.string(), rarity: raritySchema.nullable(),
