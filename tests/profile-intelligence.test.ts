@@ -30,6 +30,12 @@ test("one normalized profile derives all four profile-intelligence domains", asy
   assert.equal(intelligence.domains.MINING.glaciteTunnels.totalCorpsesLooted, 18);
   assert.deepEqual(intelligence.domains.MINING.glaciteTunnels.fossilsDonated, ["CLUBBED", "UGLY"]);
   assert.equal(intelligence.domains.MINING.glaciteTunnels.coldResistance, 24);
+  assert.equal(intelligence.domains.MINING.miningKnowledge.stage, "GLACITE_TUNNELS");
+  assert.equal(intelligence.domains.MINING.miningKnowledge.access.crystalHollowsHotmRequirement, 4);
+  assert.equal(intelligence.domains.MINING.miningKnowledge.access.glaciteTunnelsHotmRequirement, 7);
+  assert.equal(intelligence.domains.MINING.miningKnowledge.activity.glaciteTunnels, true);
+  assert.deepEqual(intelligence.domains.MINING.miningKnowledge.relevantStats,
+    ["miningSpeed", "miningFortune", "gemstoneFortune", "pristine", "coldResistance"]);
   assert.ok(!intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("XP table")));
   if (intelligence.domains.FISHING.domain !== "FISHING") throw new Error("unreachable");
   assert.deepEqual(intelligence.domains.FISHING.itemsFished, { total: 321, normal: 300 });
