@@ -9,7 +9,7 @@ function selectedInput() {
   const usernameOrUuid = process.argv[2]?.trim();
   if (!usernameOrUuid) {
     throw new Error(
-      "Provide a Minecraft username or UUID. Example: npm run validate:mining-luna -- ShinyFloa",
+      "Provide a Minecraft username or UUID. Example: npm run validate:mining-luna -- ShinyFloa 500000000 Blueberry",
     );
   }
 
@@ -19,16 +19,23 @@ function selectedInput() {
     throw new Error("Optional budget must be a non-negative number of coins.");
   }
 
-  return { usernameOrUuid, requestedProfile: undefined, budgetCoins };
+  const requestedProfile = process.argv[4]?.trim() || undefined;
+
+  return { usernameOrUuid, requestedProfile, budgetCoins };
 }
 
-function outputPathFor(username: string) {
-  return `docs/phase-5.2e-mining-luna-validation-${username.toLowerCase()}.json`;
+function outputSlug(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function outputPathFor(username: string, requestedProfile?: string) {
+  const profileSuffix = requestedProfile ? `-${outputSlug(requestedProfile)}` : "";
+  return `docs/phase-5.2e-mining-luna-validation-${outputSlug(username)}${profileSuffix}.json`;
 }
 
 async function main() {
   const input = selectedInput();
-  const outputPath = outputPathFor(input.usernameOrUuid);
+  const outputPath = outputPathFor(input.usernameOrUuid, input.requestedProfile);
   const built = await buildAdvisorContextInspectionForPlayer({
     usernameOrUuid: input.usernameOrUuid,
     requestedProfile: input.requestedProfile,
