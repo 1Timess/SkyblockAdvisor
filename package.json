@@ -25,7 +25,8 @@
     "validate:mining": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining.ts",
     "validate:mining-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining-luna.ts",
     "inspect:mining-item-nbt": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-mining-item-nbt.ts",
-    "inspect:mining-drill-components": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-mining-drill-components.ts"
+    "inspect:mining-drill-components": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-mining-drill-components.ts",
+    "validate:mining-drill-components": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining-drill-components.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
