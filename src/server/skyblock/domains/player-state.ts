@@ -21,6 +21,7 @@ export function buildExtendedPlayerState(member: RawMember) {
         nonRefundableMithrilSpent2: finiteNumber(member.mining_core?.powder_spent_non_refundable_mithril_2) },
       dailyOres: { total: finiteNumber(member.mining_core?.daily_ores_mined), gemstone: finiteNumber(member.mining_core?.daily_ores_mined_gemstone),
         glacite: finiteNumber(member.mining_core?.daily_ores_mined_glacite), mithrilOre: finiteNumber(member.mining_core?.daily_ores_mined_mithril_ore) },
+      crystalHollows: normalizeCrystalHollows(member.mining_core?.crystals, member.mining_core?.biomes),
       crystals: dynamicRecord(member.mining_core?.crystals), biomes: dynamicRecord(member.mining_core?.biomes),
     },
     foraging: { treeExperience: finiteNumber(member.skill_tree?.experience?.foraging), nodes: foragingNodes,
@@ -69,6 +70,21 @@ function normalizeNodes(value: unknown): Record<string, NormalizedNode> {
     }
   }
   return result;
+}
+const nucleusCrystalIds = ["jade", "amber", "amethyst", "sapphire", "topaz"] as const;
+function normalizeCrystalHollows(crystalsValue: unknown, biomesValue: unknown) {
+  const available = crystalsValue !== null && crystalsValue !== undefined;
+  const crystals = Object.fromEntries(Object.entries(dynamicRecord(crystalsValue)).map(([rawId, raw]) => {
+    const state = dynamicRecord(raw), id = rawId.endsWith("_crystal") ? rawId.slice(0, -"_crystal".length) : rawId;
+    return [id, { rawId, state: typeof state.state === "string" ? state.state : null,
+      totalFound: finiteNumber(state.total_found), totalPlaced: finiteNumber(state.total_placed) }];
+  }));
+  const required = [...nucleusCrystalIds];
+  const acquired = available ? required.filter(id => ["FOUND", "PLACED"].includes(crystals[id]?.state ?? "")) : [];
+  const placed = available ? required.filter(id => crystals[id]?.state === "PLACED") : [];
+  const missing = available ? required.filter(id => !acquired.includes(id)) : [];
+  return { available, crystals, nucleus: { required, acquired, placed, missing, ready: available && missing.length === 0,
+    complete: available && placed.length === required.length }, biomes: dynamicRecord(biomesValue) };
 }
 function nodeLevel(node: NormalizedNode | undefined) { return node?.level ?? node?.value ?? null; }
 function dynamicRecord(value: unknown): Record<string, unknown> { return value !== null && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
