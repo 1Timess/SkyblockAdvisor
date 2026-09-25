@@ -10,7 +10,7 @@ const route: AdvisorRoute = { scope: "GEAR", activeDomains: ["ARMOR", "WEAPONS"]
 
 function input(id: string, options: {
   domain?: AdvisorCandidate["domain"]; slot?: string; category?: string; stats?: string[]; priceStatus?: CompactAdvisorCandidate["feasibility"]["priceStatus"];
-  budgetDeltaCoins?: number | null; requirements?: CompactAdvisorCandidate["feasibility"]["requirements"];
+  budgetDeltaCoins?: number | null; requirements?: CompactAdvisorCandidate["feasibility"]["requirements"]; warnings?: string[];
 } = {}, stableOrder = 0): FrontierInputCandidate {
   const domain = options.domain ?? "armor", stats = options.stats ?? ["strength"];
   const requirements = options.requirements ?? [];
@@ -18,7 +18,7 @@ function input(id: string, options: {
     categories: domain === "armor" ? ["armor", options.slot ?? "helmet"] : ["weapon", options.category ?? "sword"],
     stats: Object.fromEntries(stats.map(stat => [stat, 1])), lore: [], abilityText: [], setBonusText: [], requirements: [],
     unparsedRequirementText: [], wiki: null, marketKey: id, sources: { hypixel: true, neu: true } },
-    requirements: requirements.map(value => value.text), abilityText: [], setBonusText: [], warnings: [] };
+    requirements: requirements.map(value => value.text), abilityText: [], setBonusText: [], warnings: options.warnings ?? [] };
   const priceStatus = options.priceStatus ?? "WITHIN_BUDGET";
   return { candidate, stableOrder, relevance: { reason: "fixture", relevantStats: stats }, sourceLanes: [`${domain}:fixture:${stats[0]}`],
     feasibility: { priceStatus, budgetCoins: 30_000_000,
@@ -81,4 +81,11 @@ test("money and progression representatives enter before a distant mixed candida
     input("A", { priceStatus: "OVER_BUDGET", budgetDeltaCoins: 2_000_000 }, 2),
   ];
   assert.deepEqual(ids(candidates), ["A", "B", "C"]);
+});
+
+
+test("unknown armor baseline does not enter the actionable bucket", () => {
+  const candidate = input("UNKNOWN-ARMOR-BASELINE", { warnings: ["Wardrobe data is unavailable, so the owned armor baseline for this slot is unknown."] });
+  const selected = selectProgressionFrontier({ route, candidates: [candidate] }).selected;
+  assert.equal(selected[0].selection.bucket, "DISTANT_OR_UNCERTAIN");
 });
