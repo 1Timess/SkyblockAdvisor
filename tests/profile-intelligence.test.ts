@@ -24,6 +24,12 @@ test("one normalized profile derives all four profile-intelligence domains", asy
   assert.equal(intelligence.domains.MINING.crystalHollows.crystals.jade.state, "FOUND");
   assert.deepEqual(intelligence.domains.MINING.crystalHollows.nucleus.missing, ["amber", "topaz"]);
   assert.equal(intelligence.domains.MINING.crystalHollows.nucleus.ready, false);
+  assert.equal(intelligence.domains.MINING.glacitePowder, 4321);
+  assert.equal(intelligence.domains.MINING.glaciteTunnels.available, true);
+  assert.equal(intelligence.domains.MINING.glaciteTunnels.mineshaftsEntered, 19);
+  assert.equal(intelligence.domains.MINING.glaciteTunnels.totalCorpsesLooted, 18);
+  assert.deepEqual(intelligence.domains.MINING.glaciteTunnels.fossilsDonated, ["CLUBBED", "UGLY"]);
+  assert.equal(intelligence.domains.MINING.glaciteTunnels.coldResistance, 24);
   assert.ok(!intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("XP table")));
   if (intelligence.domains.FISHING.domain !== "FISHING") throw new Error("unreachable");
   assert.deepEqual(intelligence.domains.FISHING.itemsFished, { total: 321, normal: 300 });
