@@ -1,4 +1,5 @@
 import "server-only";
+import { writeFile } from "node:fs/promises";
 import { buildAdvisorContextInspectionForPlayer } from "../src/server/advisor/build-live-context";
 
 async function main() {
@@ -43,7 +44,9 @@ async function main() {
       },
     });
   }
-  console.log(JSON.stringify({ generatedAt: new Date().toISOString(), lunaCalls: 0, question, budgetCoins, reports }, null, 2));
+  const artifact = { generatedAt: new Date().toISOString(), lunaCalls: 0, question, budgetCoins, reports };
+  await writeFile("docs/phase-5.2e-mining-validation.json", `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
+  console.log("Wrote docs/phase-5.2e-mining-validation.json");
 }
 
 function normalizeProfile(value: string) { return value === "-" || value.toLowerCase() === "selected" ? undefined : value; }
