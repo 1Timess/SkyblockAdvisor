@@ -6,12 +6,13 @@ function object(value: unknown): Record<string, unknown> {
 
 const qualities = new Set<GemstoneQuality>(["ROUGH", "FLAWED", "FINE", "FLAWLESS", "PERFECT"]);
 const divanSlots = ["AMBER_0", "JADE_0", "AMBER_1", "JADE_1", "TOPAZ_0"] as const;
+const divanArmor = new Set(["DIVAN_HELMET", "DIVAN_CHESTPLATE", "DIVAN_LEGGINGS", "DIVAN_BOOTS"]);
 
 export function extractGemstoneState(itemId: string | null, extraAttributes: Record<string, unknown>): GemstoneState | undefined {
   const raw = object(extraAttributes.gems);
   if (!Object.keys(raw).length) return undefined;
   const unlocked = new Set(Array.isArray(raw.unlocked_slots) ? raw.unlocked_slots.filter((value): value is string => typeof value === "string") : []);
-  const expected = itemId?.startsWith("DIVAN_") ? [...divanSlots] : [];
+  const expected = itemId && divanArmor.has(itemId) ? [...divanSlots] : [];
   const observed = new Set<string>([
     ...expected,
     ...unlocked,
