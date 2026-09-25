@@ -49,10 +49,10 @@ test("snapshot sync validates page consistency before publishing one compact sna
     { success: true, page: 1, totalPages: 2, totalAuctions: 2, lastUpdated: 1000, auctions: [auction({ uuid: "b", starting_bid: 200, end: 3000 })] },
   ];
   let saved;
-  const result = await syncAuctionSnapshot({ fetchPage: async page => pages[page], save: async snapshot => { saved = snapshot; }, now: () => 2000 });
+  const result = await syncAuctionSnapshot({ fetchPage: async page => pages[page], save: async snapshot => { saved = snapshot; }, now: () => 2000, fetchBazaarSnapshot: null });
   assert.equal(result.pagesFetched, 2); assert.equal(result.quoteCount, 1); assert.equal(saved!.quotes.FIXTURE.coins, 200);
   const changed = [...pages]; changed[1] = { ...changed[1], lastUpdated: 1001 };
-  await assert.rejects(syncAuctionSnapshot({ fetchPage: async page => changed[page], save: async () => {}, now: () => 2000 }), AuctionSnapshotChangedError);
+  await assert.rejects(syncAuctionSnapshot({ fetchPage: async page => changed[page], save: async () => {}, now: () => 2000, fetchBazaarSnapshot: null }), AuctionSnapshotChangedError);
 });
 
 test("file snapshot store round-trips validated JSON and reports missing snapshots", async () => {
@@ -63,4 +63,30 @@ test("file snapshot store round-trips validated JSON and reports missing snapsho
       pagesFetched: 1, auctionsObserved: 1, binListingsAccepted: 1, quotes: aggregateMarketListings([{ marketKey: "ITEM", coins: 5 }], observedAt) };
     await saveMarketSnapshot(snapshot, file); assert.deepEqual(await loadMarketSnapshot(file), snapshot);
   } finally { await fs.rm(directory, { recursive: true, force: true }); }
+});
+
+
+test("snapshot sync merges Bazaar acquisition prices into the shared quote map", async () => {
+  const pages: AuctionPage[] = [
+    { success: true, page: 0, totalPages: 1, totalAuctions: 1, lastUpdated: 1000, auctions: [auction({ uuid: "a", starting_bid: 100, end: 3000 })] },
+  ];
+  let saved;
+  await syncAuctionSnapshot({
+    fetchPage: async () => pages[0],
+    fetchBazaarSnapshot: async () => ({
+      success: true,
+      lastUpdated: 1500,
+      products: {
+        PERFECT_TOPAZ_GEM: {
+          product_id: "PERFECT_TOPAZ_GEM",
+          quick_status: { productId: "PERFECT_TOPAZ_GEM", sellPrice: 123.4, buyPrice: 120 },
+        },
+      },
+    }),
+    save: async snapshot => { saved = snapshot; },
+    now: () => 2000,
+  });
+  assert.deepEqual(saved!.quotes.PERFECT_TOPAZ_GEM, {
+    marketKey: "PERFECT_TOPAZ_GEM", coins: 124, observedAt: new Date(1500).toISOString(), basis: "BAZAAR", confidence: "HIGH",
+  });
 });
