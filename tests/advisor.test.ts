@@ -190,9 +190,11 @@ test("Mining discovery emits owned-item gemstone upgrades alongside replacements
   assert.ok(lanes.miningSpeed.some(value => value.id.includes(":AMBER_1:PERFECT")));
   const topaz = lanes.pristine.find(value => value.id.includes(":TOPAZ_0:PERFECT"));
   assert.ok(topaz?.warnings.some(warning => warning.includes("unlocked but empty")));
-  assert.deepEqual(topaz?.knownChanges.pristine, { current: 0, candidate: 2 });
-  assert.equal(topaz?.price?.coins, 12_000_000);
+  assert.ok(topaz?.knownChanges);
+  assert.deepEqual(topaz.knownChanges.pristine, { current: 0, candidate: 2 });
+  assert.equal(topaz.price?.coins, 12_000_000);
   const lockedJade = lanes.miningFortune.find(value => value.id.includes(":JADE_0:PERFECT"));
-  assert.deepEqual(lockedJade?.knownChanges.miningFortune, { current: 0, candidate: 20 });
-  assert.equal(lockedJade?.price?.coins, 13_000_000);
+  assert.ok(lockedJade?.knownChanges);
+  assert.deepEqual(lockedJade.knownChanges.miningFortune, { current: 0, candidate: 20 });
+  assert.equal(lockedJade.price?.coins, 13_000_000);
 });
