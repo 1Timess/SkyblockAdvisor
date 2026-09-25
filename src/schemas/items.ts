@@ -16,6 +16,7 @@ export const gemstoneStateSchema = z.object({
   slots: z.array(gemstoneSlotSchema),
   source: z.literal("NBT"),
 });
+export type GemstoneQuality = z.infer<typeof gemstoneQualitySchema>;
 export type GemstoneSlot = z.infer<typeof gemstoneSlotSchema>;
 export type GemstoneState = z.infer<typeof gemstoneStateSchema>;
 
