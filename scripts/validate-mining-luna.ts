@@ -5,29 +5,21 @@ import { callLunaAdvisor } from "../src/server/advisor/luna";
 
 const question = "What should I upgrade for mining?";
 
-const cohort = [
-  { label: "EARLY", usernameOrUuid: "iTimess", requestedProfile: "Lemon", budgetCoins: 30_000_000 },
-  { label: "MID", usernameOrUuid: "Mophh", requestedProfile: undefined, budgetCoins: undefined },
-  { label: "LATE", usernameOrUuid: "ShinyFloa", requestedProfile: undefined, budgetCoins: 2_000_000_000 },
-] as const;
-
-function selectedCohort() {
-  const requestedUsername = process.argv[2]?.trim();
-  if (!requestedUsername) {
+function selectedInput() {
+  const usernameOrUuid = process.argv[2]?.trim();
+  if (!usernameOrUuid) {
     throw new Error(
-      "Provide exactly one validation username. Example: npm run validate:mining-luna -- ShinyFloa",
+      "Provide a Minecraft username or UUID. Example: npm run validate:mining-luna -- ShinyFloa",
     );
   }
 
-  const input = cohort.find(
-    entry => entry.usernameOrUuid.toLowerCase() === requestedUsername.toLowerCase(),
-  );
-  if (!input) {
-    throw new Error(
-      `Unknown mining Luna validation username "${requestedUsername}". Expected one of: ${cohort.map(entry => entry.usernameOrUuid).join(", ")}.`,
-    );
+  const budgetArg = process.argv[3]?.trim();
+  const budgetCoins = budgetArg === undefined ? undefined : Number(budgetArg);
+  if (budgetArg !== undefined && (!Number.isFinite(budgetCoins) || budgetCoins! < 0)) {
+    throw new Error("Optional budget must be a non-negative number of coins.");
   }
-  return input;
+
+  return { usernameOrUuid, requestedProfile: undefined, budgetCoins };
 }
 
 function outputPathFor(username: string) {
@@ -35,7 +27,7 @@ function outputPathFor(username: string) {
 }
 
 async function main() {
-  const input = selectedCohort();
+  const input = selectedInput();
   const outputPath = outputPathFor(input.usernameOrUuid);
   const built = await buildAdvisorContextInspectionForPlayer({
     usernameOrUuid: input.usernameOrUuid,
@@ -51,7 +43,6 @@ async function main() {
   try {
     const luna = await callLunaAdvisor(built.context);
     report = {
-      cohort: input.label,
       player: {
         username: built.context.canonical.identity.username,
         profile: built.context.canonical.profile.cuteName,
@@ -64,7 +55,6 @@ async function main() {
     };
   } catch (error) {
     report = {
-      cohort: input.label,
       player: {
         username: built.context.canonical.identity.username,
         profile: built.context.canonical.profile.cuteName,
