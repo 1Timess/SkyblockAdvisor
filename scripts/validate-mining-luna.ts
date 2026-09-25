@@ -3,7 +3,6 @@ import { writeFile } from "node:fs/promises";
 import { buildAdvisorContextInspectionForPlayer } from "../src/server/advisor/build-live-context";
 import { callLunaAdvisor } from "../src/server/advisor/luna";
 
-const outputPath = "docs/phase-5.2e-mining-luna-validation.json";
 const question = "What should I upgrade for mining?";
 
 const cohort = [
@@ -12,71 +11,87 @@ const cohort = [
   { label: "LATE", usernameOrUuid: "ShinyFloa", requestedProfile: undefined, budgetCoins: 2_000_000_000 },
 ] as const;
 
-async function main() {
-  const reports = [];
-  for (const input of cohort) {
-    const built = await buildAdvisorContextInspectionForPlayer({
-      usernameOrUuid: input.usernameOrUuid,
-      requestedProfile: input.requestedProfile,
-      question,
-      budgetCoins: input.budgetCoins,
-    });
-    if (built.context.domainContext?.domain !== "MINING") throw new Error(`Expected MINING context for ${input.usernameOrUuid}.`);
-
-    try {
-      const luna = await callLunaAdvisor(built.context);
-      reports.push({
-        cohort: input.label,
-        player: {
-          username: built.context.canonical.identity.username,
-          profile: built.context.canonical.profile.cuteName,
-          budgetCoins: input.budgetCoins ?? null,
-        },
-        route: built.route,
-        deterministicContext: built.context,
-        diagnostics: built.diagnostics,
-        luna: { status: "SUCCESS", advice: luna.advice, meta: luna.meta },
-      });
-    } catch (error) {
-      reports.push({
-        cohort: input.label,
-        player: {
-          username: built.context.canonical.identity.username,
-          profile: built.context.canonical.profile.cuteName,
-          budgetCoins: input.budgetCoins ?? null,
-        },
-        route: built.route,
-        deterministicContext: built.context,
-        diagnostics: built.diagnostics,
-        luna: { status: "ERROR", error: error instanceof Error ? error.message : "Unknown Luna error." },
-      });
-    }
+function selectedCohort() {
+  const requestedUsername = process.argv[2]?.trim();
+  if (!requestedUsername) {
+    throw new Error(
+      "Provide exactly one validation username. Example: npm run validate:mining-luna -- ShinyFloa",
+    );
   }
 
-  const successfulCalls = reports.filter(report => report.luna.status === "SUCCESS").length;
-  const estimatedCostUsd = reports.reduce((sum, report) =>
-    sum + (report.luna.meta?.estimatedCostUsd ?? 0), 0);
-  const artifact = {
-    generatedAt: new Date().toISOString(),
-    question,
-    requestedCalls: cohort.length,
-    successfulCalls,
-    estimatedCostUsd,
-    reports,
-  };
-  await writeFile(outputPath, `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
-  console.log(`Wrote ${outputPath} (${successfulCalls}/${cohort.length} Luna calls succeeded).`);
+  const input = cohort.find(
+    entry => entry.usernameOrUuid.toLowerCase() === requestedUsername.toLowerCase(),
+  );
+  if (!input) {
+    throw new Error(
+      `Unknown mining Luna validation username "${requestedUsername}". Expected one of: ${cohort.map(entry => entry.usernameOrUuid).join(", ")}.`,
+    );
+  }
+  return input;
 }
 
-main().catch(async error => {
+function outputPathFor(username: string) {
+  return `docs/phase-5.2e-mining-luna-validation-${username.toLowerCase()}.json`;
+}
+
+async function main() {
+  const input = selectedCohort();
+  const outputPath = outputPathFor(input.usernameOrUuid);
+  const built = await buildAdvisorContextInspectionForPlayer({
+    usernameOrUuid: input.usernameOrUuid,
+    requestedProfile: input.requestedProfile,
+    question,
+    budgetCoins: input.budgetCoins,
+  });
+  if (built.context.domainContext?.domain !== "MINING") {
+    throw new Error(`Expected MINING context for ${input.usernameOrUuid}.`);
+  }
+
+  let report;
+  try {
+    const luna = await callLunaAdvisor(built.context);
+    report = {
+      cohort: input.label,
+      player: {
+        username: built.context.canonical.identity.username,
+        profile: built.context.canonical.profile.cuteName,
+        budgetCoins: input.budgetCoins ?? null,
+      },
+      route: built.route,
+      deterministicContext: built.context,
+      diagnostics: built.diagnostics,
+      luna: { status: "SUCCESS" as const, advice: luna.advice, meta: luna.meta },
+    };
+  } catch (error) {
+    report = {
+      cohort: input.label,
+      player: {
+        username: built.context.canonical.identity.username,
+        profile: built.context.canonical.profile.cuteName,
+        budgetCoins: input.budgetCoins ?? null,
+      },
+      route: built.route,
+      deterministicContext: built.context,
+      diagnostics: built.diagnostics,
+      luna: { status: "ERROR" as const, error: error instanceof Error ? error.message : "Unknown Luna error." },
+    };
+  }
+
+  const successfulCalls = report.luna.status === "SUCCESS" ? 1 : 0;
+  const estimatedCostUsd = report.luna.status === "SUCCESS" ? report.luna.meta.estimatedCostUsd : 0;
   const artifact = {
     generatedAt: new Date().toISOString(),
     question,
-    requestedCalls: cohort.length,
-    successfulCalls: 0,
-    fatalError: error instanceof Error ? error.message : "Mining Luna validation failed.",
+    requestedCalls: 1,
+    successfulCalls,
+    estimatedCostUsd,
+    reports: [report],
   };
   await writeFile(outputPath, `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
-  console.error(`Mining Luna validation failed. Details were written to ${outputPath}.`);
+  console.log(`Wrote ${outputPath} (${successfulCalls}/1 Luna call succeeded).`);
+}
+
+main().catch(error => {
+  console.error(error instanceof Error ? error.message : "Mining Luna validation failed.");
   process.exitCode = 1;
 });
