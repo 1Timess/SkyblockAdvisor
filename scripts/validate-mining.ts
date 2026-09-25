@@ -43,7 +43,7 @@ async function main() {
       },
     });
   }
-  const artifact = { generatedAt: new Date().toISOString(), lunaCalls: 0, question, budgetCoins, reports };
+  const artifact = { generatedAt: new Date().toISOString(), lunaCalls: 0, question, reports };
   await writeFile("docs/phase-5.2e-mining-validation.json", `${JSON.stringify(artifact, null, 2)}\n`, "utf8");
   console.log("Wrote docs/phase-5.2e-mining-validation.json");
 }
