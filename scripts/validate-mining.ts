@@ -37,6 +37,11 @@ async function main() {
       equippedMiningGear: [...profile.gear.armor.items, ...profile.gear.equipment.items].filter(item => miningItem(item.categories, item.stats)).map(item => ({
         id: item.id, name: item.name, source: item.source, categories: item.categories, stats: miningStats(item.stats),
       })),
+      indexedMiningLoadouts: {
+        names: profile.gear.loadouts.names,
+        armor: { equippedSet: profile.gear.loadouts.armor.equippedSet, sets: miningLoadoutSets(profile.gear.loadouts.armor.sets) },
+        equipment: { equippedSet: profile.gear.loadouts.equipment.equippedSet, sets: miningLoadoutSets(profile.gear.loadouts.equipment.sets) },
+      },
       discovery: {
         rawCandidates: result.diagnostics.rawActiveScopeCandidateCount,
         relevantCandidates: result.diagnostics.goalRelevantCandidateCount,
@@ -63,6 +68,10 @@ function miningStats(stats: Record<string, number>) { return Object.fromEntries(
 function miningItem(categories: string[], stats: Record<string, number>) {
   return categories.some(category => ["pickaxe", "drill", "helmet", "chestplate", "leggings", "boots", "equipment", "necklace", "cloak", "belt", "gloves", "bracelet"].includes(category))
     && Object.keys(miningStats(stats)).length > 0;
+}
+function miningLoadoutSets(sets: Record<string, Record<string, { id: string | null; name: string; source: string; categories: string[]; stats: Record<string, number> }>>) {
+  return Object.fromEntries(Object.entries(sets).map(([setId, slots]) => [setId, Object.fromEntries(Object.entries(slots)
+    .filter(([, item]) => miningItem(item.categories, item.stats)).map(([slot, item]) => [slot, { id: item.id, name: item.name, source: item.source, stats: miningStats(item.stats) }]))]));
 }
 function laneCounts(candidates: Array<{ sourceLanes: string[] }>) {
   const counts: Record<string, number> = {};
