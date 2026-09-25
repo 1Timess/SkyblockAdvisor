@@ -73,7 +73,7 @@ export function selectProgressionFrontier(input: { candidates: readonly Frontier
 function annotate(input: FrontierInputCandidate): FrontierSelectionCandidate {
   const unmet = input.feasibility.requirements.filter(requirement => requirement.status === "NOT_MET");
   const unknown = input.feasibility.requirements.filter(requirement => requirement.status === "UNKNOWN");
-  const bucket = classifyBucket(input.feasibility, unmet.length, unknown.length);
+  const bucket = classifyBucket(input, unmet.length, unknown.length);
   const knownRequirementGaps = unmet.flatMap(requirement => requirement.gap === null ? [] : [{ type: requirement.type, subject: requirement.subject, gap: requirement.gap }])
     .sort((left, right) => `${left.type}:${left.subject ?? ""}`.localeCompare(`${right.type}:${right.subject ?? ""}`) || left.gap - right.gap);
   const relevantEvidenceCount = input.relevance.relevantStats.length + (input.sourceLanes.some(lane => lane.endsWith(":ability")) ? 1 : 0);
@@ -83,10 +83,11 @@ function annotate(input: FrontierInputCandidate): FrontierSelectionCandidate {
       unmetRequirementCount: unmet.length, unknownRequirementCount: unknown.length, knownRequirementGaps, relevantEvidenceCount }, exclusionReason: null } };
 }
 
-function classifyBucket(feasibility: CompactAdvisorCandidate["feasibility"], unmetCount: number, unknownCount: number): SelectionBucket {
-  if (unknownCount > 0 || feasibility.priceStatus === "UNKNOWN") return "DISTANT_OR_UNCERTAIN";
+function classifyBucket(input: FrontierInputCandidate, unmetCount: number, unknownCount: number): SelectionBucket {
+  if (unknownCount > 0 || input.feasibility.priceStatus === "UNKNOWN") return "DISTANT_OR_UNCERTAIN";
   if (unmetCount > 0) return "PROGRESSION_GATED";
-  if (feasibility.priceStatus === "OVER_BUDGET") return "MONEY_GATED";
+  if (input.candidate.warnings.some(warning => warning.includes("owned armor baseline for this slot is unknown"))) return "DISTANT_OR_UNCERTAIN";
+  if (input.feasibility.priceStatus === "OVER_BUDGET") return "MONEY_GATED";
   return "ACTIONABLE";
 }
 
