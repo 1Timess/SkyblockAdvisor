@@ -24,10 +24,11 @@ test("empty and malformed inventories are isolated", async () => {
 test("item parsing preserves unknown mechanics, raw attributes and known stats", () => {
   const warnings: ProfileWarning[] = [];
   const item = processItem({ Count: 1, tag: { display: { Name: "§6Example", Lore: [
-    "§aHealth: +1,200", "Crit Chance: -5.5%", "Unknown Stat: +2", "", "Ability: Mystery", "Unmodeled effect.", "", "Full Set Bonus: Mysteries", "An unusual bonus.", "", "§6LEGENDARY DUNGEON CHESTPLATE",
+    "§aHealth: +1,200", "Crit Chance: -5.5%", "Gemstone Fortune: +60", "Cold Resistance: +8", "Unknown Stat: +2", "", "Ability: Mystery", "Unmodeled effect.", "", "Full Set Bonus: Mysteries", "An unusual bonus.", "", "§6LEGENDARY DUNGEON CHESTPLATE",
   ] }, ExtraAttributes: { id: "EXAMPLE", rarity_upgrades: 1, modifier: "ancient", upgrade_level: 5, enchantments: { growth: 5 } } } }, "armor", 2, warnings)!;
   assert.equal(item.name, "Example"); assert.deepEqual(item.categories, ["armor", "chestplate"]);
   assert.equal(item.stats.health, 1200); assert.equal(item.stats.critChance, -5.5);
+  assert.equal(item.stats.gemstoneFortune, 60); assert.equal(item.stats.coldResistance, 8);
   assert.equal(item.abilityText[1], "Unmodeled effect."); assert.equal(item.setBonusText[1], "An unusual bonus.");
   assert.equal(item.stars, 5); assert.equal(item.recombobulated, true); assert.equal(item.extraAttributes.modifier, "ancient");
   assert.equal("extraAttributes" in toProfileItem(item), false); assert.equal(warnings[0].code, "UNKNOWN_ITEM_STAT");
