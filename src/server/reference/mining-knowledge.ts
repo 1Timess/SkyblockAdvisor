@@ -22,8 +22,8 @@ export function buildMiningKnowledge(profile: NormalizedSkyBlockProfile) {
     || mining.glaciteTunnels.fossilsDonated.length > 0;
   const crystalHollowsEligible = hotmLevel !== null && hotmLevel >= miningMechanics.access.crystalHollowsHotm;
   const glaciteTunnelsEligible = hotmLevel !== null && hotmLevel >= miningMechanics.access.glaciteTunnelsHotm;
-  const stage = glaciteActivity ? "GLACITE_TUNNELS" : crystalActivity ? "CRYSTAL_HOLLOWS"
-    : hotmLevel !== null && hotmLevel > 0 ? "DWARVEN_MINES" : "EARLY";
+  const stage: "EARLY" | "DWARVEN_MINES" | "CRYSTAL_HOLLOWS" | "GLACITE_TUNNELS" = glaciteActivity ? "GLACITE_TUNNELS"
+    : crystalActivity ? "CRYSTAL_HOLLOWS" : hotmLevel !== null && hotmLevel > 0 ? "DWARVEN_MINES" : "EARLY";
   return {
     stage,
     access: {
