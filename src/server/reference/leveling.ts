@@ -22,3 +22,17 @@ export function levelFromXp(xp: number, costs: number[], levelCap: number, infin
     levelWithProgress: infinite ? uncappedLevel + progress : Math.min(levelCap, uncappedLevel + progress),
     maxed: !infinite && level >= levelCap };
 }
+
+// Owner-supplied cumulative HOTM thresholds, indexed by tier minus one.
+export const hotmCumulativeXp = [0, 3_000, 12_000, 37_000, 97_000, 197_000, 347_000, 557_000, 847_000, 1_247_000] as const;
+
+export function hotmLevelFromXp(xp: number | null | undefined): number | null {
+  if (xp === null || xp === undefined) return null;
+  const normalized = Math.max(0, Math.floor(xp));
+  let tier = 1;
+  for (let index = 1; index < hotmCumulativeXp.length; index++) {
+    if (normalized < hotmCumulativeXp[index]) break;
+    tier = index + 1;
+  }
+  return tier;
+}

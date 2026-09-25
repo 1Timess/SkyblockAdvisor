@@ -85,4 +85,4 @@ The normalized inventory remains available as `inventoryItems`, allowing the sam
 
 The same profile response now directly preserves mining and foraging skill-tree XP, dynamic node levels/toggles, mining powders and core state, accessory powers and tuning slots, fishing counters and trophy-fish counters, attributes, shards, collections, crafted generators, grouped player statistics, Bestiary maps, and tolerant raw state for several larger progression subsystems. No new Hypixel endpoint or request was added.
 
-HOTM level remains null because the repository does not contain a HOTM XP table. Node effects, effective aggregate stats, shard mechanics, accessory effects, and progression recommendations remain reference or derived-layer work.
+HOTM level is derived from the owner-supplied cumulative tier thresholds while retaining raw tree XP. Node effects, effective aggregate stats, shard mechanics, accessory effects, and progression recommendations remain reference or derived-layer work.

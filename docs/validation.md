@@ -231,3 +231,7 @@ The Phase 5 live rerun on iTimess / Lemon succeeded. The first Dungeon question 
 ## Phase 5.1 validation
 
 The expanded fixture covers direct powders, mining and foraging tree XP, arbitrary node levels/toggles, accessory tuning, fishing and trophy-fish counters, attributes, collections, crafted generators, and absent optional subsystems. Live values and cache reuse are recorded in `phase-5.1-live-validation.json`. The validation makes no Luna request.
+
+## Phase 5.2A validation
+
+HOTM derivation covers null XP, zero, every requested exact/between-boundary case, the tier-10 threshold, and XP above the supported maximum. The Phase 5.1 live inspection records the derived tier alongside raw tree XP.

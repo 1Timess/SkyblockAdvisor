@@ -15,12 +15,12 @@ test("one normalized profile derives all four profile-intelligence domains", asy
   assert.equal(intelligence.domains.FISHING.domain, "FISHING");
   assert.equal(intelligence.domains.MINING.domain, "MINING");
   if (intelligence.domains.MINING.domain !== "MINING") throw new Error("unreachable");
-  assert.equal(intelligence.domains.MINING.hotmLevel, null);
+  assert.equal(intelligence.domains.MINING.hotmLevel, 2);
   assert.equal(intelligence.domains.MINING.treeExperience, 4242);
   assert.equal(intelligence.domains.MINING.mithrilPowder, 12345);
   assert.equal(intelligence.domains.MINING.gemstonePowder, 6789);
   assert.equal(intelligence.domains.MINING.nodes.mining_speed.level, 12);
-  assert.ok(intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("XP table")));
+  assert.ok(!intelligence.domains.MINING.unavailableFacts.some(fact => fact.includes("XP table")));
   if (intelligence.domains.FISHING.domain !== "FISHING") throw new Error("unreachable");
   assert.deepEqual(intelligence.domains.FISHING.itemsFished, { total: 321, normal: 300 });
   assert.equal(intelligence.domains.FISHING.seaCreatureKills, 45);

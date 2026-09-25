@@ -80,8 +80,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         tools: miningTools.map(compact), armor: miningArmor.map(compact),
         equipment: miningEquipment.map(compact), pets: miningPets.map(compactPet),
         knownStats: knownStats([...miningTools, ...miningArmor, ...miningEquipment], miningPets, miningStats),
-        unavailableFacts: ["Heart of the Mountain level requires an XP table that is not present in the repository.",
-          ...(miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."])] },
+        unavailableFacts: miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."] },
     },
   };
 }

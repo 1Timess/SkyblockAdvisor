@@ -1,12 +1,14 @@
 import type { RawMember } from "../../hypixel/types";
+import { hotmLevelFromXp } from "../../reference/leveling";
 
 export function buildExtendedPlayerState(member: RawMember) {
   const miningNodes = normalizeNodes(member.skill_tree?.nodes?.mining);
   const foragingNodes = normalizeNodes(member.skill_tree?.nodes?.foraging);
   const stats = member.player_stats;
+  const miningTreeExperience = finiteNumber(member.skill_tree?.experience?.mining);
   return {
     mining: {
-      treeExperience: finiteNumber(member.skill_tree?.experience?.mining), hotmLevel: null,
+      treeExperience: miningTreeExperience, hotmLevel: hotmLevelFromXp(miningTreeExperience),
       nodes: miningNodes, selectedAbility: typeof member.skill_tree?.selected_ability === "string" ? member.skill_tree.selected_ability : null,
       selectedAbilities: stringMap(member.skill_tree?.selected_ability),
       selectedTreeSlot: scalar(member.skill_tree?.selected_skill_tree_slot), selectedTreeSlots: numericMap(member.skill_tree?.selected_skill_tree_slot),

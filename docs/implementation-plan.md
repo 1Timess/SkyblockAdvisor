@@ -90,4 +90,4 @@ Trace output distinguishes qualification, capped Phase 3 presence, advisor-disco
 - Add tolerant raw member contracts for mining, skill trees, foraging, accessories, fishing, attributes, shards, collections, player stats, Bestiary, and selected larger progression subsystems.
 - Normalize dynamic node/counter maps without encoding node effects or other static game knowledge.
 - Feed direct mining, fishing, and accessory player state into the existing Phase 5 domain payloads.
-- Keep HOTM level null until a supported XP table is added in a derived layer.
+- Derive HOTM tiers 1–10 from the owner-supplied cumulative XP thresholds while preserving raw tree XP.

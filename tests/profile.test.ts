@@ -20,6 +20,7 @@ test("combined profile validates and shares items across all required domains", 
   assert.equal(profile.progression.mining.powder.mithril, 12345);
   assert.equal(profile.progression.mining.powder.gemstone, 6789);
   assert.equal(profile.progression.mining.treeExperience, 4242);
+  assert.equal(profile.progression.mining.hotmLevel, 2);
   assert.equal(profile.progression.mining.nodes.mining_speed.level, 12);
   assert.equal(profile.progression.mining.nodes.mining_speed.enabled, true);
   assert.equal(profile.progression.mining.nodes.arbitrary_toggle.enabled, false);
@@ -55,6 +56,7 @@ test("missing API sections return partial data instead of invented levels/balanc
   assert.equal(profile.economy.purse, null); assert.deepEqual(profile.progression.skills, {});
   assert.equal(profile.progression.dungeons.catacombs, null);
   assert.equal(profile.progression.mining.treeExperience, null);
+  assert.equal(profile.progression.mining.hotmLevel, null);
   assert.deepEqual(profile.progression.mining.nodes, {});
   assert.deepEqual(profile.progression.foraging.nodes, {});
   assert.deepEqual(profile.collections, {});

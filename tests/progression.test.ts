@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import tables from "../src/server/reference/xp-tables.json";
-import { levelFromXp } from "../src/server/reference/leveling";
+import { hotmLevelFromXp, levelFromXp } from "../src/server/reference/leveling";
 import { getPetLevel, effectivePetRarity } from "../src/server/reference/pet-leveling";
 import { slayerLevel, slayerThresholds, buildSlayers } from "../src/server/skyblock/domains/slayers";
 import { buildSkills } from "../src/server/skyblock/domains/skills";
@@ -24,6 +24,14 @@ test("Catacombs continues beyond level 50 using the final cost", () => {
   const through51 = tables.dungeoneering.reduce((a, b) => a + b, 0);
   const level = levelFromXp(through51 + 300000000, tables.dungeoneering, 50, true);
   assert.equal(level.level, 52); assert.equal(level.progress, .5); assert.equal(level.maxed, false);
+});
+test("HOTM level uses the supplied cumulative thresholds", () => {
+  const cases: Array<[number | null, number | null]> = [
+    [null, null], [0, 1], [2_999, 1], [3_000, 2], [11_999, 2], [12_000, 3], [96_999, 4], [97_000, 5],
+    [196_999, 5], [197_000, 6], [1_246_999, 9], [1_247_000, 10], [2_000_000, 10],
+  ];
+  for (const [xp, expected] of cases) assert.equal(hotmLevelFromXp(xp), expected, `XP ${xp}`);
+  assert.equal(hotmLevelFromXp(undefined), null);
 });
 test("Slayer thresholds and kill tier normalization", () => {
   for (const thresholds of Object.values(slayerThresholds)) for (const [i, threshold] of thresholds.entries()) {

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-09-24T23:40:30.485Z",
+  "generatedAt": "2026-09-25T01:16:27.501Z",
   "lunaCalls": 0,
   "normalizedProfileFetchesInProcess": 1,
-  "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-24T23:40:10.904Z",
+  "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-25T01:16:10.609Z",
   "mining": {
     "skillLevel": 28,
     "treeExperience": 104330,
-    "hotmLevel": null,
+    "hotmLevel": 5,
     "powder": {
       "mithril": 372455,
       "mithrilTotal": 197566,
