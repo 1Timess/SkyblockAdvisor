@@ -1,5 +1,6 @@
 import { marketSnapshotSchema } from "../../schemas/market";
 import { fetchAuctionPage, type AuctionPage } from "../hypixel/auctions";
+import { fetchBazaar, type BazaarSnapshot } from "../hypixel/bazaar";
 import { aggregateMarketListings } from "./aggregate";
 import { normalizeAuctionListing } from "./normalize-auction";
 import { saveMarketSnapshot } from "./snapshot-store";
@@ -11,8 +12,10 @@ export async function syncAuctionSnapshot(options: {
   fetchPage?: (page: number) => Promise<AuctionPage>;
   save?: typeof saveMarketSnapshot;
   now?: () => number;
+  fetchBazaarSnapshot?: (() => Promise<BazaarSnapshot>) | null;
 } = {}): Promise<MarketSyncResult> {
   const startedAt = Date.now(), fetchPage = options.fetchPage ?? fetchAuctionPage, save = options.save ?? saveMarketSnapshot, now = options.now ?? Date.now;
+  const fetchBazaarSnapshot = options.fetchBazaarSnapshot === undefined ? fetchBazaar : options.fetchBazaarSnapshot;
   const first = await fetchPage(0), listings: MarketListing[] = [];
   let auctionsObserved = 0;
   for (let pageNumber = 0; pageNumber < first.totalPages; pageNumber++) {
@@ -28,6 +31,21 @@ export async function syncAuctionSnapshot(options: {
   if (auctionsObserved !== first.totalAuctions) throw new Error(`Auction count mismatch: expected ${first.totalAuctions}, received ${auctionsObserved}.`);
   const observedAt = new Date(first.lastUpdated).toISOString(), completedAt = new Date(now()).toISOString();
   const quotes = aggregateMarketListings(listings, observedAt);
+  if (fetchBazaarSnapshot) {
+    const bazaar = await fetchBazaarSnapshot();
+    const bazaarObservedAt = new Date(bazaar.lastUpdated).toISOString();
+    for (const [productId, product] of Object.entries(bazaar.products)) {
+      const acquisitionPrice = product.quick_status.sellPrice;
+      if (!Number.isFinite(acquisitionPrice) || acquisitionPrice < 0) continue;
+      quotes[productId] = {
+        marketKey: productId,
+        coins: Math.ceil(acquisitionPrice),
+        observedAt: bazaarObservedAt,
+        basis: "BAZAAR",
+        confidence: "HIGH",
+      };
+    }
+  }
   const snapshot = marketSnapshotSchema.parse({ version: 1, snapshotId: `auction-${first.lastUpdated}`, hypixelLastUpdated: first.lastUpdated,
     observedAt, completedAt, pagesFetched: first.totalPages, auctionsObserved, binListingsAccepted: listings.length, quotes });
   await save(snapshot);
