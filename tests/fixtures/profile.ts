@@ -57,8 +57,11 @@ export function fixtureMember(): RawMember {
       master_catacombs: { highest_tier_completed: 1, tier_completions: { "1": 1 } } },
       selected_dungeon_class: "archer", player_classes: { archer: { experience: 50 } }, secrets: 12 },
     mining_core: { powder_mithril: 12345, powder_mithril_total: 20000, powder_spent_mithril: 7655,
-      powder_gemstone: 6789, powder_gemstone_total: 8000, powder_spent_gemstone: 1211,
-      daily_ores_mined: 20, crystals: { jade: { state: "FOUND" } }, biomes: { precursor: 3 } },
+      powder_gemstone: 6789, powder_gemstone_total: 8000, powder_spent_gemstone: 1211, daily_ores_mined: 20,
+      crystals: { jade_crystal: { state: "FOUND", total_found: 3 }, amber_crystal: { state: "NOT_FOUND", total_found: 1 },
+        amethyst_crystal: { state: "PLACED", total_found: 2, total_placed: 1 }, sapphire_crystal: { state: "FOUND", total_found: 4 },
+        topaz_crystal: {}, jasper_crystal: { state: "FOUND", total_found: 9 } },
+      biomes: { precursor: { claiming_with_precursor_apparatus: false }, jungle: { jungle_temple_open: false } } },
     skill_tree: { experience: { mining: 4242, foraging: 2121 }, tokens_spent: { mountain: 7 }, selected_ability: { mining: "mining_speed_boost" },
       selected_skill_tree_slot: { mining: 1 }, last_reset: 1000, nodes: {
         mining: { mining_speed: { level: 12, enabled: true }, arbitrary_toggle: false, efficient_miner: 8 },
