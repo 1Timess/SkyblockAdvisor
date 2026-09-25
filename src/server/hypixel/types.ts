@@ -52,6 +52,8 @@ export const memberSchema = z.object({
     experience: dynamicObject.optional(), tokens_spent: z.unknown().optional(), selected_ability: z.unknown().optional(),
     selected_skill_tree_slot: z.unknown().optional(), last_reset: tolerantNumber,
   }).passthrough().optional(),
+  loadout: z.object({ armor: dynamicObject.optional().catch(undefined), equipment: dynamicObject.optional().catch(undefined),
+    loadouts: dynamicObject.optional().catch(undefined) }).passthrough().optional(),
   glacite_player_data: z.object({ fossils_donated: z.array(z.string()).optional().catch(undefined), fossil_dust: tolerantNumber,
     corpses_looted: dynamicObject.optional().catch(undefined), mineshafts_entered: tolerantNumber }).passthrough().optional(),
   foraging_core: dynamicObject.optional(), foraging: dynamicObject.optional(),
