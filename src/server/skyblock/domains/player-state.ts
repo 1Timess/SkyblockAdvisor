@@ -95,7 +95,7 @@ function normalizeGlaciteTunnels(member: RawMember) {
   const data = member.glacite_player_data, corpsesLooted = numericMap(data?.corpses_looted);
   return { available: data !== undefined || finiteNumber(member.mining_core?.powder_glacite) !== null,
     mineshaftsEntered: finiteNumber(data?.mineshafts_entered), corpsesLooted,
-    totalCorpsesLooted: Object.values(corpsesLooted).reduce((sum, count) => sum + count, 0),
+    totalCorpsesLooted: data?.corpses_looted === undefined ? null : Object.values(corpsesLooted).reduce((sum, count) => sum + count, 0),
     fossilsDonated: stringList(data?.fossils_donated), fossilDust: finiteNumber(data?.fossil_dust),
     coldResistance: finiteNumber(member.attributes?.stacks?.cold_resistance) };
 }
