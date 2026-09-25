@@ -1,5 +1,8 @@
 import type { GemstoneQuality, GemstoneSlot, GemstoneState } from "../../../schemas/items";
-import { object } from "./process-item";
+
+function object(value: unknown): Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
 
 const qualities = new Set<GemstoneQuality>(["ROUGH", "FLAWED", "FINE", "FLAWLESS", "PERFECT"]);
 const divanSlots = ["AMBER_0", "JADE_0", "AMBER_1", "JADE_1", "TOPAZ_0"] as const;
