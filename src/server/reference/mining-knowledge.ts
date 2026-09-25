@@ -37,13 +37,13 @@ export function buildMiningKnowledge(profile: NormalizedSkyBlockProfile) {
 }
 
 export function miningRelevantStats(profile: NormalizedSkyBlockProfile) {
-  const knowledge = {
-    crystal: profile.progression.mining.hotmLevel !== null
-      && profile.progression.mining.hotmLevel >= miningMechanics.access.crystalHollowsHotm,
-    glacite: profile.progression.mining.hotmLevel !== null
-      && profile.progression.mining.hotmLevel >= miningMechanics.access.glaciteTunnelsHotm,
-  };
+  const mining = profile.progression.mining, hotm = mining.hotmLevel;
+  const crystal = (hotm !== null && hotm >= miningMechanics.access.crystalHollowsHotm)
+    || Object.values(mining.crystalHollows.crystals).some(value => (value.totalFound ?? 0) > 0 || value.state === "FOUND" || value.state === "PLACED");
+  const glacite = (hotm !== null && hotm >= miningMechanics.access.glaciteTunnelsHotm)
+    || (mining.glaciteTunnels.mineshaftsEntered ?? 0) > 0 || (mining.glaciteTunnels.totalCorpsesLooted ?? 0) > 0
+    || (mining.powder.glacite ?? 0) > 0 || mining.glaciteTunnels.fossilsDonated.length > 0;
   return [...miningMechanics.statRoles.general,
-    ...(knowledge.crystal ? miningMechanics.statRoles.gemstone : []),
-    ...(knowledge.glacite ? miningMechanics.statRoles.glacite : [])];
+    ...(crystal ? miningMechanics.statRoles.gemstone : []),
+    ...(glacite ? miningMechanics.statRoles.glacite : [])];
 }
