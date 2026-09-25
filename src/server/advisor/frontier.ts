@@ -106,7 +106,7 @@ function compareContextPriority(left: FrontierSelectionCandidate, right: Frontie
     if (left.candidate.mutation.impactPriority !== right.candidate.mutation.impactPriority) {
       return left.candidate.mutation.impactPriority - right.candidate.mutation.impactPriority;
     }
-    const operationRank = { FILL: 0, UNLOCK_AND_FILL: 1, UPGRADE_QUALITY: 2 } as const;
+    const operationRank: Record<string, number> = { FILL: 0, INSTALL: 0, UNLOCK_AND_FILL: 1, REPLACE: 1, UPGRADE_QUALITY: 2 };
     const operationDifference = operationRank[left.candidate.mutation.operation] - operationRank[right.candidate.mutation.operation];
     if (operationDifference) return operationDifference;
     const leftGain = mutationRelativeGain(left.candidate), rightGain = mutationRelativeGain(right.candidate);
