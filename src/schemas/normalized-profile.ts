@@ -39,9 +39,14 @@ const miningProgressionSchema = z.object({
   tokensSpent: z.number().nullable(), tokensSpentByTree: statsSchema, lastReset: z.number().nullable(),
   powder: z.object({ mithril: z.number().nullable(), mithrilTotal: z.number().nullable(), mithrilSpent: z.number().nullable(),
     gemstone: z.number().nullable(), gemstoneTotal: z.number().nullable(), gemstoneSpent: z.number().nullable(),
+    glacite: z.number().nullable(), glaciteTotal: z.number().nullable(), glaciteSpent: z.number().nullable(), glaciteSpent2: z.number().nullable(),
+    nonRefundableGlaciteSpent: z.number().nullable(), nonRefundableGlaciteSpent2: z.number().nullable(),
     nonRefundableMithrilSpent: z.number().nullable(), nonRefundableMithrilSpent2: z.number().nullable() }),
   dailyOres: z.object({ total: z.number().nullable(), gemstone: z.number().nullable(), glacite: z.number().nullable(), mithrilOre: z.number().nullable() }),
-  crystalHollows: crystalHollowsSchema, crystals: dynamicStateSchema, biomes: dynamicStateSchema,
+  crystalHollows: crystalHollowsSchema,
+  glaciteTunnels: z.object({ available: z.boolean(), mineshaftsEntered: z.number().nullable(), corpsesLooted: statsSchema,
+    totalCorpsesLooted: z.number().nullable(), fossilsDonated: z.array(z.string()), fossilDust: z.number().nullable(), coldResistance: z.number().nullable() }),
+  crystals: dynamicStateSchema, biomes: dynamicStateSchema,
 });
 const foragingProgressionSchema = z.object({ treeExperience: z.number().nullable(), nodes: z.record(z.string(), progressionNodeSchema),
   sweepLevel: z.number().nullable(), foragingFortuneNodeLevel: z.number().nullable(), core: dynamicStateSchema });
