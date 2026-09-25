@@ -140,9 +140,9 @@ test("Luna client reports sanitized error response bodies", async () => {
 test("Mining candidates preserve same-family stat regressions for Luna", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   profile.inventoryItems.push({
-    id: "CURRENT_DRILL", name: "Current Drill", source: "inventory", slotIndex: 0, count: 1, rarity: "epic",
+    id: "CURRENT_DRILL", uuid: "current-drill-fixture", name: "Current Drill", source: "inventory", count: 1, rarity: "epic",
     categories: ["tool", "drill"], stats: { miningSpeed: 500, miningFortune: 63, gemstoneFortune: 100, pristine: 1.5 },
-    enchantments: {}, attributes: {}, lore: [], abilityText: [], setBonusText: [], warnings: [],
+    reforge: null, enchantments: {}, stars: null, recombobulated: false, lore: [], abilityText: [], setBonusText: [],
   });
   const catalog = [{
     id: "TRADEOFF_DRILL", name: "Tradeoff Drill", rarity: "epic" as const, categories: ["tool", "drill"],
