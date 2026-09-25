@@ -21,7 +21,7 @@ export const memberSchema = z.object({
   }).passthrough().optional(),
   inventory: z.object({
     inv_contents: encoded.optional(), ender_chest_contents: encoded.optional(),
-    inv_armor: encoded.optional(), equipment_contents: encoded.optional(),
+    inv_armor: encoded.optional(), equipment_contents: encoded.optional(), wardrobe_contents: encoded.optional(), personal_vault_contents: encoded.optional(),
     backpack_contents: z.record(z.string(), encoded).optional(),
     backpack_icons: z.record(z.string(), encoded).optional(),
     bag_contents: z.object({ talisman_bag: encoded.optional() }).optional(),
