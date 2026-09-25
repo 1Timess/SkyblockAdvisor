@@ -175,6 +175,14 @@ test("Mining discovery emits owned-item gemstone upgrades alongside replacements
       { id: "TOPAZ_0", slotType: "TOPAZ", status: "UNLOCKED_EMPTY", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
     ] },
   });
+  profile.inventoryItems.push({
+    id: "ARMOR_OF_YOG_LEGGINGS", uuid: "yog-leggings-fixture", name: "Jaded Yog Leggings", source: "loadout:armor:2:leggings",
+    count: 1, rarity: "epic", categories: ["armor", "leggings"], stats: { miningSpeed: 83, miningFortune: 60, pristine: 1.2 },
+    reforge: "jaded", enchantments: {}, stars: null, recombobulated: false, lore: [], abilityText: [], setBonusText: [],
+    gemstones: { source: "NBT", slots: [
+      { id: "UNIVERSAL_0", slotType: "UNIVERSAL", status: "FILLED", gemstoneType: "TOPAZ", quality: "FINE", unlockMethod: "UNKNOWN" },
+    ] },
+  });
   profile.progression.mining.hotmLevel = 7;
   const gemstoneQuotes = new Map([
     ["PERFECT_AMBER_GEM", { marketKey: "PERFECT_AMBER_GEM", coins: 10_000_000, observedAt: "2026-09-25T00:00:00.000Z", basis: "BAZAAR" as const, confidence: "HIGH" as const }],
@@ -188,6 +196,7 @@ test("Mining discovery emits owned-item gemstone upgrades alongside replacements
   assert.ok(lanes.pristine.some(value => value.id.includes(":TOPAZ_0:PERFECT")));
   assert.ok(lanes.miningSpeed.some(value => value.id.includes(":AMBER_0:PERFECT")));
   assert.ok(lanes.miningSpeed.some(value => value.id.includes(":AMBER_1:PERFECT")));
+  assert.equal(Object.values(lanes).flat().some(value => value.id.includes("yog-leggings-fixture")), false);
   const topaz = lanes.pristine.find(value => value.id.includes(":TOPAZ_0:PERFECT"));
   assert.ok(topaz?.warnings.some(warning => warning.includes("unlocked but empty")));
   assert.ok(topaz?.knownChanges);
