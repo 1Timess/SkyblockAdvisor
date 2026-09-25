@@ -62,12 +62,14 @@ test("fishing and mining discovery stays inside repo-supported category and stat
   const item = (id: string, categories: string[], stats: Record<string, number>): CandidateItem => ({ id, name: id, rarity: "rare", categories,
     stats, lore: [], abilityText: [], setBonusText: [], requirements: [], unparsedRequirementText: [], wiki: null, marketKey: id,
     sources: { hypixel: true, neu: true } });
-  const catalog = [item("ROD", ["weapon", "fishing_rod"], { fishingSpeed: 10 }), item("DRILL", ["tool", "drill"], { miningSpeed: 100 }),
+  const catalog = [item("ROD", ["weapon", "fishing_rod"], { fishingSpeed: 10 }), item("DRILL", ["tool", "drill"], { miningSpeed: 300 }),
     item("GEM_DRILL", ["tool", "drill"], { gemstoneFortune: 60, pristine: 1 }), item("COLD_HELMET", ["armor", "helmet"], { coldResistance: 8 }),
     item("SWORD_WITH_FISHING_STAT", ["weapon", "sword"], { fishingSpeed: 999 }), item("HELMET_WITH_MINING_STAT", ["armor", "helmet"], { miningFortune: 5 })];
   const fishing = buildActivityDomainLanes({ domain: "FISHING", profile, catalog, quotes: new Map() });
   const mining = buildActivityDomainLanes({ domain: "MINING", profile, catalog, quotes: new Map() });
   assert.deepEqual(fishing.fishingSpeed.map(candidate => candidate.id), ["ROD"]);
   assert.deepEqual(new Set(Object.values(mining).flat().map(candidate => candidate.id)),
-    new Set(["DRILL", "GEM_DRILL", "COLD_HELMET", "HELMET_WITH_MINING_STAT"]));
+    new Set(["DRILL", "GEM_DRILL", "COLD_HELMET"]));
+  assert.equal(mining.miningSpeed.find(candidate => candidate.id === "DRILL")?.knownChanges?.miningSpeed.current, 250);
+  assert.ok(!mining.miningFortune.some(candidate => candidate.id === "HELMET_WITH_MINING_STAT"));
 });
