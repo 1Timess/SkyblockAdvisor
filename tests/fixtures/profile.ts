@@ -51,6 +51,17 @@ export function fixtureMember(): RawMember {
       ]) } },
       backpack_contents: { "0": { data: encodeInventory([{ id: "TEST_BOW", lore: ["Damage: +50", "EPIC BOW"] }]) } },
     },
+    loadout: {
+      armor: {
+        "1": { id: 1, HELMET: { type: 0, data: encodeInventory([{ id: "LOADOUT_MINING_HELMET", lore: ["Mining Fortune: +80", "EPIC HELMET"] }]) } },
+        equipped_set: 1,
+      },
+      equipment: {
+        "1": { id: 1, EQUIPMENT_SLOT_1: { type: 0, data: encodeInventory([{ id: "LOADOUT_MINING_GLOVES", lore: ["Mining Speed: +60", "RARE GLOVES"] }]) } },
+        equipped_set: 1,
+      },
+      loadouts: { "1": { id: 1, name: "Mining" } },
+    },
     player_data: { experience: { SKILL_COMBAT: 175, SKILL_FARMING: 75, SKILL_TAMING: 0, SKILL_MINING: 175, SKILL_FORAGING: 75, SKILL_FISHING: 50 },
       unlocked_coll_tiers: ["COBBLESTONE_3", "OAK_2"], crafted_generators: ["COBBLESTONE_1", "WHEAT_2"] },
     pets_data: { pets: [{ type: "SHEEP", tier: "COMMON", exp: 150, active: true, heldItem: "PET_ITEM_TIER_BOOST" }] },
