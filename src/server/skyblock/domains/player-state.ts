@@ -17,11 +17,16 @@ export function buildExtendedPlayerState(member: RawMember) {
       powder: { mithril: finiteNumber(member.mining_core?.powder_mithril), mithrilTotal: finiteNumber(member.mining_core?.powder_mithril_total),
         mithrilSpent: finiteNumber(member.mining_core?.powder_spent_mithril), gemstone: finiteNumber(member.mining_core?.powder_gemstone),
         gemstoneTotal: finiteNumber(member.mining_core?.powder_gemstone_total), gemstoneSpent: finiteNumber(member.mining_core?.powder_spent_gemstone),
+        glacite: finiteNumber(member.mining_core?.powder_glacite), glaciteTotal: finiteNumber(member.mining_core?.powder_glacite_total),
+        glaciteSpent: finiteNumber(member.mining_core?.powder_spent_glacite), glaciteSpent2: finiteNumber(member.mining_core?.powder_spent_glacite_2),
+        nonRefundableGlaciteSpent: finiteNumber(member.mining_core?.powder_spent_non_refundable_glacite),
+        nonRefundableGlaciteSpent2: finiteNumber(member.mining_core?.powder_spent_non_refundable_glacite_2),
         nonRefundableMithrilSpent: finiteNumber(member.mining_core?.powder_spent_non_refundable_mithril),
         nonRefundableMithrilSpent2: finiteNumber(member.mining_core?.powder_spent_non_refundable_mithril_2) },
       dailyOres: { total: finiteNumber(member.mining_core?.daily_ores_mined), gemstone: finiteNumber(member.mining_core?.daily_ores_mined_gemstone),
         glacite: finiteNumber(member.mining_core?.daily_ores_mined_glacite), mithrilOre: finiteNumber(member.mining_core?.daily_ores_mined_mithril_ore) },
       crystalHollows: normalizeCrystalHollows(member.mining_core?.crystals, member.mining_core?.biomes),
+      glaciteTunnels: normalizeGlaciteTunnels(member),
       crystals: dynamicRecord(member.mining_core?.crystals), biomes: dynamicRecord(member.mining_core?.biomes),
     },
     foraging: { treeExperience: finiteNumber(member.skill_tree?.experience?.foraging), nodes: foragingNodes,
@@ -85,6 +90,14 @@ function normalizeCrystalHollows(crystalsValue: unknown, biomesValue: unknown) {
   const missing = available ? required.filter(id => !acquired.includes(id)) : [];
   return { available, crystals, nucleus: { required, acquired, placed, missing, ready: available && missing.length === 0,
     complete: available && placed.length === required.length }, biomes: dynamicRecord(biomesValue) };
+}
+function normalizeGlaciteTunnels(member: RawMember) {
+  const data = member.glacite_player_data, corpsesLooted = numericMap(data?.corpses_looted);
+  return { available: data !== undefined || finiteNumber(member.mining_core?.powder_glacite) !== null,
+    mineshaftsEntered: finiteNumber(data?.mineshafts_entered), corpsesLooted,
+    totalCorpsesLooted: Object.values(corpsesLooted).reduce((sum, count) => sum + count, 0),
+    fossilsDonated: stringList(data?.fossils_donated), fossilDust: finiteNumber(data?.fossil_dust),
+    coldResistance: finiteNumber(member.attributes?.stacks?.cold_resistance) };
 }
 function nodeLevel(node: NormalizedNode | undefined) { return node?.level ?? node?.value ?? null; }
 function dynamicRecord(value: unknown): Record<string, unknown> { return value !== null && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {}; }
