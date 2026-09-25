@@ -42,6 +42,7 @@ export function selectProgressionFrontier(input: { candidates: readonly Frontier
   const limits = broadGear ? broadBucketLimits : { ACTIONABLE: cap, MONEY_GATED: cap, PROGRESSION_GATED: cap, DISTANT_OR_UNCERTAIN: domainNarrow ? cap : 8 };
   const annotated = input.candidates.map(candidate => annotate(candidate));
   const selected: FrontierSelectionCandidate[] = [];
+  const mutationLimit = Math.min(6, cap), mutationCounts = new Map<string, number>();
   const armorSlotCounts = new Map<string, number>(), distantArmorSlotCounts = new Map<string, number>(), redundancyCounts = new Map<string, number>();
 
   for (const bucket of bucketOrder) {
@@ -56,6 +57,13 @@ export function selectProgressionFrontier(input: { candidates: readonly Frontier
         reject(candidate, "BUCKET_LIMIT", `Not selected because the ${bucket} context ceiling was reached.`);
         continue;
       }
+      if (candidate.candidate.mutation) {
+        const mutationCount = mutationCounts.get(candidate.candidate.mutation.kind) ?? 0;
+        if (mutationCount >= mutationLimit) {
+          reject(candidate, "REDUNDANCY_LIMIT", `Not selected because ${candidate.candidate.mutation.kind.toLowerCase()} mutations already have ${mutationLimit} representative context slots.`);
+          continue;
+        }
+      }
       const redundancyReason = redundancyLimitReason(candidate, { broadGear, domainNarrow, armorSlotCounts, distantArmorSlotCounts, redundancyCounts });
       if (redundancyReason) {
         reject(candidate, "REDUNDANCY_LIMIT", redundancyReason);
@@ -64,6 +72,7 @@ export function selectProgressionFrontier(input: { candidates: readonly Frontier
       candidate.selection.selected = true;
       candidate.selection.reason = `Selected as a representative ${bucket.toLowerCase().replaceAll("_", " ")} candidate by lexicographic context priority.`;
       selected.push(candidate); bucketSelected++;
+      if (candidate.candidate.mutation) mutationCounts.set(candidate.candidate.mutation.kind, (mutationCounts.get(candidate.candidate.mutation.kind) ?? 0) + 1);
       recordRedundancy(candidate, armorSlotCounts, distantArmorSlotCounts, redundancyCounts);
     }
   }
