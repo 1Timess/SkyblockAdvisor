@@ -43,7 +43,7 @@ export function buildActivityDomainLanes(input: {
     return [stat, candidates];
   }));
   if (input.domain !== "MINING") return replacementLanes;
-  const gemstoneLanes = buildMiningGemstoneUpgradeLanes(input.profile);
+  const gemstoneLanes = buildMiningGemstoneUpgradeLanes(input.profile, input.quotes);
   return Object.fromEntries(stats.map(stat => [stat, [...(gemstoneLanes[stat] ?? []), ...(replacementLanes[stat] ?? [])]]));
 }
 
