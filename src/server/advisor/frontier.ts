@@ -93,6 +93,16 @@ function classifyBucket(input: FrontierInputCandidate, unmetCount: number, unkno
 }
 
 function compareContextPriority(left: FrontierSelectionCandidate, right: FrontierSelectionCandidate) {
+  if (left.candidate.mutation && right.candidate.mutation) {
+    if (left.candidate.mutation.impactPriority !== right.candidate.mutation.impactPriority) {
+      return left.candidate.mutation.impactPriority - right.candidate.mutation.impactPriority;
+    }
+    const operationRank = { FILL: 0, UNLOCK_AND_FILL: 1, UPGRADE_QUALITY: 2 } as const;
+    const operationDifference = operationRank[left.candidate.mutation.operation] - operationRank[right.candidate.mutation.operation];
+    if (operationDifference) return operationDifference;
+    const leftGain = mutationRelativeGain(left.candidate), rightGain = mutationRelativeGain(right.candidate);
+    if (leftGain !== rightGain) return rightGain - leftGain;
+  }
   const leftFacts = left.selection.priorityFacts, rightFacts = right.selection.priorityFacts;
   if (leftFacts.unknownRequirementCount !== rightFacts.unknownRequirementCount) return leftFacts.unknownRequirementCount - rightFacts.unknownRequirementCount;
   const leftFamily = requirementFamilyKey(left), rightFamily = requirementFamilyKey(right);
@@ -121,6 +131,7 @@ function requirementFamilyKey(candidate: FrontierSelectionCandidate) {
 }
 
 function structuralKey(input: FrontierInputCandidate, bucket: SelectionBucket) {
+  if (input.candidate.mutation) return `mutation:${input.candidate.mutation.kind}:${input.candidate.mutation.parentItemKey}:${input.candidate.mutation.operation}:${bucket}`;
   const evidence = [...input.relevance.relevantStats].sort().join("+") || (input.sourceLanes.some(lane => lane.endsWith(":ability")) ? "ability" : "progression");
   if (input.candidate.domain === "armor") return `armor:${armorSlot(input.candidate) ?? "unknown"}:${evidence}:${bucket}`;
   if (input.candidate.domain === "weapon") return `weapon:${weaponCategory(input.candidate)}:${evidence}:${bucket}`;
@@ -133,7 +144,7 @@ function redundancyLimitReason(candidate: FrontierSelectionCandidate, state: {
   if (state.domainNarrow) return null;
   const keyCount = state.redundancyCounts.get(candidate.selection.redundancyKey) ?? 0;
   const itemUpgrade = candidate.candidate.item.categories.includes("item_upgrade");
-  const keyLimit = itemUpgrade ? 4 : candidate.selection.bucket === "DISTANT_OR_UNCERTAIN" ? 1 : candidate.candidate.domain === "armor" ? 3 : candidate.candidate.domain === "weapon" ? 2 : 1;
+  const keyLimit = candidate.candidate.mutation ? 1 : itemUpgrade ? 4 : candidate.selection.bucket === "DISTANT_OR_UNCERTAIN" ? 1 : candidate.candidate.domain === "armor" ? 3 : candidate.candidate.domain === "weapon" ? 2 : 1;
   if (keyCount >= keyLimit) return `Structurally similar candidates already represent ${candidate.selection.redundancyKey}.`;
   if (candidate.candidate.domain !== "armor" || !state.broadGear) return null;
   const slot = armorSlot(candidate.candidate) ?? "unknown";
@@ -150,6 +161,12 @@ function recordRedundancy(candidate: FrontierSelectionCandidate, armorSlots: Map
   const slot = armorSlot(candidate.candidate) ?? "unknown";
   armorSlots.set(slot, (armorSlots.get(slot) ?? 0) + 1);
   if (candidate.selection.bucket === "DISTANT_OR_UNCERTAIN") distantArmorSlots.set(slot, (distantArmorSlots.get(slot) ?? 0) + 1);
+}
+
+function mutationRelativeGain(candidate: AdvisorCandidate) {
+  const changes = Object.values(candidate.knownChanges ?? {}).filter(change => change.current !== null && change.candidate !== null);
+  if (!changes.length) return 0;
+  return Math.max(...changes.map(change => Math.abs((change.candidate ?? 0) - (change.current ?? 0)) / Math.max(Math.abs(change.candidate ?? 0), 1)));
 }
 
 function reject(candidate: FrontierSelectionCandidate, exclusionReason: ExclusionReason, reason: string) {
