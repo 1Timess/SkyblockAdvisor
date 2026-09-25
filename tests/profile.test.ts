@@ -4,6 +4,7 @@ import { buildNormalizedProfile, listProfiles } from "../src/server/skyblock/pro
 import { normalizedProfileSchema } from "../src/schemas/normalized-profile";
 import { fixtureMember, fixtureSources, fixtureProfiles } from "./fixtures/profile";
 import { parseProfileQuery, errorResponse } from "../src/server/api";
+import { extractGemstoneState } from "../src/server/skyblock/items/gemstones";
 
 test("combined profile validates and shares items across all required domains", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
@@ -114,4 +115,33 @@ test("profile listing and input validation are independent of a particular usern
 test("unexpected API failures never expose secrets or stack traces", async () => {
   const response = errorResponse(new Error("secret-key-value"));
   assert.equal(response.status, 500); assert.equal((await response.text()).includes("secret-key-value"), false);
+});
+
+
+test("gemstone NBT distinguishes locked, empty, and filled Divan slots", () => {
+  const state = extractGemstoneState("DIVAN_LEGGINGS", {
+    gems: {
+      unlocked_slots: ["AMBER_0", "AMBER_1", "TOPAZ_0"],
+      AMBER_0: "FLAWLESS",
+      AMBER_1: "FINE",
+    },
+  });
+  assert.ok(state);
+  assert.deepEqual(state.slots, [
+    { id: "AMBER_0", slotType: "AMBER", status: "FILLED", gemstoneType: "AMBER", quality: "FLAWLESS", unlockMethod: "GEMSTONE_CHAMBER" },
+    { id: "JADE_0", slotType: "JADE", status: "LOCKED", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
+    { id: "AMBER_1", slotType: "AMBER", status: "FILLED", gemstoneType: "AMBER", quality: "FINE", unlockMethod: "GEMSTONE_CHAMBER" },
+    { id: "JADE_1", slotType: "JADE", status: "LOCKED", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
+    { id: "TOPAZ_0", slotType: "TOPAZ", status: "UNLOCKED_EMPTY", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
+  ]);
+});
+
+test("generic Mining gemstone slots preserve the installed gemstone type", () => {
+  const state = extractGemstoneState("TITANIUM_DRILL_4", {
+    gems: { MINING_0: "FLAWLESS", MINING_0_gem: "TOPAZ", unlocked_slots: ["MINING_0"] },
+  });
+  assert.equal(state?.slots[0].slotType, "MINING");
+  assert.equal(state?.slots[0].gemstoneType, "TOPAZ");
+  assert.equal(state?.slots[0].quality, "FLAWLESS");
+  assert.equal(state?.slots[0].status, "FILLED");
 });
