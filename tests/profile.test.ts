@@ -13,6 +13,13 @@ test("combined profile validates and shares items across all required domains", 
   assert.deepEqual(profile.gear.weapons.map(i => i.id), ["TEST_SWORD", "TEST_BOW"]);
   assert.ok(profile.inventoryItems.some(item => item.id === "WARDROBE_MINING_HELMET" && item.source === "wardrobe"));
   assert.ok(profile.inventoryItems.some(item => item.id === "VAULT_DRILL" && item.source === "personal_vault"));
+  assert.ok(profile.inventoryItems.some(item => item.id === "LOADOUT_MINING_HELMET" && item.source === "loadout:armor:1:helmet"));
+  assert.ok(profile.inventoryItems.some(item => item.id === "LOADOUT_MINING_GLOVES" && item.source === "loadout:equipment:1:equipment_slot_1"));
+  assert.equal(profile.gear.loadouts.names["1"], "Mining");
+  assert.equal(profile.gear.loadouts.armor.equippedSet, 1);
+  assert.equal(profile.gear.loadouts.armor.sets["1"].helmet.id, "LOADOUT_MINING_HELMET");
+  assert.equal(profile.gear.loadouts.equipment.equippedSet, 1);
+  assert.equal(profile.gear.loadouts.equipment.sets["1"].equipment_slot_1.id, "LOADOUT_MINING_GLOVES");
   assert.equal(profile.gear.weapons[0].abilityText[1], "A mysterious ability remains readable.");
   assert.equal(profile.accessories.magicalPower.total, 32);
   assert.equal(profile.pets.activePet?.level, 2);
