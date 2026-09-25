@@ -11,6 +11,7 @@ const route: AdvisorRoute = { scope: "GEAR", activeDomains: ["ARMOR", "WEAPONS"]
 function input(id: string, options: {
   domain?: AdvisorCandidate["domain"]; slot?: string; category?: string; stats?: string[]; priceStatus?: CompactAdvisorCandidate["feasibility"]["priceStatus"];
   budgetDeltaCoins?: number | null; requirements?: CompactAdvisorCandidate["feasibility"]["requirements"]; warnings?: string[];
+  mutation?: AdvisorCandidate["mutation"];
 } = {}, stableOrder = 0): FrontierInputCandidate {
   const domain = options.domain ?? "armor", stats = options.stats ?? ["strength"];
   const requirements = options.requirements ?? [];
@@ -18,7 +19,7 @@ function input(id: string, options: {
     categories: domain === "armor" ? ["armor", options.slot ?? "helmet"] : ["weapon", options.category ?? "sword"],
     stats: Object.fromEntries(stats.map(stat => [stat, 1])), lore: [], abilityText: [], setBonusText: [], requirements: [],
     unparsedRequirementText: [], wiki: null, marketKey: id, sources: { hypixel: true, neu: true } },
-    requirements: requirements.map(value => value.text), abilityText: [], setBonusText: [], warnings: options.warnings ?? [] };
+    requirements: requirements.map(value => value.text), abilityText: [], setBonusText: [], warnings: options.warnings ?? [], mutation: options.mutation };
   const priceStatus = options.priceStatus ?? "WITHIN_BUDGET";
   return { candidate, stableOrder, relevance: { reason: "fixture", relevantStats: stats }, sourceLanes: [`${domain}:fixture:${stats[0]}`],
     feasibility: { priceStatus, budgetCoins: 30_000_000,
@@ -88,4 +89,21 @@ test("unknown armor baseline does not enter the actionable bucket", () => {
   const candidate = input("UNKNOWN-ARMOR-BASELINE", { warnings: ["Wardrobe data is unavailable, so the owned armor baseline for this slot is unknown."] });
   const selected = selectProgressionFrontier({ route, candidates: [candidate] }).selected;
   assert.equal(selected[0].selection.bucket, "DISTANT_OR_UNCERTAIN");
+});
+
+
+test("structured mutations favor domain impact and diversify by parent operation", () => {
+  const mutation = (parentItemKey: string, operation: "UNLOCK_AND_FILL" | "FILL" | "UPGRADE_QUALITY", impactPriority: number): NonNullable<AdvisorCandidate["mutation"]> => ({
+    kind: "GEMSTONE", parentItemKey, parentItemId: "DIVAN_HELMET", parentItemName: parentItemKey, slotId: "TOPAZ_0",
+    operation, currentQuality: null, targetQuality: "PERFECT", impactPriority,
+  });
+  const candidates = [
+    input("amber-upgrade", { stats: ["miningSpeed"], mutation: mutation("helmet", "UPGRADE_QUALITY", 2) }, 0),
+    input("jade-locked", { stats: ["miningFortune"], mutation: mutation("boots", "UNLOCK_AND_FILL", 1) }, 1),
+    input("topaz-locked", { stats: ["pristine"], mutation: mutation("boots", "UNLOCK_AND_FILL", 0) }, 2),
+    input("topaz-empty", { stats: ["pristine"], mutation: mutation("helmet", "FILL", 0) }, 3),
+  ];
+  const selected = selectProgressionFrontier({ route, candidates });
+  assert.deepEqual(selected.selected.map(value => value.candidate.id), ["topaz-empty", "topaz-locked", "amber-upgrade"]);
+  assert.equal(selected.candidates.find(value => value.candidate.id === "jade-locked")?.selection.exclusionReason, "REDUNDANCY_LIMIT");
 });
