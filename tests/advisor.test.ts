@@ -159,3 +159,29 @@ test("Mining candidates preserve same-family stat regressions for Luna", async (
     pristine: { current: 1.5, candidate: 0 },
   });
 });
+
+
+test("Mining discovery emits owned-item gemstone upgrades alongside replacements", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.inventoryItems.push({
+    id: "DIVAN_LEGGINGS", uuid: "divan-leggings-fixture", name: "Jaded Leggings of Divan", source: "loadout:armor:1:leggings",
+    count: 1, rarity: "legendary", categories: ["armor", "leggings"], stats: { miningSpeed: 241, miningFortune: 55 },
+    reforge: "jaded", enchantments: {}, stars: null, recombobulated: false, lore: [], abilityText: [], setBonusText: [],
+    gemstones: { source: "NBT", slots: [
+      { id: "AMBER_0", slotType: "AMBER", status: "FILLED", gemstoneType: "AMBER", quality: "FLAWLESS", unlockMethod: "GEMSTONE_CHAMBER" },
+      { id: "JADE_0", slotType: "JADE", status: "LOCKED", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
+      { id: "AMBER_1", slotType: "AMBER", status: "FILLED", gemstoneType: "AMBER", quality: "FLAWLESS", unlockMethod: "GEMSTONE_CHAMBER" },
+      { id: "JADE_1", slotType: "JADE", status: "LOCKED", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
+      { id: "TOPAZ_0", slotType: "TOPAZ", status: "UNLOCKED_EMPTY", gemstoneType: null, quality: null, unlockMethod: "GEMSTONE_CHAMBER" },
+    ] },
+  });
+  profile.progression.mining.hotmLevel = 7;
+  const lanes = buildActivityDomainLanes({ domain: "MINING", profile, catalog: [], quotes: new Map() });
+  assert.ok(lanes.miningFortune.some(value => value.id.includes(":JADE_0:PERFECT")));
+  assert.ok(lanes.miningFortune.some(value => value.id.includes(":JADE_1:PERFECT")));
+  assert.ok(lanes.pristine.some(value => value.id.includes(":TOPAZ_0:PERFECT")));
+  assert.ok(lanes.miningSpeed.some(value => value.id.includes(":AMBER_0:PERFECT")));
+  assert.ok(lanes.miningSpeed.some(value => value.id.includes(":AMBER_1:PERFECT")));
+  const topaz = lanes.pristine.find(value => value.id.includes(":TOPAZ_0:PERFECT"));
+  assert.ok(topaz?.warnings.some(warning => warning.includes("unlocked but empty")));
+});
