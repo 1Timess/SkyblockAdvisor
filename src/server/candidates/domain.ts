@@ -27,7 +27,9 @@ export function buildActivityDomainLanes(input: {
       .flatMap(({ item, baseline }) => {
         const candidate = prepareCandidate(domainFor(item), item, input.profile, input.quotes,
           { budgetCoins: input.budgetCoins, ownedItemIds: owned, eligibilityMode: "ADVISOR_DISCOVERY" });
-        return candidate ? [{ ...candidate, knownChanges: { [stat]: { current: baseline, candidate: item.stats[stat] } } }] : [];
+        return candidate ? [{ ...candidate,
+          knownChanges: { [stat]: { current: baseline, candidate: item.stats[stat] } },
+          warnings: [...candidate.warnings, `${input.domain === "MINING" ? "Mining" : "Fishing"} stat comparisons use the best visible same-slot/tool-family item contribution, not the player's total stat.`] }] : [];
       }).slice(0, 12);
     return [stat, candidates];
   }));
