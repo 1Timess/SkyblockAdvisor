@@ -132,7 +132,8 @@ function redundancyLimitReason(candidate: FrontierSelectionCandidate, state: {
 }) {
   if (state.domainNarrow) return null;
   const keyCount = state.redundancyCounts.get(candidate.selection.redundancyKey) ?? 0;
-  const keyLimit = candidate.selection.bucket === "DISTANT_OR_UNCERTAIN" ? 1 : candidate.candidate.domain === "armor" ? 3 : candidate.candidate.domain === "weapon" ? 2 : 1;
+  const itemUpgrade = candidate.candidate.item.categories.includes("item_upgrade");
+  const keyLimit = itemUpgrade ? 4 : candidate.selection.bucket === "DISTANT_OR_UNCERTAIN" ? 1 : candidate.candidate.domain === "armor" ? 3 : candidate.candidate.domain === "weapon" ? 2 : 1;
   if (keyCount >= keyLimit) return `Structurally similar candidates already represent ${candidate.selection.redundancyKey}.`;
   if (candidate.candidate.domain !== "armor" || !state.broadGear) return null;
   const slot = armorSlot(candidate.candidate) ?? "unknown";
