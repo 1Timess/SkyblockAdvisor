@@ -55,7 +55,7 @@ async function main() {
 
   const successfulCalls = reports.filter(report => report.luna.status === "SUCCESS").length;
   const estimatedCostUsd = reports.reduce((sum, report) =>
-    sum + (report.luna.status === "SUCCESS" ? report.luna.meta.estimatedCostUsd ?? 0 : 0), 0);
+    sum + (report.luna.meta?.estimatedCostUsd ?? 0), 0);
   const artifact = {
     generatedAt: new Date().toISOString(),
     question,
