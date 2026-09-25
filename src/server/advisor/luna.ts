@@ -12,8 +12,20 @@ const apiResponseSchema = z.object({
   id: z.string(), model: z.string(), status: z.string(), output: z.array(z.object({
     type: z.string(), content: z.array(z.object({ type: z.string(), text: z.string().optional(), refusal: z.string().optional() }).passthrough()).optional(),
   }).passthrough()),
-  usage: z.object({ input_tokens: z.number().int().nonnegative(), output_tokens: z.number().int().nonnegative(), total_tokens: z.number().int().nonnegative() }).optional(),
+  usage: z.object({ input_tokens: z.number().int().nonnegative(), output_tokens: z.number().int().nonnegative(), total_tokens: z.number().int().nonnegative() }).passthrough().optional(),
+  incomplete_details: z.object({ reason: z.string().optional() }).passthrough().nullable().optional(),
 }).passthrough();
+
+function incompleteResponseError(parsed: z.infer<typeof apiResponseSchema>) {
+  const reason = parsed.incomplete_details?.reason ?? "unknown";
+  const usage = parsed.usage;
+  const usageSummary = usage
+    ? `input_tokens=${usage.input_tokens}, output_tokens=${usage.output_tokens}, total_tokens=${usage.total_tokens}`
+    : "usage unavailable";
+  return new Error(
+    `Luna response did not complete (status: ${parsed.status}, reason: ${reason}; ${usageSummary}; response_id=${parsed.id}, model=${parsed.model}).`,
+  );
+}
 
 export interface LunaAdvisorResult {
   advice: AdvisorResponse;
@@ -42,7 +54,7 @@ export async function callLunaAdvisor(context: AdvisorContext, fetcher: typeof f
     throw new Error(`Luna request failed with status ${response.status}: ${body || "<empty response body>"}`);
   }
   const parsed = apiResponseSchema.parse(await response.json());
-  if (parsed.status !== "completed") throw new Error(`Luna response did not complete (status: ${parsed.status}).`);
+  if (parsed.status !== "completed") throw incompleteResponseError(parsed);
   const refusal = parsed.output.flatMap(item => item.content ?? []).find(content => content.type === "refusal")?.refusal;
   if (refusal) throw new Error("Luna declined to produce an advisor response.");
   const outputText = parsed.output.flatMap(item => item.content ?? []).find(content => content.type === "output_text")?.text;
