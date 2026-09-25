@@ -26,7 +26,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
   const version = profile.meta.sourceUpdatedAt ?? profile.meta.fetchedAt;
   const snapshotId = `${profile.identity.uuid}:${profile.profile.id}:${version}`;
   const compact = (item: ProfileItem) => ({ id: item.id, name: item.name, rarity: item.rarity, categories: item.categories,
-    stats: item.stats, abilityText: item.abilityText, setBonusText: item.setBonusText });
+    stats: item.stats, abilityText: item.abilityText, setBonusText: item.setBonusText, gemstones: item.gemstones });
   const compactPet = (pet: NormalizedSkyBlockProfile["pets"]["owned"][number]) => ({ type: pet.type, name: pet.name,
     rarity: pet.rarity, level: pet.level, heldItem: pet.heldItem, stats: pet.stats, abilityLore: pet.abilityLore });
   const dungeon = profile.progression.dungeons;
