@@ -54,7 +54,7 @@ test("combined profile validates and shares items across all required domains", 
   assert.deepEqual(profile.progression.fishing.itemsFished, { total: 321, normal: 300 });
   assert.equal(profile.progression.fishing.seaCreatureKills, 45);
   assert.deepEqual(profile.progression.fishing.trophyFish, { blobfish_bronze: 2, karate_fish_silver: 1 });
-  assert.deepEqual(profile.attributes, { veteran: 4, mana_pool: 2 });
+  assert.deepEqual(profile.attributes, { veteran: 4, mana_pool: 2, cold_resistance: 24 });
   assert.equal(profile.collections.COBBLESTONE, 1234);
   assert.deepEqual(profile.craftedGenerators, ["COBBLESTONE_1", "WHEAT_2"]);
   assert.equal(profile.warnings.length, 0);
