@@ -6,6 +6,7 @@ import { miningRelevantStats } from "../reference/mining-knowledge";
 import { prepareCandidate } from "./common";
 
 const fishingStats = ["fishingSpeed", "seaCreatureChance"] as const;
+const unavailableWardrobeBaselineWarning = "Wardrobe data is unavailable, so the owned armor baseline for this slot is unknown.";
 
 export function buildActivityDomainLanes(input: {
   domain: "FISHING" | "MINING";
@@ -17,19 +18,23 @@ export function buildActivityDomainLanes(input: {
   const stats = input.domain === "MINING" ? miningRelevantStats(input.profile) : [...fishingStats];
   const owned = new Set(input.profile.inventoryItems.flatMap(item => item.id ? [item.id] : []));
   const eligible = input.catalog.filter(item => withinBoundary(input.domain, item));
+  const wardrobeUnavailable = input.profile.warnings.some(warning => warning.code === "API_DATA_DISABLED" && warning.scope === "wardrobe");
   return Object.fromEntries(stats.map(stat => {
     const candidates = eligible.flatMap(item => {
-      const baseline = Math.max(0, ...input.profile.inventoryItems.filter(ownedItem => itemFamily(ownedItem.categories) === itemFamily(item.categories))
+      const family = itemFamily(item.categories), armorBaselineUnknown = wardrobeUnavailable && isArmorFamily(family);
+      const visibleBaseline = Math.max(0, ...input.profile.inventoryItems.filter(ownedItem => itemFamily(ownedItem.categories) === family)
         .map(ownedItem => ownedItem.stats[stat] ?? 0));
-      return item.stats[stat] !== undefined && item.stats[stat] > baseline ? [{ item, baseline }] : [];
+      const baseline = armorBaselineUnknown ? null : visibleBaseline;
+      return item.stats[stat] !== undefined && (baseline === null || item.stats[stat] > baseline) ? [{ item, baseline, armorBaselineUnknown }] : [];
     })
       .sort((left, right) => (right.item.stats[stat] ?? 0) - (left.item.stats[stat] ?? 0) || left.item.id.localeCompare(right.item.id))
-      .flatMap(({ item, baseline }) => {
+      .flatMap(({ item, baseline, armorBaselineUnknown }) => {
         const candidate = prepareCandidate(domainFor(item), item, input.profile, input.quotes,
           { budgetCoins: input.budgetCoins, ownedItemIds: owned, eligibilityMode: "ADVISOR_DISCOVERY" });
-        return candidate ? [{ ...candidate,
-          knownChanges: { [stat]: { current: baseline, candidate: item.stats[stat] } },
-          warnings: [...candidate.warnings, `${input.domain === "MINING" ? "Mining" : "Fishing"} stat comparisons use the best visible same-slot/tool-family item contribution, not the player's total stat.`] }] : [];
+        if (!candidate) return [];
+        const warnings = [...candidate.warnings, `${input.domain === "MINING" ? "Mining" : "Fishing"} stat comparisons use the best visible same-slot/tool-family item contribution, not the player's total stat.`];
+        if (armorBaselineUnknown) warnings.push(unavailableWardrobeBaselineWarning);
+        return [{ ...candidate, knownChanges: { [stat]: { current: baseline, candidate: item.stats[stat] } }, warnings }];
       }).slice(0, 12);
     return [stat, candidates];
   }));
@@ -46,6 +51,8 @@ function withinBoundary(domain: "FISHING" | "MINING", item: CandidateItem) {
 function domainFor(item: CandidateItem): AdvisorCandidate["domain"] {
   return item.categories.some(category => ["armor", "helmet", "chestplate", "leggings", "boots", "equipment"].includes(category)) ? "armor" : "tool";
 }
+
+function isArmorFamily(family: string) { return ["helmet", "chestplate", "leggings", "boots"].includes(family); }
 
 function itemFamily(categories: readonly string[]) {
   if (categories.includes("fishing_rod")) return "fishing_rod";
