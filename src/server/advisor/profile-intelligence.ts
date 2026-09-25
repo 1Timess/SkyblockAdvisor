@@ -3,6 +3,7 @@ import type { ItemStats, ProfileItem } from "../../schemas/items";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { TtlCache } from "../cache/ttl-cache";
 import { buildNormalizedProfile } from "../skyblock/profile/build-normalized-profile";
+import { buildMiningKnowledge, miningRelevantStats } from "../reference/mining-knowledge";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -20,7 +21,6 @@ export interface ProfileIntelligenceSnapshot {
 }
 
 const fishingStats = ["fishingSpeed", "seaCreatureChance"] as const;
-const miningStats = ["miningSpeed", "miningFortune", "pristine"] as const;
 
 export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): ProfileIntelligenceSnapshot {
   const version = profile.meta.sourceUpdatedAt ?? profile.meta.fetchedAt;
@@ -34,6 +34,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
   const miningTools = byCategory(profile.inventoryItems, ["pickaxe", "drill"]);
   const fishingArmor = withStats(profile.gear.armor.items, fishingStats);
   const fishingEquipment = withStats(profile.gear.equipment.items, fishingStats);
+  const miningStats = miningRelevantStats(profile), miningKnowledge = buildMiningKnowledge(profile);
   const miningArmor = withStats(profile.gear.armor.items, miningStats);
   const miningEquipment = withStats(profile.gear.equipment.items, miningStats);
   const fishingPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, fishingStats));
@@ -77,7 +78,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         tokensSpent: profile.progression.mining.tokensSpent, tokensSpentByTree: profile.progression.mining.tokensSpentByTree,
         mithrilPowder: profile.progression.mining.powder.mithril,
         gemstonePowder: profile.progression.mining.powder.gemstone, glacitePowder: profile.progression.mining.powder.glacite,
-        crystalHollows: profile.progression.mining.crystalHollows, glaciteTunnels: profile.progression.mining.glaciteTunnels,
+        miningKnowledge, crystalHollows: profile.progression.mining.crystalHollows, glaciteTunnels: profile.progression.mining.glaciteTunnels,
         crystals: profile.progression.mining.crystals, biomes: profile.progression.mining.biomes,
         tools: miningTools.map(compact), armor: miningArmor.map(compact),
         equipment: miningEquipment.map(compact), pets: miningPets.map(compactPet),
