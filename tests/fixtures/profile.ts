@@ -43,6 +43,8 @@ export function fixtureMember(): RawMember {
       equipment_contents: { data: encodeInventory([{ id: "TEST_BELT", lore: ["Defense: +5", "RARE BELT"] }]) },
       inv_contents: { data: encodeInventory([{ id: "TEST_SWORD", lore: ["Damage: +100", "Ability: Unmodeled Power RIGHT CLICK", "A mysterious ability remains readable.", "", "RARE SWORD"] }]) },
       ender_chest_contents: { data: encodeInventory([{ id: "WOLF_RING", lore: ["RARE ACCESSORY"] }]) },
+      wardrobe_contents: { data: encodeInventory([{ id: "WARDROBE_MINING_HELMET", lore: ["Mining Fortune: +40", "EPIC HELMET"] }]) },
+      personal_vault_contents: { data: encodeInventory([{ id: "VAULT_DRILL", lore: ["Mining Speed: +250", "RARE DRILL"] }]) },
       bag_contents: { talisman_bag: { data: encodeInventory([
         { id: "WOLF_TALISMAN", lore: ["COMMON ACCESSORY"] },
         { id: "HEGEMONY_ARTIFACT", lore: ["LEGENDARY ACCESSORY"] },
