@@ -4,8 +4,8 @@ const labels: Record<string, string> = {
   Health: "health", Defense: "defense", Damage: "damage", Strength: "strength", "Crit Chance": "critChance", "Crit Damage": "critDamage",
   Intelligence: "intelligence", "Bonus Attack Speed": "attackSpeed", "Attack Speed": "attackSpeed", Ferocity: "ferocity", Speed: "speed",
   "Magic Find": "magicFind", "Pet Luck": "petLuck", "Ability Damage": "abilityDamage", "Sea Creature Chance": "seaCreatureChance",
-  "Fishing Speed": "fishingSpeed", "Mining Speed": "miningSpeed", "Mining Fortune": "miningFortune", "Farming Fortune": "farmingFortune",
-  "Foraging Fortune": "foragingFortune", Pristine: "pristine",
+  "Fishing Speed": "fishingSpeed", "Mining Speed": "miningSpeed", "Mining Fortune": "miningFortune", "Gemstone Fortune": "gemstoneFortune",
+  "Cold Resistance": "coldResistance", "Farming Fortune": "farmingFortune", "Foraging Fortune": "foragingFortune", Pristine: "pristine",
 };
 export function extractStats(lore: string[]) {
   const stats: ItemStats = {};
