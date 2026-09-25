@@ -4,6 +4,7 @@ import type { MarketQuote } from "../../schemas/market";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { miningRelevantStats } from "../reference/mining-knowledge";
 import { prepareCandidate } from "./common";
+import { buildMiningGemstoneUpgradeLanes } from "./gemstone";
 
 const fishingStats = ["fishingSpeed", "seaCreatureChance"] as const;
 const unavailableArmorLoadoutWarning = "Armor loadout data is unavailable, so the owned armor baseline for this slot is unknown.";
@@ -21,7 +22,7 @@ export function buildActivityDomainLanes(input: {
   const eligible = input.catalog.filter(item => withinBoundary(input.domain, item));
   const armorLoadoutsUnavailable = input.profile.warnings.some(warning => warning.code === "API_DATA_DISABLED" && warning.scope === "loadout.armor");
   const equipmentLoadoutsUnavailable = input.profile.warnings.some(warning => warning.code === "API_DATA_DISABLED" && warning.scope === "loadout.equipment");
-  return Object.fromEntries(stats.map(stat => {
+  const replacementLanes = Object.fromEntries(stats.map(stat => {
     const candidates = eligible.flatMap(item => {
       const family = itemFamily(item.categories), baselineUnknown = armorLoadoutsUnavailable && isArmorFamily(family)
         || equipmentLoadoutsUnavailable && isEquipmentFamily(family);
@@ -41,6 +42,9 @@ export function buildActivityDomainLanes(input: {
       }).slice(0, 12);
     return [stat, candidates];
   }));
+  if (input.domain !== "MINING") return replacementLanes;
+  const gemstoneLanes = buildMiningGemstoneUpgradeLanes(input.profile);
+  return Object.fromEntries(stats.map(stat => [stat, [...(gemstoneLanes[stat] ?? []), ...(replacementLanes[stat] ?? [])]]));
 }
 
 function withinBoundary(domain: "FISHING" | "MINING", item: CandidateItem) {
