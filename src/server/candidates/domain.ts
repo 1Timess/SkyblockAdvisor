@@ -25,19 +25,19 @@ export function buildActivityDomainLanes(input: {
     const candidates = eligible.flatMap(item => {
       const family = itemFamily(item.categories), baselineUnknown = armorLoadoutsUnavailable && isArmorFamily(family)
         || equipmentLoadoutsUnavailable && isEquipmentFamily(family);
-      const visibleBaseline = Math.max(0, ...input.profile.inventoryItems.filter(ownedItem => itemFamily(ownedItem.categories) === family)
-        .map(ownedItem => ownedItem.stats[stat] ?? 0));
+      const familyItems = input.profile.inventoryItems.filter(ownedItem => itemFamily(ownedItem.categories) === family);
+      const visibleBaseline = Math.max(0, ...familyItems.map(ownedItem => ownedItem.stats[stat] ?? 0));
       const baseline = baselineUnknown ? null : visibleBaseline;
-      return item.stats[stat] !== undefined && (baseline === null || item.stats[stat] > baseline) ? [{ item, baseline, baselineUnknown, family }] : [];
+      return item.stats[stat] !== undefined && (baseline === null || item.stats[stat] > baseline) ? [{ item, baselineUnknown, family, familyItems }] : [];
     })
       .sort((left, right) => (right.item.stats[stat] ?? 0) - (left.item.stats[stat] ?? 0) || left.item.id.localeCompare(right.item.id))
-      .flatMap(({ item, baseline, baselineUnknown, family }) => {
+      .flatMap(({ item, baselineUnknown, family, familyItems }) => {
         const candidate = prepareCandidate(domainFor(item), item, input.profile, input.quotes,
           { budgetCoins: input.budgetCoins, ownedItemIds: owned, eligibilityMode: "ADVISOR_DISCOVERY" });
         if (!candidate) return [];
         const warnings = [...candidate.warnings, `${input.domain === "MINING" ? "Mining" : "Fishing"} stat comparisons use the best visible same-slot/tool-family item contribution, not the player's total stat.`];
         if (baselineUnknown) warnings.push(isArmorFamily(family) ? unavailableArmorLoadoutWarning : unavailableEquipmentLoadoutWarning);
-        return [{ ...candidate, knownChanges: { [stat]: { current: baseline, candidate: item.stats[stat] } }, warnings }];
+        return [{ ...candidate, knownChanges: comparisonVector(item, familyItems, stats, baselineUnknown), warnings }];
       }).slice(0, 12);
     return [stat, candidates];
   }));
@@ -63,4 +63,14 @@ function itemFamily(categories: readonly string[]) {
   if (categories.includes("pickaxe") || categories.includes("drill")) return "mining_tool";
   return ["helmet", "chestplate", "leggings", "boots", "necklace", "cloak", "belt", "gloves", "bracelet"].find(category => categories.includes(category))
     ?? (categories.includes("equipment") ? "equipment" : "other");
+}
+
+function comparisonVector(item: CandidateItem, familyItems: readonly NormalizedSkyBlockProfile["inventoryItems"][number][],
+  stats: readonly string[], baselineUnknown: boolean) {
+  return Object.fromEntries(stats.flatMap(stat => {
+    const candidate = item.stats[stat] ?? 0;
+    if (baselineUnknown) return candidate !== 0 ? [[stat, { current: null, candidate }]] : [];
+    const current = Math.max(0, ...familyItems.map(ownedItem => ownedItem.stats[stat] ?? 0));
+    return current !== 0 || candidate !== 0 ? [[stat, { current, candidate }]] : [];
+  }));
 }
