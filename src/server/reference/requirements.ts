@@ -66,6 +66,7 @@ export function checkItemRequirements(item: Pick<CandidateItem, "requirements">,
     if (requirement.kind === "SLAYER_LEVEL") actual = profile.progression.slayers[requirement.slayer]?.level ?? null;
     if (requirement.kind === "DUNGEON_LEVEL") actual = profile.progression.dungeons.catacombs?.level ?? null;
     if (requirement.kind === "DUNGEON_FLOOR") actual = profile.progression.dungeons.highestFloorNormal;
+    if (requirement.kind === "HEART_OF_THE_MOUNTAIN") actual = profile.progression.mining.hotmLevel;
     const required = "tier" in requirement ? requirement.tier : "floor" in requirement ? requirement.floor : requirement.level;
     return { requirement, actual, status: actual === null ? "UNKNOWN" as const : actual >= required ? "MET" as const : "NOT_MET" as const };
   });
