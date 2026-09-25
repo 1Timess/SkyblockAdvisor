@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-09-25T01:16:27.501Z",
+  "generatedAt": "2026-09-25T16:25:25.480Z",
   "lunaCalls": 0,
   "normalizedProfileFetchesInProcess": 1,
-  "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-25T01:16:10.609Z",
+  "snapshotId": "e1600c846ef2489587d403a2416e3a09:beda34e9-694b-4fc1-a538-212f5d6b826b:2026-09-25T16:25:08.234Z",
   "mining": {
     "skillLevel": 28,
     "treeExperience": 104330,
@@ -35,6 +35,114 @@
       "forest_4": 0,
       "forest_5": 0,
       "mountain_2": 7
+    },
+    "crystalHollows": {
+      "available": true,
+      "crystals": {
+        "jade": {
+          "rawId": "jade_crystal",
+          "state": "FOUND",
+          "totalFound": 1,
+          "totalPlaced": null
+        },
+        "amber": {
+          "rawId": "amber_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "amethyst": {
+          "rawId": "amethyst_crystal",
+          "state": "FOUND",
+          "totalFound": 1,
+          "totalPlaced": null
+        },
+        "sapphire": {
+          "rawId": "sapphire_crystal",
+          "state": "FOUND",
+          "totalFound": 1,
+          "totalPlaced": null
+        },
+        "topaz": {
+          "rawId": "topaz_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "jasper": {
+          "rawId": "jasper_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "ruby": {
+          "rawId": "ruby_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "opal": {
+          "rawId": "opal_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "aquamarine": {
+          "rawId": "aquamarine_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "peridot": {
+          "rawId": "peridot_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "onyx": {
+          "rawId": "onyx_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        },
+        "citrine": {
+          "rawId": "citrine_crystal",
+          "state": null,
+          "totalFound": null,
+          "totalPlaced": null
+        }
+      },
+      "nucleus": {
+        "required": [
+          "jade",
+          "amber",
+          "amethyst",
+          "sapphire",
+          "topaz"
+        ],
+        "acquired": [
+          "jade",
+          "amethyst",
+          "sapphire"
+        ],
+        "placed": [],
+        "missing": [
+          "amber",
+          "topaz"
+        ],
+        "ready": false,
+        "complete": false
+      },
+      "biomes": {
+        "precursor": {
+          "claiming_with_precursor_apparatus": false
+        },
+        "jungle": {
+          "jungle_temple_open": false,
+          "jungle_temple_chest_uses": 0
+        },
+        "dwarven": {}
+      }
     },
     "sampleNodes": {
       "mining_speed": {
@@ -147,14 +255,14 @@
   "fishing": {
     "skillLevel": 22,
     "itemsFished": {
-      "total": 1494,
-      "normal": 1189,
-      "treasure": 270,
-      "large_treasure": 24,
+      "total": 1700,
+      "normal": 1336,
+      "treasure": 320,
+      "large_treasure": 32,
       "trophy_fish": 8,
-      "outstanding": 3
+      "outstanding": 4
     },
-    "seaCreatureKills": 1136,
+    "seaCreatureKills": 1470,
     "trophyFishCounters": 15,
     "trophyFishTotalCaught": 21
   },
