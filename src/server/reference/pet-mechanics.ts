@@ -5,7 +5,6 @@ import {
   type CanonicalPetDefinition, type CanonicalPetItemDefinition,
   type PetAbilityMechanic, type PetCondition, type PetEffect,
 } from "../../schemas/pet-mechanics";
-import { extractStats } from "../skyblock/items/parse-stats";
 import { stripFormatting } from "../skyblock/items/parse-footer";
 
 const rarities = ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"] as const;
@@ -26,10 +25,10 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
     const curve = resolveXpCurve(constants.pet_levels, custom?.pet_levels, maxLevel);
     const rarityOffset = custom?.rarity_offset?.[rarity] ?? constants.pet_rarity_offset[rarity] ?? null;
     const cleanLore = (item.lore ?? []).map(stripFormatting);
-    const baseStats = extractStats(cleanLore).stats;
+    const baseStatTemplates = parseBaseStatTemplates(cleanLore);
     return [canonicalPetDefinitionSchema.parse({
       id: item.internalname, type, rarity: rarity.toLowerCase(), petSkillType: constants.pet_types[type] ?? null,
-      maxLevel, rarityOffset, xpCurve: curve, xpMultiplier: custom?.xp_multiplier ?? 1, customLevelingType: custom?.type ?? null, baseStats,
+      maxLevel, rarityOffset, xpCurve: curve, xpMultiplier: custom?.xp_multiplier ?? 1, customLevelingType: custom?.type ?? null, baseStatTemplates,
       abilities: parsePetAbilities(item.lore ?? []), upgradePaths: parseKatPaths(item), source: "NEU",
     })];
   });
@@ -144,4 +143,14 @@ function resolveXpCurve(base: readonly number[], custom: readonly number[] | und
   if (!custom?.length) return [...base].slice(0, maxLevel);
   // NEU custom level-200 pets provide the additional 101-200 costs separately from the normal curve.
   return [...base.slice(0, 100), ...custom].slice(0, maxLevel);
+}
+
+function parseBaseStatTemplates(lore: readonly string[]) {
+  const out: Record<string, string> = {};
+  for (const line of lore) {
+    const match = line.match(/^([A-Za-z ]+):\\s*[+]?((?:\\{[A-Z_]+\\})|(?:-?\\d+(?:\\.\\d+)?))(?:%|$)/);
+    if (!match) continue;
+    out[match[1].trim().toUpperCase().replaceAll(" ", "_")] = match[2];
+  }
+  return out;
 }
