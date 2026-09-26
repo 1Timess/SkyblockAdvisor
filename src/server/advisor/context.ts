@@ -31,6 +31,7 @@ export function buildAdvisorContext(input: {
       setBonusText: candidate.setBonusText, warnings: candidate.warnings,
       relevance: input.relevanceById?.get(candidate.id) ?? { reason: "Selected by active goal relevance.", relevantStats: Object.keys(candidate.knownChanges ?? {}) },
       feasibility: buildCandidateFeasibility(candidate, input.profile, input.budgetCoins ?? input.conversationState?.budgetCoins),
+      ...(candidate.petAcquisitionFamily ? { petAcquisitionFamily: candidate.petAcquisitionFamily } : {}),
       ...(family ? { family } : {}),
     })),
     warnings: compactProfileWarnings(input.profile.warnings),
