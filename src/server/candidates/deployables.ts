@@ -19,8 +19,6 @@ export function buildMiningDeployableLanes(input: {
   if (!deployables.length) return {};
 
   const ownedDeployables = deployables.filter(item => ownedIds.has(item.id));
-  const baseline = Object.fromEntries(miningDeployableStats.map(stat => [stat,
-    Math.max(0, ...ownedDeployables.map(item => item.deployableMechanics?.effects[stat] ?? 0))]));
 
   const usable = new Set(deployables.filter(item => checkItemRequirements(item, input.profile).every(check => check.status === "MET")).map(item => item.id));
   const progressionDeployables = deployables.filter(item => !usable.has(item.id) || !isDominatedByUsableDeployable(item, deployables, usable));
@@ -31,10 +29,13 @@ export function buildMiningDeployableLanes(input: {
     const candidate = prepareCandidate("tool", item, input.profile, input.quotes,
       { budgetCoins: input.budgetCoins, ownedItemIds: ownedIds, eligibilityMode: "ADVISOR_DISCOVERY" });
     if (!candidate || !item.deployableMechanics) continue;
+    const baseline = bestOwnedDeployableBaseline(item, ownedDeployables);
+    if (baseline && !deployableStrictlyImproves(item, baseline)) continue;
     const changes: NonNullable<AdvisorCandidate["knownChanges"]> = {};
     for (const stat of miningDeployableStats) {
-      const current = baseline[stat] ?? 0, target = item.deployableMechanics.effects[stat] ?? 0;
-      if (target > current) changes[stat] = { current, candidate: target };
+      const current = baseline?.deployableMechanics?.effects[stat] ?? 0;
+      const target = item.deployableMechanics.effects[stat] ?? 0;
+      if (target !== current) changes[stat] = { current, candidate: target };
     }
     if (!Object.keys(changes).length) continue;
 
@@ -63,5 +64,28 @@ function isDominatedByUsableDeployable(item: CandidateItem, deployables: readonl
       if (alternative > current) strictlyBetter = true;
     }
     return strictlyBetter;
+  });
+}
+
+
+export function deployableStrictlyImproves(candidate: CandidateItem, baseline: CandidateItem) {
+  if (!candidate.deployableMechanics || !baseline.deployableMechanics) return false;
+  let strictlyBetter = false;
+  for (const stat of miningDeployableStats) {
+    const current = baseline.deployableMechanics.effects[stat] ?? 0;
+    const target = candidate.deployableMechanics.effects[stat] ?? 0;
+    if (target < current) return false;
+    if (target > current) strictlyBetter = true;
+  }
+  return strictlyBetter;
+}
+
+function bestOwnedDeployableBaseline(candidate: CandidateItem, owned: readonly CandidateItem[]) {
+  const comparable = owned.filter(item => item.deployableMechanics && deployableStrictlyImproves(candidate, item));
+  if (!comparable.length) return owned.length ? null : undefined;
+  return comparable.reduce((best, item) => {
+    const bestScore = miningDeployableStats.reduce((sum, stat) => sum + (best.deployableMechanics?.effects[stat] ?? 0), 0);
+    const itemScore = miningDeployableStats.reduce((sum, stat) => sum + (item.deployableMechanics?.effects[stat] ?? 0), 0);
+    return itemScore > bestScore ? item : best;
   });
 }
