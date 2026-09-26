@@ -17,7 +17,7 @@ const statNames = [
 export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constants: NeuPetConstants): CanonicalPetDefinition[] {
   return items.flatMap(item => {
     const match = item.internalname.match(/^(.+);([0-5])$/);
-    if (!match || !(item.lore ?? []).some(line => stripFormatting(line).trim().endsWith(" Pet"))) return [];
+    if (!match || !isNeuPetDefinition(item)) return [];
     const tier = Number(match[2]), type = match[1], rarity = rarities[tier];
     if (!rarity) return [];
     const custom = constants.custom_pet_leveling[type];
@@ -32,6 +32,14 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
       abilities: parsePetAbilities(item.lore ?? []), upgradePaths: parseKatPaths(item), source: "NEU",
     })];
   });
+}
+
+function isNeuPetDefinition(item: NeuItem) {
+  // NEU pet definitions are structurally identified by TYPE;TIER. Do not require a "Pet" lore footer:
+  // mount-style pets such as Rock use category text like "Mining Mount" instead.
+  return /^.+;[0-5]$/.test(item.internalname) &&
+    ((item.lore ?? []).some(line => /Right-click to add this pet to your pet menu!/i.test(stripFormatting(line))) ||
+      /petInfo:/.test(String((item as unknown as Record<string, unknown>).nbttag ?? "")));
 }
 
 export function buildCanonicalPetItemDefinitions(items: readonly NeuItem[], constants: NeuPetConstants): CanonicalPetItemDefinition[] {
