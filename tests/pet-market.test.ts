@@ -12,17 +12,17 @@ function mutation(overrides: Partial<PetMutation> = {}): PetMutation {
     reasons: [], uncertainty: [], ...overrides,
   };
 }
-function resolver(pets: Record<string, number> = {}, items: Record<string, number> = {}): PetMarketResolver {
+function resolver(items: Record<string, number> = {}): PetMarketResolver {
   return {
-    async quotePet(id) { return pets[id] == null ? null : { key: `pet:${id}`, coins: pets[id], observedAt: "2026-09-26T00:00:00Z", source: "TEST", confidence: "HIGH" }; },
     async quoteItem(id) { return items[id] == null ? null : { key: `item:${id}`, coins: items[id], observedAt: "2026-09-26T00:00:00Z", source: "TEST", confidence: "HIGH" }; },
   };
 }
 
-test("acquisition resolves from the concrete canonical pet variant", async () => {
-  const priced = await pricePetMutation(mutation(), resolver({ "SCATHA;4": 42_000_000 }));
-  assert.equal(priced.costStatus, "RESOLVED");
-  assert.equal(priced.totalCoins, 42_000_000);
+test("acquisition refuses rarity-only pricing and requires level-aware market choices", async () => {
+  const priced = await pricePetMutation(mutation(), resolver());
+  assert.equal(priced.costStatus, "UNRESOLVED");
+  assert.equal(priced.totalCoins, null);
+  assert.deepEqual(priced.unresolvedKeys, ["pet-acquisition:SCATHA;4:level-aware"]);
 });
 
 test("Kat combines fixed coins and counted item quotes", async () => {
@@ -32,7 +32,7 @@ test("Kat combines fixed coins and counted item quotes", async () => {
     after: { type: "SCATHA", canonicalPetId: "SCATHA;3", baseRarity: "epic", effectiveRarity: "epic", level: 80, maxLevel: 100, heldItem: null },
     requirements: { coins: 1_000_000, timeSeconds: 60, itemCosts: [{ itemId: "ENCHANTED_MITHRIL", count: 2 }], marketPriceRequired: false },
   });
-  const priced = await pricePetMutation(kat, resolver({}, { ENCHANTED_MITHRIL: 50_000 }));
+  const priced = await pricePetMutation(kat, resolver({ ENCHANTED_MITHRIL: 50_000 }));
   assert.equal(priced.costStatus, "RESOLVED");
   assert.equal(priced.fixedCoins, 1_000_000);
   assert.equal(priced.marketCoins, 100_000);
@@ -56,14 +56,8 @@ test("held-item swap prices the item exactly once", async () => {
     after: { type: "SILVERFISH", canonicalPetId: "SILVERFISH;4", baseRarity: "legendary", effectiveRarity: "legendary", level: 83, maxLevel: 100, heldItem: "PET_ITEM_QUICK_CLAW" },
     requirements: { coins: null, timeSeconds: null, itemCosts: [{ itemId: "PET_ITEM_QUICK_CLAW", count: 1 }], marketPriceRequired: true },
   });
-  const priced = await pricePetMutation(swap, resolver({}, { PET_ITEM_QUICK_CLAW: 9_000_000 }));
+  const priced = await pricePetMutation(swap, resolver({ PET_ITEM_QUICK_CLAW: 9_000_000 }));
   assert.equal(priced.marketCoins, 9_000_000);
   assert.equal(priced.quotes.length, 1);
 });
 
-test("missing acquisition quote is explicitly unresolved", async () => {
-  const priced = await pricePetMutation(mutation(), resolver());
-  assert.equal(priced.costStatus, "UNRESOLVED");
-  assert.equal(priced.totalCoins, null);
-  assert.deepEqual(priced.unresolvedKeys, ["pet:SCATHA;4"]);
-});
