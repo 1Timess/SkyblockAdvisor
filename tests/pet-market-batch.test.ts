@@ -20,7 +20,6 @@ test("batch pricing requests a shared market key only once", async () => {
       itemCalls++;
       return { key: `item:${itemId}`, coins: 10, observedAt: null, source: "TEST", confidence: "HIGH" };
     },
-    async quotePet() { return null; },
   });
   assert.equal(priced.length, 2);
   assert.equal(itemCalls, 1);
