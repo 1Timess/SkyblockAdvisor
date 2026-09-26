@@ -58,6 +58,13 @@ export const compactAdvisorCandidateSchema = z.object({
     })),
   }),
   requirements: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()), warnings: z.array(z.string()),
+  petAcquisitionFamily: z.object({
+    kind: z.literal("PET_ACQUISITION"), familyId: z.string(), petType: z.string(),
+    members: z.array(z.object({
+      id: z.string(), canonicalPetId: z.string(), rarity: z.string(),
+      level: z.number().int().positive(), maxLevel: z.number().int().positive(),
+    })).min(1),
+  }).optional(),
   family: z.object({
     kind: z.string(), count: z.number().int().min(2), totalPriceCoins: z.number().nonnegative().nullable(),
     aggregateKnownChanges: z.record(z.string(), z.number()), members: z.array(compactAdvisorCandidateMemberSchema).min(2),
