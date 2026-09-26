@@ -52,6 +52,20 @@ test("held-item mechanics can make a concrete setup Mining relevant", () => {
   assert.ok(result.evidence.some(value => value.source === "PET_ITEM_EFFECT"));
 });
 
+test("Mining location alone does not make a Fishing mechanic Mining relevant", () => {
+  const result = evaluatePetDomainRelevance(pet({
+    petSkillType: "FISHING",
+    abilities: [{
+      name: "Expert Cave Fisher", rawLore: ["Gain +20 Fishing Speed while in the Crystal Hollows."],
+      effects: [{ kind: "FLAT_STAT", target: "FISHING_SPEED", valueTemplate: "20", rawText: "Gain +20 Fishing Speed while in the Crystal Hollows." }],
+      conditions: [{ kind: "LOCATION", value: "Crystal Hollows", rawText: "Gain +20 Fishing Speed while in the Crystal Hollows." }],
+      parseStatus: "PARTIAL", confidence: "MEDIUM",
+    }],
+  }), "MINING");
+  assert.equal(result.relevant, false);
+  assert.ok(result.evidence.some(value => value.source === "PET_CONDITION"));
+});
+
 test("pet skill type alone is metadata and does not assert domain relevance", () => {
   const result = evaluatePetDomainRelevance(pet({ petSkillType: "MINING" }), "MINING");
   assert.equal(result.relevant, false);
