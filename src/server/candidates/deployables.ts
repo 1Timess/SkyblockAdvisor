@@ -3,6 +3,7 @@ import type { AdvisorCandidate } from "../../schemas/candidates";
 import type { MarketQuote } from "../../schemas/market";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { isMiningRelevantDeployable } from "../reference/deployable-mechanics";
+import { checkItemRequirements } from "../reference/requirements";
 import { prepareCandidate } from "./common";
 
 const miningDeployableStats = ["miningSpeed", "miningFortune", "gemstoneSpread", "heatResistance", "coldResistance"] as const;
@@ -21,8 +22,11 @@ export function buildMiningDeployableLanes(input: {
   const baseline = Object.fromEntries(miningDeployableStats.map(stat => [stat,
     Math.max(0, ...ownedDeployables.map(item => item.deployableMechanics?.effects[stat] ?? 0))]));
 
+  const usable = new Set(deployables.filter(item => checkItemRequirements(item, input.profile).every(check => check.status === "MET")).map(item => item.id));
+  const progressionDeployables = deployables.filter(item => !usable.has(item.id) || !isDominatedByUsableDeployable(item, deployables, usable));
+
   const lanes: Record<string, AdvisorCandidate[]> = {};
-  for (const item of deployables) {
+  for (const item of progressionDeployables) {
     if (ownedIds.has(item.id)) continue;
     const candidate = prepareCandidate("tool", item, input.profile, input.quotes,
       { budgetCoins: input.budgetCoins, ownedItemIds: ownedIds, eligibilityMode: "ADVISOR_DISCOVERY" });
@@ -44,4 +48,20 @@ export function buildMiningDeployableLanes(input: {
     for (const stat of Object.keys(changes)) (lanes[stat] ??= []).push(contextual);
   }
   return lanes;
+}
+
+
+function isDominatedByUsableDeployable(item: CandidateItem, deployables: readonly CandidateItem[], usable: ReadonlySet<string>) {
+  const mechanics = item.deployableMechanics;
+  if (!mechanics) return false;
+  return deployables.some(other => {
+    if (other.id === item.id || !usable.has(other.id) || !other.deployableMechanics) return false;
+    let strictlyBetter = false;
+    for (const stat of miningDeployableStats) {
+      const current = mechanics.effects[stat] ?? 0, alternative = other.deployableMechanics.effects[stat] ?? 0;
+      if (alternative < current) return false;
+      if (alternative > current) strictlyBetter = true;
+    }
+    return strictlyBetter;
+  });
 }
