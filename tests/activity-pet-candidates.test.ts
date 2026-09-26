@@ -21,12 +21,15 @@ function catalog(pet: CanonicalPetDefinition): CandidateItem {
     requirements: [], unparsedRequirementText: [], wiki: null, marketKey: `PET:${pet.type}:LEGENDARY`, sources: { hypixel: false, neu: true } };
 }
 
-test("activity pet lanes expose concrete semantic mutations but not flattened acquisitions", () => {
+test("activity pet lanes expose concrete semantic mutations and preserve acquisitions as one family", () => {
   const owned = definition("SEMANTIC_MINER;4");
   const unowned = definition("OTHER_MINER;4");
   const lanes = buildActivityPetLanes({ domain: "MINING", setups: [setup("owned", owned)], definitions: [owned, unowned], petItems: [], catalog: [catalog(owned), catalog(unowned)] });
   assert.ok(lanes.petLevelTarget?.some(candidate => candidate.item.id === owned.id));
-  assert.equal(Object.values(lanes).flat().some(candidate => candidate.item.id === unowned.id), false);
+  const acquisitions = lanes.petAcquisition ?? [];
+  assert.equal(acquisitions.length, 1);
+  assert.equal(acquisitions[0].petAcquisitionFamily?.petType, unowned.type);
+  assert.deepEqual(acquisitions[0].petAcquisitionFamily?.members.map(member => member.canonicalPetId), [unowned.id]);
 });
 
 test("Mining activity integration is semantic rather than pet-name based", () => {
@@ -48,4 +51,21 @@ test("activity adapter never fabricates a rarity-only pet acquisition price", ()
   const pet = definition("MINER;4");
   const lanes = buildActivityPetLanes({ domain: "MINING", setups: [setup("one", pet)], definitions: [pet], petItems: [], catalog: [catalog(pet)] });
   assert.ok(Object.values(lanes).flat().every(candidate => candidate.price === undefined));
+});
+
+
+test("acquisition family retains every concrete rarity child without selecting one", () => {
+  const owned = definition("OWNED_MINER;4");
+  const rare = { ...definition("FAMILY_MINER;2"), rarity: "rare" } as CanonicalPetDefinition;
+  const epic = { ...definition("FAMILY_MINER;3"), rarity: "epic" } as CanonicalPetDefinition;
+  const legendary = definition("FAMILY_MINER;4");
+  const lanes = buildActivityPetLanes({
+    domain: "MINING", setups: [setup("owned", owned)],
+    definitions: [owned, rare, epic, legendary], petItems: [],
+    catalog: [catalog(owned), { ...catalog(rare), rarity: "rare" }, { ...catalog(epic), rarity: "epic" }, catalog(legendary)],
+  });
+  const family = lanes.petAcquisition?.find(candidate => candidate.petAcquisitionFamily?.petType === "FAMILY_MINER");
+  assert.ok(family?.petAcquisitionFamily);
+  assert.deepEqual(family.petAcquisitionFamily.members.map(member => member.canonicalPetId), ["FAMILY_MINER;2", "FAMILY_MINER;3", "FAMILY_MINER;4"]);
+  assert.equal(family.price, undefined);
 });
