@@ -5,6 +5,7 @@ import { buildCanonicalPetDefinitions, buildCanonicalPetItemDefinitions } from "
 import { buildOwnedPetSetups } from "../src/server/pets/owned-setups";
 import { evaluatePetDomainRelevance } from "../src/server/pets/domain-relevance";
 import { buildDomainPetMutations } from "../src/server/pets/domain-mutations";
+import { buildPetMutationFamilies } from "../src/server/pets/mutation-families";
 
 async function main() {
   const username = process.argv[2];
@@ -33,6 +34,7 @@ async function main() {
     return relevance.relevant ? [{ setup, relevance }] : [];
   });
   const miningMutations = buildDomainPetMutations({ domain: "MINING", setups, definitions, petItems });
+  const miningMutationFamilies = buildPetMutationFamilies("MINING", miningMutations);
   const mutationKinds = Object.fromEntries(["ACQUIRE", "KAT_UPGRADE", "CHANGE_HELD_ITEM", "LEVEL_TARGET"].map(kind => [
     kind, miningMutations.filter(value => value.kind === kind).length,
   ]));
@@ -67,6 +69,11 @@ async function main() {
     },
     miningMutations: {
       countsByKind: mutationKinds,
+      familyCount: miningMutationFamilies.length,
+      families: miningMutationFamilies.map(family => ({
+        familyId: family.familyId, kind: family.kind, petType: family.petType, sourceSetupId: family.sourceSetupId,
+        childMutationIds: family.children.map(child => child.mutationId),
+      })),
       mutations: miningMutations.map(value => ({
         mutationId: value.mutationId, kind: value.kind, assessment: value.assessment, sourceSetupId: value.sourceSetupId,
         before: value.before, after: value.after, requirements: value.requirements, reasons: value.reasons, uncertainty: value.uncertainty,
