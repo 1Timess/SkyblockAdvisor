@@ -28,11 +28,6 @@ export async function pricePetMutation(mutation: PetMutation, resolver: PetMarke
   }
 
   const marketCoins = quotes.reduce((sum, quote) => sum + quote.coins, 0);
-  const expectedMarketComponents =
-    (mutation.kind === "ACQUIRE" ? 1 : 0) +
-    (mutation.kind === "CHANGE_HELD_ITEM" && mutation.after.heldItem ? 1 : 0) +
-    mutation.requirements.itemCosts.filter(cost => !(mutation.kind === "CHANGE_HELD_ITEM" && cost.itemId === mutation.after.heldItem && cost.count === 1)).length;
-
   const resolvedMarketComponents = quotes.length;
   const costStatus = unresolvedKeys.length === 0
     ? "RESOLVED"
