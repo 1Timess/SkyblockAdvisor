@@ -136,7 +136,7 @@ function groupCandidateFamilies(candidates: readonly AdvisorCandidate[]) {
 }
 
 function candidateFamilyKey(candidate: AdvisorCandidate) {
-  if (!candidate.categories.includes("gemstone_upgrade")) return null;
+  if (!candidate.item.categories.includes("gemstone_upgrade")) return null;
   const match = candidate.id.match(/^GEMSTONE:[^:]+:([^:]+):([^:]+)$/);
   if (!match) return null;
   const [, slotId, quality] = match;
