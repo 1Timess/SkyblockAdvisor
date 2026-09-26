@@ -70,3 +70,12 @@ test("parses self-only deployables and alternate exclusivity wording", () => {
   assert.equal(value.durationSeconds, 300);
   assert.equal(value.radiusBlocks, 30);
 });
+
+
+test("Pareto comparison preserves a candidate when an alternative trades away a Mining deployable effect", () => {
+  const lower = parseDeployableMechanics(["Ability: Deploy RIGHT CLICK", "Grants +60 Mining Speed.", "Grants +15 Mining Fortune.", "Grants +5 Heat Resistance.", "RARE DEPLOYABLE"]);
+  const sidegrade = parseDeployableMechanics(["Ability: Deploy RIGHT CLICK", "Grants +80 Mining Speed.", "Grants +10 Mining Fortune.", "EPIC DEPLOYABLE"]);
+  assert.ok(lower && sidegrade);
+  const stats = ["miningSpeed", "miningFortune", "gemstoneSpread", "heatResistance", "coldResistance"];
+  assert.equal(stats.every(stat => (sidegrade.effects[stat] ?? 0) >= (lower.effects[stat] ?? 0)), false);
+});
