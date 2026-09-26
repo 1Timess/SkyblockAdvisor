@@ -25,7 +25,7 @@ function petItem(itemId: string): CanonicalPetItemDefinition {
 
 test("owned setup preserves every concrete duplicate pet", () => {
   const pets = [
-    pet({ uuid: "scatha-a", level: 80, heldItem: "PET_ITEM_QUICK_CLAW" }),
+    pet({ uuid: "scatha-a", xp: 7900, level: 80, xpCurrent: 0, xpForNext: 100, progress: 0, heldItem: "PET_ITEM_QUICK_CLAW" }),
     pet({ uuid: "scatha-b", level: 100, heldItem: "PET_ITEM_TIER_BOOST", effectiveRarity: "legendary" }),
   ];
   const setups = buildOwnedPetSetups({
