@@ -3,6 +3,7 @@ import type { AdvisorCandidate } from "../../schemas/candidates";
 import type { OwnedPetSetup } from "../../schemas/owned-pet-setup";
 import type { CanonicalPetDefinition, CanonicalPetItemDefinition } from "../../schemas/pet-mechanics";
 import type { PetProgressionDomain } from "../../schemas/pet-domain-relevance";
+import type { PetMutation } from "../../schemas/pet-mutations";
 import { buildDomainPetMutations } from "../pets/domain-mutations";
 
 const rarityTiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"] as const;
@@ -15,10 +16,7 @@ export function buildActivityPetLanes(input: {
   catalog: readonly CandidateItem[];
 }): Record<string, AdvisorCandidate[]> {
   const catalog = new Map(input.catalog.map(item => [item.id, item]));
-  const mutations = buildDomainPetMutations(input).filter(
-    (mutation): mutation is Exclude<typeof mutation, { kind: "ACQUIRE" }> =>
-      mutation.kind !== "ACQUIRE",
-  );
+  const mutations = buildDomainPetMutations(input).filter(isNonAcquirePetMutation);
   const lanes: Record<string, AdvisorCandidate[]> = {};
 
   for (const mutation of mutations) {
@@ -48,13 +46,19 @@ export function buildActivityPetLanes(input: {
   return lanes;
 }
 
-function laneFor(kind: "KAT_UPGRADE" | "CHANGE_HELD_ITEM" | "LEVEL_TARGET") {
+type NonAcquirePetMutation = Exclude<PetMutation, { kind: "ACQUIRE" }>;
+
+function isNonAcquirePetMutation(mutation: PetMutation): mutation is NonAcquirePetMutation {
+  return mutation.kind !== "ACQUIRE";
+}
+
+function laneFor(kind: NonAcquirePetMutation["kind"]) {
   if (kind === "KAT_UPGRADE") return "petRarityUpgrade";
   if (kind === "CHANGE_HELD_ITEM") return "petHeldItem";
   return "petLevelTarget";
 }
 
-function knownChanges(mutation: ReturnType<typeof buildDomainPetMutations>[number]): NonNullable<AdvisorCandidate["knownChanges"]> {
+function knownChanges(mutation: NonAcquirePetMutation): NonNullable<AdvisorCandidate["knownChanges"]> {
   const changes: NonNullable<AdvisorCandidate["knownChanges"]> = {};
   if (mutation.before?.level !== mutation.after.level) changes.petLevel = { current: mutation.before?.level ?? null, candidate: mutation.after.level };
   if (mutation.before?.baseRarity !== mutation.after.baseRarity) {
