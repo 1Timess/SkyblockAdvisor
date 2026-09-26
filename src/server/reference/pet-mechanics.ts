@@ -35,8 +35,8 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
 }
 
 export function buildCanonicalPetItemDefinitions(items: readonly NeuItem[], constants: NeuPetConstants): CanonicalPetItemDefinition[] {
-  const ids = new Set(Object.values(constants.pet_item_display_name_to_id));
-  return items.filter(item => ids.has(item.internalname)).map(item => {
+  const mappedIds = new Set(Object.values(constants.pet_item_display_name_to_id));
+  return items.filter(item => mappedIds.has(item.internalname) || isNeuPetItem(item)).map(item => {
     const rawLore = (item.lore ?? []).map(stripFormatting).filter(Boolean);
     const parsed = parseMechanic(rawLore);
     return canonicalPetItemDefinitionSchema.parse({
@@ -44,6 +44,13 @@ export function buildCanonicalPetItemDefinitions(items: readonly NeuItem[], cons
       parseStatus: parsed.status, confidence: parsed.confidence, source: "NEU",
     });
   });
+}
+
+
+function isNeuPetItem(item: NeuItem) {
+  const lore = (item.lore ?? []).map(stripFormatting);
+  return lore.some(line => /^\s*(?:COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|MYTHIC) PET ITEM\s*$/.test(line.trim())) ||
+    lore.some(line => /Pet Items can boost pets/i.test(line));
 }
 
 export function parsePetAbilities(rawLore: readonly string[]): PetAbilityMechanic[] {
