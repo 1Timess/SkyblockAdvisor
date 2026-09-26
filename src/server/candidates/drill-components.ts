@@ -29,7 +29,7 @@ export function buildMiningDrillComponentUpgradeLanes(input: {
         const candidate = prepareCandidate("tool", part, input.profile, input.quotes,
           { budgetCoins: input.budgetCoins, ownedItemIds: owned, eligibilityMode: "ADVISOR_DISCOVERY" });
         if (!candidate) continue;
-        if (!isProgressionCandidate(slot, current, part)) continue;
+        if (!isDrillComponentProgressionCandidate(slot, current, part)) continue;
         const changes = componentChanges(current, part);
         const relevantStats = Object.keys(changes).filter(stat => (changes[stat].candidate ?? 0) > (changes[stat].current ?? 0));
         const id = `DRILL_COMPONENT:${drill.uuid ?? drill.id ?? drill.name}:${slot}:${part.id}`;
@@ -69,7 +69,7 @@ function componentChanges(current: CandidateItem | undefined, target: CandidateI
   return changes;
 }
 
-function isProgressionCandidate(slot: keyof typeof slotCategory, current: CandidateItem | undefined, target: CandidateItem) {
+export function isDrillComponentProgressionCandidate(slot: keyof typeof slotCategory, current: CandidateItem | undefined, target: CandidateItem) {
   const after = target.drillComponentMechanics;
   if (!after) return false;
   if (!current) return true;
