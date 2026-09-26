@@ -22,23 +22,6 @@ export function buildPetLevelBuckets(
   });
 }
 
-export function chooseAffordablePetListing(
-  buckets: readonly PetLevelBucket[],
-  budgetCoins: number,
-  heldItemCoins = 0,
-) {
-  return buckets
-    .flatMap(bucket => bucket.representative ? [{ bucket, listing: bucket.representative }] : [])
-    .map(value => ({ ...value, heldItemCoins, totalCoins: value.listing.coins + heldItemCoins }))
-    .filter(value => value.totalCoins <= budgetCoins)
-    .sort((a, b) =>
-      b.listing.level - a.listing.level ||
-      b.bucket.confidence.localeCompare(a.bucket.confidence) ||
-      a.totalCoins - b.totalCoins ||
-      a.listing.listingId.localeCompare(b.listing.listingId)
-    )[0] ?? null;
-}
-
 function representativeListing(samples: readonly PetMarketListing[]) {
   if (samples.length === 0) return null;
 
