@@ -32,6 +32,14 @@ const compactItemSchema = z.object({
   id: z.string().nullable(), name: z.string(), rarity: raritySchema.nullable(), categories: z.array(z.string()), stats: statsSchema,
   abilityText: z.array(z.string()), setBonusText: z.array(z.string()), gemstones: gemstoneStateSchema.optional(),
 });
+export const compactAdvisorCandidateMemberSchema = z.object({
+  id: z.string(), name: z.string(),
+  price: z.object({ coins: z.number().int().nonnegative(), observedAt: z.string().datetime(), confidence: marketConfidenceSchema }).nullable(),
+  knownChanges: z.record(z.string(), z.object({ current: z.number().nullable(), candidate: z.number().nullable() })),
+  requirements: z.array(z.string()), warnings: z.array(z.string()),
+});
+export type CompactAdvisorCandidateMember = z.infer<typeof compactAdvisorCandidateMemberSchema>;
+
 export const compactAdvisorCandidateSchema = z.object({
   id: z.string(), domain: z.enum(["armor", "weapon", "accessory", "pet", "tool"]), name: z.string(), rarity: raritySchema.nullable(),
   categories: z.array(z.string()), stats: statsSchema,
@@ -50,6 +58,10 @@ export const compactAdvisorCandidateSchema = z.object({
     })),
   }),
   requirements: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()), warnings: z.array(z.string()),
+  family: z.object({
+    kind: z.string(), count: z.number().int().min(2), totalPriceCoins: z.number().nonnegative().nullable(),
+    aggregateKnownChanges: z.record(z.string(), z.number()), members: z.array(compactAdvisorCandidateMemberSchema).min(2),
+  }).optional(),
 });
 export type CompactAdvisorCandidate = z.infer<typeof compactAdvisorCandidateSchema>;
 export const availableAnalysisSchema = z.object({
@@ -127,7 +139,7 @@ export type AdvisorContext = z.infer<typeof advisorContextSchema>;
 const followUpSchema = z.object({ domain: analysisDomainSchema, label: z.string().min(1), reason: z.string().min(1) });
 const actionSchema = z.object({
   rank: z.number().int().positive(), actionType: z.enum(["BUY", "PROGRESSION", "HOLD", "INVESTIGATE"]),
-  candidateId: z.string().nullable(), action: z.string().min(1), why: z.string().min(1), tradeoffs: z.array(z.string()),
+  candidateId: z.string().nullable(), memberCandidateIds: z.array(z.string()), action: z.string().min(1), why: z.string().min(1), tradeoffs: z.array(z.string()),
   prerequisites: z.array(z.string()), uncertainty: z.string().nullable(),
 });
 const clarificationSchema = z.object({
