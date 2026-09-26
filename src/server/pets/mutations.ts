@@ -24,13 +24,15 @@ export function buildPetMutations(input: {
     for (const path of definition.upgradePaths) {
       const output = definitions.get(path.outputId);
       if (!output || path.inputId !== definition.id) continue;
-      const after = { ...before, canonicalPetId: output.id, baseRarity: output.rarity, effectiveRarity: output.rarity, maxLevel: output.maxLevel };
+      const effectiveRarity = setup.effectiveRarity === setup.baseRarity ? output.rarity : setup.effectiveRarity;
+      const rarityUncertainty = setup.effectiveRarity === setup.baseRarity ? [] : ["Effective rarity depends on the preserved held-item mechanic."];
+      const after = { ...before, canonicalPetId: output.id, baseRarity: output.rarity, effectiveRarity, maxLevel: output.maxLevel };
       mutations.push(petMutationSchema.parse({
         mutationId: `pet:kat:${setup.setupId}:${output.id}`, kind: "KAT_UPGRADE",
         assessment: rarityIndex(output.rarity) > rarityIndex(definition.rarity) ? "PROGRESSION" : "UNCERTAIN",
         sourceSetupId: setup.setupId, before, after,
         requirements: { coins: path.coins, timeSeconds: path.timeSeconds, itemCosts: path.itemCosts, marketPriceRequired: path.coins == null },
-        reasons: [`Canonical KAT path ${definition.id} -> ${output.id}`], uncertainty: [],
+        reasons: [`Canonical KAT path ${definition.id} -> ${output.id}`], uncertainty: rarityUncertainty,
       }));
     }
 
