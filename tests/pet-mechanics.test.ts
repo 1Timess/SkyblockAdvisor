@@ -74,6 +74,15 @@ test("pet item discovery does not depend exclusively on the NEU display-name con
   assert.deepEqual(definitions.map(value => value.itemId), ["CROCHET_TIGER_PLUSHIE", "YELLOW_BANDANA"]);
 });
 
+test("mount-style pets are canonical even without a Pet lore footer", () => {
+  const rock = item("ROCK;1", ["§8Mining Mount", "", "§7Defense: §a+{DEFENSE}", "", "§eRight-click to add this pet to your pet menu!", "", "§a§lUNCOMMON"]);
+  const definitions = buildCanonicalPetDefinitions([rock], constants);
+  assert.equal(definitions.length, 1);
+  assert.equal(definitions[0].id, "ROCK;1");
+  assert.equal(definitions[0].type, "ROCK");
+  assert.equal(definitions[0].rarity, "uncommon");
+});
+
 test("unknown pet mechanics fail soft and preserve raw lore", () => {
   const [pet] = buildCanonicalPetDefinitions([item("BEE;4", ["§8Farming Pet", "", "§6Future Mechanic", "§7Do a completely novel thing with flowers.", "", "§6§lLEGENDARY"])], constants);
   assert.equal(pet.abilities[0].parseStatus, "UNPARSED");
