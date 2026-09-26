@@ -47,6 +47,8 @@ export const canonicalPetDefinitionSchema = z.object({
   maxLevel: z.number().int().positive(),
   rarityOffset: z.number().int().nonnegative().nullable(),
   xpCurve: z.array(z.number().nonnegative()),
+  xpMultiplier: z.number().positive(),
+  customLevelingType: z.number().nullable(),
   baseStats: z.record(z.string(), z.number()),
   abilities: z.array(petAbilityMechanicSchema),
   upgradePaths: z.array(petUpgradePathSchema),
