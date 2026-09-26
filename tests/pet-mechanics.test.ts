@@ -10,7 +10,7 @@ const constants: NeuPetConstants = {
   custom_pet_leveling: {
     GOLDEN_DRAGON: { type: 1, pet_levels: Array.from({ length: 200 }, (_, index) => index + 100), max_level: 200 },
   },
-  pet_types: { SCATHA: "MINING", BAL: "MINING", GOLDEN_DRAGON: "COMBAT", BEE: "FARMING" },
+  pet_types: { SCATHA: "MINING", BAL: "MINING", GOLDEN_DRAGON: "COMBAT", BEE: "FARMING", ROCK: "MINING" },
   pet_item_display_name_to_id: { "§6Quick Claw": "PET_ITEM_QUICK_CLAW", "§6Tier Boost": "PET_ITEM_TIER_BOOST" },
 };
 
@@ -81,6 +81,12 @@ test("mount-style pets are canonical even without a Pet lore footer", () => {
   assert.equal(definitions[0].id, "ROCK;1");
   assert.equal(definitions[0].type, "ROCK");
   assert.equal(definitions[0].rarity, "uncommon");
+});
+
+test("semicolon tier ids that are not in NEU pet_types are not canonical pets", () => {
+  const shard = item("ATTRIBUTE_SHARD_FORTUNATE_MINER;1", ["§7Mining Fortune: §a+10"]);
+  const definitions = buildCanonicalPetDefinitions([shard], constants);
+  assert.deepEqual(definitions, []);
 });
 
 test("unknown pet mechanics fail soft and preserve raw lore", () => {
