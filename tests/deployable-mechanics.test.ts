@@ -44,3 +44,29 @@ test("Mining relevance follows parsed effects rather than the footer label", () 
   assert.equal(value?.effects.gemstoneSpread, 2.5);
   assert.equal(isMiningRelevantDeployable(value), true);
 });
+
+
+test("references to deployables do not make an upgrade item a deployable", () => {
+  const value = parseDeployableMechanics([
+    "Combinable in Anvil",
+    "Combine this Book in an Anvil with a deployable to gain a small but permanent stat boost!",
+    "EPIC",
+  ]);
+  assert.equal(value, undefined);
+});
+
+test("parses self-only deployables and alternate exclusivity wording", () => {
+  const value = parseDeployableMechanics([
+    "Fishing Deployable",
+    "Ability: Deploy RIGHT CLICK",
+    "Place a totem down for 5m, buffing only yourself within 30 blocks.",
+    "Deployable Buff: Corrupted",
+    "Only one deployable can be active at a time.",
+    "UNCOMMON DEPLOYABLE",
+  ]);
+  assert.ok(value);
+  assert.equal(value.maxPlayers, 1);
+  assert.equal(value.exclusiveBuff, true);
+  assert.equal(value.durationSeconds, 300);
+  assert.equal(value.radiusBlocks, 30);
+});
