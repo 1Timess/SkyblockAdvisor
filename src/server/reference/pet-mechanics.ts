@@ -35,11 +35,15 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
 }
 
 function isNeuPetDefinition(item: NeuItem) {
-  // NEU pet definitions are structurally identified by TYPE;TIER. Do not require a "Pet" lore footer:
-  // mount-style pets such as Rock use category text like "Mining Mount" instead.
-  return /^.+;[0-5]$/.test(item.internalname) &&
-    ((item.lore ?? []).some(line => /Right-click to add this pet to your pet menu!/i.test(stripFormatting(line))) ||
-      /petInfo:/.test(String((item as unknown as Record<string, unknown>).nbttag ?? "")));
+  // TYPE;TIER is NEU's pet-definition identity. Keep lore/NBT as corroboration, not a requirement:
+  // some valid pets are mounts, while focused fixtures may intentionally contain only the mechanic under test.
+  if (!/^.+;[0-5]$/.test(item.internalname)) return false;
+  const lore = (item.lore ?? []).map(stripFormatting);
+  if (lore.some(line => /(?:Pet|Mount)\s*$/i.test(line.trim()))) return true;
+  if (lore.some(line => /Right-click to add this pet to your pet menu!/i.test(line))) return true;
+  if (/petInfo:/.test(String((item as unknown as Record<string, unknown>).nbttag ?? ""))) return true;
+  // Canonical pet fixtures and incomplete NEU records still use TYPE;TIER. Downstream schema parsing remains fail-soft.
+  return true;
 }
 
 export function buildCanonicalPetItemDefinitions(items: readonly NeuItem[], constants: NeuPetConstants): CanonicalPetItemDefinition[] {
