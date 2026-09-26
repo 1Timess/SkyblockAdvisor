@@ -72,6 +72,21 @@ test("pet skill type alone is metadata and does not assert domain relevance", ()
   assert.deepEqual(result.evidence.map(value => value.source), ["PET_SKILL_TYPE"]);
 });
 
+test("generic effect text does not borrow a domain from an unrelated clause", () => {
+  const result = evaluatePetDomainRelevance(pet({
+    abilities: [{
+      name: "Mixed Utility",
+      rawLore: ["Catching a Sea Creature has a 10% chance to give Treasure.", "Gain Mining Speed while mining."],
+      effects: [{
+        kind: "DROP_CHANCE", target: null, valueTemplate: "10%",
+        rawText: "Catching a Sea Creature has a 10% chance to give Treasure. Gain Mining Speed while mining.",
+      }],
+      conditions: [], parseStatus: "PARTIAL", confidence: "MEDIUM",
+    }],
+  }), "MINING");
+  assert.equal(result.relevant, false);
+});
+
 test("combat-only mechanics do not leak into Mining", () => {
   const result = evaluatePetDomainRelevance(pet({
     petSkillType: "COMBAT",
