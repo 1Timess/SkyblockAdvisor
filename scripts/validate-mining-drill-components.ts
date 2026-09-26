@@ -40,7 +40,7 @@ async function main() {
     })),
     catalog: {
       count: componentCatalog.length,
-      components: componentCatalog.map(item => ({ id: item.id, name: item.name, categories: item.categories, stats: item.stats, lore: item.lore, requirements: item.requirements })),
+      components: componentCatalog.map(item => ({ id: item.id, name: item.name, categories: item.categories, stats: item.stats, drillComponentMechanics: item.drillComponentMechanics ?? null, lore: item.lore, requirements: item.requirements })),
     },
     discovery: {
       rawComponentMutations: componentFrontier.length,
