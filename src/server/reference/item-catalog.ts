@@ -7,6 +7,7 @@ import { extractStats } from "../skyblock/items/parse-stats";
 import { parseItemRequirements } from "./requirements";
 import type { NeuRepository } from "./neu/repository";
 import { parseDrillComponentMechanics } from "./drill-component-mechanics";
+import { parseDeployableMechanics } from "./deployable-mechanics";
 
 export interface ItemCatalog {
   getById(id: string): CandidateItem | undefined;
@@ -56,7 +57,8 @@ export function buildItemCatalog(items: readonly HypixelItemDefinition[], neu?: 
     if (reference) neuEnriched++;
     const lore = (reference?.lore ?? []).map(stripFormatting);
     const footer = parseFooter(lore);
-    const categories = [...new Set([...footer.categories, ...categoriesForItemType(item.category), ...categoriesForReferenceLore(lore)])];
+    const deployableMechanics = parseDeployableMechanics(lore);
+    const categories = [...new Set([...footer.categories, ...categoriesForItemType(item.category), ...categoriesForReferenceLore(lore), ...(deployableMechanics ? ["deployable"] : [])])];
     const { stats } = extractStats(lore);
     const requirements = parseItemRequirements({ lore, slayerRequirement: reference?.slayer_req });
     return {
@@ -72,6 +74,7 @@ export function buildItemCatalog(items: readonly HypixelItemDefinition[], neu?: 
       marketKey: item.id,
       sources: { hypixel: true as const, neu: reference !== undefined },
       drillComponentMechanics: parseDrillComponentMechanics(lore),
+      deployableMechanics,
     } satisfies CandidateItem;
   });
   return new InMemoryItemCatalog(catalog, {
