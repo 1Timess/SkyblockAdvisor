@@ -65,6 +65,15 @@ test("pet items share the canonical effect model and retain uncertainty", () => 
   assert.equal(boost.rawLore[1], "Boosts the rarity of your pet by 1 tier!");
 });
 
+test("pet item discovery does not depend exclusively on the NEU display-name constants map", () => {
+  const definitions = buildCanonicalPetItemDefinitions([
+    item("CROCHET_TIGER_PLUSHIE", ["§8Consumed on use", "", "§aPet Items §7can boost pets in many", "§7powerful ways!", "", "§7Grants §e+35 Attack Speed§7.", "", "§5§lEPIC PET ITEM"]),
+    item("YELLOW_BANDANA", ["§8Consumed on use", "", "§aPet Items §7can boost pets in many", "", "§7Grants §6+30 Farming Fortune§7.", "", "§9§lRARE PET ITEM"]),
+    item("NOT_A_PET_ITEM", ["§7Grants +30 Farming Fortune."]),
+  ], constants);
+  assert.deepEqual(definitions.map(value => value.itemId), ["CROCHET_TIGER_PLUSHIE", "YELLOW_BANDANA"]);
+});
+
 test("unknown pet mechanics fail soft and preserve raw lore", () => {
   const [pet] = buildCanonicalPetDefinitions([item("BEE;4", ["§8Farming Pet", "", "§6Future Mechanic", "§7Do a completely novel thing with flowers.", "", "§6§lLEGENDARY"])], constants);
   assert.equal(pet.abilities[0].parseStatus, "UNPARSED");
