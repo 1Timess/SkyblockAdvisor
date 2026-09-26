@@ -15,12 +15,13 @@ export function buildOwnedPetSetups(input: {
     const canonicalPetId = canonicalId(pet.type, pet.rarity);
     const definition = canonicalPetId ? definitions.get(canonicalPetId) : undefined;
     const heldItemDefinition = pet.heldItem ? petItems.get(pet.heldItem) : undefined;
+    const level = definition ? resolveCanonicalPetLevel(pet.xp, definition) : null;
     return ownedPetSetupSchema.parse({
       setupId: pet.uuid ? `pet:${pet.uuid}` : fallbackSetupId(pet, index),
       uuid: pet.uuid, type: pet.type, name: pet.name,
       baseRarity: pet.rarity, effectiveRarity: pet.effectiveRarity,
-      xp: pet.xp, level: pet.level, maxLevel: pet.maxLevel,
-      xpCurrent: pet.xpCurrent, xpForNext: pet.xpForNext, progress: pet.progress,
+      xp: pet.xp, level: level?.level ?? pet.level, maxLevel: definition?.maxLevel ?? pet.maxLevel,
+      xpCurrent: level?.xpCurrent ?? pet.xpCurrent, xpForNext: level?.xpForNext ?? pet.xpForNext, progress: level?.progress ?? pet.progress,
       heldItem: pet.heldItem, candyUsed: pet.candyUsed, skin: pet.skin, active: pet.active,
       canonicalPetId: definition?.id ?? null,
       canonicalPetItemId: heldItemDefinition?.itemId ?? null,
@@ -40,4 +41,16 @@ function canonicalId(type: string, rarity: string) {
 function fallbackSetupId(pet: NormalizedPet, index: number) {
   // Hypixel historically omitted UUIDs on some pet records. The source-order suffix keeps duplicate concrete copies distinct.
   return `pet:${pet.type}:${pet.rarity}:${index}`;
+}
+
+function resolveCanonicalPetLevel(xp: number, definition: CanonicalPetDefinition) {
+  let level = 1, consumed = 0;
+  for (const cost of definition.xpCurve) {
+    if (level >= definition.maxLevel || consumed + cost > xp) break;
+    consumed += cost;
+    level++;
+  }
+  const xpCurrent = Math.max(0, Math.floor(xp - consumed));
+  const xpForNext = level >= definition.maxLevel ? 0 : definition.xpCurve[level - 1] ?? 0;
+  return { level, xpCurrent, xpForNext, progress: xpForNext > 0 ? Math.min(1, xpCurrent / xpForNext) : 0 };
 }
