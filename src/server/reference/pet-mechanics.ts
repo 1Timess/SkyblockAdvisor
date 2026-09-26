@@ -148,7 +148,7 @@ function resolveXpCurve(base: readonly number[], custom: readonly number[] | und
 function parseBaseStatTemplates(lore: readonly string[]) {
   const out: Record<string, string> = {};
   for (const line of lore) {
-    const match = line.match(/^([A-Za-z ]+):\\s*[+]?((?:\\{[A-Z_]+\\})|(?:-?\\d+(?:\\.\\d+)?))(?:%|$)/);
+    const match = line.match(/^([A-Za-z ]+):\s*\+?((?:\{[A-Z_]+\})|(?:-?\d+(?:\.\d+)?))(?:%|$)/);
     if (!match) continue;
     out[match[1].trim().toUpperCase().replaceAll(" ", "_")] = match[2];
   }
