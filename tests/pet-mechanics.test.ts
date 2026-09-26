@@ -19,11 +19,12 @@ function item(internalname: string, lore: string[], recipes?: unknown[]): NeuIte
 }
 
 test("canonical pets use NEU custom leveling and preserve pet skill type as metadata", () => {
-  const [pet] = buildCanonicalPetDefinitions([item("GOLDEN_DRAGON;4", ["§8Combat Pet", "", "§6Treasure", "§7Gain §c{3}% damage for every million coins in your bank.", "", "§6§lLEGENDARY"])], constants);
+  const [pet] = buildCanonicalPetDefinitions([item("GOLDEN_DRAGON;4", ["§8Combat Pet", "", "§7Strength: §c+{STRENGTH}", "", "§6Treasure", "§7Gain §c{3}% damage for every million coins in your bank.", "", "§6§lLEGENDARY"])], constants);
   assert.equal(pet.maxLevel, 200);
   assert.equal(pet.xpCurve.length, 200);
   assert.equal(pet.petSkillType, "COMBAT");
   assert.equal(pet.source, "NEU");
+  assert.equal(pet.baseStatTemplates.STRENGTH, "{STRENGTH}");
   assert.equal(pet.abilities[0].rawLore[0], "Gain {3}% damage for every million coins in your bank.");
 });
 
