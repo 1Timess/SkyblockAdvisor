@@ -1,0 +1,46 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { isMiningRelevantDeployable, parseDeployableMechanics } from "../src/server/reference/deployable-mechanics";
+
+test("parses Glacite Lantern mechanics without relying on the Mining Deployable label", () => {
+  const value = parseDeployableMechanics([
+    "Ability: Deploy RIGHT CLICK",
+    "Place an orb for 5m buffing up to 5 players within 30 blocks.",
+    "Affects all players inside a Glacite Mineshaft, regardless of distance.",
+    "Orb Buff: Glacite Lantern",
+    "Grants +80 Mining Speed.",
+    "Grants +20 Mining Fortune.",
+    "Grants +10 Heat Resistance.",
+    "Grants +5 Cold Resistance.",
+    "Only one deployable buff applies.",
+    "EPIC DEPLOYABLE",
+  ]);
+  assert.deepEqual(value, {
+    durationSeconds: 300, radiusBlocks: 30, maxPlayers: 5, exclusiveBuff: true, mineshaftGlobal: true,
+    effects: { miningSpeed: 80, miningFortune: 20, heatResistance: 10, coldResistance: 5 },
+  });
+  assert.equal(isMiningRelevantDeployable(value), true);
+});
+
+test("plain Deployable identity does not imply Mining relevance", () => {
+  const value = parseDeployableMechanics([
+    "Ability: Deploy RIGHT CLICK",
+    "Place an orb for 60s buffing up to 5 players within 20 blocks.",
+    "Grants +10 Vitality.",
+    "Only one deployable buff applies.",
+    "LEGENDARY DEPLOYABLE",
+  ]);
+  assert.ok(value);
+  assert.equal(isMiningRelevantDeployable(value), false);
+});
+
+test("Mining relevance follows parsed effects rather than the footer label", () => {
+  const value = parseDeployableMechanics([
+    "Ability: Deploy RIGHT CLICK",
+    "Place an orb for 5m.",
+    "Grants +2.5 Gemstone Spread.",
+    "LEGENDARY DEPLOYABLE",
+  ]);
+  assert.equal(value?.effects.gemstoneSpread, 2.5);
+  assert.equal(isMiningRelevantDeployable(value), true);
+});
