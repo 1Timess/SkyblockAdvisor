@@ -22,8 +22,8 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
     if (!rarity) return [];
     const custom = constants.custom_pet_leveling[type];
     const maxLevel = custom?.max_level ?? 100;
-    const curve = resolveXpCurve(constants.pet_levels, custom?.pet_levels, maxLevel);
     const rarityOffset = custom?.rarity_offset?.[rarity] ?? constants.pet_rarity_offset[rarity] ?? null;
+    const curve = resolveXpCurve(constants.pet_levels, custom?.pet_levels, maxLevel, rarityOffset, custom?.xp_multiplier ?? 1);
     const cleanLore = (item.lore ?? []).map(stripFormatting);
     const baseStatTemplates = parseBaseStatTemplates(cleanLore);
     return [canonicalPetDefinitionSchema.parse({
@@ -138,13 +138,14 @@ function hasUnresolvedSemantics(text: string, effects: readonly PetEffect[]) {
   return /for each|for every|depending|based on|current|per .*collection|up to|max |if |while |when /i.test(text);
 }
 
-function resolveXpCurve(base: readonly number[], custom: readonly number[] | undefined, maxLevel: number) {
-  if (maxLevel <= 100) return [...(custom ?? base)].slice(0, maxLevel);
-  if (!custom?.length) return [...base].slice(0, maxLevel);
-  // NEU custom level-200 pets provide the additional 101-200 costs separately from the normal curve.
-  return [...base.slice(0, 100), ...custom].slice(0, maxLevel);
+function resolveXpCurve(base: readonly number[], custom: readonly number[] | undefined, maxLevel: number, rarityOffset: number | null, xpMultiplier: number) {
+  const offset = rarityOffset ?? 0;
+  const normalLevels = Math.min(maxLevel - 1, 99);
+  const normal = base.slice(offset, offset + normalLevels).map(value => value * xpMultiplier);
+  if (maxLevel <= 100) return normal;
+  const extraNeeded = maxLevel - 1 - normal.length;
+  return [...normal, ...(custom ?? []).slice(0, extraNeeded).map(value => value * xpMultiplier)];
 }
-
 function parseBaseStatTemplates(lore: readonly string[]) {
   const out: Record<string, string> = {};
   for (const line of lore) {
