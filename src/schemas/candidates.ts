@@ -28,6 +28,20 @@ const drillComponentMutationSchema = z.object({
 });
 export const candidateMutationSchema = z.discriminatedUnion("kind", [gemstoneMutationSchema, drillComponentMutationSchema]);
 
+const petAcquisitionFamilyMemberSchema = z.object({
+  id: z.string().min(1),
+  canonicalPetId: z.string().min(1),
+  rarity: z.string().min(1),
+  level: z.number().int().positive(),
+  maxLevel: z.number().int().positive(),
+});
+const petAcquisitionFamilySchema = z.object({
+  kind: z.literal("PET_ACQUISITION"),
+  familyId: z.string().min(1),
+  petType: z.string().min(1),
+  members: z.array(petAcquisitionFamilyMemberSchema).min(1),
+});
+
 export const advisorCandidateSchema = z.object({
   id: z.string().min(1),
   domain: z.enum(["armor", "weapon", "accessory", "pet", "tool"]),
@@ -39,6 +53,7 @@ export const advisorCandidateSchema = z.object({
   setBonusText: z.array(z.string()),
   warnings: z.array(z.string()),
   mutation: candidateMutationSchema.optional(),
+  petAcquisitionFamily: petAcquisitionFamilySchema.optional(),
 });
 export type AdvisorCandidate = z.infer<typeof advisorCandidateSchema>;
 
