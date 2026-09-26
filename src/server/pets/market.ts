@@ -3,7 +3,6 @@ import { pricedPetMutationSchema, type PetMarketQuote, type PricedPetMutation } 
 
 export type PetMarketResolver = {
   quoteItem(itemId: string): Promise<PetMarketQuote | null>;
-  quotePet(canonicalPetId: string): Promise<PetMarketQuote | null>;
 };
 
 export async function pricePetMutation(mutation: PetMutation, resolver: PetMarketResolver): Promise<PricedPetMutation> {
@@ -12,9 +11,9 @@ export async function pricePetMutation(mutation: PetMutation, resolver: PetMarke
   const unresolvedKeys: string[] = [];
 
   if (mutation.kind === "ACQUIRE") {
-    const key = `pet:${mutation.after.canonicalPetId}`;
-    const quote = await resolver.quotePet(mutation.after.canonicalPetId);
-    if (quote) quotes.push(quote); else unresolvedKeys.push(key);
+    // Acquisition prices are level-aware and resolved through acquisition-choices.ts.
+    // A rarity-only quote would collapse materially different pet market states.
+    unresolvedKeys.push(`pet-acquisition:${mutation.after.canonicalPetId}:level-aware`);
   }
 
   if (mutation.kind === "CHANGE_HELD_ITEM" && mutation.after.heldItem) {
