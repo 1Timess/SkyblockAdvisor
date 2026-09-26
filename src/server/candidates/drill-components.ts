@@ -28,9 +28,9 @@ export function buildMiningDrillComponentUpgradeLanes(input: {
         const candidate = prepareCandidate("tool", part, input.profile, input.quotes,
           { budgetCoins: input.budgetCoins, ownedItemIds: owned, eligibilityMode: "ADVISOR_DISCOVERY" });
         if (!candidate) continue;
+        if (!isProgressionCandidate(slot, current, part)) continue;
         const changes = componentChanges(current, part);
         const relevantStats = Object.keys(changes).filter(stat => (changes[stat].candidate ?? 0) > (changes[stat].current ?? 0));
-        if (!relevantStats.length && slot !== "UPGRADE_MODULE" && slot !== "FUEL_TANK") continue;
         const id = `DRILL_COMPONENT:${drill.uuid ?? drill.id ?? drill.name}:${slot}:${part.id}`;
         const mutation: AdvisorCandidate = {
           ...candidate, id, item: { ...candidate.item, id, name: `${currentId ? "Replace" : "Install"} ${part.name} on ${drill.name}`,
@@ -62,5 +62,29 @@ function componentChanges(current: CandidateItem | undefined, target: CandidateI
     const before = current?.stats[stat] ?? 0, after = target.stats[stat] ?? 0;
     if (before !== 0 || after !== 0) changes[stat] = { current: before, candidate: after };
   }
+  const before = current?.drillComponentMechanics, after = target.drillComponentMechanics;
+  if (after?.miningSpeed !== null && after?.miningSpeed !== undefined) changes.miningSpeed = { current: before?.miningSpeed ?? 0, candidate: after.miningSpeed };
+  if (after?.miningFortune !== null && after?.miningFortune !== undefined) changes.miningFortune = { current: before?.miningFortune ?? 0, candidate: after.miningFortune };
   return changes;
+}
+
+function isProgressionCandidate(slot: keyof typeof slotCategory, current: CandidateItem | undefined, target: CandidateItem) {
+  const after = target.drillComponentMechanics;
+  if (!after) return false;
+  if (!current) return true;
+  const before = current.drillComponentMechanics;
+  if (!before) return false;
+  if (slot === "UPGRADE_MODULE") return false; // Modules are goal-dependent tradeoffs until activity intent can rank their mechanics.
+  if (slot === "ENGINE") return dominates([before.miningSpeed, before.miningFortune], [after.miningSpeed, after.miningFortune]);
+  return dominates([before.fuelCapacity, before.pickaxeCooldownReductionPct], [after.fuelCapacity, after.pickaxeCooldownReductionPct]);
+}
+
+function dominates(before: Array<number | null>, after: Array<number | null>) {
+  let better = false;
+  for (let i = 0; i < before.length; i++) {
+    const a = after[i], b = before[i];
+    if (a === null || b === null || a < b) return false;
+    if (a > b) better = true;
+  }
+  return better;
 }
