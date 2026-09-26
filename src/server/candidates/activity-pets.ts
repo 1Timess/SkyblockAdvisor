@@ -15,7 +15,7 @@ export function buildActivityPetLanes(input: {
   catalog: readonly CandidateItem[];
 }): Record<string, AdvisorCandidate[]> {
   const catalog = new Map(input.catalog.map(item => [item.id, item]));
-  const mutations = buildDomainPetMutations(input).filter(mutation => mutation.kind !== "ACQUIRE");
+  const mutations = buildDomainPetMutations(input).filter(\n    (mutation): mutation is Exclude<typeof mutation, { kind: "ACQUIRE" }> => mutation.kind !== "ACQUIRE",\n  );
   const lanes: Record<string, AdvisorCandidate[]> = {};
 
   for (const mutation of mutations) {
