@@ -60,8 +60,13 @@ function collectMechanicEvidence(
 
 function collectEffects(effects: readonly PetEffect[], domain: PetProgressionDomain, source: "PET_EFFECT" | "PET_ITEM_EFFECT", out: PetDomainEvidence[]) {
   for (const effect of effects) {
-    const domains = new Set<PetProgressionDomain>(TARGET_DOMAINS[effect.target ?? ""] ?? []);
-    for (const [pattern, candidate] of TEXT_DOMAINS) if (pattern.test(effect.rawText)) domains.add(candidate);
+    const mapped = effect.target ? TARGET_DOMAINS[effect.target] : undefined;
+    const domains = new Set<PetProgressionDomain>(mapped ?? []);
+    // A recognized target is authoritative. Do not let location/activity words elsewhere in the
+    // same sentence reclassify it (for example Fishing Speed while in Crystal Hollows).
+    if (!mapped) {
+      for (const [pattern, candidate] of TEXT_DOMAINS) if (pattern.test(effect.rawText)) domains.add(candidate);
+    }
     if (domains.has(domain)) out.push({ source, domain, mechanic: effect.target ?? effect.kind, rawText: effect.rawText });
   }
 }
