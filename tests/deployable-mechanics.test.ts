@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { isMiningRelevantDeployable, parseDeployableMechanics } from "../src/server/reference/deployable-mechanics";
+import { deployableStrictlyImproves } from "../src/server/candidates/deployables";
+import type { CandidateItem } from "../src/schemas/catalog";
 
 test("parses Glacite Lantern mechanics without relying on the Mining Deployable label", () => {
   const value = parseDeployableMechanics([
@@ -72,10 +74,14 @@ test("parses self-only deployables and alternate exclusivity wording", () => {
 });
 
 
-test("Pareto comparison preserves a candidate when an alternative trades away a Mining deployable effect", () => {
-  const lower = parseDeployableMechanics(["Ability: Deploy RIGHT CLICK", "Grants +60 Mining Speed.", "Grants +15 Mining Fortune.", "Grants +5 Heat Resistance.", "RARE DEPLOYABLE"]);
-  const sidegrade = parseDeployableMechanics(["Ability: Deploy RIGHT CLICK", "Grants +80 Mining Speed.", "Grants +10 Mining Fortune.", "EPIC DEPLOYABLE"]);
-  assert.ok(lower && sidegrade);
-  const stats = ["miningSpeed", "miningFortune", "gemstoneSpread", "heatResistance", "coldResistance"];
-  assert.equal(stats.every(stat => (sidegrade.effects[stat] ?? 0) >= (lower.effects[stat] ?? 0)), false);
+test("production deployable comparison rejects Frankenstein sidegrades", () => {
+  const make = (id: string, lore: string[]): CandidateItem => ({
+    id, name: id, rarity: "rare", categories: ["deployable"], stats: {}, requirements: [],
+    abilityText: [], setBonusText: [], source: "HYPIXEL", deployableMechanics: parseDeployableMechanics(lore),
+  } as CandidateItem);
+  const owned = make("OWNED", ["Ability: Deploy RIGHT CLICK", "Grants +60 Mining Speed.", "Grants +15 Mining Fortune.", "Grants +5 Heat Resistance.", "RARE DEPLOYABLE"]);
+  const sidegrade = make("SIDEGRADE", ["Ability: Deploy RIGHT CLICK", "Grants +80 Mining Speed.", "Grants +10 Mining Fortune.", "EPIC DEPLOYABLE"]);
+  const upgrade = make("UPGRADE", ["Ability: Deploy RIGHT CLICK", "Grants +80 Mining Speed.", "Grants +20 Mining Fortune.", "Grants +10 Heat Resistance.", "EPIC DEPLOYABLE"]);
+  assert.equal(deployableStrictlyImproves(sidegrade, owned), false);
+  assert.equal(deployableStrictlyImproves(upgrade, owned), true);
 });
