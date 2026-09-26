@@ -6,10 +6,14 @@ import { loadMarketSnapshot } from "../market/snapshot-store";
 import { buildAccessoryCatalog } from "../reference/accessory-data";
 import { buildItemCatalog } from "../reference/item-catalog";
 import { loadNeuRepository } from "../reference/neu/repository";
+import { loadNeuPetConstants } from "../reference/neu/pets";
+import { buildCanonicalPetDefinitions, buildCanonicalPetItemDefinitions } from "../reference/pet-mechanics";
+import { buildOwnedPetSetups } from "../pets/owned-setups";
 import { buildPetCandidateCatalog } from "../reference/pet-catalog";
 import { buildAccessoryLanes } from "../candidates/accessory";
 import { buildArmorLanes } from "../candidates/armor";
 import { buildActivityDomainLanes } from "../candidates/domain";
+import { buildActivityPetLanes } from "../candidates/activity-pets";
 import { buildPetLanes } from "../candidates/pet";
 import { buildWeaponLanes } from "../candidates/weapon";
 import { buildAdvisorContext, buildCandidateFeasibility, compactProfileWarnings, isNoOpPetCandidate, orderDetailedCandidates, type TaggedCandidateLane } from "./context";
@@ -41,7 +45,7 @@ export async function buildAdvisorContextForPlayer(input: BuildAdvisorContextInp
 export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisorContextInput): Promise<AdvisorContextBuildResult> {
   const profileResultPromise = advisorProfileSnapshotCache.getOrLoad({ usernameOrUuid: input.usernameOrUuid, requestedProfile: input.requestedProfile,
     profileSnapshotId: input.conversationState?.profileSnapshotId });
-  const [profileResult, items, neu, market] = await Promise.all([profileResultPromise, hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]);
+  const [profileResult, items, neu, market, petConstants] = await Promise.all([profileResultPromise, hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot(), loadNeuPetConstants()]);
   const intelligence = profileResult.snapshot, profile = intelligence.profile;
   const route = routeAdvisorQuestion({ question: input.question, profile, conversationState: input.conversationState });
   const effectiveBudgetCoins = input.budgetCoins ?? input.conversationState?.budgetCoins;
@@ -66,6 +70,22 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     const activityDomain = route.domain;
     const result = buildActivityDomainLanes({ domain: activityDomain, profile, catalog, quotes, budgetCoins: effectiveBudgetCoins });
     lanes.push(...Object.entries(result).map(([lane, candidates]) => ({ domain: activityDomain, label: `${activityDomain.toLowerCase()}:${lane}`, candidates })));
+
+    const petDefinitions = buildCanonicalPetDefinitions(neu.getAll(), petConstants);
+    const petItems = buildCanonicalPetItemDefinitions(neu.getAll(), petConstants);
+    const petSetups = buildOwnedPetSetups({ pets: profile.pets.owned, definitions: petDefinitions, petItems });
+    const petResult = buildActivityPetLanes({
+      domain: activityDomain,
+      setups: petSetups,
+      definitions: petDefinitions,
+      petItems,
+      catalog: buildPetCandidateCatalog(neu),
+    });
+    lanes.push(...Object.entries(petResult).map(([lane, candidates]) => ({
+      domain: activityDomain,
+      label: `${activityDomain.toLowerCase()}:${lane}`,
+      candidates,
+    })));
   } else if (route.scope === "PETS") {
     const result = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu), quotes, budgetCoins: effectiveBudgetCoins,
       rolePetTypes: input.rolePetTypes, eligibilityMode });
