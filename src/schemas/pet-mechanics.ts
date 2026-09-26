@@ -49,7 +49,7 @@ export const canonicalPetDefinitionSchema = z.object({
   xpCurve: z.array(z.number().nonnegative()),
   xpMultiplier: z.number().positive(),
   customLevelingType: z.number().nullable(),
-  baseStats: z.record(z.string(), z.number()),
+  baseStatTemplates: z.record(z.string(), z.string()),
   abilities: z.array(petAbilityMechanicSchema),
   upgradePaths: z.array(petUpgradePathSchema),
   source: z.literal("NEU"),
