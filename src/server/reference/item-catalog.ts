@@ -6,6 +6,7 @@ import { categoriesForItemType, parseFooter, stripFormatting } from "../skyblock
 import { extractStats } from "../skyblock/items/parse-stats";
 import { parseItemRequirements } from "./requirements";
 import type { NeuRepository } from "./neu/repository";
+import { parseDrillComponentMechanics } from "./drill-component-mechanics";
 
 export interface ItemCatalog {
   getById(id: string): CandidateItem | undefined;
@@ -70,6 +71,7 @@ export function buildItemCatalog(items: readonly HypixelItemDefinition[], neu?: 
       wiki: wikiUrl(reference?.infoType, reference?.info),
       marketKey: item.id,
       sources: { hypixel: true as const, neu: reference !== undefined },
+      drillComponentMechanics: parseDrillComponentMechanics(lore),
     } satisfies CandidateItem;
   });
   return new InMemoryItemCatalog(catalog, {
