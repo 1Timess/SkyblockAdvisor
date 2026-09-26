@@ -6,6 +6,7 @@ import { miningRelevantStats } from "../reference/mining-knowledge";
 import { prepareCandidate } from "./common";
 import { buildMiningGemstoneUpgradeLanes } from "./gemstone";
 import { buildMiningDrillComponentUpgradeLanes } from "./drill-components";
+import { buildMiningDeployableLanes } from "./deployables";
 
 const fishingStats = ["fishingSpeed", "seaCreatureChance"] as const;
 const unavailableArmorLoadoutWarning = "Armor loadout data is unavailable, so the owned armor baseline for this slot is unknown.";
@@ -46,8 +47,9 @@ export function buildActivityDomainLanes(input: {
   if (input.domain !== "MINING") return replacementLanes;
   const gemstoneLanes = buildMiningGemstoneUpgradeLanes(input.profile, input.quotes);
   const componentLanes = buildMiningDrillComponentUpgradeLanes(input);
-  const laneNames = new Set([...stats, ...Object.keys(componentLanes)]);
-  return Object.fromEntries([...laneNames].map(stat => [stat, [...(gemstoneLanes[stat] ?? []), ...(componentLanes[stat] ?? []), ...(replacementLanes[stat] ?? [])]]));
+  const deployableLanes = buildMiningDeployableLanes(input);
+  const laneNames = new Set([...stats, ...Object.keys(componentLanes), ...Object.keys(deployableLanes)]);
+  return Object.fromEntries([...laneNames].map(stat => [stat, [...(gemstoneLanes[stat] ?? []), ...(componentLanes[stat] ?? []), ...(deployableLanes[stat] ?? []), ...(replacementLanes[stat] ?? [])]]));
 }
 
 function withinBoundary(domain: "FISHING" | "MINING", item: CandidateItem) {

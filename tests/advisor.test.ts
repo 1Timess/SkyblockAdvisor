@@ -80,7 +80,7 @@ test("CLARIFICATION validates without purchase candidates", async () => {
 
 test("PLAN enforces semantic action IDs and contiguous ranks", async () => {
   const advisorContext = await context();
-  const valid = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "BUY", candidateId: "WEAPON_A", action: "Buy it",
+  const valid = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "BUY", candidateId: "WEAPON_A", memberCandidateIds: [], action: "Buy it",
     why: "Known improvement", tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [],
     followUps: [{ domain: "ACCESSORIES", label: "Check accessories", reason: "Analysis is available." }] };
   assert.deepEqual(validateAdvisorResponse(valid, advisorContext), valid);
@@ -94,19 +94,19 @@ test("PLAN enforces semantic action IDs and contiguous ranks", async () => {
 test("prerequisite-first and hold-only plans are valid", async () => {
   const advisorContext = await context();
   const prerequisite = { kind: "PLAN", headline: "Unlock first", actions: [
-    { rank: 1, actionType: "PROGRESSION", candidateId: null, action: "Complete the prerequisite", why: "The candidate is locked", tradeoffs: [], prerequisites: [], uncertainty: null },
-    { rank: 2, actionType: "BUY", candidateId: "WEAPON_A", action: "Buy after unlocking", why: "Then it is usable", tradeoffs: [], prerequisites: ["Complete the prerequisite"], uncertainty: null },
+    { rank: 1, actionType: "PROGRESSION", candidateId: null, memberCandidateIds: [], action: "Complete the prerequisite", why: "The candidate is locked", tradeoffs: [], prerequisites: [], uncertainty: null },
+    { rank: 2, actionType: "BUY", candidateId: "WEAPON_A", memberCandidateIds: [], action: "Buy after unlocking", why: "Then it is usable", tradeoffs: [], prerequisites: ["Complete the prerequisite"], uncertainty: null },
   ], caveats: [], followUps: [] };
   assert.deepEqual(validateAdvisorResponse(prerequisite, advisorContext), prerequisite);
   const hold = { kind: "PLAN", headline: "Keep saving", actions: [
-    { rank: 1, actionType: "HOLD", candidateId: null, action: "Hold coins", why: "No supplied candidate justifies spending", tradeoffs: [], prerequisites: [], uncertainty: null },
+    { rank: 1, actionType: "HOLD", candidateId: null, memberCandidateIds: [], action: "Hold coins", why: "No supplied candidate justifies spending", tradeoffs: [], prerequisites: [], uncertainty: null },
   ], caveats: [], followUps: [{ domain: "PETS", label: "Inspect pets", reason: "Another domain may be more productive." }] };
   assert.deepEqual(validateAdvisorResponse(hold, advisorContext), hold);
 });
 
 test("Luna client sends the scoped strict request and validates its response", async () => {
   const advisorContext = await context();
-  const advice = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "HOLD", candidateId: null, action: "Save coins", why: "Uncertainty",
+  const advice = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "HOLD", candidateId: null, memberCandidateIds: [], action: "Save coins", why: "Uncertainty",
     tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [], followUps: [{ domain: "PETS", label: "Inspect pets", reason: "Pet analysis is available." }] };
   let request: RequestInit | undefined;
   const fetcher = async (_input: string | URL | Request, init?: RequestInit) => {
@@ -206,4 +206,35 @@ test("Mining discovery emits owned-item gemstone upgrades alongside replacements
   assert.ok(lockedJade?.knownChanges);
   assert.deepEqual(lockedJade.knownChanges.miningFortune, { current: 0, candidate: 20 });
   assert.equal(lockedJade.price?.coins, 13_000_000);
+});
+
+
+test("advisor context groups repeated gemstone upgrades while preserving concrete members", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const gemstone = (id: string, name: string): AdvisorCandidate => ({
+    ...candidate(id, "armor"),
+    item: { ...candidate(id, "armor").item, name, categories: ["armor", "gemstone_upgrade"] },
+    knownChanges: { miningFortune: { current: 8, candidate: 20 } },
+    price: { coins: 14_000_000, observedAt: new Date(0).toISOString(), confidence: "HIGH" },
+  });
+  const members = [
+    gemstone("GEMSTONE:helmet-uuid:JADE_0:PERFECT", "Upgrade JADE_0 to PERFECT on Sorrow Helmet"),
+    gemstone("GEMSTONE:chest-uuid:JADE_0:PERFECT", "Upgrade JADE_0 to PERFECT on Sorrow Chestplate"),
+    gemstone("GEMSTONE:legs-uuid:JADE_0:PERFECT", "Upgrade JADE_0 to PERFECT on Sorrow Leggings"),
+    gemstone("GEMSTONE:boots-uuid:JADE_0:PERFECT", "Upgrade JADE_0 to PERFECT on Sorrow Boots"),
+  ];
+  const advisorContext = buildAdvisorContext({ question: "What should I upgrade for mining?", profile,
+    route: { ...route, scope: "MINING", goal: "MINING", activeDomains: ["MINING"], domain: "MINING" },
+    availableAnalysis: available, candidates: members });
+  assert.equal(advisorContext.candidates.length, 1);
+  const family = advisorContext.candidates[0].family;
+  assert.ok(family);
+  assert.equal(family.count, 4);
+  assert.equal(family.totalPriceCoins, 56_000_000);
+  assert.equal(family.aggregateKnownChanges.miningFortune, 48);
+  assert.deepEqual(family.members.map(member => member.id), members.map(member => member.id));
+  assert.ok(family.members.some(member => member.name.includes("Helmet")));
+  assert.ok(family.members.some(member => member.name.includes("Chestplate")));
+  assert.ok(family.members.some(member => member.name.includes("Leggings")));
+  assert.ok(family.members.some(member => member.name.includes("Boots")));
 });
