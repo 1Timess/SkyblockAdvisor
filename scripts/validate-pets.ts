@@ -4,6 +4,7 @@ import { loadNeuPetConstants } from "../src/server/reference/neu/pets";
 import { buildCanonicalPetDefinitions, buildCanonicalPetItemDefinitions } from "../src/server/reference/pet-mechanics";
 import { buildOwnedPetSetups } from "../src/server/pets/owned-setups";
 import { evaluatePetDomainRelevance } from "../src/server/pets/domain-relevance";
+import { buildDomainPetMutations } from "../src/server/pets/domain-mutations";
 
 async function main() {
   const username = process.argv[2];
@@ -31,6 +32,10 @@ async function main() {
     const relevance = evaluatePetDomainRelevance(definition, "MINING", heldItem);
     return relevance.relevant ? [{ setup, relevance }] : [];
   });
+  const miningMutations = buildDomainPetMutations({ domain: "MINING", setups, definitions, petItems });
+  const mutationKinds = Object.fromEntries(["ACQUIRE", "KAT_UPGRADE", "CHANGE_HELD_ITEM", "LEVEL_TARGET"].map(kind => [
+    kind, miningMutations.filter(value => value.kind === kind).length,
+  ]));
   const duplicateTypes = [...new Set(setups.map(value => value.type).filter((type, index, all) => all.indexOf(type) !== index))].sort();
   const missingPets = setups.filter(value => value.resolution.petDefinition === "MISSING");
   const missingItems = setups.filter(value => value.resolution.petItemDefinition === "MISSING");
@@ -39,7 +44,7 @@ async function main() {
   const result = {
     username: profile.identity.username, profile: profile.profile.cuteName,
     counts: { normalizedPets: profile.pets.owned.length, setups: setups.length, uniqueSetupIds: setupIds.size,
-      duplicateTypes: duplicateTypes.length, missingPetDefinitions: missingPets.length, missingPetItems: missingItems.length, activePets: active.length, catalogMiningRelevant: catalogMining.length, ownedMiningRelevant: ownedMining.length },
+      duplicateTypes: duplicateTypes.length, missingPetDefinitions: missingPets.length, missingPetItems: missingItems.length, activePets: active.length, catalogMiningRelevant: catalogMining.length, ownedMiningRelevant: ownedMining.length, miningMutations: miningMutations.length },
     invariants: {
       noPetsDropped: setups.length === profile.pets.owned.length,
       setupIdsUnique: setupIds.size === setups.length,
@@ -58,6 +63,13 @@ async function main() {
         confidence: relevance.confidence,
         evidence: relevance.evidence.map(value => ({ source: value.source, mechanic: value.mechanic })),
         unresolvedMechanics: relevance.unresolvedMechanics,
+      })),
+    },
+    miningMutations: {
+      countsByKind: mutationKinds,
+      mutations: miningMutations.map(value => ({
+        mutationId: value.mutationId, kind: value.kind, assessment: value.assessment, sourceSetupId: value.sourceSetupId,
+        before: value.before, after: value.after, requirements: value.requirements, reasons: value.reasons, uncertainty: value.uncertainty,
       })),
     },
     duplicateTypes,
