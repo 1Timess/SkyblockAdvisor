@@ -9,14 +9,6 @@ export const petMarketQuoteSchema = z.object({
   confidence: z.enum(["HIGH", "MEDIUM", "LOW"]),
 });
 
-export const petAcquisitionEnvelopeSchema = z.object({
-  canonicalPetId: z.string().min(1),
-  minLevel: z.number().int().positive(),
-  maxLevel: z.number().int().positive(),
-  lowLevelQuote: petMarketQuoteSchema.nullable(),
-  maxLevelQuote: petMarketQuoteSchema.nullable(),
-}).refine(value => value.maxLevel >= value.minLevel, { message: "maxLevel must be >= minLevel" });
-
 export const petMarketListingSchema = z.object({
   listingId: z.string().min(1),
   canonicalPetId: z.string().min(1),
@@ -48,7 +40,6 @@ export const pricedPetMutationSchema = z.object({
 export type PetMarketQuote = z.infer<typeof petMarketQuoteSchema>;
 export type PricedPetMutation = z.infer<typeof pricedPetMutationSchema>;
 
-export type PetAcquisitionEnvelope = z.infer<typeof petAcquisitionEnvelopeSchema>;
 
 export type PetMarketListing = z.infer<typeof petMarketListingSchema>;
 export type PetLevelBucket = z.infer<typeof petLevelBucketSchema>;
