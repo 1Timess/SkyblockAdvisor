@@ -5,6 +5,7 @@ import type { CanonicalPetDefinition, CanonicalPetItemDefinition } from "../../s
 import type { PetProgressionDomain } from "../../schemas/pet-domain-relevance";
 import type { PetMutation } from "../../schemas/pet-mutations";
 import { buildDomainPetMutations } from "../pets/domain-mutations";
+import { buildPetMutationFamilies } from "../pets/mutation-families";
 
 const rarityTiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"] as const;
 
@@ -16,7 +17,8 @@ export function buildActivityPetLanes(input: {
   catalog: readonly CandidateItem[];
 }): Record<string, AdvisorCandidate[]> {
   const catalog = new Map(input.catalog.map(item => [item.id, item]));
-  const mutations = buildDomainPetMutations(input).filter(isNonAcquirePetMutation);
+  const domainMutations = buildDomainPetMutations(input);
+  const mutations = domainMutations.filter(isNonAcquirePetMutation);
   const lanes: Record<string, AdvisorCandidate[]> = {};
 
   for (const mutation of mutations) {
@@ -40,6 +42,34 @@ export function buildActivityPetLanes(input: {
       ],
     };
     (lanes[lane] ??= []).push(candidate);
+  }
+
+  for (const family of buildPetMutationFamilies(input.domain, domainMutations).filter(value => value.kind === "ACQUIRE_FAMILY")) {
+    const first = family.children[0];
+    const item = first ? catalog.get(first.after.canonicalPetId) : undefined;
+    if (!item) continue;
+    const candidate: AdvisorCandidate = {
+      id: family.familyId,
+      domain: "pet",
+      item,
+      requirements: [],
+      abilityText: item.abilityText,
+      setBonusText: [],
+      warnings: ["Pet acquisition pricing is level-aware and remains unresolved until concrete market choices are composed downstream."],
+      petAcquisitionFamily: {
+        kind: "PET_ACQUISITION",
+        familyId: family.familyId,
+        petType: family.petType,
+        members: family.children.map(child => ({
+          id: child.mutationId,
+          canonicalPetId: child.after.canonicalPetId,
+          rarity: child.after.baseRarity,
+          level: child.after.level,
+          maxLevel: child.after.maxLevel,
+        })),
+      },
+    };
+    (lanes.petAcquisition ??= []).push(candidate);
   }
 
   for (const candidates of Object.values(lanes)) candidates.sort((a, b) => a.id.localeCompare(b.id));
