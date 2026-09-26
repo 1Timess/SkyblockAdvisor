@@ -27,9 +27,17 @@ export function buildPetMutationFamilies(domain: PetProgressionDomain, mutations
       children: [...children].sort((a, b) => rarityIndex(a.after.baseRarity) - rarityIndex(b.after.baseRarity)),
     }));
   }
-  return families;
+  return families.sort((a, b) =>
+    familyOrder(a.kind) - familyOrder(b.kind) ||
+    a.petType.localeCompare(b.petType) ||
+    a.familyId.localeCompare(b.familyId)
+  );
 }
 
 function rarityIndex(rarity: string) {
   return ["common", "uncommon", "rare", "epic", "legendary", "mythic"].indexOf(rarity.toLowerCase());
+}
+
+function familyOrder(kind: PetMutationFamily["kind"]) {
+  return kind === "CONCRETE_MUTATION" ? 0 : 1;
 }
