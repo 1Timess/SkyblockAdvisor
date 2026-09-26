@@ -7,7 +7,7 @@ import type { ProfileItem } from "../src/schemas/items";
 function drill(uuid: string, stats: ProfileItem["stats"], engine: string | null): ProfileItem {
   return {
     id: "TEST_DRILL", uuid, name: uuid, count: 1, rarity: null, stars: 0, recombobulated: false, reforge: null,
-    enchantments: {}, attributes: {}, stats, categories: ["tool", "drill"], source: "inventory", slot: 0,
+    enchantments: {}, stats, categories: ["tool", "drill"], source: "inventory", slot: 0,
     drillComponents: { engine, fuelTank: null, upgradeModule: null, fuel: 0, source: "NBT" },
   };
 }
