@@ -17,7 +17,7 @@ const statNames = [
 export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constants: NeuPetConstants): CanonicalPetDefinition[] {
   return items.flatMap(item => {
     const match = item.internalname.match(/^(.+);([0-5])$/);
-    if (!match || !isNeuPetDefinition(item)) return [];
+    if (!match || !isNeuPetDefinition(item, constants)) return [];
     const tier = Number(match[2]), type = match[1], rarity = rarities[tier];
     if (!rarity) return [];
     const custom = constants.custom_pet_leveling[type];
@@ -34,16 +34,13 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
   });
 }
 
-function isNeuPetDefinition(item: NeuItem) {
-  // TYPE;TIER is NEU's pet-definition identity. Keep lore/NBT as corroboration, not a requirement:
-  // some valid pets are mounts, while focused fixtures may intentionally contain only the mechanic under test.
-  if (!/^.+;[0-5]$/.test(item.internalname)) return false;
-  const lore = (item.lore ?? []).map(stripFormatting);
-  if (lore.some(line => /(?:Pet|Mount)\s*$/i.test(line.trim()))) return true;
-  if (lore.some(line => /Right-click to add this pet to your pet menu!/i.test(line))) return true;
-  if (/petInfo:/.test(String((item as unknown as Record<string, unknown>).nbttag ?? ""))) return true;
-  // Canonical pet fixtures and incomplete NEU records still use TYPE;TIER. Downstream schema parsing remains fail-soft.
-  return true;
+function isNeuPetDefinition(item: NeuItem, constants: NeuPetConstants) {
+  const match = item.internalname.match(/^(.+);[0-5]$/);
+  if (!match) return false;
+  const type = match[1];
+  // NEU's pet_types map is the authoritative machine-readable pet catalog. Lore/NBT is not:
+  // valid pets such as Rock may be labelled as mounts, while unrelated items can also use ;TIER ids.
+  return Object.prototype.hasOwnProperty.call(constants.pet_types, type);
 }
 
 export function buildCanonicalPetItemDefinitions(items: readonly NeuItem[], constants: NeuPetConstants): CanonicalPetItemDefinition[] {
