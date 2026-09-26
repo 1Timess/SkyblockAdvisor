@@ -18,8 +18,9 @@ export function buildMiningDrillComponentUpgradeLanes(input: {
 }): Record<string, AdvisorCandidate[]> {
   const lanes: Record<string, AdvisorCandidate[]> = {};
   const owned = new Set(input.profile.inventoryItems.flatMap(item => item.id ? [item.id] : []));
+  const relevantParents = miningRelevantDrillParents(input.profile.inventoryItems, input.catalog);
   for (const drill of input.profile.inventoryItems) {
-    if (!drill.drillComponents) continue;
+    if (!drill.drillComponents || !relevantParents.has(itemKey(drill))) continue;
     for (const slot of Object.keys(slotCategory) as Array<keyof typeof slotCategory>) {
       const currentId = installedId(drill, slot);
       const current = currentId ? input.catalog.find(item => item.id === currentId) : undefined;
@@ -87,4 +88,40 @@ function dominates(before: Array<number | null>, after: Array<number | null>) {
     if (a > b) better = true;
   }
   return better;
+}
+
+
+export function miningRelevantDrillParents(items: readonly ProfileItem[], catalog: readonly CandidateItem[]) {
+  const drills = items.filter(item => item.drillComponents);
+  const vectors = new Map(drills.map(drill => [itemKey(drill), drillPotentialVector(drill, catalog)]));
+  return new Set(drills.filter(drill => {
+    const vector = vectors.get(itemKey(drill))!;
+    return !drills.some(other => other !== drill && dominatesVector(vectors.get(itemKey(other))!, vector));
+  }).map(itemKey));
+}
+
+function drillPotentialVector(drill: ProfileItem, catalog: readonly CandidateItem[]) {
+  const bestEngine = catalog.filter(item => item.categories.includes("drill_engine"))
+    .map(item => item.drillComponentMechanics).filter(Boolean)
+    .reduce((best, mechanics) => ({
+      miningSpeed: Math.max(best.miningSpeed, mechanics?.miningSpeed ?? 0),
+      miningFortune: Math.max(best.miningFortune, mechanics?.miningFortune ?? 0),
+    }), { miningSpeed: 0, miningFortune: 0 });
+  const currentEngine = drill.drillComponents?.engine ? catalog.find(item => item.id === drill.drillComponents?.engine)?.drillComponentMechanics : undefined;
+  return {
+    miningSpeed: (drill.stats.miningSpeed ?? 0) - (currentEngine?.miningSpeed ?? 0) + bestEngine.miningSpeed,
+    miningFortune: (drill.stats.miningFortune ?? 0) - (currentEngine?.miningFortune ?? 0) + bestEngine.miningFortune,
+    gemstoneFortune: drill.stats.gemstoneFortune ?? 0,
+    pristine: drill.stats.pristine ?? 0,
+  };
+}
+
+function dominatesVector(left: Readonly<Record<string, number>>, right: Readonly<Record<string, number>>) {
+  const stats = ["miningSpeed", "miningFortune", "gemstoneFortune", "pristine"] as const;
+  return stats.every(stat => (left[stat] ?? 0) >= (right[stat] ?? 0))
+    && stats.some(stat => (left[stat] ?? 0) > (right[stat] ?? 0));
+}
+
+function itemKey(item: ProfileItem) {
+  return item.uuid ?? `${item.id ?? item.name}:${item.source}`;
 }
