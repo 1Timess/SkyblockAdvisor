@@ -41,7 +41,9 @@ export function evaluatePetDomainRelevance(
     evidence.push({ source: "PET_SKILL_TYPE", domain, mechanic: pet.petSkillType!, rawText: null });
   }
 
-  const semantic = evidence.some(value => value.source !== "PET_SKILL_TYPE");
+  // Conditions scope mechanics; they do not establish the benefit's domain on their own.
+  // Example: Fishing Speed in Crystal Hollows is still a Fishing mechanic, not a Mining mechanic.
+  const semantic = evidence.some(value => value.source === "PET_EFFECT" || value.source === "PET_ITEM_EFFECT");
   const relevant = semantic;
   const confidence = !relevant ? (unresolvedMechanics.length ? "LOW" : "MEDIUM")
     : unresolvedMechanics.length ? "MEDIUM" : "HIGH";
