@@ -68,10 +68,27 @@ function collectEffects(effects: readonly PetEffect[], domain: PetProgressionDom
     // A recognized target is authoritative. Do not let location/activity words elsewhere in the
     // same sentence reclassify it (for example Fishing Speed while in Crystal Hollows).
     if (!mapped) {
-      for (const [pattern, candidate] of TEXT_DOMAINS) if (pattern.test(effect.rawText)) domains.add(candidate);
+      const inferred = inferGenericEffectDomains(effect);
+      for (const candidate of inferred) domains.add(candidate);
     }
     if (domains.has(domain)) out.push({ source, domain, mechanic: effect.target ?? effect.kind, rawText: effect.rawText });
   }
+}
+
+function inferGenericEffectDomains(effect: PetEffect): Set<PetProgressionDomain> {
+  const out = new Set<PetProgressionDomain>();
+  const text = effect.rawText;
+  // Generic mechanics need an explicit activity/resource relationship, not merely a domain noun
+  // somewhere in a multi-clause ability.
+  const rules: readonly [RegExp, PetProgressionDomain][] = [
+    [/\b(?:while|when) mining\b|\bwhile mining\b|\bmining (?:item|items|drop|drops|treasure|resource|resources)\b|\b(?:mithril|gemstone|glacite) powder\b/i, "MINING"],
+    [/\b(?:while|when) farming\b|\bfarming (?:drop|drops|crop|crops|resource|resources)\b/i, "FARMING"],
+    [/\b(?:while|when) foraging\b|\bforaging (?:drop|drops|resource|resources)\b/i, "FORAGING"],
+    [/\b(?:while|when) fishing\b|\bcatch(?:ing)? (?:a )?sea creature\b|\bfishing (?:drop|drops|treasure|resource|resources)\b/i, "FISHING"],
+    [/\b(?:while|when) (?:fighting|in combat)\b|\b(?:kill|killing) (?:a )?mob\b/i, "COMBAT"],
+  ];
+  for (const [pattern, domain] of rules) if (pattern.test(text)) out.add(domain);
+  return out.size === 1 ? out : new Set<PetProgressionDomain>();
 }
 
 function collectConditions(conditions: readonly PetCondition[], domain: PetProgressionDomain, source: "PET_CONDITION" | "PET_ITEM_CONDITION", out: PetDomainEvidence[]) {
