@@ -41,7 +41,14 @@ export function chooseAffordablePetListing(
 
 function representativeListing(samples: readonly PetMarketListing[]) {
   if (samples.length === 0) return null;
-  // Use the lower median asking price rather than the single cheapest listing.
-  // This resists one anomalously cheap listing while remaining deterministic.
-  return samples[Math.floor((samples.length - 1) / 2)] ?? null;
+
+  // Establish the lower-median asking price independently of listing tie-breaks.
+  // Then choose the highest-level listing at that exact price so equal-price
+  // samples cannot move the median position itself.
+  const prices = samples.map(sample => sample.coins).sort((a, b) => a - b);
+  const medianPrice = prices[Math.floor((prices.length - 1) / 2)];
+
+  return samples
+    .filter(sample => sample.coins === medianPrice)
+    .sort((a, b) => b.level - a.level || a.listingId.localeCompare(b.listingId))[0] ?? null;
 }
