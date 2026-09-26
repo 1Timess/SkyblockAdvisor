@@ -76,9 +76,11 @@ test("parses self-only deployables and alternate exclusivity wording", () => {
 
 test("production deployable comparison rejects Frankenstein sidegrades", () => {
   const make = (id: string, lore: string[]): CandidateItem => ({
-    id, name: id, rarity: "rare", categories: ["deployable"], stats: {}, requirements: [],
-    abilityText: [], setBonusText: [], source: "HYPIXEL", deployableMechanics: parseDeployableMechanics(lore),
-  } as CandidateItem);
+    id, name: id, rarity: "rare", categories: ["deployable"], stats: {},
+    lore, abilityText: [], setBonusText: [], requirements: [], unparsedRequirementText: [],
+    wiki: null, marketKey: id, sources: { hypixel: true, neu: false },
+    deployableMechanics: parseDeployableMechanics(lore),
+  });
   const owned = make("OWNED", ["Ability: Deploy RIGHT CLICK", "Grants +60 Mining Speed.", "Grants +15 Mining Fortune.", "Grants +5 Heat Resistance.", "RARE DEPLOYABLE"]);
   const sidegrade = make("SIDEGRADE", ["Ability: Deploy RIGHT CLICK", "Grants +80 Mining Speed.", "Grants +10 Mining Fortune.", "EPIC DEPLOYABLE"]);
   const upgrade = make("UPGRADE", ["Ability: Deploy RIGHT CLICK", "Grants +80 Mining Speed.", "Grants +20 Mining Fortune.", "Grants +10 Heat Resistance.", "EPIC DEPLOYABLE"]);
