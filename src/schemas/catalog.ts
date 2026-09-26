@@ -11,12 +11,22 @@ export const itemRequirementSchema = z.discriminatedUnion("kind", [
 ]);
 export type ItemRequirement = z.infer<typeof itemRequirementSchema>;
 
+export const drillComponentMechanicsSchema = z.object({
+  slot: z.enum(["ENGINE", "FUEL_TANK", "UPGRADE_MODULE"]),
+  miningSpeed: z.number().nullable(), miningFortune: z.number().nullable(),
+  fuelCapacity: z.number().nullable(), pickaxeCooldownReductionPct: z.number().nullable(),
+  powderMultiplierPct: z.number().nullable(), hotmPerkLevelBonus: z.number().nullable(),
+  fuelPreservationPct: z.number().nullable(), fuelConsumptionMultiplier: z.number().nullable(),
+  conditional: z.boolean(),
+});
+export type DrillComponentMechanics = z.infer<typeof drillComponentMechanicsSchema>;
+
 export const candidateItemSchema = z.object({
   id: z.string().min(1), name: z.string().min(1), rarity: raritySchema.nullable(), categories: z.array(z.string()),
   stats: statsSchema, lore: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
   requirements: z.array(itemRequirementSchema), unparsedRequirementText: z.array(z.string()),
   wiki: z.string().url().nullable(), marketKey: z.string().min(1),
-  sources: z.object({ hypixel: z.boolean(), neu: z.boolean() }),
+  sources: z.object({ hypixel: z.boolean(), neu: z.boolean() }), drillComponentMechanics: drillComponentMechanicsSchema.optional(),
 });
 export type CandidateItem = z.infer<typeof candidateItemSchema>;
 
