@@ -23,13 +23,13 @@ export function buildCanonicalPetDefinitions(items: readonly NeuItem[], constant
     if (!rarity) return [];
     const custom = constants.custom_pet_leveling[type];
     const maxLevel = custom?.max_level ?? 100;
-    const curve = custom?.pet_levels ?? constants.pet_levels;
+    const curve = resolveXpCurve(constants.pet_levels, custom?.pet_levels, maxLevel);
     const rarityOffset = custom?.rarity_offset?.[rarity] ?? constants.pet_rarity_offset[rarity] ?? null;
     const cleanLore = (item.lore ?? []).map(stripFormatting);
     const baseStats = extractStats(cleanLore).stats;
     return [canonicalPetDefinitionSchema.parse({
       id: item.internalname, type, rarity: rarity.toLowerCase(), petSkillType: constants.pet_types[type] ?? null,
-      maxLevel, rarityOffset, xpCurve: curve.slice(0, maxLevel), baseStats,
+      maxLevel, rarityOffset, xpCurve: curve, xpMultiplier: custom?.xp_multiplier ?? 1, customLevelingType: custom?.type ?? null, baseStats,
       abilities: parsePetAbilities(item.lore ?? []), upgradePaths: parseKatPaths(item), source: "NEU",
     })];
   });
@@ -137,4 +137,11 @@ function resourceTarget(text: string) {
 function hasUnresolvedSemantics(text: string, effects: readonly PetEffect[]) {
   if (!effects.length) return true;
   return /for each|for every|depending|based on|current|per .*collection|up to|max |if |while |when /i.test(text);
+}
+
+function resolveXpCurve(base: readonly number[], custom: readonly number[] | undefined, maxLevel: number) {
+  if (maxLevel <= 100) return [...(custom ?? base)].slice(0, maxLevel);
+  if (!custom?.length) return [...base].slice(0, maxLevel);
+  // NEU custom level-200 pets provide the additional 101-200 costs separately from the normal curve.
+  return [...base.slice(0, 100), ...custom].slice(0, maxLevel);
 }
