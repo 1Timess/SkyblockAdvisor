@@ -21,12 +21,22 @@ export const drillComponentMechanicsSchema = z.object({
 });
 export type DrillComponentMechanics = z.infer<typeof drillComponentMechanicsSchema>;
 
+export const deployableMechanicsSchema = z.object({
+  durationSeconds: z.number().nullable(),
+  radiusBlocks: z.number().nullable(),
+  maxPlayers: z.number().int().positive().nullable(),
+  exclusiveBuff: z.boolean(),
+  mineshaftGlobal: z.boolean(),
+  effects: statsSchema,
+});
+export type DeployableMechanics = z.infer<typeof deployableMechanicsSchema>;
+
 export const candidateItemSchema = z.object({
   id: z.string().min(1), name: z.string().min(1), rarity: raritySchema.nullable(), categories: z.array(z.string()),
   stats: statsSchema, lore: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
   requirements: z.array(itemRequirementSchema), unparsedRequirementText: z.array(z.string()),
   wiki: z.string().url().nullable(), marketKey: z.string().min(1),
-  sources: z.object({ hypixel: z.boolean(), neu: z.boolean() }), drillComponentMechanics: drillComponentMechanicsSchema.optional(),
+  sources: z.object({ hypixel: z.boolean(), neu: z.boolean() }), drillComponentMechanics: drillComponentMechanicsSchema.optional(), deployableMechanics: deployableMechanicsSchema.optional(),
 });
 export type CandidateItem = z.infer<typeof candidateItemSchema>;
 
