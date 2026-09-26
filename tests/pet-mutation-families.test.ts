@@ -35,3 +35,14 @@ test("non-acquisition concrete mutations remain independent families", () => {
   assert.equal(families[0].kind, "CONCRETE_MUTATION");
   assert.equal(families[0].children[0].mutationId, level.mutationId);
 });
+
+
+test("family output is deterministic when acquisition input order changes", () => {
+  const a = [acquire("SCATHA;4", "legendary"), acquire("BAL;4", "legendary"), acquire("SCATHA;2", "rare")];
+  const b = [...a].reverse();
+  const normalize = (values: ReturnType<typeof buildPetMutationFamilies>) => values.map(value => ({
+    familyId: value.familyId,
+    children: value.children.map(child => child.mutationId),
+  }));
+  assert.deepEqual(normalize(buildPetMutationFamilies("MINING", a)), normalize(buildPetMutationFamilies("MINING", b)));
+});
