@@ -15,7 +15,7 @@ function definition(id: string): CanonicalPetDefinition {
   const [type, tier] = id.split(";");
   return {
     id, type, rarity: ["common", "uncommon", "rare", "epic", "legendary", "mythic"][Number(tier)],
-    petSkillType: "MINING", maxLevel: 100, rarityOffset: 16, xpCurve: [1], xpMultiplier: 1,
+    petSkillType: "MINING", maxLevel: 100, rarityOffset: 16, xpCurve: Array(99).fill(100), xpMultiplier: 1,
     customLevelingType: null, baseStatTemplates: {}, abilities: [], upgradePaths: [], source: "NEU",
   };
 }
@@ -36,6 +36,17 @@ test("owned setup preserves every concrete duplicate pet", () => {
   assert.deepEqual(setups.map(value => value.setupId), ["pet:scatha-a", "pet:scatha-b"]);
   assert.deepEqual(setups.map(value => value.heldItem), ["PET_ITEM_QUICK_CLAW", "PET_ITEM_TIER_BOOST"]);
   assert.deepEqual(setups.map(value => value.level), [80, 100]);
+});
+
+test("canonical definition is authoritative for resolved level state", () => {
+  const [setup] = buildOwnedPetSetups({
+    pets: [pet({ uuid: "leveled", xp: 250, level: 99, maxLevel: 100, xpCurrent: 999, xpForNext: 999, progress: 0.999 })],
+    definitions: [definition("SCATHA;3")],
+  });
+  assert.equal(setup.level, 3);
+  assert.equal(setup.xpCurrent, 50);
+  assert.equal(setup.xpForNext, 100);
+  assert.equal(setup.progress, 0.5);
 });
 
 test("Tier Boost keeps base rarity separate from effective rarity and resolves the base definition", () => {
