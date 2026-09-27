@@ -82,6 +82,7 @@ export const rawProfileSchema = z.object({
 });
 export const itemDefinitionSchema = z.object({
   id: z.string(), name: z.string(), category: z.string().optional(), tier: z.string().optional(),
+  generator: z.string().optional(), generator_tier: z.number().int().positive().optional(),
 });
 export type RawMember = z.infer<typeof memberSchema>;
 export type RawProfile = z.infer<typeof rawProfileSchema>;

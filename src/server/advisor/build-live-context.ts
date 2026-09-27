@@ -49,8 +49,10 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     profileSnapshotId: input.conversationState?.profileSnapshotId });
   const intelligence = profileResult.snapshot, profile = intelligence.profile;
   const route = routeAdvisorQuestion({ question: input.question, profile, conversationState: input.conversationState });
-  const [items, neu, market, petConstants] = route.domain === "ENCHANTING" || route.domain === "COLLECTIONS"
+  const [items, neu, market, petConstants] = route.domain === "ENCHANTING"
     ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
+    : route.domain === "COLLECTIONS"
+      ? [await hypixelClient.getItems(), null, null, null] as const
     : await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot(), loadNeuPetConstants()]);
   const effectiveBudgetCoins = input.budgetCoins ?? input.conversationState?.budgetCoins;
   const catalog = neu ? buildItemCatalog(items, neu).getAll() : [], quotes = new Map<string, MarketQuote>(Object.entries(market?.quotes ?? {}));
@@ -62,7 +64,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
   if (route.domain === "COLLECTIONS") {
     const resource = await hypixelClient.getCollections();
-    activeDomainContext = buildCollectionAdvisorContext(profile, input.question, resource);
+    activeDomainContext = buildCollectionAdvisorContext(profile, input.question, resource, items);
   }
 
   if (route.domain === "DUNGEONS") {

@@ -1,4 +1,5 @@
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import type { HypixelItemDefinition } from "../hypixel/types";
 
 export interface CollectionTier { tier: number; amount: number; unlocks: string[] }
 export interface CollectionDefinition { id: string; name: string; category: string; tiers: CollectionTier[] }
@@ -10,10 +11,11 @@ export interface CollectionProgress {
 }
 export interface CraftedMinion { id: string; name: string; tiers: number[] }
 export interface MinionRecipeLead {
-  name: string; collectionId: string; collectionName: string; category: string;
+  name: string; generatorId: string | null; collectionId: string; collectionName: string; category: string;
   requiredTier: number; requiredAmount: number; collected: number | null; remaining: number | null;
   access: "EXPLICIT_TIER" | "COUNT_THRESHOLD" | "BELOW_THRESHOLD" | "UNKNOWN";
-  history: "EXACT_ID_MATCH" | "NO_EXACT_ID_MATCH"; observedCraftedTiers: number[];
+  history: "OBSERVED" | "NOT_OBSERVED" | "CATALOG_UNKNOWN"; observedCraftedTiers: number[];
+  nextCraftTier: number | null; nextCraftItemId: string | null;
 }
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === "object" && !Array.isArray(value)
@@ -81,31 +83,30 @@ export function selectCraftedMinions(minions: readonly CraftedMinion[], question
   return [...minions].sort((a, b) => Math.max(...a.tiers) - Math.max(...b.tiers) || a.id.localeCompare(b.id)).slice(0, limit);
 }
 
-const minionId = (name: string) => name.toUpperCase().replace(/[^A-Z0-9]/g, "");
 export function buildMinionRecipeLeads(definitions: readonly CollectionDefinition[], progress: readonly CollectionProgress[],
-  craftedMinions: readonly CraftedMinion[]): MinionRecipeLead[] {
+  craftedMinions: readonly CraftedMinion[], items: readonly HypixelItemDefinition[]): MinionRecipeLead[] {
   const progressById = new Map(progress.map(entry => [entry.id, entry]));
-  const craftedByName = new Map<string, CraftedMinion[]>();
-  for (const minion of craftedMinions) {
-    const key = minionId(minion.id);
-    craftedByName.set(key, [...(craftedByName.get(key) ?? []), minion]);
-  }
+  const craftedById = new Map(craftedMinions.map(minion => [minion.id, minion]));
+  const generatorItems = items.filter(item => item.generator && item.generator_tier);
   return definitions.flatMap(definition => definition.tiers.flatMap(tier => tier.unlocks.flatMap(unlock => {
     const match = /^(.+?) Minion Recipes$/i.exec(unlock);
     if (!match) return [];
     const entry = progressById.get(definition.id);
     if (!entry) return [];
-    const matching = craftedByName.get(minionId(match[1])) ?? [];
-    // More than one crafted ID for a normalized name is ambiguous; leave the history unjoined.
-    const observed = matching.length === 1 ? matching[0].tiers : [];
+    const variants = generatorItems.filter(item => /^(.+) Minion [IVX]+$/.exec(item.name)?.[1] === match[1]);
+    const ids = new Set(variants.map(item => item.generator));
+    const generatorId = ids.size === 1 ? variants[0].generator! : null;
+    const observed = generatorId ? craftedById.get(generatorId)?.tiers ?? [] : [];
+    const nextItem = generatorId ? variants.filter(item => item.generator === generatorId && item.generator_tier! > (observed.at(-1) ?? 0))
+      .sort((a, b) => a.generator_tier! - b.generator_tier!)[0] : undefined;
     const access = (entry.unlockedTier ?? 0) >= tier.tier ? "EXPLICIT_TIER" as const
       : (entry.countTier ?? 0) >= tier.tier ? "COUNT_THRESHOLD" as const
         : entry.collected === null ? "UNKNOWN" as const : "BELOW_THRESHOLD" as const;
-    return [{ name: match[1], collectionId: definition.id, collectionName: definition.name, category: definition.category,
+    return [{ name: match[1], generatorId, collectionId: definition.id, collectionName: definition.name, category: definition.category,
       requiredTier: tier.tier, requiredAmount: tier.amount, collected: entry.collected,
       remaining: entry.collected === null ? null : Math.max(0, tier.amount - entry.collected), access,
-      history: matching.length === 1 ? "EXACT_ID_MATCH" as const : "NO_EXACT_ID_MATCH" as const,
-      observedCraftedTiers: observed }];
+      history: generatorId === null ? "CATALOG_UNKNOWN" as const : observed.length ? "OBSERVED" as const : "NOT_OBSERVED" as const,
+      observedCraftedTiers: observed, nextCraftTier: nextItem?.generator_tier ?? null, nextCraftItemId: nextItem?.id ?? null }];
   })));
 }
 
@@ -115,8 +116,10 @@ export function selectMinionRecipeLeads(leads: readonly MinionRecipeLead[], ques
   if (named.length) return named.slice(0, limit);
   const accessRank = { EXPLICIT_TIER: 0, COUNT_THRESHOLD: 1, BELOW_THRESHOLD: 4, UNKNOWN: 6 };
   return [...leads].sort((a, b) => {
-    const aObserved = a.history === "EXACT_ID_MATCH" ? 2 : 0, bObserved = b.history === "EXACT_ID_MATCH" ? 2 : 0;
-    return accessRank[a.access] + aObserved - accessRank[b.access] - bObserved
+    const aObserved = a.history === "NOT_OBSERVED" ? 0 : a.history === "OBSERVED" ? 2 : 7;
+    const bObserved = b.history === "NOT_OBSERVED" ? 0 : b.history === "OBSERVED" ? 2 : 7;
+    return accessRank[a.access] + aObserved + (a.nextCraftTier === null ? 10 : 0)
+      - accessRank[b.access] - bObserved - (b.nextCraftTier === null ? 10 : 0)
       || (a.remaining ?? Infinity) - (b.remaining ?? Infinity) || a.name.localeCompare(b.name);
   }).slice(0, limit);
 }

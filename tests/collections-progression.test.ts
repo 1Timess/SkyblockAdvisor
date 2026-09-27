@@ -79,23 +79,46 @@ test("minion recipe leads keep collection gates and crafted history separate", (
   const profile = { collections: { LEATHER: 803, "INK_SACK:3": 100, WHEAT: 10 },
     unlockedCollectionTiers: ["INK_SACK:3_1"], craftedGenerators: ["COCOA_1", "WHEAT_2"] };
   const crafted = buildCraftedMinions(profile.craftedGenerators);
-  const leads = buildMinionRecipeLeads(source, buildCollectionProgress(profile, source), crafted);
+  const leads = buildMinionRecipeLeads(source, buildCollectionProgress(profile, source), crafted, [
+    { id: "COW_GENERATOR_1", name: "Cow Minion I", generator: "COW", generator_tier: 1 },
+    { id: "COW_GENERATOR_2", name: "Cow Minion II", generator: "COW", generator_tier: 2 },
+    { id: "COCOA_GENERATOR_1", name: "Cocoa Beans Minion I", generator: "COCOA", generator_tier: 1 },
+    { id: "COCOA_GENERATOR_2", name: "Cocoa Beans Minion II", generator: "COCOA", generator_tier: 2 },
+    { id: "WHEAT_GENERATOR_3", name: "Wheat Minion III", generator: "WHEAT", generator_tier: 3 },
+  ]);
   const cow = leads.find(lead => lead.name === "Cow")!;
   assert.equal(cow.access, "COUNT_THRESHOLD");
   assert.equal(cow.remaining, 0);
-  assert.equal(cow.history, "NO_EXACT_ID_MATCH");
+  assert.equal(cow.history, "NOT_OBSERVED");
+  assert.equal(cow.generatorId, "COW");
+  assert.equal(cow.nextCraftItemId, "COW_GENERATOR_1");
   const cocoa = leads.find(lead => lead.name === "Cocoa Beans")!;
   assert.equal(cocoa.access, "EXPLICIT_TIER");
-  assert.equal(cocoa.history, "NO_EXACT_ID_MATCH");
-  assert.deepEqual(cocoa.observedCraftedTiers, []);
+  assert.equal(cocoa.history, "OBSERVED");
+  assert.deepEqual(cocoa.observedCraftedTiers, [1]);
+  assert.equal(cocoa.nextCraftTier, 2);
   const wheat = leads.find(lead => lead.name === "Wheat")!;
   assert.equal(wheat.access, "BELOW_THRESHOLD");
-  assert.equal(wheat.history, "EXACT_ID_MATCH");
+  assert.equal(wheat.history, "OBSERVED");
   assert.deepEqual(wheat.observedCraftedTiers, [2]);
+  assert.equal(wheat.nextCraftItemId, "WHEAT_GENERATOR_3");
   assert.deepEqual(selectMinionRecipeLeads(leads, "Cow minion?", 8).map(lead => lead.name), ["Cow"]);
-  assert.equal(selectMinionRecipeLeads(leads, "What minions should I craft?", 1)[0].name, "Cocoa Beans");
+  assert.equal(selectMinionRecipeLeads(leads, "What minions should I craft?", 1)[0].name, "Cow");
   assert.deepEqual(selectMinionRecipeLeads([...leads, { ...cow, name: "Unknown", access: "UNKNOWN", collected: null, remaining: null }],
-    "What minions should I craft?", 3).map(lead => lead.name), ["Cocoa Beans", "Cow", "Wheat"]);
+    "What minions should I craft?", 3).map(lead => lead.name), ["Cow", "Cocoa Beans", "Wheat"]);
+});
+
+test("a catalogued final minion tier produces no invented higher craft", () => {
+  const source = parseCollectionDefinitions({ collections: { FORAGING: { items: { "LOG:2": {
+    name: "Birch Log", tiers: [{ tier: 1, amountRequired: 50, unlocks: ["Birch Minion Recipes"] }],
+  } } } } });
+  const profile = { collections: { "LOG:2": 100 }, unlockedCollectionTiers: ["LOG:2_1"], craftedGenerators: ["BIRCH_11"] };
+  const [lead] = buildMinionRecipeLeads(source, buildCollectionProgress(profile, source), buildCraftedMinions(profile.craftedGenerators), [
+    { id: "BIRCH_GENERATOR_11", name: "Birch Minion XI", generator: "BIRCH", generator_tier: 11 },
+  ]);
+  assert.equal(lead.history, "OBSERVED");
+  assert.equal(lead.nextCraftTier, null);
+  assert.equal(lead.nextCraftItemId, null);
 });
 
 test("collection and minion questions route to the collection domain", async () => {
@@ -114,7 +137,7 @@ test("advisor context scopes sourced collection gates to the question", async ()
     version: "test", lastUpdated: 123, collections: { FARMING: { items: { WHEAT: {
       name: "Wheat", tiers: [{ tier: 1, amountRequired: 50, unlocks: ["Wheat Minion I"] }],
     } } } },
-  }));
+  }, []));
   assert.equal(context.domain, "COLLECTIONS");
   if (context.domain !== "COLLECTIONS") throw new Error("unreachable");
   assert.equal(context.focus.length, 1);
