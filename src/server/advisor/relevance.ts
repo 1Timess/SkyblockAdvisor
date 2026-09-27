@@ -21,8 +21,11 @@ export function filterCandidateLanesForGoal(lanes: readonly TaggedCandidateLane[
 export function buildCandidateRelevance(lanes: readonly TaggedCandidateLane[], candidateId: string, route: AdvisorRoute): CandidateRelevance {
   const laneNames = [...new Set(lanes.filter(lane => lane.candidates.some(candidate => candidate.id === candidateId)).map(lane => laneNameOf(lane.label)))];
   const stats = laneNames.filter(lane => lane !== "ability" && !accessoryOrPetLane(lane));
-  const petAcquisition = lanes.some(lane => lane.candidates.some(candidate => candidate.id === candidateId && candidate.petAcquisitionFamily));
-  if (petAcquisition && (route.goal === "MINING" || route.goal === "FISHING")) return { reason: "This pet acquisition family has canonical mechanics relevant to the active activity domain.", relevantStats: [] };
+  const occurrences = lanes.flatMap(lane => lane.candidates.filter(candidate => candidate.id === candidateId));
+  const semanticEvidence = [...new Set(occurrences.flatMap(candidate => candidate.semanticEvidence ?? []))].sort();
+  const petAcquisition = occurrences.some(candidate => candidate.petAcquisitionFamily);
+  if (petAcquisition && (route.goal === "MINING" || route.goal === "FISHING")) return { reason: "This pet acquisition family has canonical mechanics relevant to the active activity domain.", relevantStats: semanticEvidence };
+  if (semanticEvidence.length && (route.goal === "MINING" || route.goal === "FISHING")) return { reason: "This pet operation preserves canonical mechanics relevant to the active activity domain.", relevantStats: semanticEvidence };
   if (route.goal === "MAGICAL_POWER") return { reason: "Accessory progression is directly relevant to the Magical Power goal.", relevantStats: ["magicalPower"] };
   if (route.goal === "PET") return { reason: "Pet progression is directly relevant to the requested pet scope.", relevantStats: laneNames };
   if (route.goal === "FISHING") return { reason: "The candidate has repo-supported fishing progression evidence.", relevantStats: laneNames };
@@ -36,6 +39,7 @@ export function mergeCandidateEvidence(candidate: AdvisorCandidate, lanes: reado
   const occurrences = lanes.flatMap(lane => lane.candidates.filter(value => value.id === candidate.id));
   return { ...candidate,
     knownChanges: mergeKnownChanges(occurrences),
+    semanticEvidence: [...new Set(occurrences.flatMap(value => value.semanticEvidence ?? []))].sort(),
     warnings: [...new Set(occurrences.flatMap(value => value.warnings))],
   };
 }
