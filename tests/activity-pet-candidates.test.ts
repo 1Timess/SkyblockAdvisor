@@ -37,6 +37,7 @@ test("Mining activity integration is semantic rather than pet-name based", () =>
   const lanes = buildActivityPetLanes({ domain: "MINING", setups: [setup("one", arbitrary)], definitions: [arbitrary], petItems: [], catalog: [catalog(arbitrary)] });
   assert.equal(lanes.petLevelTarget?.[0]?.domain, "pet");
   assert.deepEqual(lanes.petLevelTarget?.[0]?.knownChanges?.petLevel, { current: 80, candidate: 100 });
+  assert.deepEqual(lanes.petLevelTarget?.[0]?.semanticEvidence, ["MINING_SPEED"]);
 });
 
 test("domain-relevant held-item operations enter the activity lane", () => {
@@ -68,4 +69,18 @@ test("acquisition family retains every concrete rarity child without selecting o
   assert.ok(family?.petAcquisitionFamily);
   assert.deepEqual(family.petAcquisitionFamily.members.map(member => member.canonicalPetId), ["FAMILY_MINER;2", "FAMILY_MINER;3", "FAMILY_MINER;4"]);
   assert.equal(family.price, undefined);
+});
+
+
+test("acquisition family semantic evidence unions mechanics across concrete rarity children", () => {
+  const owned = definition("OWNED_SEMANTIC;4");
+  const speed = { ...definition("UNION_MINER;2"), rarity: "rare" } as CanonicalPetDefinition;
+  const fortuneEffect: PetEffect = { kind: "FLAT_STAT", target: "MINING_FORTUNE", valueTemplate: "1", rawText: "Gain +1 Mining Fortune" };
+  const fortune = { ...definition("UNION_MINER;4"), abilities: [{ name: "Fortune", rawLore: [fortuneEffect.rawText], effects: [fortuneEffect], conditions: [], parseStatus: "FULL", confidence: "HIGH" }] } as CanonicalPetDefinition;
+  const lanes = buildActivityPetLanes({
+    domain: "MINING", setups: [setup("owned", owned)], definitions: [owned, speed, fortune], petItems: [],
+    catalog: [catalog(owned), { ...catalog(speed), rarity: "rare" }, catalog(fortune)],
+  });
+  const family = lanes.petAcquisition?.find(candidate => candidate.petAcquisitionFamily?.petType === "UNION_MINER");
+  assert.deepEqual(family?.semanticEvidence, ["MINING_FORTUNE", "MINING_SPEED"]);
 });
