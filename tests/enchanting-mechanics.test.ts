@@ -30,15 +30,15 @@ test("researched experiment thresholds preserve the three separate progressions"
   const levels = (experiment: string) => researchedExperimentTiers.filter(tier => tier.experiment === experiment).map(tier => tier.requiredEnchantingLevel);
   assert.deepEqual(levels("CHRONOMATRON"), [20, 25, 30, 35, 40]);
   assert.deepEqual(levels("ULTRASEQUENCER"), [25, 30, 40]);
-  assert.deepEqual(levels("SUPERPAIRS"), [10, 20, null, 30, 40, 50]);
+  assert.deepEqual(levels("SUPERPAIRS"), [10, 20, 25, 30, 40, 50]);
   assert.ok(researchedExperimentTiers.every(tier => tier.source.endsWith("/Experiments")));
   assert.ok(!enchantingMilestones.some(milestone => milestone.name.includes("Superpairs")));
 });
 
-test("the conflicting Grand Superpairs row cannot assert level 2 or enter milestones", () => {
+test("Grand Superpairs level 25 is corroborated research and does not enter confirmed milestones", () => {
   const grand = researchedExperimentTiers.find(tier => tier.experiment === "SUPERPAIRS" && tier.stake === "GRAND")!;
-  assert.equal(grand.evidence, "CONFLICTING_SOURCE");
-  assert.equal(grand.requiredEnchantingLevel, null);
-  assert.equal(experimentTierSchema.safeParse({ ...grand, evidence: "COMMUNITY_WIKI_RESEARCH" }).success, false);
-  assert.equal(experimentTierSchema.safeParse({ ...grand, requiredEnchantingLevel: 2 }).success, false);
+  assert.equal(grand.evidence, "CORROBORATED_RESEARCH");
+  assert.equal(grand.requiredEnchantingLevel, 25);
+  assert.equal(experimentTierSchema.safeParse({ ...grand, requiredEnchantingLevel: null }).success, false);
+  assert.ok(!enchantingMilestones.some(milestone => milestone.name.includes("Superpairs")));
 });

@@ -5,7 +5,7 @@ import { hypixelClient } from "../src/server/hypixel/client";
 import { selectProfile } from "../src/server/hypixel/profiles";
 import { memberSchema } from "../src/server/hypixel/types";
 import { buildOwnedEnchantingState } from "../src/server/enchanting/owned-state";
-import { buildExperimentRewardOpportunities } from "../src/server/enchanting/reward-opportunities";
+import { buildExperimentRewardOpportunities, selectExperimentRewardFocus } from "../src/server/enchanting/reward-opportunities";
 import { researchedExperimentTiers } from "../src/server/reference/enchanting-mechanics";
 
 async function main() {
@@ -25,6 +25,7 @@ async function main() {
     player: { username: identity.username, profile: selected.cute_name },
     owned, tierResearch: researchedExperimentTiers,
     possibleRewardOpportunities: buildExperimentRewardOpportunities(owned),
+    rewardFocus: selectExperimentRewardFocus(owned),
     // Current API evidence; preserve this block so new fields and changed shapes are visible.
     rawExperimentation: member.experimentation ?? null,
   };

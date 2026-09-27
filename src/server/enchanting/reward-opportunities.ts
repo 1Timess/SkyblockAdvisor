@@ -34,3 +34,17 @@ export function buildExperimentRewardOpportunities(state: OwnedEnchantingState):
     cosmetic: entries.filter(entry => entry.reward.kind === "DYE" || entry.reward.kind === "COSMETIC"),
   };
 }
+
+// Only an explicit item goal can promote a possible drop for review. Ownership,
+// price, and upgrade value must be checked by downstream item mechanics.
+export function selectExperimentRewardFocus(
+  state: OwnedEnchantingState, requestedRewardNames: readonly string[] = []
+): { enchantingXpActivity: boolean; matchedRewards: ExperimentRewardOpportunity[] } {
+  const names = new Set(requestedRewardNames.map(name => name.trim().toLowerCase()).filter(Boolean));
+  const { progression } = buildExperimentRewardOpportunities(state);
+  return {
+    enchantingXpActivity: state.skill !== null && state.skill.level >= experimentationMechanics.accessLevel
+      && state.skill.level < 60,
+    matchedRewards: progression.filter(entry => names.has(entry.reward.name.toLowerCase())),
+  };
+}
