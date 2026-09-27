@@ -6,6 +6,7 @@ import type { PetProgressionDomain } from "../../schemas/pet-domain-relevance";
 import type { PetMutation } from "../../schemas/pet-mutations";
 import { buildDomainPetMutations } from "../pets/domain-mutations";
 import { buildPetMutationFamilies } from "../pets/mutation-families";
+import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 
 const rarityTiers = ["common", "uncommon", "rare", "epic", "legendary", "mythic"] as const;
 
@@ -17,6 +18,8 @@ export function buildActivityPetLanes(input: {
   catalog: readonly CandidateItem[];
 }): Record<string, AdvisorCandidate[]> {
   const catalog = new Map(input.catalog.map(item => [item.id, item]));
+  const definitions = new Map(input.definitions.map(value => [value.id, value]));
+  const petItems = new Map(input.petItems.map(value => [value.itemId, value]));
   const domainMutations = buildDomainPetMutations(input);
   const mutations = domainMutations.filter(isNonAcquirePetMutation);
   const lanes: Record<string, AdvisorCandidate[]> = {};
@@ -33,6 +36,7 @@ export function buildActivityPetLanes(input: {
       requirements: mutation.requirements.itemCosts.map(cost => `${cost.count}x ${cost.itemId}`),
       abilityText: item.abilityText,
       setBonusText: [],
+      semanticEvidence: semanticEvidence(mutation.after.canonicalPetId, mutation.after.heldItem),
       warnings: [
         ...mutation.reasons,
         ...mutation.uncertainty,
@@ -55,6 +59,7 @@ export function buildActivityPetLanes(input: {
       requirements: [],
       abilityText: item.abilityText,
       setBonusText: [],
+      semanticEvidence: [...new Set(family.children.flatMap(child => semanticEvidence(child.after.canonicalPetId, child.after.heldItem)))],
       warnings: ["Pet acquisition pricing is level-aware and remains unresolved until concrete market choices are composed downstream."],
       petAcquisitionFamily: {
         kind: "PET_ACQUISITION",
@@ -74,6 +79,15 @@ export function buildActivityPetLanes(input: {
 
   for (const candidates of Object.values(lanes)) candidates.sort((a, b) => a.id.localeCompare(b.id));
   return lanes;
+
+  function semanticEvidence(canonicalPetId: string, heldItemId: string | null) {
+    const definition = definitions.get(canonicalPetId);
+    if (!definition) return [];
+    const heldItem = heldItemId ? petItems.get(heldItemId) ?? null : null;
+    return [...new Set(evaluatePetDomainRelevance(definition, input.domain, heldItem).evidence
+      .filter(value => value.source === "PET_EFFECT" || value.source === "PET_ITEM_EFFECT")
+      .map(value => value.mechanic))].sort();
+  }
 }
 
 type NonAcquirePetMutation = Exclude<PetMutation, { kind: "ACQUIRE" }>;
