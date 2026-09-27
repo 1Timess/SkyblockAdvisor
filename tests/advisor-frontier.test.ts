@@ -11,7 +11,7 @@ const route: AdvisorRoute = { scope: "GEAR", activeDomains: ["ARMOR", "WEAPONS"]
 function input(id: string, options: {
   domain?: AdvisorCandidate["domain"]; slot?: string; category?: string; stats?: string[]; priceStatus?: CompactAdvisorCandidate["feasibility"]["priceStatus"];
   budgetDeltaCoins?: number | null; requirements?: CompactAdvisorCandidate["feasibility"]["requirements"]; warnings?: string[];
-  mutation?: AdvisorCandidate["mutation"];
+  mutation?: AdvisorCandidate["mutation"]; petAcquisitionFamily?: AdvisorCandidate["petAcquisitionFamily"];
 } = {}, stableOrder = 0): FrontierInputCandidate {
   const domain = options.domain ?? "armor", stats = options.stats ?? ["strength"];
   const requirements = options.requirements ?? [];
@@ -19,7 +19,8 @@ function input(id: string, options: {
     categories: domain === "armor" ? ["armor", options.slot ?? "helmet"] : ["weapon", options.category ?? "sword"],
     stats: Object.fromEntries(stats.map(stat => [stat, 1])), lore: [], abilityText: [], setBonusText: [], requirements: [],
     unparsedRequirementText: [], wiki: null, marketKey: id, sources: { hypixel: true, neu: true } },
-    requirements: requirements.map(value => value.text), abilityText: [], setBonusText: [], warnings: options.warnings ?? [], mutation: options.mutation };
+    requirements: requirements.map(value => value.text), abilityText: [], setBonusText: [], warnings: options.warnings ?? [], mutation: options.mutation,
+    petAcquisitionFamily: options.petAcquisitionFamily };
   const priceStatus = options.priceStatus ?? "WITHIN_BUDGET";
   return { candidate, stableOrder, relevance: { reason: "fixture", relevantStats: stats }, sourceLanes: [`${domain}:fixture:${stats[0]}`],
     feasibility: { priceStatus, budgetCoins: 30_000_000,
@@ -130,4 +131,22 @@ test("structured mutation context is representative rather than exhaustive", () 
   assert.equal(result.selected.length, 6);
   assert.ok(result.selected.every(value => value.candidate.mutation?.kind === "GEMSTONE"));
   assert.equal(result.candidates.filter(value => value.selection.exclusionReason === "REDUNDANCY_LIMIT").length, 4);
+});
+
+
+test("distinct pet acquisition families survive Mining frontier redundancy as separate compressed slots", () => {
+  const miningRoute: AdvisorRoute = { scope: "MINING", activeDomains: ["MINING"], clarificationRecommended: false,
+    reason: "fixture", goal: "MINING", inferredRole: null, armorSlots: [], domain: "MINING", mechanics: [] };
+  const family = (petType: string): NonNullable<AdvisorCandidate["petAcquisitionFamily"]> => ({
+    kind: "PET_ACQUISITION", familyId: `pet-family:MINING:acquire:${petType}`, petType,
+    members: [
+      { id: `pet:acquire:${petType};3`, canonicalPetId: `${petType};3`, rarity: "epic", level: 1, maxLevel: 100 },
+      { id: `pet:acquire:${petType};4`, canonicalPetId: `${petType};4`, rarity: "legendary", level: 1, maxLevel: 100 },
+    ],
+  });
+  const candidates = ["ALPHA_MINER", "BETA_MINER"].map((petType, index) =>
+    input(petType, { domain: "pet", stats: ["petAcquisition"], priceStatus: "UNKNOWN", petAcquisitionFamily: family(petType) }, index));
+  const result = selectProgressionFrontier({ route: miningRoute, candidates });
+  assert.deepEqual(result.selected.map(value => value.candidate.id), ["ALPHA_MINER", "BETA_MINER"]);
+  assert.ok(result.selected.every(value => value.candidate.petAcquisitionFamily?.members.length === 2));
 });
