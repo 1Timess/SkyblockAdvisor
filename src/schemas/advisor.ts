@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
+import { experimentObservationSchema } from "./owned-enchanting";
 
 export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
@@ -98,7 +99,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("ENCHANTING"), enchantingLevel: z.number().nullable(), enchantingXp: z.number().nullable(),
     xpActivity: z.boolean(), matchedRewards: z.array(z.object({ name: z.string(), kind: z.string(), access: z.string(),
       requiredEnchantingLevel: z.number().nullable(), lowerEnchantedItems: z.array(z.string()), itemFit: z.string() })),
-    possibleRewardCount: z.number().int().nonnegative(), note: z.string() }),
+    possibleRewardCount: z.number().int().nonnegative(), experimentation: experimentObservationSchema, note: z.string() }),
   z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
     highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),
     weapons: z.array(compactItemSchema), equipment: z.array(compactItemSchema), activePet: compactPetSchema.nullable() }),

@@ -18,6 +18,7 @@ import { buildSlayers } from "../domains/slayers";
 import { buildDungeons } from "../domains/dungeons";
 import { buildEconomy } from "./economy";
 import { buildExtendedPlayerState } from "../domains/player-state";
+import { buildOwnedEnchantingState } from "../../enchanting/owned-state";
 
 type Sources = {
   resolvePlayer: typeof resolvePlayer;
@@ -66,7 +67,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     accessories: buildAccessories(items, member, buildAccessoryCatalog(catalogResult.items), warnings),
     pets: buildPets(member, warnings),
     progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings),
-      mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing },
+      mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing, enchanting: buildOwnedEnchantingState(member) },
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
     playerStats: extended.playerStats, bestiary: extended.bestiary, otherProgression: extended.otherProgression,

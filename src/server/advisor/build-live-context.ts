@@ -44,13 +44,15 @@ export interface BuildAdvisorContextInput {
 export async function buildAdvisorContextForPlayer(input: BuildAdvisorContextInput): Promise<AdvisorContext> { return (await buildAdvisorContextInspectionForPlayer(input)).context; }
 
 export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisorContextInput): Promise<AdvisorContextBuildResult> {
-  const profileResultPromise = advisorProfileSnapshotCache.getOrLoad({ usernameOrUuid: input.usernameOrUuid, requestedProfile: input.requestedProfile,
+  const profileResult = await advisorProfileSnapshotCache.getOrLoad({ usernameOrUuid: input.usernameOrUuid, requestedProfile: input.requestedProfile,
     profileSnapshotId: input.conversationState?.profileSnapshotId });
-  const [profileResult, items, neu, market, petConstants] = await Promise.all([profileResultPromise, hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot(), loadNeuPetConstants()]);
   const intelligence = profileResult.snapshot, profile = intelligence.profile;
   const route = routeAdvisorQuestion({ question: input.question, profile, conversationState: input.conversationState });
+  const [items, neu, market, petConstants] = route.domain === "ENCHANTING"
+    ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
+    : await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot(), loadNeuPetConstants()]);
   const effectiveBudgetCoins = input.budgetCoins ?? input.conversationState?.budgetCoins;
-  const catalog = buildItemCatalog(items, neu).getAll(), quotes = new Map<string, MarketQuote>(Object.entries(market?.quotes ?? {}));
+  const catalog = neu ? buildItemCatalog(items, neu).getAll() : [], quotes = new Map<string, MarketQuote>(Object.entries(market?.quotes ?? {}));
   const eligibilityMode = "ADVISOR_DISCOVERY" as const;
   const lanes: TaggedCandidateLane[] = [];
   let petLevelTarget: AdvisorCandidate[] = [], rabbitNoOpInRawLanes = false;
@@ -75,15 +77,15 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     const result = buildActivityDomainLanes({ domain: activityDomain, profile, catalog, quotes, budgetCoins: effectiveBudgetCoins });
     lanes.push(...Object.entries(result).map(([lane, candidates]) => ({ domain: activityDomain, label: `${activityDomain.toLowerCase()}:${lane}`, candidates })));
 
-    const petDefinitions = buildCanonicalPetDefinitions(neu.getAll(), petConstants);
-    const petItems = buildCanonicalPetItemDefinitions(neu.getAll(), petConstants);
+    const petDefinitions = buildCanonicalPetDefinitions(neu!.getAll(), petConstants!);
+    const petItems = buildCanonicalPetItemDefinitions(neu!.getAll(), petConstants!);
     const petSetups = buildOwnedPetSetups({ pets: profile.pets.owned, definitions: petDefinitions, petItems });
     const petResult = buildActivityPetLanes({
       domain: activityDomain,
       setups: petSetups,
       definitions: petDefinitions,
       petItems,
-      catalog: buildPetCandidateCatalog(neu),
+      catalog: buildPetCandidateCatalog(neu!),
     });
     lanes.push(...Object.entries(petResult).map(([lane, candidates]) => ({
       domain: activityDomain,
@@ -100,7 +102,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
       hasRelevantPetCandidates: Object.values(petResult).some(candidates => candidates.length > 0),
     });
   } else if (route.scope === "PETS") {
-    const result = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu), quotes, budgetCoins: effectiveBudgetCoins,
+    const result = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu!), quotes, budgetCoins: effectiveBudgetCoins,
       rolePetTypes: input.rolePetTypes, eligibilityMode });
     petLevelTarget = result.lanes.levelTarget;
     const petLanes = Object.entries(result.lanes).map(([lane, candidates]) => ({ domain: "PETS" as const, label: `pet:${lane}`, candidates }));

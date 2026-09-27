@@ -92,7 +92,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         unavailableFacts: miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."] },
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
         enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
-        matchedRewards: [], possibleRewardCount: 0,
+        matchedRewards: [], possibleRewardCount: 0, experimentation: profile.progression.enchanting.experimentation,
         note: "Experimentation rewards are possible drops. Ownership, RNG Meter progress, and available charges are unknown." },
     },
   };

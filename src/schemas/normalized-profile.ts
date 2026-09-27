@@ -2,6 +2,7 @@ import { z } from "zod";
 import { profileItemSchema, raritySchema, statsSchema, warningSchema } from "./items";
 import { dungeonSchema, levelSchema, slayerSchema } from "./progression";
 import { petSchema } from "./pets";
+import { ownedEnchantingStateSchema } from "./owned-enchanting";
 
 export const profileSummarySchema = z.object({ id: z.string(), cuteName: z.string(), selected: z.boolean(), gameMode: z.string().nullable() });
 export const profilesResponseSchema = z.object({
@@ -64,7 +65,8 @@ export const normalizedProfileSchema = z.object({
   accessories: accessorySchema,
   pets: z.object({ owned: z.array(petSchema), activePet: petSchema.nullable() }),
   progression: z.object({ skills: z.record(z.string(), levelSchema), slayers: z.record(z.string(), slayerSchema), dungeons: dungeonSchema,
-    mining: miningProgressionSchema, foraging: foragingProgressionSchema, fishing: fishingProgressionSchema }),
+    mining: miningProgressionSchema, foraging: foragingProgressionSchema, fishing: fishingProgressionSchema,
+    enchanting: ownedEnchantingStateSchema }),
   attributes: statsSchema,
   shards: z.object({ owned: z.unknown().nullable(), fused: z.unknown().nullable(), traps: z.unknown().nullable() }),
   collections: statsSchema, unlockedCollectionTiers: z.array(z.string()), craftedGenerators: z.array(z.string()),
