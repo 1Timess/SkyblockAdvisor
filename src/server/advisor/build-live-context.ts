@@ -17,7 +17,7 @@ import { buildActivityPetLanes } from "../candidates/activity-pets";
 import { buildPetLanes } from "../candidates/pet";
 import { buildWeaponLanes } from "../candidates/weapon";
 import { buildAdvisorContext, buildCandidateFeasibility, compactProfileWarnings, isNoOpPetCandidate, orderDetailedCandidates, type TaggedCandidateLane } from "./context";
-import { advisorProfileSnapshotCache } from "./profile-intelligence";
+import { advisorProfileSnapshotCache, enrichActivityPetDomainContext } from "./profile-intelligence";
 import { routeAdvisorQuestion } from "./routing";
 import { buildCandidateRelevance, filterCandidateLanesForGoal, mergeCandidateEvidence, uniqueLaneCandidates } from "./relevance";
 import { selectProgressionFrontier, type ExclusionReason, type FrontierSelectionCandidate, type SelectionBucket } from "./frontier";
@@ -53,6 +53,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   const eligibilityMode = "ADVISOR_DISCOVERY" as const;
   const lanes: TaggedCandidateLane[] = [];
   let petLevelTarget: AdvisorCandidate[] = [], rabbitNoOpInRawLanes = false;
+  let activeDomainContext: AdvisorDomainContext | null = route.domain ? intelligence.domains[route.domain] : null;
 
   if (route.domain === "DUNGEONS") {
     for (const current of profile.gear.armor.items) {
@@ -86,6 +87,15 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
       label: `${activityDomain.toLowerCase()}:${lane}`,
       candidates,
     })));
+    activeDomainContext = enrichActivityPetDomainContext({
+      context: intelligence.domains[activityDomain],
+      profile,
+      domain: activityDomain,
+      setups: petSetups,
+      definitions: petDefinitions,
+      petItems,
+      hasRelevantPetCandidates: Object.values(petResult).some(candidates => candidates.length > 0),
+    });
   } else if (route.scope === "PETS") {
     const result = buildPetLanes({ profile, catalog: buildPetCandidateCatalog(neu), quotes, budgetCoins: effectiveBudgetCoins,
       rolePetTypes: input.rolePetTypes, eligibilityMode });
@@ -123,7 +133,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   };
   const context = buildAdvisorContext({ question: input.question, profile, intelligence, route, availableAnalysis, candidates: detailedCandidates,
     conversationState: nextConversationState, relevanceById, budgetCoins: effectiveBudgetCoins,
-    domainContext: route.domain ? intelligence.domains[route.domain] : null });
+    domainContext: activeDomainContext });
   const candidateLanes = Object.fromEntries(detailedCandidates.map(candidate => [candidate.id, relevantLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label)]));
   const rabbitPets = profile.pets.owned.filter(pet => pet.type.toUpperCase() === "RABBIT"), petUniqueTypeCount = new Set(profile.pets.owned.map(pet => pet.type)).size;
   const level100RabbitDetected = rabbitPets.some(pet => pet.level !== null && pet.maxLevel !== null && pet.level >= pet.maxLevel);
