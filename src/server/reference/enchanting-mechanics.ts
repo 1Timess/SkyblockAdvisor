@@ -1,4 +1,4 @@
-import { experimentationMechanicsSchema, skillMilestoneSchema, type SkillMilestone } from "../../schemas/enchanting-mechanics";
+import { experimentationMechanicsSchema, skillMilestoneSchema, type ExperimentTier, type SkillMilestone } from "../../schemas/enchanting-mechanics";
 import { levelFromXp } from "./leveling";
 import xpTables from "./xp-tables.json";
 
@@ -47,9 +47,31 @@ export function upcomingEnchantingMilestones(level: number): readonly SkillMiles
 }
 
 const unknown = { status: "UNKNOWN" as const, value: null, source: null };
+const experimentSource = "https://hypixelskyblock.minecraft.wiki/w/Experiments";
+const tier = (experiment: ExperimentTier["experiment"], stake: ExperimentTier["stake"],
+  requiredEnchantingLevel: number | null, note: string | null = null): ExperimentTier => ({
+  experiment, stake, requiredEnchantingLevel,
+  evidence: requiredEnchantingLevel === null ? "CONFLICTING_SOURCE" : "COMMUNITY_WIKI_RESEARCH",
+  source: experimentSource, note,
+});
+
+// Research data only. The owner confirmed the Enchanting Rewards Per Level table,
+// not this separate Experiments page. Do not emit these as production milestones
+// until the threshold table is confirmed or corroborated in live game data.
+export const researchedExperimentTiers: readonly ExperimentTier[] = Object.freeze([
+  tier("CHRONOMATRON", "HIGH", 20), tier("CHRONOMATRON", "GRAND", 25),
+  tier("CHRONOMATRON", "SUPREME", 30), tier("CHRONOMATRON", "TRANSCENDENT", 35),
+  tier("CHRONOMATRON", "METAPHYSICAL", 40),
+  tier("ULTRASEQUENCER", "SUPREME", 25), tier("ULTRASEQUENCER", "TRANSCENDENT", 30),
+  tier("ULTRASEQUENCER", "METAPHYSICAL", 40),
+  tier("SUPERPAIRS", "BEGINNER", 10), tier("SUPERPAIRS", "HIGH", 20),
+  tier("SUPERPAIRS", "GRAND", null, "The source lists level 2 between level 20 and level 30; verify in game."),
+  tier("SUPERPAIRS", "SUPREME", 30), tier("SUPERPAIRS", "TRANSCENDENT", 40),
+  tier("SUPERPAIRS", "METAPHYSICAL", 50),
+]);
 export const experimentationMechanics = experimentationMechanicsSchema.parse({
   accessLevel: 10,
-  tiers: unknown,
+  tiers: researchedExperimentTiers,
   dailyCharges: unknown,
   resets: unknown,
   rngMeter: unknown,

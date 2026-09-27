@@ -19,9 +19,23 @@ export const experimentationFactSchema = z.object({
     context.addIssue({ code: "custom", message: "Unknown facts cannot assert a value" });
 });
 
+export const experimentTierSchema = z.object({
+  experiment: z.enum(["CHRONOMATRON", "ULTRASEQUENCER", "SUPERPAIRS"]),
+  stake: z.enum(["BEGINNER", "HIGH", "GRAND", "SUPREME", "TRANSCENDENT", "METAPHYSICAL"]),
+  requiredEnchantingLevel: z.number().int().min(10).max(60).nullable(),
+  evidence: z.enum(["COMMUNITY_WIKI_RESEARCH", "CONFLICTING_SOURCE"]),
+  source: z.url(),
+  note: z.string().nullable(),
+}).superRefine((tier, context) => {
+  if (tier.evidence === "COMMUNITY_WIKI_RESEARCH" && tier.requiredEnchantingLevel === null)
+    context.addIssue({ code: "custom", message: "A researched threshold requires a level" });
+  if (tier.evidence === "CONFLICTING_SOURCE" && (tier.requiredEnchantingLevel !== null || !tier.note))
+    context.addIssue({ code: "custom", message: "A conflicting threshold requires a null level and explanation" });
+});
+
 export const experimentationMechanicsSchema = z.object({
   accessLevel: z.number().int().min(1).max(60),
-  tiers: experimentationFactSchema,
+  tiers: z.array(experimentTierSchema),
   dailyCharges: experimentationFactSchema,
   resets: experimentationFactSchema,
   rngMeter: experimentationFactSchema,
@@ -29,3 +43,4 @@ export const experimentationMechanicsSchema = z.object({
 
 export type SkillMilestone = z.infer<typeof skillMilestoneSchema>;
 export type ExperimentationMechanics = z.infer<typeof experimentationMechanicsSchema>;
+export type ExperimentTier = z.infer<typeof experimentTierSchema>;
