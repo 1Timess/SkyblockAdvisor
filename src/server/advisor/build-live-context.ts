@@ -1,4 +1,4 @@
-import type { AdvisorContext, AdvisorConversationState, AdvisorRoute, AnalysisScope, AvailableAnalysis, ProfileIntelligenceDomain } from "../../schemas/advisor";
+import type { AdvisorContext, AdvisorConversationState, AdvisorDomainContext, AdvisorRoute, AnalysisScope, AvailableAnalysis, ProfileIntelligenceDomain } from "../../schemas/advisor";
 import type { AdvisorCandidate } from "../../schemas/candidates";
 import type { MarketQuote } from "../../schemas/market";
 import { hypixelClient } from "../hypixel/client";
