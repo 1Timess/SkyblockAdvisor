@@ -8,6 +8,20 @@ export const experimentObservationSchema = z.object({
     ultrasequencer: z.array(z.string()),
     superpairs: z.array(z.string()),
   }),
+  chargeTrackTimestamp: z.number().nonnegative().nullable(),
+  claimsResets: z.number().int().nonnegative().nullable(),
+  claimsResetsTimestamp: z.number().nonnegative().nullable(),
+  serumsDrank: z.number().int().nonnegative().nullable(),
+  claimedRetroactiveRng: z.boolean().nullable(),
+  history: z.record(z.enum(["chronomatron", "ultrasequencer", "superpairs"]), z.object({
+    attempts: z.record(z.string(), z.number().int().nonnegative()),
+    claims: z.record(z.string(), z.number().int().nonnegative()),
+    bestScores: z.record(z.string(), z.number().nonnegative()),
+    bonusClicks: z.number().int().nonnegative().nullable(),
+    lastAttempt: z.number().nonnegative().nullable(),
+    lastClaimed: z.number().nonnegative().nullable(),
+    claimed: z.boolean().nullable(),
+  })),
   // A timestamp alone cannot prove whether a free charge or paid reset is available.
   attemptAvailability: z.literal("UNKNOWN"),
 });
