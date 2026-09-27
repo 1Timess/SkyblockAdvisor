@@ -104,6 +104,36 @@ test("prerequisite-first and hold-only plans are valid", async () => {
   assert.deepEqual(validateAdvisorResponse(hold, advisorContext), hold);
 });
 
+
+test("pet acquisition family member IDs validate as alternatives under the family candidate", async () => {
+  const advisorContext = await context();
+  advisorContext.candidates = [{
+    ...advisorContext.candidates[0],
+    id: "pet-family:MINING:acquire:SCATHA",
+    domain: "pet",
+    name: "Scatha",
+    petAcquisitionFamily: {
+      kind: "PET_ACQUISITION",
+      familyId: "pet-family:MINING:acquire:SCATHA",
+      petType: "SCATHA",
+      members: [
+        { id: "pet:acquire:SCATHA;2", canonicalPetId: "SCATHA;2", rarity: "rare", level: 1, maxLevel: 100 },
+        { id: "pet:acquire:SCATHA;4", canonicalPetId: "SCATHA;4", rarity: "legendary", level: 1, maxLevel: 100 },
+      ],
+    },
+  }];
+  const response = { kind: "PLAN", headline: "Pet plan", actions: [{
+    rank: 1, actionType: "BUY", candidateId: "pet-family:MINING:acquire:SCATHA",
+    memberCandidateIds: ["pet:acquire:SCATHA;4"], action: "Consider Legendary Scatha",
+    why: "It is one concrete alternative in the supplied family.", tradeoffs: [], prerequisites: [], uncertainty: null,
+  }], caveats: [], followUps: [] };
+  assert.deepEqual(validateAdvisorResponse(response, advisorContext), response);
+  assert.throws(() => validateAdvisorResponse({
+    ...response,
+    actions: [{ ...response.actions[0], memberCandidateIds: ["pet:acquire:SCATHA;3"] }],
+  }, advisorContext), /unknown candidate family member ID/);
+});
+
 test("Luna client sends the scoped strict request and validates its response", async () => {
   const advisorContext = await context();
   const advice = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "HOLD", candidateId: null, memberCandidateIds: [], action: "Save coins", why: "Uncertainty",
