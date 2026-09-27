@@ -21,6 +21,8 @@ export function filterCandidateLanesForGoal(lanes: readonly TaggedCandidateLane[
 export function buildCandidateRelevance(lanes: readonly TaggedCandidateLane[], candidateId: string, route: AdvisorRoute): CandidateRelevance {
   const laneNames = [...new Set(lanes.filter(lane => lane.candidates.some(candidate => candidate.id === candidateId)).map(lane => laneNameOf(lane.label)))];
   const stats = laneNames.filter(lane => lane !== "ability" && !accessoryOrPetLane(lane));
+  const petAcquisition = lanes.some(lane => lane.candidates.some(candidate => candidate.id === candidateId && candidate.petAcquisitionFamily));
+  if (petAcquisition && (route.goal === "MINING" || route.goal === "FISHING")) return { reason: "This pet acquisition family has canonical mechanics relevant to the active activity domain.", relevantStats: [] };
   if (route.goal === "MAGICAL_POWER") return { reason: "Accessory progression is directly relevant to the Magical Power goal.", relevantStats: ["magicalPower"] };
   if (route.goal === "PET") return { reason: "Pet progression is directly relevant to the requested pet scope.", relevantStats: laneNames };
   if (route.goal === "FISHING") return { reason: "The candidate has repo-supported fishing progression evidence.", relevantStats: laneNames };
@@ -74,5 +76,5 @@ function roleCategoryMatches(candidate: AdvisorCandidate, route: AdvisorRoute) {
 }
 
 function laneNameOf(label: string) { return label.slice(label.lastIndexOf(":") + 1); }
-function accessoryOrPetLane(lane: string) { return ["missing", "rarityUpgrade", "cheapestMp", "recombobulation", "enrichment", "owned", "levelTarget", "roleProgression"].includes(lane); }
+function accessoryOrPetLane(lane: string) { return ["missing", "rarityUpgrade", "cheapestMp", "recombobulation", "enrichment", "owned", "levelTarget", "roleProgression", "petAcquisition", "petRarityUpgrade", "petHeldItem", "petLevelTarget"].includes(lane); }
 function goalLabel(goal: AdvisorGoal) { return goal.toLowerCase().replaceAll("_", " "); }
