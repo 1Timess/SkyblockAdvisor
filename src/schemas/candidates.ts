@@ -52,6 +52,7 @@ export const advisorCandidateSchema = z.object({
   abilityText: z.array(z.string()),
   setBonusText: z.array(z.string()),
   warnings: z.array(z.string()),
+  semanticEvidence: z.array(z.string()).optional(),
   mutation: candidateMutationSchema.optional(),
   petAcquisitionFamily: petAcquisitionFamilySchema.optional(),
 });
