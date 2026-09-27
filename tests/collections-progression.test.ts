@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildCollectionProgress, buildCraftedMinions, buildMinionRecipeLeads, parseCollectionDefinitions,
+import { buildCollectionProgress, buildCraftedMinions, buildMinionRecipeLeads, buildMinionUpgradeLeads, parseCollectionDefinitions,
   selectCollectionFocus, selectCraftedMinions, selectMinionRecipeLeads } from "../src/server/collections/progression";
 import { routeAdvisorQuestion } from "../src/server/advisor/routing";
 import { buildCollectionAdvisorContext } from "../src/server/collections/advisor-context";
@@ -119,6 +119,15 @@ test("a catalogued final minion tier produces no invented higher craft", () => {
   assert.equal(lead.history, "OBSERVED");
   assert.equal(lead.nextCraftTier, null);
   assert.equal(lead.nextCraftItemId, null);
+});
+
+test("observed Slayer minions can have catalogued upgrade leads without a collection recipe", () => {
+  const leads = buildMinionUpgradeLeads(buildCraftedMinions(["TARANTULA_1", "VOIDLING_1", "BIRCH_11"]), [
+    { id: "TARANTULA_GENERATOR_2", name: "Tarantula Minion II", generator: "TARANTULA", generator_tier: 2 },
+    { id: "VOIDLING_GENERATOR_2", name: "Voidling Minion II", generator: "VOIDLING", generator_tier: 2 },
+    { id: "BIRCH_GENERATOR_11", name: "Birch Minion XI", generator: "BIRCH", generator_tier: 11 },
+  ]);
+  assert.deepEqual(leads.map(lead => [lead.id, lead.nextCraftTier]), [["TARANTULA", 2], ["VOIDLING", 2]]);
 });
 
 test("collection and minion questions route to the collection domain", async () => {

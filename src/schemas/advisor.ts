@@ -100,6 +100,9 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("COLLECTIONS"), sourceVersion: z.string().nullable(), sourceUpdatedAt: z.number().nullable(),
     totalCollections: z.number().int().nonnegative(), craftedMinionTierCount: z.number().int().nonnegative(),
     craftedMinionTypes: z.number().int().nonnegative(), minionFocus: z.array(z.object({ id: z.string(), name: z.string(), tiers: z.array(z.number()) })).max(8),
+    minionUpgradeCount: z.number().int().nonnegative(), minionUpgradeFocus: z.array(z.object({
+      id: z.string(), name: z.string(), tiers: z.array(z.number()), nextCraftTier: z.number().int().positive(), nextCraftItemId: z.string(),
+    })).max(8),
     minionRecipeCount: z.number().int().nonnegative(), minionRecipeFocus: z.array(z.object({
       name: z.string(), generatorId: z.string().nullable(), collectionId: z.string(), collectionName: z.string(), category: z.string(),
       requiredTier: z.number().int().positive(), requiredAmount: z.number().nonnegative(),

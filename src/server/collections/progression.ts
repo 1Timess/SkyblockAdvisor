@@ -10,6 +10,7 @@ export interface CollectionProgress {
   craftedMinionTiers: number[];
 }
 export interface CraftedMinion { id: string; name: string; tiers: number[] }
+export interface MinionUpgradeLead extends CraftedMinion { nextCraftTier: number; nextCraftItemId: string }
 export interface MinionRecipeLead {
   name: string; generatorId: string | null; collectionId: string; collectionName: string; category: string;
   requiredTier: number; requiredAmount: number; collected: number | null; remaining: number | null;
@@ -81,6 +82,18 @@ export function selectCraftedMinions(minions: readonly CraftedMinion[], question
   if (named.length) return named.slice(0, limit);
   // Surface the smallest observed tier histories first. These are investigation leads, not proofs of missing crafts.
   return [...minions].sort((a, b) => Math.max(...a.tiers) - Math.max(...b.tiers) || a.id.localeCompare(b.id)).slice(0, limit);
+}
+
+export function buildMinionUpgradeLeads(minions: readonly CraftedMinion[], items: readonly HypixelItemDefinition[]): MinionUpgradeLead[] {
+  const itemsByGenerator = new Map<string, HypixelItemDefinition[]>();
+  for (const item of items) if (item.generator && item.generator_tier) {
+    itemsByGenerator.set(item.generator, [...(itemsByGenerator.get(item.generator) ?? []), item]);
+  }
+  return minions.flatMap(minion => {
+    const next = itemsByGenerator.get(minion.id)?.filter(item => item.generator_tier! > minion.tiers.at(-1)!)
+      .sort((a, b) => a.generator_tier! - b.generator_tier!)[0];
+    return next ? [{ ...minion, nextCraftTier: next.generator_tier!, nextCraftItemId: next.id }] : [];
+  });
 }
 
 export function buildMinionRecipeLeads(definitions: readonly CollectionDefinition[], progress: readonly CollectionProgress[],

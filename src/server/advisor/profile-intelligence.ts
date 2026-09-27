@@ -62,7 +62,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
     domains: {
       COLLECTIONS: { domain: "COLLECTIONS", sourceVersion: null, sourceUpdatedAt: null, totalCollections: 0,
         craftedMinionTierCount: profile.craftedGenerators.length, craftedMinionTypes: 0, minionFocus: [],
-        minionRecipeCount: 0, minionRecipeFocus: [], focus: [],
+        minionRecipeCount: 0, minionRecipeFocus: [], minionUpgradeCount: 0, minionUpgradeFocus: [], focus: [],
         note: "Collection thresholds have not been loaded. Crafted minion IDs are observed, but placed minions and upgrades are not visible." },
       DUNGEONS: { domain: "DUNGEONS", catacombsLevel: dungeon.catacombs?.level ?? null, selectedClass: dungeon.selectedClass,
         highestFloorNormal: dungeon.highestFloorNormal, highestFloorMaster: dungeon.highestFloorMaster,
