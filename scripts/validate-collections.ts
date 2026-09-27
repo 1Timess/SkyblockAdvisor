@@ -1,0 +1,25 @@
+import "server-only";
+import { mkdir, writeFile } from "node:fs/promises";
+import { buildAdvisorContextInspectionForPlayer } from "../src/server/advisor/build-live-context";
+
+async function main() {
+  const [usernameOrUuid, profileArg] = process.argv.slice(2);
+  if (!usernameOrUuid) throw new Error("Usage: npm run validate:collections -- <username-or-uuid> [profile]");
+  const requestedProfile = profileArg && profileArg !== "-" ? profileArg : undefined;
+  const questions = ["Which collections should I progress next?", "What minions should I craft next?"];
+  const inspections = [];
+  for (const question of questions) inspections.push(await buildAdvisorContextInspectionForPlayer({ usernameOrUuid, requestedProfile, question }));
+  const safe = (value: string) => value.toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
+  const selected = inspections[0].context.canonical.profile.cuteName;
+  const output = `docs/collections-validation-${safe(inspections[0].context.canonical.identity.username)}-${safe(selected)}.json`;
+  await mkdir("docs", { recursive: true });
+  await writeFile(output, `${JSON.stringify({ generatedAt: new Date().toISOString(), lunaCalls: 0,
+    player: { username: inspections[0].context.canonical.identity.username, profile: selected },
+    inspections: inspections.map((result, index) => ({ question: questions[index], route: result.route,
+      domainContext: result.context.domainContext, available: result.availableAnalysis.collections,
+      candidateCount: result.context.candidates.length })),
+  }, null, 2)}\n`, "utf8");
+  console.log(`Wrote ${output}`);
+}
+
+main().catch(error => { console.error(error instanceof Error ? error.message : error); process.exitCode = 1; });

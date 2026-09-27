@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildCollectionProgress, buildCraftedMinions, parseCollectionDefinitions, selectCollectionFocus, selectCraftedMinions } from "../src/server/collections/progression";
+import { buildCollectionProgress, buildCraftedMinions, buildMinionRecipeLeads, parseCollectionDefinitions,
+  selectCollectionFocus, selectCraftedMinions, selectMinionRecipeLeads } from "../src/server/collections/progression";
 import { routeAdvisorQuestion } from "../src/server/advisor/routing";
 import { buildCollectionAdvisorContext } from "../src/server/collections/advisor-context";
 import { advisorDomainContextSchema } from "../src/schemas/advisor";
@@ -69,6 +70,34 @@ test("generic minion focus shows smaller observed histories instead of alphabeti
   assert.deepEqual(selectCraftedMinions(crafted, "What about birch minion?", 2).map(minion => minion.id), ["BIRCH"]);
 });
 
+test("minion recipe leads keep collection gates and crafted history separate", () => {
+  const source = parseCollectionDefinitions({ collections: { FARMING: { items: {
+    LEATHER: { name: "Leather", tiers: [{ tier: 1, amountRequired: 50, unlocks: ["Cow Minion Recipes", "+4 SkyBlock XP"] }] },
+    "INK_SACK:3": { name: "Cocoa Beans", tiers: [{ tier: 1, amountRequired: 75, unlocks: ["Cocoa Beans Minion Recipes"] }] },
+    WHEAT: { name: "Wheat", tiers: [{ tier: 1, amountRequired: 50, unlocks: ["Wheat Minion Recipes"] }] },
+  } } } });
+  const profile = { collections: { LEATHER: 803, "INK_SACK:3": 100, WHEAT: 10 },
+    unlockedCollectionTiers: ["INK_SACK:3_1"], craftedGenerators: ["COCOA_1", "WHEAT_2"] };
+  const crafted = buildCraftedMinions(profile.craftedGenerators);
+  const leads = buildMinionRecipeLeads(source, buildCollectionProgress(profile, source), crafted);
+  const cow = leads.find(lead => lead.name === "Cow")!;
+  assert.equal(cow.access, "COUNT_THRESHOLD");
+  assert.equal(cow.remaining, 0);
+  assert.equal(cow.history, "NO_EXACT_ID_MATCH");
+  const cocoa = leads.find(lead => lead.name === "Cocoa Beans")!;
+  assert.equal(cocoa.access, "EXPLICIT_TIER");
+  assert.equal(cocoa.history, "NO_EXACT_ID_MATCH");
+  assert.deepEqual(cocoa.observedCraftedTiers, []);
+  const wheat = leads.find(lead => lead.name === "Wheat")!;
+  assert.equal(wheat.access, "BELOW_THRESHOLD");
+  assert.equal(wheat.history, "EXACT_ID_MATCH");
+  assert.deepEqual(wheat.observedCraftedTiers, [2]);
+  assert.deepEqual(selectMinionRecipeLeads(leads, "Cow minion?", 8).map(lead => lead.name), ["Cow"]);
+  assert.equal(selectMinionRecipeLeads(leads, "What minions should I craft?", 1)[0].name, "Cocoa Beans");
+  assert.deepEqual(selectMinionRecipeLeads([...leads, { ...cow, name: "Unknown", access: "UNKNOWN", collected: null, remaining: null }],
+    "What minions should I craft?", 3).map(lead => lead.name), ["Cocoa Beans", "Cow", "Wheat"]);
+});
+
 test("collection and minion questions route to the collection domain", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   for (const question of ["Which collection should I work on?", "What minion should I craft?"]) {
@@ -91,4 +120,5 @@ test("advisor context scopes sourced collection gates to the question", async ()
   assert.equal(context.focus.length, 1);
   assert.equal(context.focus[0].id, "WHEAT");
   assert.equal(context.sourceVersion, "test");
+  assert.equal(context.minionRecipeCount, 0);
 });

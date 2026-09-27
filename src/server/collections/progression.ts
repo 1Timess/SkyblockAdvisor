@@ -9,6 +9,12 @@ export interface CollectionProgress {
   craftedMinionTiers: number[];
 }
 export interface CraftedMinion { id: string; name: string; tiers: number[] }
+export interface MinionRecipeLead {
+  name: string; collectionId: string; collectionName: string; category: string;
+  requiredTier: number; requiredAmount: number; collected: number | null; remaining: number | null;
+  access: "EXPLICIT_TIER" | "COUNT_THRESHOLD" | "BELOW_THRESHOLD" | "UNKNOWN";
+  history: "EXACT_ID_MATCH" | "NO_EXACT_ID_MATCH"; observedCraftedTiers: number[];
+}
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === "object" && !Array.isArray(value)
   ? value as Record<string, unknown> : {};
@@ -73,6 +79,46 @@ export function selectCraftedMinions(minions: readonly CraftedMinion[], question
   if (named.length) return named.slice(0, limit);
   // Surface the smallest observed tier histories first. These are investigation leads, not proofs of missing crafts.
   return [...minions].sort((a, b) => Math.max(...a.tiers) - Math.max(...b.tiers) || a.id.localeCompare(b.id)).slice(0, limit);
+}
+
+const minionId = (name: string) => name.toUpperCase().replace(/[^A-Z0-9]/g, "");
+export function buildMinionRecipeLeads(definitions: readonly CollectionDefinition[], progress: readonly CollectionProgress[],
+  craftedMinions: readonly CraftedMinion[]): MinionRecipeLead[] {
+  const progressById = new Map(progress.map(entry => [entry.id, entry]));
+  const craftedByName = new Map<string, CraftedMinion[]>();
+  for (const minion of craftedMinions) {
+    const key = minionId(minion.id);
+    craftedByName.set(key, [...(craftedByName.get(key) ?? []), minion]);
+  }
+  return definitions.flatMap(definition => definition.tiers.flatMap(tier => tier.unlocks.flatMap(unlock => {
+    const match = /^(.+?) Minion Recipes$/i.exec(unlock);
+    if (!match) return [];
+    const entry = progressById.get(definition.id);
+    if (!entry) return [];
+    const matching = craftedByName.get(minionId(match[1])) ?? [];
+    // More than one crafted ID for a normalized name is ambiguous; leave the history unjoined.
+    const observed = matching.length === 1 ? matching[0].tiers : [];
+    const access = (entry.unlockedTier ?? 0) >= tier.tier ? "EXPLICIT_TIER" as const
+      : (entry.countTier ?? 0) >= tier.tier ? "COUNT_THRESHOLD" as const
+        : entry.collected === null ? "UNKNOWN" as const : "BELOW_THRESHOLD" as const;
+    return [{ name: match[1], collectionId: definition.id, collectionName: definition.name, category: definition.category,
+      requiredTier: tier.tier, requiredAmount: tier.amount, collected: entry.collected,
+      remaining: entry.collected === null ? null : Math.max(0, tier.amount - entry.collected), access,
+      history: matching.length === 1 ? "EXACT_ID_MATCH" as const : "NO_EXACT_ID_MATCH" as const,
+      observedCraftedTiers: observed }];
+  })));
+}
+
+export function selectMinionRecipeLeads(leads: readonly MinionRecipeLead[], question: string, limit = 8): MinionRecipeLead[] {
+  const text = question.toLowerCase();
+  const named = leads.filter(lead => text.includes(lead.name.toLowerCase()) || text.includes(lead.collectionName.toLowerCase()));
+  if (named.length) return named.slice(0, limit);
+  const accessRank = { EXPLICIT_TIER: 0, COUNT_THRESHOLD: 1, BELOW_THRESHOLD: 4, UNKNOWN: 6 };
+  return [...leads].sort((a, b) => {
+    const aObserved = a.history === "EXACT_ID_MATCH" ? 2 : 0, bObserved = b.history === "EXACT_ID_MATCH" ? 2 : 0;
+    return accessRank[a.access] + aObserved - accessRank[b.access] - bObserved
+      || (a.remaining ?? Infinity) - (b.remaining ?? Infinity) || a.name.localeCompare(b.name);
+  }).slice(0, limit);
 }
 
 export function selectCollectionFocus(progress: readonly CollectionProgress[], question: string, limit = 8): CollectionProgress[] {

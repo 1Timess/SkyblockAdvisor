@@ -100,6 +100,13 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("COLLECTIONS"), sourceVersion: z.string().nullable(), sourceUpdatedAt: z.number().nullable(),
     totalCollections: z.number().int().nonnegative(), craftedMinionTierCount: z.number().int().nonnegative(),
     craftedMinionTypes: z.number().int().nonnegative(), minionFocus: z.array(z.object({ id: z.string(), name: z.string(), tiers: z.array(z.number()) })).max(8),
+    minionRecipeCount: z.number().int().nonnegative(), minionRecipeFocus: z.array(z.object({
+      name: z.string(), collectionId: z.string(), collectionName: z.string(), category: z.string(),
+      requiredTier: z.number().int().positive(), requiredAmount: z.number().nonnegative(),
+      collected: z.number().nullable(), remaining: z.number().nullable(),
+      access: z.enum(["EXPLICIT_TIER", "COUNT_THRESHOLD", "BELOW_THRESHOLD", "UNKNOWN"]),
+      history: z.enum(["EXACT_ID_MATCH", "NO_EXACT_ID_MATCH"]), observedCraftedTiers: z.array(z.number()),
+    })).max(8),
     focus: z.array(z.object({ id: z.string(), name: z.string(), category: z.string(), collected: z.number().nullable(),
       unlockedTier: z.number().nullable(), countTier: z.number().nullable(), nextTier: z.object({ tier: z.number(), amount: z.number(), unlocks: z.array(z.string()) }).nullable(),
       remaining: z.number().nullable(), nextTierStatus: z.enum(["BELOW_THRESHOLD", "UNKNOWN", "MAXED"]),
