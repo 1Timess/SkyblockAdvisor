@@ -1,9 +1,12 @@
 import type { AdvisorDomainContext, ProfileIntelligenceDomain } from "../../schemas/advisor";
+import type { OwnedPetSetup } from "../../schemas/owned-pet-setup";
+import type { CanonicalPetDefinition, CanonicalPetItemDefinition } from "../../schemas/pet-mechanics";
 import type { ItemStats, ProfileItem } from "../../schemas/items";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { TtlCache } from "../cache/ttl-cache";
 import { buildNormalizedProfile } from "../skyblock/profile/build-normalized-profile";
 import { buildMiningKnowledge, miningRelevantStats } from "../reference/mining-knowledge";
+import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -87,6 +90,36 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         knownStats: knownStats([...miningTools, ...miningArmor, ...miningEquipment], miningPets, miningStats),
         unavailableFacts: miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."] },
     },
+  };
+}
+
+export function enrichActivityPetDomainContext(input: {
+  context: AdvisorDomainContext;
+  profile: NormalizedSkyBlockProfile;
+  domain: "MINING" | "FISHING";
+  setups: readonly OwnedPetSetup[];
+  definitions: readonly CanonicalPetDefinition[];
+  petItems: readonly CanonicalPetItemDefinition[];
+  hasRelevantPetCandidates: boolean;
+}): AdvisorDomainContext {
+  if (input.context.domain !== input.domain) return input.context;
+  const definitions = new Map(input.definitions.map(definition => [definition.id, definition]));
+  const petItems = new Map(input.petItems.map(item => [item.itemId, item]));
+  const relevantPets = input.profile.pets.owned.filter((_, index) => {
+    const setup = input.setups[index];
+    if (!setup?.canonicalPetId) return false;
+    const definition = definitions.get(setup.canonicalPetId);
+    if (!definition) return false;
+    const petItem = setup.canonicalPetItemId ? petItems.get(setup.canonicalPetItemId) ?? null : null;
+    return evaluatePetDomainRelevance(definition, input.domain, petItem).relevant;
+  });
+  const unavailablePrefix = input.domain === "MINING" ? "Pet mining effects are unavailable" : "Pet fishing effects are unavailable";
+  return {
+    ...input.context,
+    pets: relevantPets.map(compactPet),
+    unavailableFacts: input.hasRelevantPetCandidates || relevantPets.length
+      ? input.context.unavailableFacts.filter(fact => !fact.startsWith(unavailablePrefix))
+      : input.context.unavailableFacts,
   };
 }
 
