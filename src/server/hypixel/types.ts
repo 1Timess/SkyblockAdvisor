@@ -14,6 +14,8 @@ export const rawPetSchema = z.object({
   heldItem: z.string().nullable().optional(), candyUsed: number.optional(), skin: z.string().nullable().optional(),
 });
 export const memberSchema = z.object({
+  // Preserve the changing Experimentation payload for evidence-first normalization.
+  experimentation: z.unknown().optional(),
   currencies: z.object({ coin_purse: number.optional() }).optional(),
   profile: z.object({ bank_account: number.optional() }).optional(),
   player_data: z.object({ experience: z.record(z.string(), number).optional(),
