@@ -29,7 +29,8 @@
     "validate:mining-drill-components": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining-drill-components.ts",
     "validate:mining-deployables": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-mining-deployables.ts",
     "validate:pets": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets.ts",
-    "validate:pets-activity": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets-activity.ts"
+    "validate:pets-activity": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets-activity.ts",
+    "validate:pets-activity-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets-activity-luna.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
