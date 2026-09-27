@@ -35,9 +35,9 @@ test("researched experiment thresholds preserve the three separate progressions"
   assert.ok(!enchantingMilestones.some(milestone => milestone.name.includes("Superpairs")));
 });
 
-test("Grand Superpairs level 25 is corroborated research and does not enter confirmed milestones", () => {
+test("Grand Superpairs level 25 is owner confirmed and remains a distinct tier", () => {
   const grand = researchedExperimentTiers.find(tier => tier.experiment === "SUPERPAIRS" && tier.stake === "GRAND")!;
-  assert.equal(grand.evidence, "CORROBORATED_RESEARCH");
+  assert.equal(grand.evidence, "USER_CONFIRMED");
   assert.equal(grand.requiredEnchantingLevel, 25);
   assert.equal(experimentTierSchema.safeParse({ ...grand, requiredEnchantingLevel: null }).success, false);
   assert.ok(!enchantingMilestones.some(milestone => milestone.name.includes("Superpairs")));

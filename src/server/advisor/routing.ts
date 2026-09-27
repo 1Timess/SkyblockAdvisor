@@ -4,7 +4,7 @@ import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile
 const roleScopes: Record<AdvisorRole, AnalysisScope> = { mage: "MAGE", archer: "ARCHER", berserk: "BERSERK", tank: "SURVIVABILITY", healer: "SURVIVABILITY" };
 const domainsByScope: Record<AnalysisScope, AnalysisDomain[]> = {
   GEAR: ["ARMOR", "WEAPONS"], ARMOR: ["ARMOR"], WEAPONS: ["WEAPONS"], ACCESSORIES: ["ACCESSORIES"], PETS: ["PETS"],
-  FISHING: ["FISHING"], MINING: ["MINING"], SURVIVABILITY: ["ARMOR"], DAMAGE: ["ARMOR", "WEAPONS"], MAGE: ["ARMOR", "WEAPONS"],
+  FISHING: ["FISHING"], MINING: ["MINING"], ENCHANTING: ["ENCHANTING"], SURVIVABILITY: ["ARMOR"], DAMAGE: ["ARMOR", "WEAPONS"], MAGE: ["ARMOR", "WEAPONS"],
   ARCHER: ["ARMOR", "WEAPONS"], BERSERK: ["ARMOR", "WEAPONS"], GENERAL: ["ARMOR", "WEAPONS"], CLARIFY: [],
 };
 
@@ -22,6 +22,7 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
   if (domain === "ACCESSORIES") [scope, reason] = ["ACCESSORIES", "The question explicitly asks about accessories or Magical Power."];
   else if (domain === "FISHING") [scope, reason] = ["FISHING", "The question explicitly asks about fishing progression."];
   else if (domain === "MINING") [scope, reason] = ["MINING", "The question explicitly asks about mining progression."];
+  else if (domain === "ENCHANTING") [scope, reason] = ["ENCHANTING", "The question explicitly asks about Enchanting or Experimentation."];
   else if (domain === "DUNGEONS") [scope, reason] = [scopeForDungeonQuestion(text, goal, armorSlots), "The question asks about Dungeon progression or combat gear."];
   else if (/\bpets?\b/.test(text)) [scope, reason] = ["PETS", "The question explicitly asks about pets."];
   else if (/\boverall\b|\bgeneral\b|\baccount progression\b/.test(text)) { scope = "GENERAL"; routedDomain = "DUNGEONS"; reason = "The question explicitly requests general account progression."; }
@@ -30,6 +31,7 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
 }
 
 function detectDomain(text: string): ProfileIntelligenceDomain | null {
+  if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
   if (/\bmagical power\b|\bmp\b|\baccessor(?:y|ies)\b|\btalismans?\b/.test(text)) return "ACCESSORIES";
   if (/\bfishing\b|\bfish(?:ing)? rod\b|\bsea creature\b/.test(text)) return "FISHING";
   if (/\bmining\b|\bhotm\b|\bheart of the mountain\b|\bpowder\b|\bdrill\b|\bpickaxe\b/.test(text)) return "MINING";
@@ -37,6 +39,7 @@ function detectDomain(text: string): ProfileIntelligenceDomain | null {
   return null;
 }
 function detectExplicitGoal(text: string): AdvisorGoal | null {
+  if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b/.test(text)) return "ENCHANTING";
   if (/\bforaging\b/.test(text)) return "FORAGING"; if (/\bfishing\b/.test(text)) return "FISHING"; if (/\bmining\b/.test(text)) return "MINING";
   if (/\bmagical power\b|\bmp\b/.test(text)) return "MAGICAL_POWER"; if (/\bintelligence\b|\bmana\b/.test(text)) return "INTELLIGENCE";
   if (/\battack speed\b/.test(text)) return "ATTACK_SPEED"; if (/\bcrit(?:ical)? damage\b/.test(text)) return "CRIT_DAMAGE";

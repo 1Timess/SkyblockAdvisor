@@ -23,7 +23,7 @@ export const experimentTierSchema = z.object({
   experiment: z.enum(["CHRONOMATRON", "ULTRASEQUENCER", "SUPERPAIRS"]),
   stake: z.enum(["BEGINNER", "HIGH", "GRAND", "SUPREME", "TRANSCENDENT", "METAPHYSICAL"]),
   requiredEnchantingLevel: z.number().int().min(10).max(60).nullable(),
-  evidence: z.enum(["COMMUNITY_WIKI_RESEARCH", "CORROBORATED_RESEARCH", "CONFLICTING_SOURCE"]),
+  evidence: z.enum(["COMMUNITY_WIKI_RESEARCH", "CORROBORATED_RESEARCH", "USER_CONFIRMED", "CONFLICTING_SOURCE"]),
   source: z.url(),
   note: z.string().nullable(),
 }).superRefine((tier, context) => {

@@ -90,6 +90,10 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         equipment: miningEquipment.map(compact), pets: miningPets.map(compactPet),
         knownStats: knownStats([...miningTools, ...miningArmor, ...miningEquipment], miningPets, miningStats),
         unavailableFacts: miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."] },
+      ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
+        enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
+        matchedRewards: [], possibleRewardCount: 0,
+        note: "Experimentation rewards are possible drops. Ownership, RNG Meter progress, and available charges are unknown." },
     },
   };
 }

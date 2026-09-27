@@ -28,7 +28,12 @@ test("focus selects XP progression and only explicitly requested item rewards", 
   const early = buildOwnedEnchantingState(memberSchema.parse({ player_data: { experience: { SKILL_ENCHANTING: 1_965_761 } } }));
   assert.deepEqual(selectExperimentRewardFocus(early), { enchantingXpActivity: true, matchedRewards: [] });
   const focus = selectExperimentRewardFocus(early, ["Growth VII", "nadeshiko dye", "growth vii", "Unknown"]);
-  assert.deepEqual(focus.matchedRewards.map(entry => [entry.reward.name, entry.access]), [["Growth VII", "TIER_LOCKED"]]);
+  assert.deepEqual(focus.matchedRewards.map(entry => [entry.reward.name, entry.access, entry.itemFit]), [["Growth VII", "TIER_LOCKED", "UNVERIFIED"]]);
+  const withGear = selectExperimentRewardFocus(early, ["Growth VII"], [
+    { name: "Chestplate", enchantments: { growth: 6 } }, { name: "Boots", enchantments: { growth: 7 } },
+  ]);
+  assert.deepEqual(withGear.matchedRewards[0].lowerEnchantedItems, ["Chestplate"]);
+  assert.equal(withGear.matchedRewards[0].itemFit, "LOWER_ENCHANT_VISIBLE");
   const late = buildOwnedEnchantingState(memberSchema.parse({ player_data: { experience: { SKILL_ENCHANTING: 347_627_429 } } }));
   assert.equal(selectExperimentRewardFocus(late).enchantingXpActivity, false);
 });

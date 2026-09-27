@@ -21,6 +21,7 @@ import { advisorProfileSnapshotCache, enrichActivityPetDomainContext } from "./p
 import { routeAdvisorQuestion } from "./routing";
 import { buildCandidateRelevance, filterCandidateLanesForGoal, mergeCandidateEvidence, uniqueLaneCandidates } from "./relevance";
 import { selectProgressionFrontier, type ExclusionReason, type FrontierSelectionCandidate, type SelectionBucket } from "./frontier";
+import { buildEnchantingAdvisorContext } from "../enchanting/advisor-context";
 
 export interface AdvisorContextDiagnostics {
   profileWarningCount: number; compactWarningCount: number; petOwnedCount: number; petUniqueTypeCount: number; petDuplicateCount: number;
@@ -54,6 +55,8 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   const lanes: TaggedCandidateLane[] = [];
   let petLevelTarget: AdvisorCandidate[] = [], rabbitNoOpInRawLanes = false;
   let activeDomainContext: AdvisorDomainContext | null = route.domain ? intelligence.domains[route.domain] : null;
+
+  if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
 
   if (route.domain === "DUNGEONS") {
     for (const current of profile.gear.armor.items) {
@@ -118,6 +121,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     dungeons: { available: profile.progression.dungeons.catacombs !== null, candidateCount: meaningful("ARMOR").length + meaningful("WEAPONS").length },
     fishing: { available: profile.progression.skills.fishing !== undefined || profile.inventoryItems.some(item => item.categories.includes("fishing_rod")), candidateCount: meaningful("FISHING").length },
     mining: { available: profile.progression.skills.mining !== undefined || profile.inventoryItems.some(item => item.categories.includes("pickaxe") || item.categories.includes("drill")), candidateCount: meaningful("MINING").length },
+    enchanting: { available: profile.progression.skills.enchanting !== undefined, candidateCount: 0 },
   };
   const frontier = selectProgressionFrontier({ route, candidates: relevantCandidates.map((candidate, stableOrder) => ({ candidate, stableOrder,
     relevance: buildCandidateRelevance(relevantLanes, candidate.id, route), feasibility: buildCandidateFeasibility(candidate, profile, effectiveBudgetCoins),
@@ -143,7 +147,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     name: candidate.item.name, sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label), reason: "Only appeared in lanes irrelevant to the active goal." }));
   const buckets: SelectionBucket[] = ["ACTIONABLE", "MONEY_GATED", "PROGRESSION_GATED", "DISTANT_OR_UNCERTAIN"];
   const exclusions: ExclusionReason[] = ["REDUNDANCY_LIMIT", "BUCKET_LIMIT", "FINAL_CAP", "LOWER_CONTEXT_PRIORITY", "NO_OP", "OTHER"];
-  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING"];
+  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING"];
   return { context, route, availableAnalysis, detailedCandidates, candidateLanes, frontierCandidates: frontier.candidates,
     rawScopeCandidates: rawScopedCandidates.map(candidate => ({ candidateId: candidate.id, domain: candidate.domain, name: candidate.item.name,
       sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label) })), nextConversationState,

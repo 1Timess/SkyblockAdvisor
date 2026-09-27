@@ -71,6 +71,9 @@ test("profile-intelligence domains route explicitly", async () => {
   const profile = await fixture();
   assert.equal(routeAdvisorQuestion({ question: "What fishing gear should I use?", profile }).domain, "FISHING");
   assert.equal(routeAdvisorQuestion({ question: "What should I do for mining?", profile }).domain, "MINING");
+  const enchanting = routeAdvisorQuestion({ question: "Should I do Superpairs for enchanting XP?", profile });
+  assert.equal(enchanting.domain, "ENCHANTING");
+  assert.equal(enchanting.scope, "ENCHANTING");
   const accessories = routeAdvisorQuestion({ question: "Give me an accessory sweep for foraging", profile });
   assert.equal(accessories.domain, "ACCESSORIES");
   assert.equal(accessories.goal, "FORAGING");

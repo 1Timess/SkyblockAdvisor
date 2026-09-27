@@ -38,13 +38,34 @@ export function buildExperimentRewardOpportunities(state: OwnedEnchantingState):
 // Only an explicit item goal can promote a possible drop for review. Ownership,
 // price, and upgrade value must be checked by downstream item mechanics.
 export function selectExperimentRewardFocus(
-  state: OwnedEnchantingState, requestedRewardNames: readonly string[] = []
-): { enchantingXpActivity: boolean; matchedRewards: ExperimentRewardOpportunity[] } {
+  state: OwnedEnchantingState, requestedRewardNames: readonly string[] = [],
+  visibleItems: readonly { name: string; enchantments: Record<string, number> }[] = []
+): { enchantingXpActivity: boolean; matchedRewards: Array<ExperimentRewardOpportunity & {
+  lowerEnchantedItems: string[]; itemFit: "LOWER_ENCHANT_VISIBLE" | "UNVERIFIED";
+}> } {
   const names = new Set(requestedRewardNames.map(name => name.trim().toLowerCase()).filter(Boolean));
   const { progression } = buildExperimentRewardOpportunities(state);
   return {
     enchantingXpActivity: state.skill !== null && state.skill.level >= experimentationMechanics.accessLevel
       && state.skill.level < 60,
-    matchedRewards: progression.filter(entry => names.has(entry.reward.name.toLowerCase())),
+    matchedRewards: progression.filter(entry => names.has(entry.reward.name.toLowerCase())).map(entry => {
+      const match = /^(.+) ([IVX]+)$/.exec(entry.reward.name);
+      const targetLevel = match ? romanNumeral(match[2]) : null;
+      const key = match?.[1].toLowerCase().replace(/[^a-z0-9]/g, "_");
+      const lowerEnchantedItems = entry.reward.kind === "ENCHANTED_BOOK" && key && targetLevel !== null
+        ? [...new Set(visibleItems.filter(item => Object.entries(item.enchantments).some(([enchant, level]) =>
+          enchant.toLowerCase() === key && Number.isFinite(level) && level < targetLevel)).map(item => item.name))]
+        : [];
+      return { ...entry, lowerEnchantedItems,
+        itemFit: lowerEnchantedItems.length ? "LOWER_ENCHANT_VISIBLE" as const : "UNVERIFIED" as const };
+    }),
   };
+}
+
+function romanNumeral(value: string): number | null {
+  const digits: Record<string, number> = { I: 1, V: 5, X: 10 };
+  let result = 0;
+  for (let index = 0; index < value.length; index++)
+    result += digits[value[index]] * (digits[value[index]] < (digits[value[index + 1]] ?? 0) ? -1 : 1);
+  return result > 0 ? result : null;
 }

@@ -67,8 +67,8 @@ export const researchedExperimentTiers: readonly ExperimentTier[] = Object.freez
   tier("SUPERPAIRS", "BEGINNER", 10), tier("SUPERPAIRS", "HIGH", 20),
   {
     experiment: "SUPERPAIRS", stake: "GRAND", requiredEnchantingLevel: 25,
-    evidence: "CORROBORATED_RESEARCH", source: "https://hypixel-skyblock.fandom.com/wiki/Experiments",
-    note: "The other community page has a level 2 typo; this level 25 threshold is corroborated by an independent table, not yet confirmed in live UI.",
+    evidence: "USER_CONFIRMED", source: "https://hypixel-skyblock.fandom.com/wiki/Experiments",
+    note: "The project owner confirmed the level 25 unlock on 2026-09-27; the other community page has a level 2 typo.",
   },
   tier("SUPERPAIRS", "SUPREME", 30), tier("SUPERPAIRS", "TRANSCENDENT", 40),
   tier("SUPERPAIRS", "METAPHYSICAL", 50),
