@@ -140,6 +140,7 @@ function requirementFamilyKey(candidate: FrontierSelectionCandidate) {
 }
 
 function structuralKey(input: FrontierInputCandidate, bucket: SelectionBucket) {
+  if (input.candidate.petAcquisitionFamily) return `pet-acquisition:${input.candidate.petAcquisitionFamily.petType}:${bucket}`;
   if (input.candidate.mutation) return `mutation:${input.candidate.mutation.kind}:${input.candidate.mutation.parentItemKey}:${input.candidate.mutation.operation}:${bucket}`;
   const evidence = [...input.relevance.relevantStats].sort().join("+") || (input.sourceLanes.some(lane => lane.endsWith(":ability")) ? "ability" : "progression");
   if (input.candidate.domain === "armor") return `armor:${armorSlot(input.candidate) ?? "unknown"}:${evidence}:${bucket}`;
