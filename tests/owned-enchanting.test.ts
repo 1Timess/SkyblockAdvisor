@@ -13,27 +13,20 @@ test("preserves distinct Experimentation sections without inferring charge avail
   const state = buildOwnedEnchantingState(member);
   assert.deepEqual(state.skill, { xp: 9_925, level: 10 });
   assert.equal(state.experimentation.status, "PRESENT");
-  assert.deepEqual(state.experimentation.sections.chronomatron, ["attempts_0", "best_score_0", "bonus_clicks", "last_attempt"]);
-  assert.deepEqual(state.experimentation.sections.ultrasequencer, ["claims_1"]);
-  assert.deepEqual(state.experimentation.sections.superpairs, ["last_claimed"]);
-  assert.ok(state.experimentation.keys.includes("charges"));
-  assert.equal(state.experimentation.chargeTrackTimestamp, 1_789_949_055_186);
   assert.equal(state.experimentation.serumsDrank, 3);
-  assert.equal(state.experimentation.claimedRetroactiveRng, true);
   assert.deepEqual(state.experimentation.history.chronomatron.attempts, { "0": 15 });
   assert.deepEqual(state.experimentation.history.chronomatron.bestScores, { "0": 23 });
-  assert.equal(state.experimentation.history.chronomatron.lastAttempt, 0);
   assert.deepEqual(state.experimentation.history.ultrasequencer.claims, { "1": 4 });
-  assert.equal(state.experimentation.attemptAvailability, "UNKNOWN");
+  assert.equal("chargeTrackTimestamp" in state.experimentation, false);
+  assert.equal("lastClaimed" in state.experimentation.history.chronomatron, false);
 });
 
-test("missing or malformed source state never becomes level zero or available attempt", () => {
+test("missing or malformed source state never becomes level zero or owned upgrades", () => {
   const missing = buildOwnedEnchantingState(memberSchema.parse({}));
   assert.equal(missing.skill, null);
   assert.equal(missing.experimentation.status, "ABSENT");
-  assert.equal(missing.experimentation.attemptAvailability, "UNKNOWN");
+  assert.equal(missing.experimentation.serumsDrank, null);
   const malformed = buildOwnedEnchantingState(memberSchema.parse({ experimentation: ["unexpected"] }));
   assert.equal(malformed.experimentation.status, "MALFORMED");
-  assert.deepEqual(malformed.experimentation.keys, []);
   assert.equal(malformed.experimentation.serumsDrank, null);
 });
