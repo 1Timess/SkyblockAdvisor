@@ -75,6 +75,7 @@ Candidates are plausible possibilities, not guaranteed upgrades. Do not recommen
 Pet-domain candidates inside the current route are real detailed candidates even if availableAnalysis.pets is summary-only or normalized profile warnings say some pet data is unavailable. If current-route candidates with domain \"pet\" are supplied, assess them from their supplied relevance, known changes, ability text, requirements, warnings, and family metadata. Never claim pet effects or pet upgrades are unavailable when such pet candidates are present; instead state the specific missing field (for example price or exact effect magnitude) as uncertainty.
 The supplied candidates are intentionally a representative progression frontier, not an exhaustive list. Absence from the shortlist does not imply an item is bad; it means it was not selected for this context window.
 For ENCHANTING, use domainContext.xpActivity for an XP progression action when appropriate. matchedRewards are possible drops named in the question, not owned items or BUY candidates. lowerEnchantedItems is a capped sample; lowerEnchantedItemCount counts distinct visible names, including inactive inventory. A lower enchant on visible gear supports investigation of an upgrade, but does not prove compatibility, value, active use, or acquisition. Never imply RNG Meter progress or charge availability.
+For COLLECTIONS, use the sourced nextTier amount, remaining count, unlock strings, and explicitly observed minionFocus tiers. Collection IDs and crafted minion IDs may differ; do not assert they correspond unless the context explicitly joins them. A reached threshold with no tier signal is unconfirmed, not an unlocked reward. A missing crafted tier does not prove the player cannot craft or obtain a minion. Do not claim placed minions, production rates, recipe ingredients, or minion slot unlocks from these fields. Recommend progression or investigation with null candidateId; no collection item BUY candidate is supplied.
 Use supplied budget and requirement gaps to judge whether saving or a prerequisite is worthwhile. You may sequence PROGRESSION followed by BUY. Do not invent how long an unlock will take.
 BUY requires a supplied candidate ID. PROGRESSION and INVESTIGATE may use null. HOLD uses null and is valid when this domain does not justify spending.
 Some candidates contain a family with concrete members. The top-level candidate ID is the canonical ID for that family and remains the required candidateId for BUY. For an ordinary grouped family, the members are independently actionable pieces: explain the individual member upgrades and return the exact member IDs you recommend in memberCandidateIds. Do not hide the per-item breakdown behind only an aggregate. Family totals summarize the supplied members.
@@ -97,8 +98,8 @@ const availableAnalysisJsonSchema = {
     pets: { type: "object", additionalProperties: false, properties: {
       available: { type: "boolean" }, candidateCount: { type: "integer", minimum: 0 }, ownedCount: { type: "integer", minimum: 0 },
     }, required: ["available", "candidateCount", "ownedCount"] },
-    dungeons: domainAvailabilityJsonSchema(), fishing: domainAvailabilityJsonSchema(), mining: domainAvailabilityJsonSchema(), enchanting: domainAvailabilityJsonSchema(),
-  }, required: ["armor", "weapons", "accessories", "pets", "dungeons", "fishing", "mining", "enchanting"],
+    dungeons: domainAvailabilityJsonSchema(), fishing: domainAvailabilityJsonSchema(), mining: domainAvailabilityJsonSchema(), enchanting: domainAvailabilityJsonSchema(), collections: domainAvailabilityJsonSchema(),
+  }, required: ["armor", "weapons", "accessories", "pets", "dungeons", "fishing", "mining", "enchanting", "collections"],
 };
 const advisorJsonSchema = {
   type: "object", additionalProperties: false,
@@ -119,7 +120,7 @@ const advisorJsonSchema = {
     } },
     caveats: stringArray,
     followUps: { type: "array", items: { type: "object", additionalProperties: false, properties: {
-      domain: { type: "string", enum: ["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "DUNGEONS"] }, label: { type: "string" }, reason: { type: "string" },
+      domain: { type: "string", enum: ["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "DUNGEONS"] }, label: { type: "string" }, reason: { type: "string" },
     }, required: ["domain", "label", "reason"] } },
   },
   required: ["kind", "question", "whyNeeded", "suggestedAnswers", "availableAnalysis", "headline", "actions", "caveats", "followUps"],

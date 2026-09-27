@@ -8,10 +8,10 @@ import { buildActivityDomainLanes } from "../src/server/candidates/domain";
 import type { CandidateItem } from "../src/schemas/catalog";
 import { fixtureSources } from "./fixtures/profile";
 
-test("one normalized profile derives all five profile-intelligence domains", async () => {
+test("one normalized profile derives all six profile-intelligence domains", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   const intelligence = buildProfileIntelligence(profile);
-  assert.deepEqual(Object.keys(intelligence.domains), ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING"]);
+  assert.deepEqual(Object.keys(intelligence.domains), ["COLLECTIONS", "DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING"]);
   assert.equal(intelligence.domains.ENCHANTING.domain, "ENCHANTING");
   assert.equal(intelligence.domains.DUNGEONS.domain, "DUNGEONS");
   assert.equal(intelligence.domains.ACCESSORIES.domain, "ACCESSORIES");

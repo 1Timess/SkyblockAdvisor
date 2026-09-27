@@ -10,6 +10,8 @@ const envelope = z.object({ success: z.boolean() });
 const profilesSchema = z.object({ profiles: z.array(rawProfileSchema).nullable() });
 const playerSchema = z.object({ player: z.record(z.string(), z.unknown()).nullable() });
 const itemsSchema = z.object({ items: z.array(itemDefinitionSchema) });
+const collectionsSchema = z.object({ version: z.string().optional(), lastUpdated: z.number().optional(),
+  collections: z.record(z.string(), z.unknown()) });
 
 export class HypixelClient {
   constructor(private fetcher: Fetcher = fetch, private cache = new TtlCache(), private apiKey = () => getServerEnv().HYPIXEL_API_KEY) {}
@@ -34,6 +36,7 @@ export class HypixelClient {
   async getProfiles(uuid: string) { return (await this.request(`skyblock/profiles?uuid=${encodeURIComponent(uuid)}`, 300, profilesSchema)).profiles ?? []; }
   async getPlayer(uuid: string) { return (await this.request(`player?uuid=${encodeURIComponent(uuid)}`, 300, playerSchema)).player; }
   async getItems() { return (await this.request("resources/skyblock/items", 43200, itemsSchema, false)).items; }
+  async getCollections() { return this.request("resources/skyblock/collections", 43200, collectionsSchema, false); }
 }
 
 export const hypixelClient = new HypixelClient();
