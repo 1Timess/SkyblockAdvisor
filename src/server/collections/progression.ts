@@ -4,8 +4,8 @@ export interface CollectionTier { tier: number; amount: number; unlocks: string[
 export interface CollectionDefinition { id: string; name: string; category: string; tiers: CollectionTier[] }
 export interface CollectionProgress {
   id: string; name: string; category: string; collected: number | null;
-  unlockedTier: number | null; nextTier: CollectionTier | null; remaining: number | null;
-  nextTierStatus: "LOCKED" | "REACHED_UNCONFIRMED" | "UNKNOWN" | "MAXED";
+  unlockedTier: number | null; countTier: number | null; nextTier: CollectionTier | null; remaining: number | null;
+  nextTierStatus: "BELOW_THRESHOLD" | "UNKNOWN" | "MAXED";
   craftedMinionTiers: number[];
 }
 export interface CraftedMinion { id: string; name: string; tiers: number[] }
@@ -41,11 +41,14 @@ export function buildCollectionProgress(profile: Pick<NormalizedSkyBlockProfile,
     const collected = integer(profile.collections[definition.id]) ?? null;
     const confirmed = definition.tiers.filter(tier => unlocked.has(`${definition.id.toUpperCase()}_${tier.tier}`));
     const unlockedTier = confirmed.length ? Math.max(...confirmed.map(tier => tier.tier)) : null;
-    // Use the explicit unlocked-tier signal first. A count alone is not proof of an unlock on this member.
-    const nextTier = definition.tiers.find(tier => tier.tier > (unlockedTier ?? 0)) ?? null;
+    const reached = collected === null ? [] : definition.tiers.filter(tier => collected >= tier.amount);
+    const countTier = collected === null ? null : reached.length ? Math.max(...reached.map(tier => tier.tier)) : 0;
+    // Collection counts can advance farther than the explicit tier list (and co-op tier data may advance farther
+    // than this member's count). Use either signal to find the next threshold, but keep their evidence separate.
+    const nextTier = definition.tiers.find(tier => tier.tier > Math.max(unlockedTier ?? 0, countTier ?? 0)) ?? null;
     const remaining = nextTier && collected !== null ? Math.max(0, nextTier.amount - collected) : null;
-    return { id: definition.id, name: definition.name, category: definition.category, collected, unlockedTier, nextTier, remaining,
-      nextTierStatus: !nextTier ? "MAXED" : collected === null ? "UNKNOWN" : remaining === 0 ? "REACHED_UNCONFIRMED" : "LOCKED",
+    return { id: definition.id, name: definition.name, category: definition.category, collected, unlockedTier, countTier, nextTier, remaining,
+      nextTierStatus: !nextTier ? "MAXED" : collected === null ? "UNKNOWN" : "BELOW_THRESHOLD",
       craftedMinionTiers: crafted.get(definition.id.toUpperCase()) ?? [] };
   });
 }
@@ -67,14 +70,16 @@ export function buildCraftedMinions(ids: readonly string[]): CraftedMinion[] {
 export function selectCraftedMinions(minions: readonly CraftedMinion[], question: string, limit = 8): CraftedMinion[] {
   const text = question.toLowerCase();
   const named = minions.filter(minion => text.includes(minion.name.toLowerCase()) || text.includes(minion.id.toLowerCase().replaceAll("_", " ")));
-  return (named.length ? named : minions).slice(0, limit);
+  if (named.length) return named.slice(0, limit);
+  // Surface the smallest observed tier histories first. These are investigation leads, not proofs of missing crafts.
+  return [...minions].sort((a, b) => Math.max(...a.tiers) - Math.max(...b.tiers) || a.id.localeCompare(b.id)).slice(0, limit);
 }
 
 export function selectCollectionFocus(progress: readonly CollectionProgress[], question: string, limit = 8): CollectionProgress[] {
   const text = question.toLowerCase();
   const named = progress.filter(entry => text.includes(entry.name.toLowerCase()) || text.includes(entry.id.toLowerCase().replaceAll("_", " ")));
   if (named.length) return named.slice(0, limit);
-  return [...progress].filter(entry => entry.nextTier !== null || entry.craftedMinionTiers.length > 0)
+  return [...progress].filter(entry => entry.nextTier !== null)
     .sort((a, b) => {
       const aKnown = a.remaining !== null ? 1 : 0, bKnown = b.remaining !== null ? 1 : 0;
       if (aKnown !== bKnown) return bKnown - aKnown;

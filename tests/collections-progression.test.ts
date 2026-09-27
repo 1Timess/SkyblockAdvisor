@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildCollectionProgress, buildCraftedMinions, parseCollectionDefinitions, selectCollectionFocus } from "../src/server/collections/progression";
+import { buildCollectionProgress, buildCraftedMinions, parseCollectionDefinitions, selectCollectionFocus, selectCraftedMinions } from "../src/server/collections/progression";
 import { routeAdvisorQuestion } from "../src/server/advisor/routing";
 import { buildCollectionAdvisorContext } from "../src/server/collections/advisor-context";
 import { advisorDomainContextSchema } from "../src/schemas/advisor";
@@ -20,9 +20,10 @@ test("collection thresholds keep observed tier unlocks distinct from collection 
     unlockedCollectionTiers: ["WHEAT_1"], craftedGenerators: ["WHEAT_1", "WHEAT_3", "CARROT_1", "ODD_VALUE"] }, definitions);
   const wheat = progress.find(entry => entry.id === "WHEAT")!;
   assert.equal(wheat.unlockedTier, 1);
-  assert.equal(wheat.nextTier?.tier, 2);
-  assert.equal(wheat.remaining, 0);
-  assert.equal(wheat.nextTierStatus, "REACHED_UNCONFIRMED");
+  assert.equal(wheat.countTier, 2);
+  assert.equal(wheat.nextTier, null);
+  assert.equal(wheat.remaining, null);
+  assert.equal(wheat.nextTierStatus, "MAXED");
   assert.deepEqual(wheat.craftedMinionTiers, [1, 3]);
   assert.deepEqual(selectCollectionFocus(progress, "What about my wheat minion?").map(entry => entry.id), ["WHEAT"]);
 });
@@ -34,6 +35,7 @@ test("missing counts do not imply locked gates and malformed source tiers are ig
   assert.deepEqual(parsed[0].tiers.map(tier => tier.tier), [2]);
   const [progress] = buildCollectionProgress({ collections: {}, unlockedCollectionTiers: [], craftedGenerators: [] }, parsed);
   assert.equal(progress.nextTierStatus, "UNKNOWN");
+  assert.equal(progress.countTier, null);
   assert.equal(progress.remaining, null);
 });
 
@@ -44,8 +46,27 @@ test("vanilla collection keys do not claim a matching crafted minion ID", () => 
   const [progress] = buildCollectionProgress({ collections: { "INK_SACK:3": 75 },
     unlockedCollectionTiers: ["INK_SACK:3_1"], craftedGenerators: ["COCOA_1"] }, parsed);
   assert.equal(progress.unlockedTier, 1);
+  assert.equal(progress.countTier, 1);
   assert.deepEqual(progress.craftedMinionTiers, []);
   assert.deepEqual(buildCraftedMinions(["COCOA_1"]), [{ id: "COCOA", name: "Cocoa", tiers: [1] }]);
+});
+
+test("late collection totals skip stale explicit tier markers rather than repeating reached gates", () => {
+  const [clay] = buildCollectionProgress({ collections: { CLAY_BALL: 289_427_423 },
+    unlockedCollectionTiers: ["CLAY_BALL_5"], craftedGenerators: ["CLAY_11"] },
+    parseCollectionDefinitions({ collections: { FISHING: { items: { CLAY_BALL: { name: "Clay Ball", tiers: [
+      { tier: 5, amountRequired: 1000 }, { tier: 6, amountRequired: 2500 }, { tier: 7, amountRequired: 5000 },
+    ] } } } } }));
+  assert.equal(clay.unlockedTier, 5);
+  assert.equal(clay.countTier, 7);
+  assert.equal(clay.nextTier, null);
+  assert.equal(clay.nextTierStatus, "MAXED");
+});
+
+test("generic minion focus shows smaller observed histories instead of alphabetical entries", () => {
+  const crafted = buildCraftedMinions(["BIRCH_10", "CARROT_1", "COBBLESTONE_2", "BIRCH_9"]);
+  assert.deepEqual(selectCraftedMinions(crafted, "What minions should I craft?", 2).map(minion => minion.id), ["CARROT", "COBBLESTONE"]);
+  assert.deepEqual(selectCraftedMinions(crafted, "What about birch minion?", 2).map(minion => minion.id), ["BIRCH"]);
 });
 
 test("collection and minion questions route to the collection domain", async () => {
