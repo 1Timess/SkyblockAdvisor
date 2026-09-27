@@ -31,7 +31,8 @@
     "validate:pets": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets.ts",
     "validate:pets-activity": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets-activity.ts",
     "validate:pets-activity-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-pets-activity-luna.ts",
-    "validate:enchanting-state": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-enchanting-state.ts"
+    "validate:enchanting-state": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-enchanting-state.ts",
+    "validate:enchanting-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-enchanting-luna.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
