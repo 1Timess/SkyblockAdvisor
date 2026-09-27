@@ -82,5 +82,5 @@ test("acquisition family semantic evidence unions mechanics across concrete rari
     catalog: [catalog(owned), { ...catalog(speed), rarity: "rare" }, catalog(fortune)],
   });
   const family = lanes.petAcquisition?.find(candidate => candidate.petAcquisitionFamily?.petType === "UNION_MINER");
-  assert.deepEqual(family?.semanticEvidence, ["MINING_FORTUNE", "MINING_SPEED"]);
+  assert.deepEqual(family?.semanticEvidence, ["MINING_SPEED", "MINING_FORTUNE"]);
 });
