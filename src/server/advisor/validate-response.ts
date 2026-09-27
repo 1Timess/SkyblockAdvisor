@@ -2,7 +2,10 @@ import { advisorResponseSchema, type AdvisorContext, type AdvisorResponse } from
 
 export function validateAdvisorResponse(value: unknown, context: AdvisorContext): AdvisorResponse {
   const response = advisorResponseSchema.parse(value), allowed = new Set(context.candidates.map(candidate => candidate.id));
-  const familyMembers = new Map(context.candidates.filter(candidate => candidate.family).map(candidate => [candidate.id, new Set(candidate.family!.members.map(member => member.id))]));
+  const familyMembers = new Map(context.candidates.flatMap(candidate => {
+    const members = candidate.family?.members ?? candidate.petAcquisitionFamily?.members;
+    return members ? [[candidate.id, new Set(members.map(member => member.id))] as const] : [];
+  }));
   if (response.kind === "CLARIFICATION") return response;
   const ranks = response.actions.map(action => action.rank);
   if (new Set(ranks).size !== ranks.length || ranks.some((rank, index) => rank !== index + 1)) throw new Error("Advisor action ranks must be unique and contiguous from 1.");
