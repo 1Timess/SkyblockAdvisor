@@ -98,7 +98,8 @@ const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals:
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("ENCHANTING"), enchantingLevel: z.number().nullable(), enchantingXp: z.number().nullable(),
     xpActivity: z.boolean(), matchedRewards: z.array(z.object({ name: z.string(), kind: z.string(), access: z.string(),
-      requiredEnchantingLevel: z.number().nullable(), lowerEnchantedItems: z.array(z.string()), itemFit: z.string() })),
+      requiredEnchantingLevel: z.number().nullable(), lowerEnchantedItems: z.array(z.string()).max(8),
+      lowerEnchantedItemCount: z.number().int().nonnegative(), itemFit: z.string() })),
     possibleRewardCount: z.number().int().nonnegative(), experimentation: experimentObservationSchema, note: z.string() }),
   z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
     highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),

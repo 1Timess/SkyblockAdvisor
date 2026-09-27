@@ -41,7 +41,7 @@ export function selectExperimentRewardFocus(
   state: OwnedEnchantingState, requestedRewardNames: readonly string[] = [],
   visibleItems: readonly { name: string; enchantments: Record<string, number> }[] = []
 ): { enchantingXpActivity: boolean; matchedRewards: Array<ExperimentRewardOpportunity & {
-  lowerEnchantedItems: string[]; itemFit: "LOWER_ENCHANT_VISIBLE" | "UNVERIFIED";
+  lowerEnchantedItems: string[]; lowerEnchantedItemCount: number; itemFit: "LOWER_ENCHANT_VISIBLE" | "UNVERIFIED";
 }> } {
   const names = new Set(requestedRewardNames.map(name => name.trim().toLowerCase()).filter(Boolean));
   const { progression } = buildExperimentRewardOpportunities(state);
@@ -56,7 +56,7 @@ export function selectExperimentRewardFocus(
         ? [...new Set(visibleItems.filter(item => Object.entries(item.enchantments).some(([enchant, level]) =>
           enchant.toLowerCase() === key && Number.isFinite(level) && level < targetLevel)).map(item => item.name))]
         : [];
-      return { ...entry, lowerEnchantedItems,
+      return { ...entry, lowerEnchantedItems: lowerEnchantedItems.slice(0, 8), lowerEnchantedItemCount: lowerEnchantedItems.length,
         itemFit: lowerEnchantedItems.length ? "LOWER_ENCHANT_VISIBLE" as const : "UNVERIFIED" as const };
     }),
   };

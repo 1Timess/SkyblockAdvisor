@@ -33,9 +33,19 @@ test("focus selects XP progression and only explicitly requested item rewards", 
     { name: "Chestplate", enchantments: { growth: 6 } }, { name: "Boots", enchantments: { growth: 7 } },
   ]);
   assert.deepEqual(withGear.matchedRewards[0].lowerEnchantedItems, ["Chestplate"]);
+  assert.equal(withGear.matchedRewards[0].lowerEnchantedItemCount, 1);
   assert.equal(withGear.matchedRewards[0].itemFit, "LOWER_ENCHANT_VISIBLE");
   const late = buildOwnedEnchantingState(memberSchema.parse({ player_data: { experience: { SKILL_ENCHANTING: 347_627_429 } } }));
   assert.equal(selectExperimentRewardFocus(late).enchantingXpActivity, false);
+});
+
+test("large visible inventories retain count while bounding the advisor sample", () => {
+  const state = buildOwnedEnchantingState(memberSchema.parse({ player_data: { experience: { SKILL_ENCHANTING: 347_627_429 } } }));
+  const items = Array.from({ length: 52 }, (_, index) => ({ name: `Armor ${index}`, enchantments: { growth: 6 } }));
+  const [focus] = selectExperimentRewardFocus(state, ["Growth VII"], items).matchedRewards;
+  assert.equal(focus.lowerEnchantedItemCount, 52);
+  assert.equal(focus.lowerEnchantedItems.length, 8);
+  assert.equal(focus.itemFit, "LOWER_ENCHANT_VISIBLE");
 });
 
 test("max level does not imply owned rewards or meter progress", () => {

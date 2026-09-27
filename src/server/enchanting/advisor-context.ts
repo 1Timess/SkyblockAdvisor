@@ -13,7 +13,7 @@ export function buildEnchantingAdvisorContext(profile: NormalizedSkyBlockProfile
     enchantingXp: state.skill?.xp ?? null, xpActivity: focus.enchantingXpActivity,
     matchedRewards: focus.matchedRewards.map(entry => ({ name: entry.reward.name, kind: entry.reward.kind,
       access: entry.access, requiredEnchantingLevel: entry.requiredEnchantingLevel,
-      lowerEnchantedItems: entry.lowerEnchantedItems, itemFit: entry.itemFit })),
+      lowerEnchantedItems: entry.lowerEnchantedItems, lowerEnchantedItemCount: entry.lowerEnchantedItemCount, itemFit: entry.itemFit })),
     possibleRewardCount: opportunities.progression.length, experimentation: state.experimentation,
-    note: "Possible drops only. Attempts, claims, best scores, and bonus clicks are observed counters, not reward ownership or current charges. Item fit does not prove compatibility. RNG Meter progress is unknown." };
+    note: "Possible drops only. Lower-enchanted item names are a sample of visible inventory (up to 8); the count covers all distinct visible names and does not identify active gear. Attempts, claims, best scores, and bonus clicks are observed counters, not reward ownership or current charges. Item fit does not prove compatibility. RNG Meter progress is unknown." };
 }
