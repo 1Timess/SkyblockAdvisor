@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
-import { AdvisorProfileSnapshotCache, buildProfileIntelligence } from "../src/server/advisor/profile-intelligence";
+import { AdvisorProfileSnapshotCache, buildProfileIntelligence, enrichActivityPetDomainContext } from "../src/server/advisor/profile-intelligence";
+import type { CanonicalPetDefinition, PetEffect } from "../src/schemas/pet-mechanics";
+import type { OwnedPetSetup } from "../src/schemas/owned-pet-setup";
 import { buildActivityDomainLanes } from "../src/server/candidates/domain";
 import type { CandidateItem } from "../src/schemas/catalog";
 import { fixtureSources } from "./fixtures/profile";
@@ -74,4 +76,31 @@ test("fishing and mining discovery stays inside repo-supported category and stat
     new Set(["DRILL", "GEM_DRILL", "COLD_HELMET"]));
   assert.equal(mining.miningSpeed.find(candidate => candidate.id === "DRILL")?.knownChanges?.miningSpeed.current, 250);
   assert.ok(!mining.miningFortune.some(candidate => candidate.id === "HELMET_WITH_MINING_STAT"));
+});
+
+
+test("semantic activity pet context cannot claim pet effects are unavailable when relevant pet progression exists", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const intelligence = buildProfileIntelligence(profile);
+  const effect: PetEffect = { kind: "FLAT_STAT", target: "MINING_SPEED", valueTemplate: "1", rawText: "Gain +1 Mining Speed" };
+  const definition: CanonicalPetDefinition = {
+    id: "SHEEP;0", type: "SHEEP", rarity: "common", petSkillType: null, maxLevel: 100, rarityOffset: 0, xpCurve: [], xpMultiplier: 1,
+    customLevelingType: null, baseStatTemplates: {},
+    abilities: [{ name: "Synthetic mining mechanic", rawLore: [effect.rawText], effects: [effect], conditions: [], parseStatus: "FULL", confidence: "HIGH" }],
+    upgradePaths: [], source: "NEU",
+  };
+  const setup: OwnedPetSetup = {
+    setupId: "fixture-sheep", uuid: null, type: "SHEEP", name: "Sheep", baseRarity: "common", effectiveRarity: "common",
+    xp: 0, level: 1, maxLevel: 100, xpCurrent: 0, xpForNext: 1, progress: 0, heldItem: null, candyUsed: 0, skin: null, active: true,
+    canonicalPetId: definition.id, canonicalPetItemId: null, resolution: { petDefinition: "RESOLVED", petItemDefinition: "NONE" },
+  };
+  const context = enrichActivityPetDomainContext({
+    context: intelligence.domains.MINING, profile, domain: "MINING", setups: [setup], definitions: [definition], petItems: [],
+    hasRelevantPetCandidates: true,
+  });
+  assert.equal(context.domain, "MINING");
+  if (context.domain !== "MINING") throw new Error("unreachable");
+  assert.equal(context.pets.length, 1);
+  assert.equal(context.pets[0].type, "SHEEP");
+  assert.ok(!context.unavailableFacts.some(fact => fact.startsWith("Pet mining effects are unavailable")));
 });
