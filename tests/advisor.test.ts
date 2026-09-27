@@ -155,6 +155,29 @@ test("Luna client sends the scoped strict request and validates its response", a
   assert.equal(new Headers(request?.headers).get("Authorization"), "Bearer test-token");
 });
 
+test("Luna instructions require verbatim opaque candidate IDs and current-route pet assessment", async () => {
+  const advisorContext = await context();
+  advisorContext.candidates = [{
+    ...advisorContext.candidates[0],
+    id: "GEMSTONE:opaque-fixture-uuid:TOPAZ_0:PERFECT",
+    domain: "pet",
+    relevance: { reason: "Canonical mining pet mechanic.", relevantStats: ["PRISTINE"] },
+  }];
+  const advice = { kind: "PLAN", headline: "Plan", actions: [{ rank: 1, actionType: "HOLD", candidateId: null, memberCandidateIds: [], action: "Hold", why: "Fixture",
+    tradeoffs: [], prerequisites: [], uncertainty: null }], caveats: [], followUps: [] };
+  let request: RequestInit | undefined;
+  const fetcher = async (_input: string | URL | Request, init?: RequestInit) => {
+    request = init;
+    return new Response(JSON.stringify({ id: "resp_fixture", model: "gpt-6-luna", status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(advice) }] }],
+      usage: { input_tokens: 100, output_tokens: 20, total_tokens: 120 } }), { status: 200, headers: { "Content-Type": "application/json" } });
+  };
+  await callLunaAdvisor(advisorContext, fetcher, "test-token");
+  const body = JSON.parse(String(request?.body));
+  assert.match(body.instructions, /opaque UUIDs/);
+  assert.match(body.instructions, /indivisible string copied verbatim/);
+  assert.match(body.instructions, /Never claim pet effects or pet upgrades are unavailable when such pet candidates are present/);
+});
+
 test("Luna client reports sanitized error response bodies", async () => {
   const advisorContext = await context();
   const fetcher = async () => new Response('{"error":{"message":"invalid request for test-token"}}', { status: 400 });
