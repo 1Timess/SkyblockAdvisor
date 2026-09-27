@@ -44,3 +44,18 @@ export const experimentationMechanicsSchema = z.object({
 export type SkillMilestone = z.infer<typeof skillMilestoneSchema>;
 export type ExperimentationMechanics = z.infer<typeof experimentationMechanicsSchema>;
 export type ExperimentTier = z.infer<typeof experimentTierSchema>;
+
+export const possibleExperimentRewardSchema = z.object({
+  name: z.string().min(1),
+  kind: z.enum(["ENCHANTED_BOOK", "ENDCAP_UPGRADE", "PET", "CONSUMABLE", "DYE", "COSMETIC"]),
+  pool: z.enum(["RARE", "ULTRA_RARE", "OTHER"]),
+  // Null means the exact minimum stake has not been established by the cited source.
+  minimumStake: z.enum(["BEGINNER", "HIGH", "GRAND", "SUPREME", "TRANSCENDENT", "METAPHYSICAL"]).nullable(),
+  source: z.url(),
+  minimumStakeSource: z.url().nullable(),
+}).superRefine((reward, context) => {
+  if ((reward.minimumStake === null) !== (reward.minimumStakeSource === null))
+    context.addIssue({ code: "custom", message: "A minimum stake requires its own source" });
+});
+
+export type PossibleExperimentReward = z.infer<typeof possibleExperimentRewardSchema>;
