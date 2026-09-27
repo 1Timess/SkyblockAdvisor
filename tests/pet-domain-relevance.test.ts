@@ -11,6 +11,17 @@ function pet(overrides: Partial<CanonicalPetDefinition> = {}): CanonicalPetDefin
   };
 }
 
+test("an arbitrary pet's Enchanting Wisdom effect establishes Enchanting relevance", () => {
+  const result = evaluatePetDomainRelevance(pet({
+    id: "UNLISTED_PET;4", type: "UNLISTED_PET", petSkillType: "COMBAT",
+    abilities: [{ name: "Study", rawLore: ["Gain +20 Enchanting Wisdom."],
+      effects: [{ kind: "FLAT_STAT", target: "ENCHANTING_WISDOM", valueTemplate: "20", rawText: "Gain +20 Enchanting Wisdom." }],
+      conditions: [], parseStatus: "FULL", confidence: "HIGH" }],
+  }), "ENCHANTING");
+  assert.equal(result.relevant, true);
+  assert.ok(result.evidence.some(entry => entry.source === "PET_EFFECT" && entry.mechanic === "ENCHANTING_WISDOM"));
+});
+
 test("Scatha-style mining stats produce semantic Mining relevance without pet ID knowledge", () => {
   const result = evaluatePetDomainRelevance(pet({
     id: "SOME_UNKNOWN_PET;4", type: "SOME_UNKNOWN_PET",
