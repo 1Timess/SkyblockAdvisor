@@ -23,6 +23,7 @@ const available: AvailableAnalysis = {
   enchanting: { available: true, candidateCount: 0 },
   collections: { available: true, candidateCount: 0 },
   slayer: { available: true, candidateCount: 0 },
+  farming: { available: true, candidateCount: 0 },
 };
 const route: AdvisorRoute = { scope: "GEAR", goal: "GENERAL_UPGRADE", inferredRole: "berserk", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "DUNGEONS", mechanics: [] };
 

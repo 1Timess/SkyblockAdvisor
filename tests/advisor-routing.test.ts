@@ -79,3 +79,12 @@ test("profile-intelligence domains route explicitly", async () => {
   assert.equal(accessories.goal, "FORAGING");
   assert.deepEqual(accessories.mechanics, ["SWEEP"]);
 });
+
+test("Farming and Garden questions route to the profile-wide domain", async () => {
+  const profile = await fixture();
+  const farming = routeAdvisorQuestion({ question: "What Farming progression should I focus on?", profile });
+  assert.equal(farming.domain, "FARMING");
+  assert.equal(farming.goal, "FARMING");
+  assert.deepEqual(farming.activeDomains, ["FARMING"]);
+  assert.equal(routeAdvisorQuestion({ question: "Which Garden visitor offers are next?", profile }).domain, "FARMING");
+});
