@@ -12,6 +12,7 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     uniqueVisitorsServed: progress.uniqueVisitorsServed, nextOffersMilestone: progress.nextOffersMilestone,
     nextUniqueVisitorsMilestone: progress.nextUniqueVisitorsMilestone,
     resourcesCollected: progress.resourcesCollected, cropUpgradeLevels: progress.cropUpgradeLevels,
+    unlockedPlotIds: progress.unlockedPlotIds,
     activeOffers: progress.activeOffers.slice(0, 8), activeOfferCount: progress.activeOffers.length,
     note: "Garden data is profile-wide. Crops collected do not imply a crop milestone tier or a collection unlock. Active visitor requirements do not establish inventory feasibility, price, or value. Contest ranks and Farming Fortune are unreported.",
   };

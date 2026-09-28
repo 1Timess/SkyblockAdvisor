@@ -65,7 +65,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         farmingXp: profile.progression.skills.farming?.xp ?? null, gardenAvailable: false, gardenXp: null, gardenLevel: null,
         nextGardenLevel: null, totalOffersAccepted: null, uniqueVisitorsServed: null,
         nextOffersMilestone: null, nextUniqueVisitorsMilestone: null, resourcesCollected: {}, cropUpgradeLevels: {},
-        activeOffers: [], activeOfferCount: 0, note: "Garden state has not been loaded for this snapshot." },
+        unlockedPlotIds: [], activeOffers: [], activeOfferCount: 0, note: "Garden state has not been loaded for this snapshot." },
       SLAYER: { domain: "SLAYER", totalLevelUnlocks: 0, totalBossDrops: 0, possibleRngOptionCount: 0,
         focusFamilies: [], families: [], unlockFocus: [], dropFocus: [], craftedSlayerMinions: [], note: "Slayer reward sources have not been joined." },
       COLLECTIONS: { domain: "COLLECTIONS", sourceVersion: null, sourceUpdatedAt: null, totalCollections: 0,

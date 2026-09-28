@@ -106,6 +106,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     nextOffersMilestone: z.object({ tier: z.number(), threshold: z.number(), remaining: z.number() }).nullable(),
     nextUniqueVisitorsMilestone: z.object({ tier: z.number(), threshold: z.number(), remaining: z.number() }).nullable(),
     resourcesCollected: z.record(z.string(), z.number()), cropUpgradeLevels: z.record(z.string(), z.number()),
+    unlockedPlotIds: z.array(z.string()).max(24),
     activeOffers: z.array(z.object({ visitor: z.string(), status: z.string().nullable(), requirements: z.array(z.object({ itemId: z.string(), amount: z.number() })) })).max(8),
     activeOfferCount: z.number().int().nonnegative(), note: z.string() }),
   z.object({ domain: z.literal("SLAYER"), totalLevelUnlocks: z.number().int().nonnegative(), totalBossDrops: z.number().int().nonnegative(),

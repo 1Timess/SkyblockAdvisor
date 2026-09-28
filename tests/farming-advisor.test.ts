@@ -8,13 +8,14 @@ import { fixtureSources } from "./fixtures/profile";
 test("Farming context keeps distinct Garden thresholds and observed offers", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   const value = buildFarmingAdvisorContext(profile, {
-    garden_experience: 9330, resources_collected: { WHEAT: 123 },
+    garden_experience: 9330, resources_collected: { WHEAT: 123 }, unlocked_plots_ids: ["beginner_1", "beginner_2"],
     commission_data: { total_completed: 98, unique_npcs_served: 46 },
     active_commissions: { tia: { status: "NOT_STARTED", requirement: [{ item: "ENCHANTED_CACTUS", amount: 2 }] } },
   });
   assert.equal(value.domain, "FARMING");
   if (value.domain !== "FARMING") return;
   assert.deepEqual(value.nextGardenLevel, { level: 10, xpRequired: 10120, xpRemaining: 790 });
+  assert.deepEqual(value.unlockedPlotIds, ["beginner_1", "beginner_2"]);
   assert.equal(value.nextOffersMilestone?.remaining, 2);
   assert.equal(value.nextUniqueVisitorsMilestone?.remaining, 4);
   assert.deepEqual(value.activeOffers[0].requirements, [{ itemId: "ENCHANTED_CACTUS", amount: 2 }]);
