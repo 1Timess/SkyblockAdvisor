@@ -22,3 +22,11 @@ The current Garden guide says crop milestones count Garden harvesting and separa
 4. Implement Farming context and goals, then validate deterministic output against both profiles. Add a single guarded advisor response check only after unit, type and lint gates pass.
 
 The first advisor pass should make skill/Garden/crop/visitor progress legible and recommend explicit sourced milestones. Contest optimization, effective Farming Fortune, tool mutations, crop profit, and visitor cost ranking require additional evidence and should remain separate follow-up work.
+
+## Two-profile field audit and sourced level pass
+
+The 2026-09-28 inspections of iTimess Lemon and ShinyFloa Blueberry both returned Garden HTTP 200. Their member `garden_player_data` exposed only `copper`; Garden XP, crop resources, visitor counts, plots, active offers and composter upgrades came from the separate endpoint. Both had `jacobs_contest`, but neither reported `perks.farming_level_cap`. Do not equate a missing perk with a measured cap bonus. ShinyFloa's Garden contained five active offers, while iTimess's active offers object was empty. The inspection hid item quantities, so offer feasibility remains unresolved.
+
+The [current Garden level table](https://hypixelskyblock.minecraft.wiki/w/The_Garden) gives cumulative thresholds of 10,120 XP for level 10 and 20,120 XP for level 11. The two observed Garden XP values therefore imply iTimess at level 10 with 7,939 XP to level 11, and ShinyFloa at level 9 with 790 XP to level 10. [Visitor milestone tables](https://hypixelskyblock.minecraft.wiki/w/The_Garden) put iTimess's 40 accepted offers 10 short of the 50-offer tier and 30 unique visitors 10 short of 40. ShinyFloa's 98 offers are 2 short of 100, and 46 unique visitors are 4 short of 50. These are count gaps, not estimates of cost or effort. The pinned threshold arrays in `garden-milestones.json` and `buildGardenProgress` implement these facts. The data remains profile-wide; a selected member's private inventory is not evidence of shared crop availability.
+
+The next pass should inspect `validate:farming-state` results to verify parsed values and quantities, audit crop-specific milestone thresholds under the 2025 rebalance, then wire an on-demand Garden fetch into a Farming advisor route. Do not fetch Garden for unrelated advisor questions.
