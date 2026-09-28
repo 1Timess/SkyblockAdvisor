@@ -16,7 +16,7 @@ export interface ProfileIntelligenceSnapshot {
     profile: { id: string; cuteName: string; selected: boolean; gameMode: string | null; snapshotId: string; fetchedAt: string };
     economy: NormalizedSkyBlockProfile["economy"];
     skills: Record<string, { level: number; maxLevel: number }>;
-    slayers: Record<string, { level: number; xp: number }>;
+    slayers: Record<string, { level: number | null; xp: number | null }>;
     dungeons: { catacombsLevel: number | null; selectedClass: string | null; highestFloorNormal: number | null; highestFloorMaster: number | null };
     magicalPower: number;
   };
@@ -54,12 +54,15 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         gameMode: profile.profile.gameMode, snapshotId, fetchedAt: profile.meta.fetchedAt },
       economy: profile.economy,
       skills: Object.fromEntries(Object.entries(profile.progression.skills).map(([id, value]) => [id, { level: value.level, maxLevel: value.maxLevel }])),
-      slayers: Object.fromEntries(Object.entries(profile.progression.slayers).map(([id, value]) => [id, { level: value.level, xp: value.xp }])),
+      slayers: Object.fromEntries(Object.entries(profile.progression.slayers).map(([id, value]) => [id,
+        { level: value.xpReported === false ? null : value.level, xp: value.xpReported === false ? null : value.xp }])),
       dungeons: { catacombsLevel: dungeon.catacombs?.level ?? null, selectedClass: dungeon.selectedClass,
         highestFloorNormal: dungeon.highestFloorNormal, highestFloorMaster: dungeon.highestFloorMaster },
       magicalPower: profile.accessories.magicalPower.total,
     },
     domains: {
+      SLAYER: { domain: "SLAYER", totalLevelUnlocks: 0, totalBossDrops: 0, possibleRngOptionCount: 0,
+        focusFamilies: [], families: [], unlockFocus: [], dropFocus: [], craftedSlayerMinions: [], note: "Slayer reward sources have not been joined." },
       COLLECTIONS: { domain: "COLLECTIONS", sourceVersion: null, sourceUpdatedAt: null, totalCollections: 0,
         craftedMinionTierCount: profile.craftedGenerators.length, craftedMinionTypes: 0, minionFocus: [],
         minionRecipeCount: 0, minionRecipeFocus: [], minionUpgradeCount: 0, minionUpgradeFocus: [], focus: [],

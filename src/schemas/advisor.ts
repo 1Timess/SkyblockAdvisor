@@ -3,15 +3,15 @@ import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 import { experimentObservationSchema } from "./owned-enchanting";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "DUNGEONS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
-export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS"]);
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER"]);
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
-export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "FORAGING"]);
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FORAGING"]);
 export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
@@ -82,6 +82,7 @@ export const availableAnalysisSchema = z.object({
   mining: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   enchanting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
 });
 export type AvailableAnalysis = z.infer<typeof availableAnalysisSchema>;
 
@@ -97,6 +98,17 @@ const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals:
   nucleus: z.object({ required: z.array(z.string()), acquired: z.array(z.string()), placed: z.array(z.string()),
     missing: z.array(z.string()), ready: z.boolean(), complete: z.boolean() }), biomes: z.record(z.string(), z.unknown()) });
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
+  z.object({ domain: z.literal("SLAYER"), totalLevelUnlocks: z.number().int().nonnegative(), totalBossDrops: z.number().int().nonnegative(),
+    possibleRngOptionCount: z.number().int().nonnegative(), focusFamilies: z.array(z.string()).max(6),
+    families: z.array(z.object({ id: z.string(), bossName: z.string(), status: z.enum(["OBSERVED", "UNREPORTED"]),
+      xp: z.number().nonnegative().nullable(), level: z.number().int().nonnegative().nullable(), nextLevel: z.number().int().positive().nullable(),
+      xpToNext: z.number().nonnegative().nullable(), killsByTier: z.record(z.string(), z.number().nonnegative()),
+      claimedRewardKeys: z.array(z.string()) })).max(6),
+    unlockFocus: z.array(z.object({ family: z.string(), level: z.number().int().positive(), levelReached: z.boolean().nullable(), name: z.string(), itemId: z.string().nullable(),
+      useRequirementLevel: z.number().int().nonnegative().nullable() })).max(16),
+    dropFocus: z.array(z.object({ family: z.string(), neuId: z.string(), name: z.string(), conditionStatus: z.enum(["SOURCED", "UNRESOLVED"]),
+      conditions: z.array(z.object({ bossTier: z.number().int().positive(), slayerLevel: z.number().int().nonnegative() })) })).max(8),
+    craftedSlayerMinions: z.array(z.object({ id: z.string(), name: z.string(), tiers: z.array(z.number().int().positive()) })).max(4), note: z.string() }),
   z.object({ domain: z.literal("COLLECTIONS"), sourceVersion: z.string().nullable(), sourceUpdatedAt: z.number().nullable(),
     totalCollections: z.number().int().nonnegative(), craftedMinionTierCount: z.number().int().nonnegative(),
     craftedMinionTypes: z.number().int().nonnegative(), minionFocus: z.array(z.object({ id: z.string(), name: z.string(), tiers: z.array(z.number()) })).max(8),
@@ -161,7 +173,7 @@ export const advisorContextSchema = z.object({
       snapshotId: z.string(), fetchedAt: z.string() }),
     economy: z.object({ purse: z.number().nullable(), bank: z.number().nullable(), personalBank: z.number().nullable() }),
     skills: z.record(z.string(), z.object({ level: z.number(), maxLevel: z.number() })),
-    slayers: z.record(z.string(), z.object({ level: z.number(), xp: z.number() })),
+    slayers: z.record(z.string(), z.object({ level: z.number().nullable(), xp: z.number().nullable() })),
     dungeons: z.object({ catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(), highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable() }),
     magicalPower: z.number(),
   }),

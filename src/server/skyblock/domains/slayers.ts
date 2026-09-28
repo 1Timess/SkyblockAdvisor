@@ -6,7 +6,7 @@ import type { RawMember } from "../../hypixel/types";
 const shared = [10, 30, 250, 1500, 5000, 20000, 100000, 400000, 1000000];
 export const slayerThresholds: Record<string, number[]> = {
   zombie: [5, 15, 200, 1000, 5000, 20000, 100000, 400000, 1000000],
-  spider: [5, 25, 200, 1000, 5000, 20000, 100000, 400000, 1000000],
+  spider: [10, 25, 200, 1000, 5000, 20000, 100000, 400000, 1000000],
   wolf: shared, enderman: shared, blaze: shared, vampire: [20, 75, 240, 840, 2400],
 };
 export function slayerLevel(xp: number, thresholds: number[]) { return thresholds.filter(threshold => xp >= threshold).length; }

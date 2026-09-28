@@ -1,0 +1,1253 @@
+{
+  "sourceNote": "Community wiki boss drop tables inspected 2026-09-28; conditions mean drop eligibility by boss tier and Slayer level, never guaranteed acquisition. New drops may not appear in pinned NEU RNG options.",
+  "families": {
+    "zombie": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Revenant_Horror",
+      "drops": [
+        {
+          "name": "Revenant Flesh",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Matcha Dye",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Foul Flesh",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Undead Catalyst",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 3
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 3
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Revenant Catalyst",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Pestilence Rune I",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 2
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 2
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 2
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Revenant Shard",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Smite VI)",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Beheaded Horror",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 5
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Paragon Shard",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Snake Rune I",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Festering Maggot",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Scythe Blade",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Revenant Viscera",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Shredded Sinew",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Severed Hand",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Warden Heart",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        }
+      ]
+    },
+    "spider": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Tarantula_Broodfather",
+      "drops": [
+        {
+          "name": "Tarantula Web",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Toxic Arrow Poison",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Brick Red Dye",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Spider Catalyst",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 2
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 2
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Bite Rune I",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Tarantula Catalyst",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Bane of Arthropods VI)",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Fly Swatter",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 5
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Tarantula Talisman",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Darkness Within Rune I",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Vial of Venom",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Digested Mosquito",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Paragon Shard",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            },
+            {
+              "bossTier": 5,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Tarantula Silk",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Primordial Shard",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Shriveled Wasp",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Ensnared Snail",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Primordial Eye",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 7
+            }
+          ]
+        }
+      ]
+    },
+    "wolf": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Sven_Packmaster",
+      "drops": [
+        {
+          "name": "Wolf Tooth",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 1
+            }
+          ]
+        },
+        {
+          "name": "Hamster Wheel",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 1
+            }
+          ]
+        },
+        {
+          "name": "Spirit Rune I",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Critical VI)",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Furball",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Red Claw Egg",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Paragon Shard",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Couture Rune I",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Grizzly Salmon",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Overflux Capacitor",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Celeste Dye",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            }
+          ]
+        }
+      ]
+    },
+    "enderman": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Voidgloom_Seraph",
+      "drops": [
+        {
+          "name": "Null Sphere",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Byzantium Dye",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Twilight Arrow Poison",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Summoning Eye",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 1
+            },
+            {
+              "bossTier": 3,
+              "slayerLevel": 1
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 1
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Mana Steal I)",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 2
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Null Atom",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Endersnake Rune I",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 0
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Transmission Tuner",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 3
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Hazmat Enderman",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            },
+            {
+              "bossTier": 4,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Smarty Pants I)",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "End Rune I",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Sinful Dice",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "Etherwarp Merger",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Pocket Espresso Machine",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Handy Blood Chalice",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Void Conqueror Enderman Skin",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Judgement Core",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Enchant Rune I",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Exceedingly Rare Ender Artifact Upgrade",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "End Stone Idol",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Paragon Shard",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        }
+      ]
+    },
+    "blaze": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Inferno_Demonlord",
+      "drops": [
+        {
+          "name": "Derelict Ashe",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Blaze Powder",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Lavatears Rune I",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 1
+            }
+          ]
+        },
+        {
+          "name": "Wisp's Ice-Flavored Water",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 1
+            }
+          ]
+        },
+        {
+          "name": "Bundle of Magma Arrows",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 1
+            }
+          ]
+        },
+        {
+          "name": "Mana Disintegrator",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Scorched Books",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Inferno Demonlord Shard",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Kelvin Inverter",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Blaze Rod Distillate",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Glowstone Distillate",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Magma Cream Distillate",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Nether Wart Distillate",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Gabagool Distillate",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Scorched Power Crystal",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Archfiend Dice",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Fire Aspect III)",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Fiery Burst Rune I",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Flawed Opal Gemstone",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book (Duplex I)",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 6
+            }
+          ]
+        },
+        {
+          "name": "High Class Archfiend Dice",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Wilson's Engineering Plans",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Subzero Inverter",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 7
+            }
+          ]
+        },
+        {
+          "name": "Paragon Shard",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Flame Dye",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            }
+          ]
+        }
+      ]
+    },
+    "vampire": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Riftstalker_Bloodfiend",
+      "drops": [
+        {
+          "name": "Coven Seal",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book Bundle (Quantum)",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Soultwist Rune I",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 2
+            }
+          ]
+        },
+        {
+          "name": "Bubba Blister",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Fang-tastic Chocolate Chip",
+          "conditions": [
+            {
+              "bossTier": 2,
+              "slayerLevel": 3
+            }
+          ]
+        },
+        {
+          "name": "Guardian Lucky Block",
+          "conditions": [
+            {
+              "bossTier": 3,
+              "slayerLevel": 4
+            }
+          ]
+        },
+        {
+          "name": "McGrubber's Burger",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Unfanged Vampire Part",
+          "conditions": [
+            {
+              "bossTier": 4,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Enchanted Book Bundle (The One)",
+          "conditions": [
+            {
+              "bossTier": 5,
+              "slayerLevel": 5
+            }
+          ]
+        },
+        {
+          "name": "Sangria Dye",
+          "conditions": [
+            {
+              "bossTier": 1,
+              "slayerLevel": 0
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

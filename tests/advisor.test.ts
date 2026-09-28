@@ -22,6 +22,7 @@ const available: AvailableAnalysis = {
   dungeons: { available: true, candidateCount: 4 }, fishing: { available: true, candidateCount: 0 }, mining: { available: true, candidateCount: 0 },
   enchanting: { available: true, candidateCount: 0 },
   collections: { available: true, candidateCount: 0 },
+  slayer: { available: true, candidateCount: 0 },
 };
 const route: AdvisorRoute = { scope: "GEAR", goal: "GENERAL_UPGRADE", inferredRole: "berserk", activeDomains: ["ARMOR", "WEAPONS"], clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "DUNGEONS", mechanics: [] };
 

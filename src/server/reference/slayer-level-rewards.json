@@ -1,0 +1,494 @@
+{
+  "sourceNote": "Community wiki leveling tables inspected 2026-09-28; item unlocks are not proof of ownership or recipe ingredients.",
+  "families": {
+    "zombie": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Zombie_Slayer",
+      "levels": {
+        "1": {
+          "xp": 5,
+          "unlocks": [
+            "Wand of Healing"
+          ],
+          "grants": []
+        },
+        "2": {
+          "xp": 15,
+          "unlocks": [
+            "Zombie Ring",
+            "Revenant Viscera",
+            "Small Slayer Sack"
+          ],
+          "grants": []
+        },
+        "3": {
+          "xp": 200,
+          "unlocks": [
+            "Revenant Falchion",
+            "Wand of Mending",
+            "Crystallized Heart"
+          ],
+          "grants": [
+            "Undead Catalyst"
+          ]
+        },
+        "4": {
+          "xp": 1000,
+          "unlocks": [
+            "Revenant Leggings",
+            "Revenant Boots",
+            "Travel Scroll to Hub Crypts"
+          ],
+          "grants": []
+        },
+        "5": {
+          "xp": 5000,
+          "unlocks": [
+            "Revenant Minion",
+            "Devour Ring",
+            "Revenant Chestplate",
+            "Voodoo Doll"
+          ],
+          "grants": [
+            "Revenant Minion I"
+          ]
+        },
+        "6": {
+          "xp": 20000,
+          "unlocks": [
+            "Wand of Restoration",
+            "Revived Heart",
+            "Reaper Falchion"
+          ],
+          "grants": [
+            "Revenant Catalyst"
+          ]
+        },
+        "7": {
+          "xp": 100000,
+          "unlocks": [
+            "Zombie Artifact",
+            "Reaper Mask",
+            "Reaper Scythe",
+            "Wand of Atonement",
+            "Reaper Chestplate",
+            "Reaper Leggings",
+            "Reaper Boots"
+          ],
+          "grants": []
+        },
+        "8": {
+          "xp": 400000,
+          "unlocks": [
+            "Reaper Orb",
+            "Halberd of the Shredded",
+            "Warden Helmet"
+          ],
+          "grants": []
+        },
+        "9": {
+          "xp": 1000000,
+          "unlocks": [
+            "Revenant Minion XII Upgrade Stone"
+          ],
+          "grants": [
+            "Reaper Gem"
+          ]
+        }
+      }
+    },
+    "wolf": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Wolf_Slayer",
+      "levels": {
+        "1": {
+          "xp": 10,
+          "unlocks": [
+            "Red Claw Talisman"
+          ],
+          "grants": []
+        },
+        "2": {
+          "xp": 30,
+          "unlocks": [
+            "Radiant Power Orb",
+            "Golden Tooth",
+            "Large Slayer Sack"
+          ],
+          "grants": []
+        },
+        "3": {
+          "xp": 250,
+          "unlocks": [
+            "Maddox Batphone",
+            "Shaman Sword"
+          ],
+          "grants": [
+            "Maddox Batphone"
+          ]
+        },
+        "4": {
+          "xp": 1500,
+          "unlocks": [
+            "Mastiff Crown",
+            "Mastiff Chestplate",
+            "Mastiff Leggings",
+            "Mastiff Boots"
+          ],
+          "grants": []
+        },
+        "5": {
+          "xp": 5000,
+          "unlocks": [
+            "Red Claw Ring",
+            "Edible Mace",
+            "Weird Tuba",
+            "Red Claw Artifact",
+            "Weirder Tuba"
+          ],
+          "grants": []
+        },
+        "6": {
+          "xp": 20000,
+          "unlocks": [
+            "Mana Flux Power Orb",
+            "Pooch Sword",
+            "Helmet of the Pack",
+            "Chestplate of the Pack",
+            "Leggings of the Pack",
+            "Boots of the Pack"
+          ],
+          "grants": []
+        },
+        "7": {
+          "xp": 100000,
+          "unlocks": [
+            "Hunter Talisman",
+            "Overflux Power Orb"
+          ],
+          "grants": []
+        },
+        "8": {
+          "xp": 400000,
+          "unlocks": [
+            "Hunter Ring",
+            "Plasmaflux Power Orb"
+          ],
+          "grants": []
+        },
+        "9": {
+          "xp": 1000000,
+          "unlocks": [],
+          "grants": []
+        }
+      }
+    },
+    "spider": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Spider_Slayer",
+      "levels": {
+        "1": {
+          "xp": 10,
+          "unlocks": [
+            "Spider Ring"
+          ],
+          "grants": []
+        },
+        "2": {
+          "xp": 25,
+          "unlocks": [
+            "Recluse Fang",
+            "Tarantula Silk"
+          ],
+          "grants": []
+        },
+        "3": {
+          "xp": 200,
+          "unlocks": [
+            "Medium Slayer Sack"
+          ],
+          "grants": []
+        },
+        "4": {
+          "xp": 1000,
+          "unlocks": [
+            "Tarantula Helmet",
+            "Tarantula Chestplate",
+            "Tarantula Leggings",
+            "Tarantula Boots",
+            "Tarantula Fang"
+          ],
+          "grants": []
+        },
+        "5": {
+          "xp": 5000,
+          "unlocks": [
+            "Tarantula Minion",
+            "Spider Shortbow"
+          ],
+          "grants": [
+            "Tarantula Minion I"
+          ]
+        },
+        "6": {
+          "xp": 20000,
+          "unlocks": [
+            "Scorpion Foil",
+            "Spider Artifact",
+            "Flycatcher"
+          ],
+          "grants": []
+        },
+        "7": {
+          "xp": 100000,
+          "unlocks": [
+            "Mosquito Shortbow",
+            "Common Mosquito Pet",
+            "Tarantula Ring",
+            "Primordial Helmet",
+            "Primordial Chestplate",
+            "Primordial Leggings",
+            "Primordial Boots",
+            "Shriveled Bracelet"
+          ],
+          "grants": [
+            "Survivor Cube"
+          ]
+        },
+        "8": {
+          "xp": 400000,
+          "unlocks": [
+            "Sting",
+            "The Primordial",
+            "Shriveled Cornea"
+          ],
+          "grants": []
+        },
+        "9": {
+          "xp": 1000000,
+          "unlocks": [
+            "Tarantula Minion XII Upgrade Stone"
+          ],
+          "grants": []
+        }
+      }
+    },
+    "enderman": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Enderman_Slayer",
+      "levels": {
+        "1": {
+          "xp": 10,
+          "unlocks": [
+            "Voidwalker Katana"
+          ],
+          "grants": []
+        },
+        "2": {
+          "xp": 30,
+          "unlocks": [
+            "Null Ovoid",
+            "Soulflow Pile",
+            "Lesser Soulflow Engine",
+            "Soulflow"
+          ],
+          "grants": []
+        },
+        "3": {
+          "xp": 250,
+          "unlocks": [
+            "Final Destination Helmet",
+            "Final Destination Chestplate",
+            "Final Destination Leggings",
+            "Final Destination Boots",
+            "Soul Esoward",
+            "Voidedge Katana"
+          ],
+          "grants": []
+        },
+        "4": {
+          "xp": 1500,
+          "unlocks": [
+            "Voidling Minion I",
+            "Travel Scroll to the Void Sepulture"
+          ],
+          "grants": []
+        },
+        "5": {
+          "xp": 5000,
+          "unlocks": [
+            "Soulflow Battery",
+            "Soulflow Engine",
+            "Vorpal Katana",
+            "Gloomlock Grimoire",
+            "Juju Shortbow"
+          ],
+          "grants": []
+        },
+        "6": {
+          "xp": 20000,
+          "unlocks": [
+            "Gyrokinetic Wand",
+            "Aspect of the Void",
+            "Atomsplit Katana",
+            "Sinseeker Scythe"
+          ],
+          "grants": []
+        },
+        "7": {
+          "xp": 100000,
+          "unlocks": [
+            "Soulflow Supercell",
+            "Etherwarp Conduit",
+            "Ender Relic",
+            "Terminator"
+          ],
+          "grants": []
+        },
+        "8": {
+          "xp": 400000,
+          "unlocks": [],
+          "grants": []
+        },
+        "9": {
+          "xp": 1000000,
+          "unlocks": [],
+          "grants": []
+        }
+      }
+    },
+    "vampire": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Vampire_Slayer",
+      "levels": {
+        "1": {
+          "xp": 20,
+          "unlocks": [
+            "Silver-Laced Karambit",
+            "Anti-Bite Scarf",
+            "Warm Wizard Face",
+            "Holy Ice"
+          ],
+          "grants": []
+        },
+        "2": {
+          "xp": 75,
+          "unlocks": [
+            "Steak Stake",
+            "Juicy Healing Melon",
+            "Maddox Badphone"
+          ],
+          "grants": []
+        },
+        "3": {
+          "xp": 240,
+          "unlocks": [
+            "Vampiric Timecharm",
+            "Bloodbadge",
+            "Leggings of the Coven",
+            "Perma-Jelled Garlic-Flavored Re-Heated Gummy Polar Bear",
+            "Super Sharp 'n Stabby Steak Stake"
+          ],
+          "grants": []
+        },
+        "4": {
+          "xp": 840,
+          "unlocks": [
+            "Silver-Twist Karambit",
+            "Luscious Healing Melon",
+            "Anti-Bite Scarf (Mythic)",
+            "Warmer Wizard Face",
+            "Weirder Tuba"
+          ],
+          "grants": []
+        },
+        "5": {
+          "xp": 2400,
+          "unlocks": [
+            "Lively Sepulture Chestplate",
+            "Vampire Dentist Relic"
+          ],
+          "grants": []
+        }
+      }
+    },
+    "blaze": {
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Blaze_Slayer",
+      "levels": {
+        "1": {
+          "xp": 10,
+          "unlocks": [
+            "Droplet Wisp Pet"
+          ],
+          "grants": []
+        },
+        "2": {
+          "xp": 30,
+          "unlocks": [
+            "Molten Powder",
+            "Firedust Dagger",
+            "Twilight Dagger"
+          ],
+          "grants": []
+        },
+        "3": {
+          "xp": 250,
+          "unlocks": [
+            "Wisp Upgrade Stone (Rare)",
+            "Burststopper Talisman",
+            "Warning Flare",
+            "Inferno Minion I"
+          ],
+          "grants": []
+        },
+        "4": {
+          "xp": 1500,
+          "unlocks": [
+            "Kindlebane Dagger",
+            "Mawdredge Dagger",
+            "Demonslayer Gauntlet",
+            "Teleporter Pill",
+            "Travel Scroll to the Smoldering Tomb"
+          ],
+          "grants": []
+        },
+        "5": {
+          "xp": 5000,
+          "unlocks": [
+            "Wisp Upgrade Stone (Epic)",
+            "Destruction Cloak",
+            "Tactical Insertion"
+          ],
+          "grants": []
+        },
+        "6": {
+          "xp": 20000,
+          "unlocks": [
+            "Pyrochaos Dagger",
+            "Deathripper Dagger",
+            "Blazetekk™ Ham Radio",
+            "Alert Flare"
+          ],
+          "grants": []
+        },
+        "7": {
+          "xp": 100000,
+          "unlocks": [
+            "Burststopper Artifact",
+            "Wisp Upgrade Stone (Legendary)",
+            "Annihilation Cloak",
+            "SOS Flare"
+          ],
+          "grants": []
+        },
+        "8": {
+          "xp": 400000,
+          "unlocks": [],
+          "grants": []
+        },
+        "9": {
+          "xp": 1000000,
+          "unlocks": [],
+          "grants": [
+            "Inferno Fuel Block"
+          ]
+        }
+      }
+    }
+  }
+}
