@@ -10,6 +10,7 @@ const counts = z.record(z.string(), z.number().nonnegative());
 export const slayerSchema = z.object({
   id: z.string(), xp: z.number().nonnegative(), level: z.number().nonnegative(), maxLevel: z.number().nonnegative(),
   killsByTier: counts, totalKills: z.number().nonnegative(),
+  xpReported: z.boolean().optional(), claimedRewardKeys: z.array(z.string()).optional(),
 });
 export const dungeonSchema = z.object({
   catacombs: levelSchema.nullable(), selectedClass: z.string().nullable(),

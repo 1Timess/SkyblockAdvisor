@@ -35,6 +35,7 @@ export const memberSchema = z.object({
   slayer: z.object({ slayer_bosses: z.record(z.string(), z.object({
     xp: number.optional(), boss_kills_tier_0: number.optional(), boss_kills_tier_1: number.optional(),
     boss_kills_tier_2: number.optional(), boss_kills_tier_3: number.optional(), boss_kills_tier_4: number.optional(),
+    claimed_levels: z.record(z.string(), z.unknown()).optional(),
   })) }).optional(),
   dungeons: z.object({
     dungeon_types: z.object({ catacombs: dungeonRun.optional(), master_catacombs: dungeonRun.optional() }).optional(),

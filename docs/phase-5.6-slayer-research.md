@@ -18,14 +18,18 @@ Hypixel documents profile and item endpoints, but no Slayer reward resource alon
 
 ## Current code audit
 
-`buildSlayers` currently keeps only XP, derived level, and boss kills. The raw Zod contract accepts `xp` and `boss_kills_tier_0` through `_4`; it discards all other fields inside each boss object. In particular, do not infer RNG score or claim status from missing normalized fields. Missing Slayer section produces a partial-profile warning. An absent family must remain unknown unless the live raw contract confirms that its absence means zero.
+`buildSlayers` now keeps XP, whether XP was reported, derived level, boss kills, and the literal `claimed_levels` keys. The raw Zod contract accepts `xp`, `boss_kills_tier_0` through `_4`, and `claimed_levels`; it discards other fields inside each boss object. In particular, do not infer RNG score or quest status from missing normalized fields. Missing Slayer section produces a partial-profile warning. An absent family remains unknown.
+
+The two redacted live inspections on 2026-09-28 found all six family keys in both profiles. iTimess has Blaze and Vampire with empty `claimed_levels` but no `xp`; ShinyFloa has XP and claim keys for all six. The latter also has a top-level `slayer_quest` key, whose contents were not inspected. Zombie claim keys include `level_7_special` and `level_8_special`; retain these literal keys rather than treating an absent `level_7` as unclaimed. Boss attempts were present, but counts were not included in this inspection. These observations establish field shapes for two members, not universal API semantics.
+
+The research catalog now preserves reported XP status and literal claimed keys, computes next XP gaps only from reported XP, and snapshots the 92 NEU RNG options at the pinned revision. The meter scores are catalog constants. It does not claim the player has selected or progressed toward any option.
 
 `parseItemRequirements` recognizes NEU `slayer_req` aliases and explicit lore. This is already useful for showing which *items* require a Slayer level. It does not imply the reward is earned automatically at that level. The collections pass also indexes crafted Slayer minions, which should be reused instead of building a second minion history.
 
 ## Research and implementation order
 
-1. Inspect small, redacted raw `slayer.slayer_bosses` samples from early and late profiles to establish which quest/RNG/unlock fields are actually available and whether families with zero XP appear. No full profile dump or token should be retained.
-2. Build a pinned, validated source catalog: family IDs, cumulative thresholds, NEU possible RNG rewards and item requirements. Record unresolved IDs and source revision. Treat meter values as source constants, not player progress.
+1. Inspect small, redacted raw `slayer.slayer_bosses` samples from early and late profiles to establish which quest/RNG/unlock fields are actually available and whether families with zero XP appear. Completed for iTimess Lemon and ShinyFloa Blueberry; the optional `slayer_quest` structure remains unknown.
+2. Build a pinned, validated source catalog: family IDs, cumulative thresholds, NEU possible RNG rewards and item requirements. The possible RNG snapshot and XP gaps are indexed; item use requirements already exist in the item catalog. Record unresolved IDs before joining options to items.
 3. Research direct level rewards and boss-tier/drop conditions independently. Keep `level_reward`, `use_requirement`, `recipe_unlock`, `boss_drop`, and `rng_option` distinct; only add a relation when its source supports it.
 4. Derive profile-specific next levels, XP gaps, boss kill history and relevant catalogued goals. Unknown combat viability, active quests, drop history and RNG meter state must remain unknown.
 5. Route Slayer questions into the advisor, test early and late profiles locally, then inspect at most the Luna calls agreed for this domain before a freeze decision.

@@ -21,11 +21,12 @@ export function buildSlayers(member: RawMember, warnings: ProfileWarning[]) {
     const killsByTier: Record<string, number> = {};
     for (const [key, count] of Object.entries(boss)) {
       const match = key.match(/^boss_kills_tier_(\d)$/);
-      if (match && count !== undefined) killsByTier[String(Number(match[1]) + 1)] = count;
+      if (match && typeof count === "number") killsByTier[String(Number(match[1]) + 1)] = count;
     }
     const xp = boss.xp ?? 0;
-    result[id] = { id, xp, level: slayerLevel(xp, thresholds), maxLevel: thresholds.length,
-      killsByTier, totalKills: Object.values(killsByTier).reduce((a, b) => a + b, 0) };
+    result[id] = { id, xp, xpReported: boss.xp !== undefined, level: slayerLevel(xp, thresholds), maxLevel: thresholds.length,
+      killsByTier, totalKills: Object.values(killsByTier).reduce((a, b) => a + b, 0),
+      claimedRewardKeys: Object.keys(boss.claimed_levels ?? {}).sort() };
   }
   return result;
 }
