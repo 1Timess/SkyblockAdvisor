@@ -45,7 +45,9 @@ export function buildSlayerAdvisorContext(profile: NormalizedSkyBlockProfile, qu
   const families = catalog.map(family => ({ id: family.id, bossName: family.bossName, status: family.status,
     xp: family.xp, level: family.level, nextLevel: family.nextLevel, xpToNext: family.xpToNext,
     killsByTier: family.killsByTier, claimedRewardKeys: family.claimedRewardKeys }));
-  const focusIds = familyMatch.length ? familyMatch : catalog.filter(family => family.nextLevel !== null)
+  const nextUnlocks = (id: string, level: number) =>
+    (levelSnapshot.families[id as keyof typeof levelSnapshot.families].levels as Record<string, { unlocks: string[] }>)[String(level)]?.unlocks ?? [];
+  const focusIds = familyMatch.length ? familyMatch : catalog.filter(family => family.nextLevel !== null && nextUnlocks(family.id, family.nextLevel).length > 0)
     .sort((a, b) => (a.xpToNext ?? Infinity) - (b.xpToNext ?? Infinity)).slice(0, 3).map(family => family.id);
   const unlockFocus = focusIds.flatMap(id => {
     const family = catalog.find(entry => entry.id === id)!;
@@ -83,5 +85,5 @@ export function buildSlayerAdvisorContext(profile: NormalizedSkyBlockProfile, qu
     totalBossDrops: Object.values(dropSnapshot.families).reduce((sum, family) => sum + family.drops.length, 0),
     possibleRngOptionCount: catalog.reduce((sum, family) => sum + family.possibleRngRewards.length, 0),
     unlockFocus, dropFocus, craftedSlayerMinions,
-    note: "Level unlocks, item use requirements, boss drop conditions, and possible RNG selections are separate evidence. Boss tiers in dropFocus indicate eligible drop tables, not proven fight access, ownership, probability, or farming value. Claimed reward keys are literal API keys; absent keys do not prove an unclaimed reward. Crafted minion tiers are historical observations, not placed minions. No RNG meter progress, active quest, drop inventory, recipe ingredients, or boss kill time is supplied. Item IDs in unlockFocus are references, not BUY candidates." };
+    note: "For a general progression question, focusFamilies shows the nearest XP thresholds with sourced direct unlocks; XP distance does not estimate effort or value. Level unlocks, item use requirements, boss drop conditions, and possible RNG selections are separate evidence. Boss tiers in dropFocus indicate eligible drop tables, not proven fight access, ownership, probability, or farming value. Claimed reward keys are literal API keys; absent keys do not prove an unclaimed reward. Crafted minion tiers are historical observations, not placed minions. No RNG meter progress, active quest, drop inventory, recipe ingredients, or boss kill time is supplied. Item IDs in unlockFocus are references, not BUY candidates." };
 }

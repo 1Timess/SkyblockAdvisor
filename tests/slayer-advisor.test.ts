@@ -50,6 +50,22 @@ test("Slayer level unlocks, use gates and boss drop conditions remain separate",
   advisorDomainContextSchema.parse(context);
 });
 
+test("general Slayer focus favors sourced next unlocks over closer empty milestones", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  for (const [id, level, xp] of [["blaze", 8, 800065], ["wolf", 7, 199355], ["zombie", 8, 603065],
+    ["spider", 8, 478005], ["enderman", 8, 507877]] as const) {
+    profile.progression.slayers[id] = { ...profile.progression.slayers[id], level, xp, xpReported: true };
+  }
+  const neu = new InMemoryNeuRepository([], { provider: "neu", repository: "fixture", branch: "test", etag: null,
+    downloadedAt: new Date().toISOString(), itemCount: 0 });
+  const context = buildSlayerAdvisorContext(profile, "What Slayer progression should I focus on next?", neu);
+  assert.equal(context.domain, "SLAYER");
+  if (context.domain !== "SLAYER") return;
+  assert.deepEqual(context.focusFamilies, ["wolf", "zombie", "spider"]);
+  assert.equal(context.families.find(family => family.id === "blaze")?.xpToNext, 199935);
+  assert.ok(context.unlockFocus.some(unlock => unlock.name === "Plasmaflux Power Orb"));
+});
+
 test("Slayer routing is explicit and survives a follow-up", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   const route = routeAdvisorQuestion({ question: "What should I do for Wolf Slayer?", profile });
