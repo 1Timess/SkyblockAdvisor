@@ -39,7 +39,8 @@
     "validate:slayer-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-slayer-luna.ts",
     "inspect:farming-research": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-research.ts",
     "validate:farming-state": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-state.ts",
-    "validate:farming-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-advisor.ts"
+    "validate:farming-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-advisor.ts",
+    "validate:farming-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-luna.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
