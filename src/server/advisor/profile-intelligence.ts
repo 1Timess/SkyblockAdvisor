@@ -65,7 +65,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
       magicalPower: profile.accessories.magicalPower.total,
     },
     domains: {
-      FARMING: { domain: "FARMING", ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
+      FARMING: { domain: "FARMING", equipmentComparisons: { catalogDownloadedAt: null, coverage: "UNREPORTED", mechanics: [], comparisons: [] }, ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
         farmingXp: profile.progression.skills.farming?.xp ?? null, farmingSkillFocus: farmingSkillFocus(profile),
         gardenAvailable: false, gardenXp: null, gardenLevel: null,
         nextGardenLevel: null, totalOffersAccepted: null, uniqueVisitorsServed: null,

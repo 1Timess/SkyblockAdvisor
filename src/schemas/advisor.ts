@@ -1,3 +1,4 @@
+import { requirementCheckSchema } from "./catalog";
 import { z } from "zod";
 import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
@@ -132,6 +133,18 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     contestCount: z.number().int().nonnegative(), medalInventory: z.record(z.string(), z.number()),
     contestPerkLevels: z.record(z.string(), z.number()), uniqueContestBracketKeys: z.array(z.string()).max(8),
     personalBestCropKeys: z.array(z.string()).max(13),
+    equipmentComparisons: z.object({
+      catalogDownloadedAt: z.string().datetime().nullable(), coverage: z.enum(["CATALOG_LOADED", "UNREPORTED"]),
+      mechanics: z.array(z.object({ itemId: z.string(), observedName: z.string(), catalogName: z.string().nullable(), source: z.string(), referenceLore: z.array(z.string()),
+        catalogFortune: z.number().nullable(), observedFortune: z.number().nullable(), abilityText: z.array(z.string()),
+        setBonusText: z.array(z.string()), requirements: z.array(requirementCheckSchema), utilityWarning: z.string().nullable(),
+        sourceStatus: z.enum(["CATALOG_MATCHED", "UNREPORTED"]) })).max(16),
+      comparisons: z.array(z.object({ currentItemId: z.string(), currentName: z.string(), targetItemId: z.string(), targetName: z.string(),
+        basis: z.literal("DIRECT_CATALOG_RECIPE"), currentCatalogFortune: z.number().nullable(), targetCatalogFortune: z.number().nullable(),
+        catalogFortuneDifference: z.number().nullable(), requirements: z.array(requirementCheckSchema), unparsedRequirements: z.array(z.string()),
+        abilityText: z.array(z.string()), setBonusText: z.array(z.string()), purchasePrice: z.object({ coins: z.number(), observedAt: z.string().datetime(), confidence: marketConfidenceSchema }).nullable(),
+        warnings: z.array(z.string()) })).max(12),
+    }),
     turboCropChecks: z.array(z.object({ itemId: z.string().nullable(), itemName: z.string(), source: z.string(),
       enchantment: z.string(), level: z.number().int().min(4).max(5), requiredBracket: z.enum(["BRONZE", "SILVER"]),
       eligibilityStatus: z.literal("UNREPORTED") })).max(16),

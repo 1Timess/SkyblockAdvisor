@@ -1,5 +1,9 @@
 import type { AdvisorDomainContext } from "../../schemas/advisor";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import { buildFarmingEquipmentComparisons } from "./equipment-comparisons";
+import type { CandidateItem } from "../../schemas/catalog";
+import type { MarketQuote } from "../../schemas/market";
+import type { NeuRepository } from "../reference/neu/repository";
 import { buildGardenProgress } from "./garden-progress";
 import unlocks from "../reference/garden-unlocks.json";
 import { buildObservedFarmingState } from "./observed-state";
@@ -9,7 +13,7 @@ import { mutationCatalogSummary, mutationProgressionPaths, mutationRecipeSteps, 
 import { greenhouseMechanics } from "./greenhouse-knowledge";
 import { composterFocus, farmingSkillFocus } from "./progression-focus";
 
-export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown, question = ""): AdvisorDomainContext {
+export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown, question = "", equipment?: { catalog: readonly CandidateItem[]; neu: NeuRepository | null; quotes: ReadonlyMap<string, MarketQuote> }): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
   const visitorFocused = /\b(visitors?|offers?)\b/i.test(question) && !/\b(mutations?|greenhouses?)\b/i.test(question) && !requestedMutationName(question);
   const mutationPaths = visitorFocused ? [] : mutationProgressionPaths(progress.gardenLevel, question);
@@ -20,6 +24,7 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
   return {
     domain: "FARMING", ...buildObservedFarmingState(profile), ...possibleGardenMechanics(progress.gardenLevel),
     ...(visitorFocused ? { mutationOptions: [] } : {}),
+    equipmentComparisons: buildFarmingEquipmentComparisons(profile, equipment?.catalog ?? [], equipment?.neu ?? null, equipment?.quotes),
     farmingLevel: profile.progression.skills.farming?.level ?? null,
     farmingXp: profile.progression.skills.farming?.xp ?? null,
     farmingSkillFocus: farmingSkillFocus(profile),
