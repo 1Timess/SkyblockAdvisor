@@ -65,7 +65,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   let petLevelTarget: AdvisorCandidate[] = [], rabbitNoOpInRawLanes = false;
   let activeDomainContext: AdvisorDomainContext | null = route.domain ? intelligence.domains[route.domain] : null;
 
-  if (route.domain === "FARMING") activeDomainContext = buildFarmingAdvisorContext(profile, await hypixelClient.getGarden(profile.profile.id));
+  if (route.domain === "FARMING") activeDomainContext = buildFarmingAdvisorContext(profile, await hypixelClient.getGarden(profile.profile.id), input.question);
   if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
   if (route.domain === "SLAYER") activeDomainContext = buildSlayerAdvisorContext(profile, input.question, neu!);
   if (route.domain === "COLLECTIONS") {

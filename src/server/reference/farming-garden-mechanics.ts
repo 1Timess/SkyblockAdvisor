@@ -48,7 +48,9 @@ export function possibleGardenMechanics(gardenLevel: number | null) {
     mutationOptions: gardenLevel >= 7 ? starterMutations.filter(mutation => mutation.gardenLevel <= gardenLevel)
       .map(mutation => ({ ...mutation, adjacent: [...mutation.adjacent],
         layoutStatus: mutation.name === "Witherbloom" ? "COUNT_ONLY" as const : "REFERENCE_GRID" as const,
-        inputAccess: mutation.name === "Witherbloom" ? "UNDETERMINED" as const : "LEVEL_ELIGIBLE" as const })) : [],
+        inputAccess: mutation.name === "Witherbloom" || mutation.name === "Ashwreath"
+          ? "UNDETERMINED" as const : "LEVEL_ELIGIBLE" as const,
+        cultivationStatus: "UNVERIFIED" as const })) : [],
     nextPestUnlocks: nextPestLevel === undefined ? [] : pestUnlocks.filter(pest => pest.gardenLevel === nextPestLevel),
   };
 }

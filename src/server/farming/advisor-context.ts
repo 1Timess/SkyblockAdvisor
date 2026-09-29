@@ -8,8 +8,11 @@ import { greenhouseExpansionOptions, plotExpansionOptions } from "./plot-progres
 import { mutationCatalogSummary, mutationProgressionPaths, mutationSpecialBehaviors } from "./mutation-knowledge";
 import { greenhouseMechanics } from "./greenhouse-knowledge";
 
-export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown): AdvisorDomainContext {
+export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown, question = ""): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
+  const mutationPaths = mutationProgressionPaths(progress.gardenLevel, question);
+  const relevantBehaviors = mutationPaths.flatMap(path => [...path.prerequisiteMutations, path.name, ...path.unknownInputs]);
+  if (progress.gardenLevel !== null && progress.gardenLevel >= 7) relevantBehaviors.push("Dead Plant");
   return {
     domain: "FARMING", ...buildObservedFarmingState(profile), ...possibleGardenMechanics(progress.gardenLevel),
     farmingLevel: profile.progression.skills.farming?.level ?? null,
@@ -22,18 +25,20 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     cropUpgradeLevels: progress.cropUpgradeLevels,
     unlockedPlotIds: progress.unlockedPlotIds,
     plotExpansionOptions: plotExpansionOptions(progress.unlockedPlotIds, progress.gardenLevel),
-    greenhouseExpansionOptions: progress.gardenLevel !== null && progress.gardenLevel >= 7 ? greenhouseExpansionOptions.map(option => ({ ...option })) : [],
+    greenhouseExpansionOptions: progress.gardenLevel !== null && progress.gardenLevel >= 7 ? greenhouseExpansionOptions.map(option => ({ ...option,
+      prerequisiteStatus: "UNREPORTED" as const })) : [],
     cropPestOptions: cropPestOptions(progress.gardenLevel, progress.nextCropMilestones),
     greenhouseSlotObservation: progress.greenhouseSlotObservation,
+    greenhouseAccessStatus: "UNREPORTED",
     carpenterOfferCompletions: (progress.visitorCompletions as Record<string, number>).carpenter ?? null,
     mutationKnowledge: mutationCatalogSummary(),
-    mutationPaths: mutationProgressionPaths(progress.gardenLevel),
-    mutationSpecialBehaviors: mutationSpecialBehaviors(),
+    mutationPaths,
+    mutationSpecialBehaviors: mutationSpecialBehaviors(relevantBehaviors),
     greenhouseMechanics: greenhouseMechanics(),
     greenhouseEligibility: progress.gardenLevel === null ? null : progress.gardenLevel >= unlocks.greenhouseEligibilityLevel,
     nextGardenCropUnlocks: progress.nextGardenLevel
       ? unlocks.cropsByLevel[String(progress.nextGardenLevel.level) as keyof typeof unlocks.cropsByLevel] ?? [] : [],
     activeOffers: progress.activeOffers.slice(0, 8), activeOfferCount: progress.activeOffers.length,
-    note: "Garden data is profile-wide. Crop milestone gaps use reported Garden resources_collected and current per-crop tables; absent crop keys are unreported. They do not imply collection unlocks or crop rates. Mutation options and paths are reference possibilities, not observed discovery or planted layout; level access does not prove physical feasibility. The full 40-entry dependency catalog includes 36 placement diagrams, special triggers and count-only Witherbloom. Carpenter offer completions are observed but blueprint handoff and construction are unreported. Pest unlocks are level access, not active pests. Active visitor requirements do not establish inventory feasibility, price, or value. Contest ranks, effective Farming Fortune, and missing wardrobe items are unreported.",
+    note: "Garden data is profile-wide. Crop milestone gaps use reported Garden resources_collected and current per-crop tables; absent crop keys are unreported. They do not imply collection unlocks or crop rates. Mutation options and paths are reference possibilities, not observed discovery or planted layout; level access does not prove cultivation. Full 40-entry dependency catalog includes 36 placement diagrams, special triggers and count-only Witherbloom. Carpenter offer completions are observed but blueprint handoff and construction are unreported. Pest unlocks are level access, not active pests. Active visitor requirements do not establish inventory feasibility, price, or value. Contest ranks, effective Farming Fortune, and missing wardrobe items are unreported.",
   };
 }

@@ -1,5 +1,6 @@
 import { advisorRouteSchema, type AdvisorConversationState, type AdvisorGoal, type AdvisorRole, type AdvisorRoute, type AnalysisDomain, type AnalysisScope, type ProfileIntelligenceDomain } from "../../schemas/advisor";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import greenhouseMutations from "../reference/greenhouse-mutations.json";
 
 const roleScopes: Record<AdvisorRole, AnalysisScope> = { mage: "MAGE", archer: "ARCHER", berserk: "BERSERK", tank: "SURVIVABILITY", healer: "SURVIVABILITY" };
 const domainsByScope: Record<AnalysisScope, AnalysisDomain[]> = {
@@ -35,7 +36,8 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
 
 function detectDomain(text: string): ProfileIntelligenceDomain | null {
   if (/\bslayers?\b|\b(revenant|tarantula|sven|voidgloom|inferno demonlord|riftstalker)\b|\b(warden heart|overflux capacitor|judgement core)\b/.test(text)) return "SLAYER";
-  if (/\bfarming\b|\bgarden\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)) return "FARMING";
+  if (/\bfarming\b|\bgarden\b|\bgreenhouse\b|\bmutations?\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)
+    || greenhouseMutations.mutations.some(mutation => text.includes(mutation.name.toLowerCase()))) return "FARMING";
   if (/\bcollections?\b|\bminions?\b|\bcrafted generators?\b/.test(text)) return "COLLECTIONS";
   if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
   if (/\bmagical power\b|\bmp\b|\baccessor(?:y|ies)\b|\btalismans?\b/.test(text)) return "ACCESSORIES";

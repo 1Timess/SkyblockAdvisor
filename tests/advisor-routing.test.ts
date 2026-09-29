@@ -87,4 +87,6 @@ test("Farming and Garden questions route to the profile-wide domain", async () =
   assert.equal(farming.goal, "FARMING");
   assert.deepEqual(farming.activeDomains, ["FARMING"]);
   assert.equal(routeAdvisorQuestion({ question: "Which Garden visitor offers are next?", profile }).domain, "FARMING");
+  assert.equal(routeAdvisorQuestion({ question: "How do I make Timestalk?", profile }).domain, "FARMING");
+  assert.equal(routeAdvisorQuestion({ question: "Which Greenhouse mutations are possible?", profile }).domain, "FARMING");
 });

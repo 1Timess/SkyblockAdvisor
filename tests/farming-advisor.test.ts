@@ -20,18 +20,23 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.deepEqual(value.nextGardenCropUnlocks, ["Nether Wart"]);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "REPORTED", count: 0 });
   assert.equal(value.greenhouseEligibility, true);
+  assert.equal(value.greenhouseAccessStatus, "UNREPORTED");
   assert.equal(value.carpenterOfferCompletions, 2);
   assert.equal(value.mutationKnowledge.total, 40);
   assert.equal(value.mutationKnowledge.profileAnalysisStatus, "UNREPORTED");
   assert.equal(value.mutationKnowledge.actualSpawnChanceStatus, "UNREPORTED");
   assert.equal(value.mutationPaths.find(path => path.name === "Soggybud")?.spawnWeight, 25);
-  assert.ok(value.mutationSpecialBehaviors.some(behavior => behavior.name === "Blastberry"));
   assert.ok(value.mutationOptions.some(mutation => mutation.name === "Witherbloom" && mutation.layoutStatus === "COUNT_ONLY" && mutation.inputAccess === "UNDETERMINED"));
+  assert.equal(value.mutationOptions.some(mutation => mutation.name === "Ashwreath"), false);
   assert.equal(value.mutationPaths.find(path => path.name === "Duskbloom")?.cropAccess, "FUTURE_LEVEL");
+  assert.deepEqual(value.mutationPaths.map(path => path.name), ["Chocoberry", "Soggybud", "Duskbloom"]);
+  assert.ok(value.mutationPaths.every(path => path.cultivationStatus === "UNVERIFIED"));
+  assert.deepEqual(value.mutationSpecialBehaviors.map(behavior => behavior.name), ["Dead Plant"]);
   assert.equal(value.greenhouseMechanics.profileTimerStatus, "UNREPORTED");
   assert.deepEqual(value.nextPestUnlocks, [{ name: "Beetle", crop: "Nether Wart", gardenLevel: 10 }]);
   assert.equal(value.cropPestOptions[0]?.name, "Fly");
   assert.deepEqual(value.greenhouseExpansionOptions.map(option => option.greenhouseNumber), [2, 3]);
+  assert.ok(value.greenhouseExpansionOptions.every(option => option.prerequisiteStatus === "UNREPORTED"));
   assert.ok(value.mutationOptions.some(mutation => mutation.name === "Scourroot" && mutation.adjacent.some(crop => crop.crop === "Potato")));
   assert.equal(value.mutationOptions.some(mutation => mutation.name === "Ashwreath"), false);
   assert.equal(value.nextOffersMilestone?.remaining, 2);
@@ -62,6 +67,7 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.deepEqual(value.nextCropMilestones, []);
   assert.deepEqual(value.mutationOptions, []);
   assert.deepEqual(value.mutationPaths, []);
+  assert.deepEqual(value.mutationSpecialBehaviors, []);
   assert.deepEqual(value.nextPestUnlocks, []);
   assert.deepEqual(value.plotExpansionOptions, []);
   assert.deepEqual(value.greenhouseExpansionOptions, []);
@@ -79,4 +85,17 @@ test("Lemon Garden level 10 identifies the next crop access without assuming gre
   assert.equal(value.greenhouseSlotObservation.count, 0);
   assert.deepEqual(value.nextPestUnlocks.map(pest => pest.name), ["Dragonfly", "Firefly"]);
   assert.ok(value.mutationOptions.some(mutation => mutation.name === "Ashwreath"));
+  assert.equal(value.mutationOptions.find(mutation => mutation.name === "Ashwreath")?.inputAccess, "UNDETERMINED");
+});
+
+test("named mutation questions select any catalog target and retain special behavior gates", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const target = buildFarmingAdvisorContext(profile, { garden_experience: 12181 }, "How do I make Timestalk?");
+  assert.equal(target.domain, "FARMING");
+  if (target.domain !== "FARMING") return;
+  assert.deepEqual(target.mutationPaths.map(path => path.name), ["Timestalk"]);
+  assert.ok(target.mutationPaths[0].specialSteps.includes("Shellfruit"));
+  assert.ok(target.mutationSpecialBehaviors.some(behavior => behavior.name === "Blastberry"));
+  assert.ok(target.mutationSpecialBehaviors.some(behavior => behavior.name === "Stoplight Petal"));
+  advisorDomainContextSchema.parse(target);
 });

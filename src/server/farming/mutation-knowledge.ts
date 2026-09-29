@@ -13,8 +13,9 @@ export function mutationSpawnWeight(name: string) {
     interpretation: "WEIGHT_NOT_PROBABILITY" as const } : null;
 }
 
-export function mutationSpecialBehaviors() {
-  return behaviors.behaviors.map(({ name, rule }) => ({ name, rule }));
+export function mutationSpecialBehaviors(names?: readonly string[]) {
+  return behaviors.behaviors.filter(behavior => !names || names.includes(behavior.name))
+    .map(({ name, rule }) => ({ name, rule }));
 }
 const baseCropLevels: Record<string, number> = {
   Wheat: 1, Carrot: 2, Potato: 3, Pumpkin: 4, "Sugar Cane": 5, "Melon": 6,
@@ -61,9 +62,11 @@ export function mutationCatalogSummary() {
 }
 
 /** Reference paths only: crop access is a level gate, not evidence of planted crops or mutation discovery. */
-export function mutationProgressionPaths(gardenLevel: number | null) {
+export function mutationProgressionPaths(gardenLevel: number | null, question = "") {
   if (gardenLevel === null || gardenLevel < 7) return [];
-  return ["Chocoberry", "Soggybud", "Duskbloom", "Snoozling", "Timestalk"].map(name => {
+  const requested = catalog.mutations.find(mutation => question.toLowerCase().includes(mutation.name.toLowerCase()));
+  const names = requested ? [requested.name] : ["Chocoberry", "Soggybud", "Duskbloom", ...(gardenLevel >= 12 ? ["Snoozling"] : [])];
+  return names.map(name => {
     const closure = mutationPrerequisites(name)!;
     const baseCrops = [...new Set(closure.path.flatMap(step => byName.get(step)!.requirements
       .filter(requirement => !byName.has(requirement.name)).map(requirement => requirement.name)))].sort();
@@ -75,6 +78,6 @@ export function mutationProgressionPaths(gardenLevel: number | null) {
         : gardenLevel >= requiredGardenLevel ? "LEVEL_ELIGIBLE" as const : "FUTURE_LEVEL" as const,
       unknownInputs, specialSteps: closure.specialSteps,
       layoutStatus: mutationLayout(name) ? "REFERENCE_GRID" as const : "SPECIAL_OR_COUNT_ONLY" as const,
-      profileDiscoveryStatus: "UNREPORTED" as const };
+      profileDiscoveryStatus: "UNREPORTED" as const, cultivationStatus: "UNVERIFIED" as const };
   });
 }
