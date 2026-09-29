@@ -99,3 +99,19 @@ test("named mutation questions select any catalog target and retain special beha
   assert.ok(target.mutationSpecialBehaviors.some(behavior => behavior.name === "Stoplight Petal"));
   advisorDomainContextSchema.parse(target);
 });
+
+test("visitor questions retain observed offers and milestones without unrelated mutation paths", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const garden = { garden_experience: 9330, commission_data: { total_completed: 98, unique_npcs_served: 46 },
+    active_commissions: { tia: { status: "NOT_STARTED", requirement: [{ item: "ENCHANTED_CACTUS", amount: 2 }] } } };
+  const visitor = buildFarmingAdvisorContext(profile, garden, "What are my next visitor milestones and current Garden offers?");
+  assert.equal(visitor.domain, "FARMING");
+  if (visitor.domain !== "FARMING") return;
+  assert.equal(visitor.nextOffersMilestone?.remaining, 2);
+  assert.equal(visitor.nextUniqueVisitorsMilestone?.remaining, 4);
+  assert.deepEqual(visitor.activeOffers[0].requirements, [{ itemId: "ENCHANTED_CACTUS", amount: 2 }]);
+  assert.deepEqual(visitor.mutationOptions, []);
+  assert.deepEqual(visitor.mutationPaths, []);
+  assert.deepEqual(visitor.mutationSpecialBehaviors, []);
+  advisorDomainContextSchema.parse(visitor);
+});

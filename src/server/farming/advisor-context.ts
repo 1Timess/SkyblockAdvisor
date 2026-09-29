@@ -10,11 +10,13 @@ import { greenhouseMechanics } from "./greenhouse-knowledge";
 
 export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown, question = ""): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
-  const mutationPaths = mutationProgressionPaths(progress.gardenLevel, question);
+  const visitorFocused = /\b(visitors?|offers?)\b/i.test(question) && !/\b(mutations?|greenhouses?)\b/i.test(question);
+  const mutationPaths = visitorFocused ? [] : mutationProgressionPaths(progress.gardenLevel, question);
   const relevantBehaviors = mutationPaths.flatMap(path => [...path.prerequisiteMutations, path.name, ...path.unknownInputs]);
-  if (progress.gardenLevel !== null && progress.gardenLevel >= 7) relevantBehaviors.push("Dead Plant");
+  if (!visitorFocused && progress.gardenLevel !== null && progress.gardenLevel >= 7) relevantBehaviors.push("Dead Plant");
   return {
     domain: "FARMING", ...buildObservedFarmingState(profile), ...possibleGardenMechanics(progress.gardenLevel),
+    ...(visitorFocused ? { mutationOptions: [] } : {}),
     farmingLevel: profile.progression.skills.farming?.level ?? null,
     farmingXp: profile.progression.skills.farming?.xp ?? null,
     gardenAvailable: progress.available, gardenXp: progress.gardenXp, gardenLevel: progress.gardenLevel,
