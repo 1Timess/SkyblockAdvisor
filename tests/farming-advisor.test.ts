@@ -10,7 +10,7 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   const value = buildFarmingAdvisorContext(profile, {
     garden_experience: 9330, greenhouse_slots: [], resources_collected: { WHEAT: 123 }, unlocked_plots_ids: ["beginner_1", "beginner_2"],
-    commission_data: { total_completed: 98, unique_npcs_served: 46 },
+    commission_data: { total_completed: 98, unique_npcs_served: 46, completed: { carpenter: 2 } },
     active_commissions: { tia: { status: "NOT_STARTED", requirement: [{ item: "ENCHANTED_CACTUS", amount: 2 }] } },
   });
   assert.equal(value.domain, "FARMING");
@@ -20,6 +20,9 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.deepEqual(value.nextGardenCropUnlocks, ["Nether Wart"]);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "REPORTED", count: 0 });
   assert.equal(value.greenhouseEligibility, true);
+  assert.equal(value.carpenterOfferCompletions, 2);
+  assert.equal(value.mutationKnowledge.total, 40);
+  assert.equal(value.mutationKnowledge.profileAnalysisStatus, "UNREPORTED");
   assert.deepEqual(value.nextPestUnlocks, [{ name: "Beetle", crop: "Nether Wart", gardenLevel: 10 }]);
   assert.equal(value.cropPestOptions[0]?.name, "Fly");
   assert.deepEqual(value.greenhouseExpansionOptions.map(option => option.greenhouseNumber), [2, 3]);
@@ -56,6 +59,7 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.deepEqual(value.plotExpansionOptions, []);
   assert.deepEqual(value.greenhouseExpansionOptions, []);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "UNREPORTED", count: null });
+  assert.equal(value.carpenterOfferCompletions, null);
 });
 
 test("Lemon Garden level 10 identifies the next crop access without assuming greenhouse ownership", async () => {

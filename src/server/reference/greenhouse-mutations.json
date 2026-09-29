@@ -1,0 +1,1024 @@
+{
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Mutations",
+  "checkedAt": "2026-09-29",
+  "notes": "Counts describe neighboring blocks and do not encode exact positions; multi-block plants and special triggers require layout-specific handling.",
+  "mutations": [
+    {
+      "name": "Ashwreath",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Soul Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Nether Wart",
+          "count": 2
+        },
+        {
+          "name": "Fire",
+          "count": 2
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Improved Harvest Boost",
+        "XP Loss"
+      ]
+    },
+    {
+      "name": "Choconut",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Cocoa Beans",
+          "count": 2
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Immunity"
+      ]
+    },
+    {
+      "name": "Dustgrain",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Wheat",
+          "count": 2
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Harvest Boost"
+      ]
+    },
+    {
+      "name": "Gloomgourd",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Pumpkin",
+          "count": 1
+        },
+        {
+          "name": "Melon",
+          "count": 1
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Water Retain",
+        "Bonus Drops"
+      ]
+    },
+    {
+      "name": "Lonelily",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Farmland, Dirt",
+      "condition": "ADJACENT",
+      "requirements": [],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Bonus Drops"
+      ]
+    },
+    {
+      "name": "Scourroot",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Potato",
+          "count": 1
+        },
+        {
+          "name": "Carrot",
+          "count": 1
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Immunity",
+        "XP Boost"
+      ]
+    },
+    {
+      "name": "Shadevine",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Cactus",
+          "count": 1
+        },
+        {
+          "name": "Sugar Cane",
+          "count": 1
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Improved Water Retain",
+        "Improved XP Boost",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "Veilshroom",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Mycelium",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Red Mushroom",
+          "count": 1
+        },
+        {
+          "name": "Brown Mushroom",
+          "count": 1
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Improved Harvest Boost",
+        "Water Drain"
+      ]
+    },
+    {
+      "name": "Witherbloom",
+      "rarity": "COMMON",
+      "size": "1x1",
+      "surface": "Soul Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Dead Plant",
+          "count": 4
+        }
+      ],
+      "dependencies": [],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Effect Spread"
+      ]
+    },
+    {
+      "name": "Chocoberry",
+      "rarity": "UNCOMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Choconut",
+          "count": 6
+        },
+        {
+          "name": "Gloomgourd",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Choconut",
+        "Gloomgourd"
+      ],
+      "specialRule": null,
+      "growthStages": 6,
+      "effects": [
+        "Water Retain"
+      ]
+    },
+    {
+      "name": "Cindershade",
+      "rarity": "UNCOMMON",
+      "size": "1x1",
+      "surface": "Soul Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Ashwreath",
+          "count": 4
+        },
+        {
+          "name": "Witherbloom",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Ashwreath",
+        "Witherbloom"
+      ],
+      "specialRule": null,
+      "growthStages": 8,
+      "effects": [
+        "Effect Spread",
+        "Improved Harvest Boost",
+        "XP Loss"
+      ]
+    },
+    {
+      "name": "Coalroot",
+      "rarity": "UNCOMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Ashwreath",
+          "count": 5
+        },
+        {
+          "name": "Scourroot",
+          "count": 3
+        }
+      ],
+      "dependencies": [
+        "Ashwreath",
+        "Scourroot"
+      ],
+      "specialRule": null,
+      "growthStages": 8,
+      "effects": [
+        "XP Boost"
+      ]
+    },
+    {
+      "name": "Creambloom",
+      "rarity": "UNCOMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Choconut",
+          "count": 8
+        }
+      ],
+      "dependencies": [
+        "Choconut"
+      ],
+      "specialRule": null,
+      "growthStages": 6,
+      "effects": [
+        "Immunity"
+      ]
+    },
+    {
+      "name": "Duskbloom",
+      "rarity": "UNCOMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Moonflower",
+          "count": 2
+        },
+        {
+          "name": "Shadevine",
+          "count": 2
+        },
+        {
+          "name": "Sunflower",
+          "count": 2
+        },
+        {
+          "name": "Dustgrain",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Shadevine",
+        "Dustgrain"
+      ],
+      "specialRule": null,
+      "growthStages": 8,
+      "effects": [
+        "Bonus Drops"
+      ]
+    },
+    {
+      "name": "Thornshade",
+      "rarity": "UNCOMMON",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Wild Rose",
+          "count": 4
+        },
+        {
+          "name": "Veilshroom",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Veilshroom"
+      ],
+      "specialRule": null,
+      "growthStages": 8,
+      "effects": [
+        "Effect Spread"
+      ]
+    },
+    {
+      "name": "Blastberry",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Chocoberry",
+          "count": 5
+        },
+        {
+          "name": "Ashwreath",
+          "count": 3
+        }
+      ],
+      "dependencies": [
+        "Chocoberry",
+        "Ashwreath"
+      ],
+      "specialRule": null,
+      "growthStages": 6,
+      "effects": [
+        "Immunity",
+        "Improved Harvest Boost",
+        "XP Loss"
+      ]
+    },
+    {
+      "name": "Cheesebite",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Creambloom",
+          "count": 4
+        },
+        {
+          "name": "Fermento",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Creambloom"
+      ],
+      "specialRule": null,
+      "growthStages": 10,
+      "effects": [
+        "Improved Water Retain"
+      ]
+    },
+    {
+      "name": "Chloronite",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Coalroot",
+          "count": 6
+        },
+        {
+          "name": "Thornshade",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Coalroot",
+        "Thornshade"
+      ],
+      "specialRule": null,
+      "growthStages": 10,
+      "effects": [
+        "Immunity"
+      ]
+    },
+    {
+      "name": "Do-not-eat-shroom",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Veilshroom",
+          "count": 4
+        },
+        {
+          "name": "Scourroot",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Veilshroom",
+        "Scourroot"
+      ],
+      "specialRule": null,
+      "growthStages": 8,
+      "effects": [
+        "Improved Harvest Boost",
+        "Water Drain"
+      ]
+    },
+    {
+      "name": "Fleshtrap",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Cindershade",
+          "count": 4
+        },
+        {
+          "name": "Lonelily",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Cindershade",
+        "Lonelily"
+      ],
+      "specialRule": null,
+      "growthStages": 14,
+      "effects": [
+        "Bonus Drops"
+      ]
+    },
+    {
+      "name": "Magic Jellybean",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Sugar Cane",
+          "count": 5
+        },
+        {
+          "name": "Duskbloom",
+          "count": 3
+        }
+      ],
+      "dependencies": [
+        "Duskbloom"
+      ],
+      "specialRule": null,
+      "growthStages": 120,
+      "effects": [
+        "Improved XP Boost",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "Noctilume",
+      "rarity": "RARE",
+      "size": "2x2",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Duskbloom",
+          "count": 6
+        },
+        {
+          "name": "Lonelily",
+          "count": 6
+        }
+      ],
+      "dependencies": [
+        "Duskbloom",
+        "Lonelily"
+      ],
+      "specialRule": null,
+      "growthStages": 4,
+      "effects": [
+        "Effect Spread",
+        "Improved Water Retain",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "Snoozling",
+      "rarity": "RARE",
+      "size": "3x3",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Creambloom",
+          "count": 4
+        },
+        {
+          "name": "Dustgrain",
+          "count": 3
+        },
+        {
+          "name": "Witherbloom",
+          "count": 3
+        },
+        {
+          "name": "Duskbloom",
+          "count": 3
+        },
+        {
+          "name": "Thornshade",
+          "count": 3
+        }
+      ],
+      "dependencies": [
+        "Creambloom",
+        "Dustgrain",
+        "Witherbloom",
+        "Duskbloom",
+        "Thornshade"
+      ],
+      "specialRule": null,
+      "growthStages": 20,
+      "effects": [
+        "Bonus Drops"
+      ]
+    },
+    {
+      "name": "Soggybud",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Melon",
+          "count": 2
+        },
+        {
+          "name": "Gloomgourd",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Gloomgourd"
+      ],
+      "specialRule": null,
+      "growthStages": 10,
+      "effects": [
+        "Water Retain"
+      ]
+    },
+    {
+      "name": "Turtlellini",
+      "rarity": "RARE",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Soggybud",
+          "count": 4
+        },
+        {
+          "name": "Choconut",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Soggybud",
+        "Choconut"
+      ],
+      "specialRule": null,
+      "growthStages": 0,
+      "effects": [
+        "Water Retain",
+        "Immunity"
+      ]
+    },
+    {
+      "name": "Chorus Fruit",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "End Stone",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Chloronite",
+          "count": 5
+        },
+        {
+          "name": "Magic Jellybean",
+          "count": 3
+        }
+      ],
+      "dependencies": [
+        "Chloronite",
+        "Magic Jellybean"
+      ],
+      "specialRule": null,
+      "growthStages": 12,
+      "effects": [
+        "Improved XP Boost",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "PlantBoy Advance",
+      "rarity": "EPIC",
+      "size": "2x2",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Snoozling",
+          "count": 6
+        },
+        {
+          "name": "Thunderling",
+          "count": 6
+        }
+      ],
+      "dependencies": [
+        "Snoozling",
+        "Thunderling"
+      ],
+      "specialRule": null,
+      "growthStages": 12,
+      "effects": [
+        "Harvest Boost"
+      ]
+    },
+    {
+      "name": "Puffercloud",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Snoozling",
+          "count": 2
+        },
+        {
+          "name": "Do-not-eat-shroom",
+          "count": 6
+        }
+      ],
+      "dependencies": [
+        "Snoozling",
+        "Do-not-eat-shroom"
+      ],
+      "specialRule": null,
+      "growthStages": 14,
+      "effects": [
+        "Improved Harvest Boost",
+        "Water Drain"
+      ]
+    },
+    {
+      "name": "Shellfruit",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "SPECIAL",
+      "requirements": [],
+      "dependencies": [
+        "Turtlellini",
+        "Blastberry"
+      ],
+      "specialRule": "Explode a Turtlellini with a Blastberry.",
+      "growthStages": 0,
+      "effects": [
+        "Water Retain",
+        "Immunity"
+      ]
+    },
+    {
+      "name": "Startlevine",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Blastberry",
+          "count": 4
+        },
+        {
+          "name": "Cheesebite",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Blastberry",
+        "Cheesebite"
+      ],
+      "specialRule": null,
+      "growthStages": 12,
+      "effects": [
+        "Improved Water Retain",
+        "Improved XP Boost",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "Stoplight Petal",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Snoozling",
+          "count": 4
+        },
+        {
+          "name": "Noctilume",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Snoozling",
+        "Noctilume"
+      ],
+      "specialRule": null,
+      "growthStages": 12,
+      "effects": [
+        "Effect Spread",
+        "Improved Water Retain",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "Thunderling",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Soggybud",
+          "count": 5
+        },
+        {
+          "name": "Noctilume",
+          "count": 3
+        }
+      ],
+      "dependencies": [
+        "Soggybud",
+        "Noctilume"
+      ],
+      "specialRule": null,
+      "growthStages": 16,
+      "effects": [
+        "Effect Spread"
+      ]
+    },
+    {
+      "name": "Zombud",
+      "rarity": "EPIC",
+      "size": "1x1",
+      "surface": "Soul Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Dead Plant",
+          "count": 4
+        },
+        {
+          "name": "Cindershade",
+          "count": 2
+        },
+        {
+          "name": "Fleshtrap",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Cindershade",
+        "Fleshtrap"
+      ],
+      "specialRule": null,
+      "growthStages": 16,
+      "effects": [
+        "Effect Spread",
+        "Bonus Drops"
+      ]
+    },
+    {
+      "name": "All-in Aloe",
+      "rarity": "LEGENDARY",
+      "size": "1x1",
+      "surface": "Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Magic Jellybean",
+          "count": 6
+        },
+        {
+          "name": "PlantBoy Advance",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Magic Jellybean",
+        "PlantBoy Advance"
+      ],
+      "specialRule": null,
+      "growthStages": 27,
+      "effects": [
+        "Harvest Boost"
+      ]
+    },
+    {
+      "name": "Devourer",
+      "rarity": "LEGENDARY",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Puffercloud",
+          "count": 4
+        },
+        {
+          "name": "Zombud",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Puffercloud",
+        "Zombud"
+      ],
+      "specialRule": null,
+      "growthStages": 16,
+      "effects": [
+        "Bonus Drops",
+        "Improved Harvest Boost",
+        "Water Drain"
+      ]
+    },
+    {
+      "name": "Glasscorn",
+      "rarity": "LEGENDARY",
+      "size": "2x2",
+      "surface": "Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Startlevine",
+          "count": 6
+        },
+        {
+          "name": "Chloronite",
+          "count": 6
+        }
+      ],
+      "dependencies": [
+        "Startlevine",
+        "Chloronite"
+      ],
+      "specialRule": null,
+      "growthStages": 9,
+      "effects": [
+        "Immunity",
+        "Improved Water Retain",
+        "Harvest Loss"
+      ]
+    },
+    {
+      "name": "Godseed",
+      "rarity": "LEGENDARY",
+      "size": "3x3",
+      "surface": "Farmland",
+      "condition": "SPECIAL",
+      "requirements": [],
+      "dependencies": [],
+      "specialRule": "All positive crop effects",
+      "growthStages": 40,
+      "effects": [
+        "Improved Harvest Boost",
+        "Improved Water Retain",
+        "Improved XP Boost",
+        "Immunity",
+        "Bonus Drops",
+        "Effect Spread"
+      ]
+    },
+    {
+      "name": "Jerryflower",
+      "rarity": "LEGENDARY",
+      "size": "1x1",
+      "surface": "Farmland",
+      "condition": "SPECIAL",
+      "requirements": [],
+      "dependencies": [],
+      "specialRule": "Grow the Jerryseed",
+      "growthStages": 10,
+      "effects": [
+        "None"
+      ]
+    },
+    {
+      "name": "Phantomleaf",
+      "rarity": "LEGENDARY",
+      "size": "1x1",
+      "surface": "Soul Sand",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Chorus Fruit",
+          "count": 4
+        },
+        {
+          "name": "Shellfruit",
+          "count": 4
+        }
+      ],
+      "dependencies": [
+        "Chorus Fruit",
+        "Shellfruit"
+      ],
+      "specialRule": null,
+      "growthStages": 15,
+      "effects": [
+        "XP Boost",
+        "Immunity"
+      ]
+    },
+    {
+      "name": "Timestalk",
+      "rarity": "LEGENDARY",
+      "size": "1x1",
+      "surface": "End Stone",
+      "condition": "ADJACENT",
+      "requirements": [
+        {
+          "name": "Stoplight Petal",
+          "count": 4
+        },
+        {
+          "name": "Chorus Fruit",
+          "count": 2
+        },
+        {
+          "name": "Shellfruit",
+          "count": 2
+        }
+      ],
+      "dependencies": [
+        "Stoplight Petal",
+        "Chorus Fruit",
+        "Shellfruit"
+      ],
+      "specialRule": null,
+      "growthStages": 14,
+      "effects": [
+        "Improved Water Retain",
+        "Improved XP Boost",
+        "Harvest Loss"
+      ]
+    }
+  ]
+}

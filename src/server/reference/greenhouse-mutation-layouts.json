@@ -1,0 +1,547 @@
+{
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Mutations",
+  "orientation": "Rows top-to-bottom; EMPTY means an unused neighbor. Center occupied by result in reference diagram, but must be empty before spreading.",
+  "layouts": {
+    "Ashwreath": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "Fire",
+        "EMPTY",
+        "Nether Wart",
+        "Ashwreath",
+        "Nether Wart",
+        "EMPTY",
+        "Fire",
+        "EMPTY"
+      ]
+    },
+    "Choconut": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Cocoa Beans",
+        "Choconut",
+        "Cocoa Beans",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Dustgrain": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Wheat",
+        "Dustgrain",
+        "Wheat",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Gloomgourd": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Pumpkin",
+        "Gloomgourd",
+        "Melon Slice",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Lonelily": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Lonelily",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Scourroot": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Potato",
+        "Scourroot",
+        "Carrot",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Shadevine": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Cactus",
+        "Shadevine",
+        "Sugar Cane",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Veilshroom": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "EMPTY",
+        "EMPTY",
+        "Red Mushroom",
+        "Veilshroom",
+        "Brown Mushroom",
+        "EMPTY",
+        "EMPTY",
+        "EMPTY"
+      ]
+    },
+    "Chocoberry": {
+      "width": 3,
+      "cells": [
+        "Choconut",
+        "Choconut",
+        "Choconut",
+        "Gloomgourd",
+        "Chocoberry",
+        "Choconut",
+        "Gloomgourd",
+        "Choconut",
+        "Choconut"
+      ]
+    },
+    "Cindershade": {
+      "width": 3,
+      "cells": [
+        "Ashwreath",
+        "Ashwreath",
+        "Ashwreath",
+        "Witherbloom",
+        "Cindershade",
+        "Ashwreath",
+        "Witherbloom",
+        "Witherbloom",
+        "Witherbloom"
+      ]
+    },
+    "Coalroot": {
+      "width": 3,
+      "cells": [
+        "Ashwreath",
+        "Ashwreath",
+        "Ashwreath",
+        "Scourroot",
+        "Coalroot",
+        "Ashwreath",
+        "Scourroot",
+        "Scourroot",
+        "Ashwreath"
+      ]
+    },
+    "Creambloom": {
+      "width": 3,
+      "cells": [
+        "Choconut",
+        "Choconut",
+        "Choconut",
+        "Choconut",
+        "Creambloom",
+        "Choconut",
+        "Choconut",
+        "Choconut",
+        "Choconut"
+      ]
+    },
+    "Duskbloom": {
+      "width": 3,
+      "cells": [
+        "Moonflower",
+        "Moonflower",
+        "Shadevine",
+        "Dustgrain",
+        "Duskbloom",
+        "Shadevine",
+        "Dustgrain",
+        "Sunflower",
+        "Sunflower"
+      ]
+    },
+    "Thornshade": {
+      "width": 3,
+      "cells": [
+        "Wild Rose",
+        "Wild Rose",
+        "Wild Rose",
+        "Veilshroom",
+        "Thornshade",
+        "Wild Rose",
+        "Veilshroom",
+        "Veilshroom",
+        "Veilshroom"
+      ]
+    },
+    "Blastberry": {
+      "width": 3,
+      "cells": [
+        "Chocoberry",
+        "Chocoberry",
+        "Chocoberry",
+        "Ashwreath",
+        "Blastberry",
+        "Chocoberry",
+        "Ashwreath",
+        "Ashwreath",
+        "Chocoberry"
+      ]
+    },
+    "Cheesebite": {
+      "width": 3,
+      "cells": [
+        "Creambloom",
+        "Creambloom",
+        "Creambloom",
+        "Fermento",
+        "Cheesebite",
+        "Creambloom",
+        "Fermento",
+        "Fermento",
+        "Fermento"
+      ]
+    },
+    "Chloronite": {
+      "width": 3,
+      "cells": [
+        "Coalroot",
+        "Coalroot",
+        "Coalroot",
+        "Thornshade",
+        "Chloronite",
+        "Coalroot",
+        "Thornshade",
+        "Coalroot",
+        "Coalroot"
+      ]
+    },
+    "Do-not-eat-shroom": {
+      "width": 3,
+      "cells": [
+        "Veilshroom",
+        "Veilshroom",
+        "Veilshroom",
+        "Scourroot",
+        "Do-not-eat-shroom",
+        "Veilshroom",
+        "Scourroot",
+        "Scourroot",
+        "Scourroot"
+      ]
+    },
+    "Fleshtrap": {
+      "width": 3,
+      "cells": [
+        "Cindershade",
+        "Cindershade",
+        "Cindershade",
+        "Lonelily",
+        "Fleshtrap",
+        "Cindershade",
+        "Lonelily",
+        "Lonelily",
+        "Lonelily"
+      ]
+    },
+    "Magic Jellybean": {
+      "width": 3,
+      "cells": [
+        "Sugar Cane",
+        "Sugar Cane",
+        "Sugar Cane",
+        "Duskbloom",
+        "Magic Jellybean",
+        "Sugar Cane",
+        "Duskbloom",
+        "Duskbloom",
+        "Sugar Cane"
+      ]
+    },
+    "Noctilume": {
+      "width": 4,
+      "cells": [
+        "Duskbloom",
+        "Duskbloom",
+        "Duskbloom",
+        "Duskbloom",
+        "Lonelily",
+        "Noctilume",
+        "Noctilume",
+        "Duskbloom",
+        "Lonelily",
+        "Noctilume",
+        "Noctilume",
+        "Duskbloom",
+        "Lonelily",
+        "Lonelily",
+        "Lonelily",
+        "Lonelily"
+      ]
+    },
+    "Snoozling": {
+      "width": 5,
+      "cells": [
+        "Creambloom",
+        "Creambloom",
+        "Creambloom",
+        "Creambloom",
+        "Dustgrain",
+        "Thornshade",
+        "Snoozling",
+        "Snoozling",
+        "Snoozling",
+        "Dustgrain",
+        "Thornshade",
+        "Snoozling",
+        "Snoozling",
+        "Snoozling",
+        "Dustgrain",
+        "Thornshade",
+        "Snoozling",
+        "Snoozling",
+        "Snoozling",
+        "Witherbloom",
+        "Duskbloom",
+        "Duskbloom",
+        "Duskbloom",
+        "Witherbloom",
+        "Witherbloom"
+      ]
+    },
+    "Soggybud": {
+      "width": 3,
+      "cells": [
+        "EMPTY",
+        "Gloomgourd",
+        "EMPTY",
+        "Melon Slice",
+        "Soggybud",
+        "Melon Slice",
+        "EMPTY",
+        "Gloomgourd",
+        "EMPTY"
+      ]
+    },
+    "Turtlellini": {
+      "width": 3,
+      "cells": [
+        "Soggybud",
+        "Soggybud",
+        "Soggybud",
+        "Choconut",
+        "Turtlellini",
+        "Soggybud",
+        "Choconut",
+        "Choconut",
+        "Choconut"
+      ]
+    },
+    "Chorus Fruit": {
+      "width": 3,
+      "cells": [
+        "Chloronite",
+        "Chloronite",
+        "Chloronite",
+        "Magic Jellybean",
+        "Chorus Fruit",
+        "Chloronite",
+        "Magic Jellybean",
+        "Magic Jellybean",
+        "Chloronite"
+      ]
+    },
+    "PlantBoy Advance": {
+      "width": 4,
+      "cells": [
+        "Snoozling",
+        "Snoozling",
+        "Snoozling",
+        "Thunderling",
+        "Thunderling",
+        "PlantBoy Advance",
+        "PlantBoy Advance",
+        "Thunderling",
+        "Thunderling",
+        "PlantBoy Advance",
+        "PlantBoy Advance",
+        "Thunderling",
+        "Snoozling",
+        "Snoozling",
+        "Snoozling",
+        "Thunderling"
+      ]
+    },
+    "Puffercloud": {
+      "width": 3,
+      "cells": [
+        "Snoozling",
+        "Snoozling",
+        "Do-not-eat-shroom",
+        "Do-not-eat-shroom",
+        "Puffercloud",
+        "Do-not-eat-shroom",
+        "Do-not-eat-shroom",
+        "Do-not-eat-shroom",
+        "Do-not-eat-shroom"
+      ]
+    },
+    "Startlevine": {
+      "width": 3,
+      "cells": [
+        "Blastberry",
+        "Blastberry",
+        "Blastberry",
+        "Cheesebite",
+        "Startlevine",
+        "Blastberry",
+        "Cheesebite",
+        "Cheesebite",
+        "Cheesebite"
+      ]
+    },
+    "Stoplight Petal": {
+      "width": 3,
+      "cells": [
+        "Noctilume",
+        "Noctilume",
+        "Snoozling",
+        "Snoozling",
+        "Stoplight Petal",
+        "Snoozling",
+        "Snoozling",
+        "Noctilume",
+        "Noctilume"
+      ]
+    },
+    "Thunderling": {
+      "width": 3,
+      "cells": [
+        "Noctilume",
+        "Noctilume",
+        "Noctilume",
+        "Soggybud",
+        "Thunderling",
+        "Soggybud",
+        "Soggybud",
+        "Soggybud",
+        "Soggybud"
+      ]
+    },
+    "Zombud": {
+      "width": 3,
+      "cells": [
+        "Dead Plant",
+        "Dead Plant",
+        "Dead Plant",
+        "Fleshtrap",
+        "Zombud",
+        "Dead Plant",
+        "Fleshtrap",
+        "Cindershade",
+        "Cindershade"
+      ]
+    },
+    "All-in Aloe": {
+      "width": 3,
+      "cells": [
+        "PlantBoy Advance",
+        "PlantBoy Advance",
+        "Magic Jellybean",
+        "Magic Jellybean",
+        "All-in Aloe",
+        "Magic Jellybean",
+        "Magic Jellybean",
+        "Magic Jellybean",
+        "Magic Jellybean"
+      ]
+    },
+    "Devourer": {
+      "width": 3,
+      "cells": [
+        "Puffercloud",
+        "Puffercloud",
+        "Puffercloud",
+        "Zombud",
+        "Devourer",
+        "Puffercloud",
+        "Zombud",
+        "Zombud",
+        "Zombud"
+      ]
+    },
+    "Glasscorn": {
+      "width": 4,
+      "cells": [
+        "Startlevine",
+        "Startlevine",
+        "Startlevine",
+        "Startlevine",
+        "Chloronite",
+        "Glasscorn",
+        "Glasscorn",
+        "Startlevine",
+        "Chloronite",
+        "Glasscorn",
+        "Glasscorn",
+        "Startlevine",
+        "Chloronite",
+        "Chloronite",
+        "Chloronite",
+        "Chloronite"
+      ]
+    },
+    "Phantomleaf": {
+      "width": 3,
+      "cells": [
+        "Chorus Fruit",
+        "Chorus Fruit",
+        "Chorus Fruit",
+        "Shellfruit",
+        "Phantomleaf",
+        "Chorus Fruit",
+        "Shellfruit",
+        "Shellfruit",
+        "Shellfruit"
+      ]
+    },
+    "Timestalk": {
+      "width": 3,
+      "cells": [
+        "Stoplight Petal",
+        "Stoplight Petal",
+        "Stoplight Petal",
+        "Shellfruit",
+        "Timestalk",
+        "Stoplight Petal",
+        "Shellfruit",
+        "Chorus Fruit",
+        "Chorus Fruit"
+      ]
+    }
+  }
+}

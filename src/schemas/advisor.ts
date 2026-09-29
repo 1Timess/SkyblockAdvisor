@@ -132,6 +132,11 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     greenhouseEligibility: z.boolean().nullable(), greenhouseSlotObservation: z.object({
       status: z.enum(["REPORTED", "UNREPORTED"]), count: z.number().int().nonnegative().nullable(),
     }),
+    carpenterOfferCompletions: z.number().int().nonnegative().nullable(),
+    mutationKnowledge: z.object({ total: z.number().int().positive(), byRarity: z.record(z.string(), z.number().int().nonnegative()),
+      specialCount: z.number().int().nonnegative(), verifiedLayoutCount: z.number().int().nonnegative(),
+      countOnlyOrSpecial: z.array(z.string()).max(8), analysisMilestones: z.array(z.number().int().positive()).max(6),
+      profileAnalysisStatus: z.literal("UNREPORTED") }),
     activeOffers: z.array(z.object({ visitor: z.string(), status: z.string().nullable(), requirements: z.array(z.object({ itemId: z.string(), amount: z.number() })) })).max(8),
     activeOfferCount: z.number().int().nonnegative(), note: z.string() }),
   z.object({ domain: z.literal("SLAYER"), totalLevelUnlocks: z.number().int().nonnegative(), totalBossDrops: z.number().int().nonnegative(),
