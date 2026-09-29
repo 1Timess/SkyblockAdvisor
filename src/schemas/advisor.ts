@@ -100,6 +100,8 @@ const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals:
     missing: z.array(z.string()), ready: z.boolean(), complete: z.boolean() }), biomes: z.record(z.string(), z.unknown()) });
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("FARMING"), farmingLevel: z.number().nullable(), farmingXp: z.number().nullable(),
+    farmingSkillFocus: z.object({ cap: z.number().nullable(), capEvidence: z.enum(["UNREPORTED", "REPORTED_PERK", "BASE_CAP_ASSUMED"]),
+      nextLevel: z.object({ level: z.number().int().positive(), xpRemaining: z.number().nonnegative() }).nullable() }),
     gardenAvailable: z.boolean(), gardenXp: z.number().nullable(), gardenLevel: z.number().nullable(),
     nextGardenLevel: z.object({ level: z.number(), xpRequired: z.number(), xpRemaining: z.number() }).nullable(),
     totalOffersAccepted: z.number().nullable(), uniqueVisitorsServed: z.number().nullable(),
@@ -108,6 +110,10 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     resourcesCollected: z.record(z.string(), z.number()), nextCropMilestones: z.array(z.object({ crop: z.string(), resourceId: z.string(),
       collected: z.number().nonnegative(), tier: z.number().int().positive(), threshold: z.number().positive(), remaining: z.number().positive() })).max(13),
     cropUpgradeLevels: z.record(z.string(), z.number()),
+    composterUpgrades: z.record(z.string(), z.number()),
+    composterOptions: z.array(z.object({ key: z.string(), name: z.string(), gardenLevel: z.number().int().positive(),
+      effect: z.string(), observedLevel: z.number().nonnegative().nullable(),
+      levelAccess: z.enum(["LEVEL_ELIGIBLE", "FUTURE_LEVEL", "UNREPORTED"]), nextCostStatus: z.literal("UNREPORTED") })).max(5),
     unlockedPlotIds: z.array(z.string()).max(24), nextGardenCropUnlocks: z.array(z.string()),
     plotExpansionOptions: z.array(z.object({ group: z.string(), unlockedInGroup: z.number().int().nonnegative(),
       totalInGroup: z.number().int().positive(), gardenLevelRequired: z.number().int().positive(),
@@ -124,6 +130,8 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
       cultivationStatus: z.literal("UNVERIFIED") })).max(9),
     nextPestUnlocks: z.array(z.object({ name: z.string(), crop: z.string(), gardenLevel: z.number().int().positive() })).max(3),
     contestCount: z.number().int().nonnegative(), medalInventory: z.record(z.string(), z.number()),
+    contestPerkLevels: z.record(z.string(), z.number()), uniqueContestBracketKeys: z.array(z.string()).max(8),
+    personalBestCropKeys: z.array(z.string()).max(13),
     observedPestKills: z.record(z.string(), z.number()), visibleEquipmentCount: z.number().int().nonnegative(),
     visibleEquipment: z.array(z.object({ id: z.string().nullable(), name: z.string(), source: z.string(),
       reforge: z.string().nullable(), enchantments: z.record(z.string(), z.number()), farmingFortune: z.number().nullable(),

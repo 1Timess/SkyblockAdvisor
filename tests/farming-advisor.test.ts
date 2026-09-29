@@ -10,11 +10,19 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   const value = buildFarmingAdvisorContext(profile, {
     garden_experience: 9330, greenhouse_slots: [], resources_collected: { WHEAT: 123 }, unlocked_plots_ids: ["beginner_1", "beginner_2"],
+    composter_data: { upgrades: { speed: 1, fuel_cap: 2 } },
     commission_data: { total_completed: 98, unique_npcs_served: 46, completed: { carpenter: 2 } },
     active_commissions: { tia: { status: "NOT_STARTED", requirement: [{ item: "ENCHANTED_CACTUS", amount: 2 }] } },
   });
   assert.equal(value.domain, "FARMING");
   if (value.domain !== "FARMING") return;
+  assert.equal(value.farmingSkillFocus.cap, profile.progression.skills.farming?.maxLevel ?? null);
+  assert.equal(value.farmingSkillFocus.capEvidence, "BASE_CAP_ASSUMED");
+  assert.equal(value.farmingSkillFocus.nextLevel?.level, (value.farmingLevel ?? 0) + 1);
+  assert.equal(value.composterOptions.find(option => option.key === "speed")?.observedLevel, 1);
+  assert.equal(value.composterOptions.find(option => option.key === "cost_reduction")?.levelAccess, "FUTURE_LEVEL");
+  assert.equal(value.composterOptions.find(option => option.key === "multi_drop")?.observedLevel, null);
+  assert.deepEqual(value.composterUpgrades, { speed: 1, fuel_cap: 2 });
   assert.deepEqual(value.nextGardenLevel, { level: 10, xpRequired: 10120, xpRemaining: 790 });
   assert.deepEqual(value.unlockedPlotIds, ["beginner_1", "beginner_2"]);
   assert.deepEqual(value.nextGardenCropUnlocks, ["Nether Wart"]);
@@ -62,6 +70,7 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.equal(value.domain, "FARMING");
   if (value.domain !== "FARMING") return;
   assert.equal(value.gardenAvailable, false);
+  assert.ok(value.composterOptions.every(option => option.levelAccess === "UNREPORTED" && option.observedLevel === null));
   assert.equal(value.totalOffersAccepted, null);
   assert.equal(value.nextGardenLevel, null);
   assert.deepEqual(value.nextCropMilestones, []);

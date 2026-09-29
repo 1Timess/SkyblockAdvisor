@@ -7,6 +7,7 @@ import { cropPestOptions, possibleGardenMechanics } from "../reference/farming-g
 import { greenhouseExpansionOptions, plotExpansionOptions } from "./plot-progress";
 import { mutationCatalogSummary, mutationProgressionPaths, mutationSpecialBehaviors } from "./mutation-knowledge";
 import { greenhouseMechanics } from "./greenhouse-knowledge";
+import { composterFocus, farmingSkillFocus } from "./progression-focus";
 
 export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown, question = ""): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
@@ -19,12 +20,15 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     ...(visitorFocused ? { mutationOptions: [] } : {}),
     farmingLevel: profile.progression.skills.farming?.level ?? null,
     farmingXp: profile.progression.skills.farming?.xp ?? null,
+    farmingSkillFocus: farmingSkillFocus(profile),
     gardenAvailable: progress.available, gardenXp: progress.gardenXp, gardenLevel: progress.gardenLevel,
     nextGardenLevel: progress.nextGardenLevel, totalOffersAccepted: progress.totalOffersAccepted,
     uniqueVisitorsServed: progress.uniqueVisitorsServed, nextOffersMilestone: progress.nextOffersMilestone,
     nextUniqueVisitorsMilestone: progress.nextUniqueVisitorsMilestone,
     resourcesCollected: progress.resourcesCollected, nextCropMilestones: progress.nextCropMilestones,
     cropUpgradeLevels: progress.cropUpgradeLevels,
+    composterUpgrades: progress.composterUpgrades,
+    composterOptions: composterFocus(progress.composterUpgrades, progress.gardenLevel),
     unlockedPlotIds: progress.unlockedPlotIds,
     plotExpansionOptions: plotExpansionOptions(progress.unlockedPlotIds, progress.gardenLevel),
     greenhouseExpansionOptions: progress.gardenLevel !== null && progress.gardenLevel >= 7 ? greenhouseExpansionOptions.map(option => ({ ...option,

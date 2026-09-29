@@ -8,6 +8,9 @@ export function buildObservedFarmingState(profile: NormalizedSkyBlockProfile) {
   return {
     contestCount: observation.contests.count,
     medalInventory: observation.contests.medalInventory,
+    contestPerkLevels: observation.contests.perkLevels,
+    uniqueContestBracketKeys: observation.contests.uniqueBracketKeys,
+    personalBestCropKeys: observation.contests.personalBestKeys,
     observedPestKills: observation.pestHistory.killStats,
     visibleEquipmentCount: observation.visibleGear.totalMatches,
     visibleEquipment: observation.visibleGear.items.slice(0, 16).map(item => ({ id: item.id, name: item.name, source: item.source,

@@ -10,6 +10,7 @@ import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 import { buildObservedFarmingState } from "../farming/observed-state";
 import { mutationCatalogSummary } from "../farming/mutation-knowledge";
 import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
+import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -65,9 +66,11 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
     },
     domains: {
       FARMING: { domain: "FARMING", ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
-        farmingXp: profile.progression.skills.farming?.xp ?? null, gardenAvailable: false, gardenXp: null, gardenLevel: null,
+        farmingXp: profile.progression.skills.farming?.xp ?? null, farmingSkillFocus: farmingSkillFocus(profile),
+        gardenAvailable: false, gardenXp: null, gardenLevel: null,
         nextGardenLevel: null, totalOffersAccepted: null, uniqueVisitorsServed: null,
         nextOffersMilestone: null, nextUniqueVisitorsMilestone: null, resourcesCollected: {}, nextCropMilestones: [], cropUpgradeLevels: {},
+        composterUpgrades: {}, composterOptions: composterFocus({}, null),
         unlockedPlotIds: [], plotExpansionOptions: [], greenhouseExpansionOptions: [], cropPestOptions: [],
         nextGardenCropUnlocks: [], mutationOptions: [], nextPestUnlocks: [], greenhouseEligibility: null,
         greenhouseSlotObservation: { status: "UNREPORTED", count: null }, greenhouseAccessStatus: "UNREPORTED", carpenterOfferCompletions: null,
