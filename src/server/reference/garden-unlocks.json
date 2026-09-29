@@ -1,0 +1,11 @@
+{
+  "source": "https://hypixelskyblock.minecraft.wiki/w/The_Garden",
+  "retrievedAt": "2026-09-28",
+  "cropsByLevel": {
+    "10": ["Nether Wart"],
+    "11": ["Sunflower", "Moonflower"],
+    "12": ["Wild Rose"]
+  },
+  "greenhouseEligibilityLevel": 7,
+  "greenhouseAdditionalRequirement": "Complete the Carpenter's first Garden visitor offer and give its Greenhouse Blueprint to Sam."
+}

@@ -17,7 +17,7 @@ export function buildGardenProgress(raw: unknown) {
   if (raw === null) return { available: false as const, gardenXp: null, gardenLevel: null, nextGardenLevel: null,
     resourcesCollected: {}, cropUpgradeLevels: {}, unlockedPlotIds: [], totalOffersAccepted: null,
     uniqueVisitorsServed: null, nextOffersMilestone: null, nextUniqueVisitorsMilestone: null,
-    visitorCompletions: {}, activeOffers: [], composterUpgrades: {} };
+    visitorCompletions: {}, activeOffers: [], composterUpgrades: {}, greenhouseSlotObservation: { status: "UNREPORTED" as const, count: null } };
   const garden = record(raw), commissions = record(garden.commission_data);
   const gardenXp = count(garden.garden_experience), totalOffersAccepted = count(commissions.total_completed);
   const uniqueVisitorsServed = count(commissions.unique_npcs_served);
@@ -41,5 +41,8 @@ export function buildGardenProgress(raw: unknown) {
         }) : [] };
     }),
     composterUpgrades: counts(record(garden.composter_data).upgrades),
+    greenhouseSlotObservation: Array.isArray(garden.greenhouse_slots)
+      ? { status: "REPORTED" as const, count: garden.greenhouse_slots.length }
+      : { status: "UNREPORTED" as const, count: null },
   };
 }
