@@ -21,6 +21,8 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.deepEqual(value.greenhouseSlotObservation, { status: "REPORTED", count: 0 });
   assert.equal(value.greenhouseEligibility, true);
   assert.deepEqual(value.nextPestUnlocks, [{ name: "Beetle", crop: "Nether Wart", gardenLevel: 10 }]);
+  assert.equal(value.cropPestOptions[0]?.name, "Fly");
+  assert.deepEqual(value.greenhouseExpansionOptions.map(option => option.greenhouseNumber), [2, 3]);
   assert.ok(value.mutationOptions.some(mutation => mutation.name === "Scourroot" && mutation.adjacent.some(crop => crop.crop === "Potato")));
   assert.equal(value.mutationOptions.some(mutation => mutation.name === "Ashwreath"), false);
   assert.equal(value.nextOffersMilestone?.remaining, 2);
@@ -51,6 +53,8 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.deepEqual(value.nextCropMilestones, []);
   assert.deepEqual(value.mutationOptions, []);
   assert.deepEqual(value.nextPestUnlocks, []);
+  assert.deepEqual(value.plotExpansionOptions, []);
+  assert.deepEqual(value.greenhouseExpansionOptions, []);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "UNREPORTED", count: null });
 });
 

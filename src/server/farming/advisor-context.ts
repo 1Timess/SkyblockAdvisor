@@ -3,7 +3,8 @@ import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile
 import { buildGardenProgress } from "./garden-progress";
 import unlocks from "../reference/garden-unlocks.json";
 import { buildObservedFarmingState } from "./observed-state";
-import { possibleGardenMechanics } from "../reference/farming-garden-mechanics";
+import { cropPestOptions, possibleGardenMechanics } from "../reference/farming-garden-mechanics";
+import { greenhouseExpansionOptions, plotExpansionOptions } from "./plot-progress";
 
 export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
@@ -18,6 +19,9 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     resourcesCollected: progress.resourcesCollected, nextCropMilestones: progress.nextCropMilestones,
     cropUpgradeLevels: progress.cropUpgradeLevels,
     unlockedPlotIds: progress.unlockedPlotIds,
+    plotExpansionOptions: plotExpansionOptions(progress.unlockedPlotIds, progress.gardenLevel),
+    greenhouseExpansionOptions: progress.gardenLevel !== null && progress.gardenLevel >= 7 ? greenhouseExpansionOptions.map(option => ({ ...option })) : [],
+    cropPestOptions: cropPestOptions(progress.gardenLevel, progress.nextCropMilestones),
     greenhouseSlotObservation: progress.greenhouseSlotObservation,
     greenhouseEligibility: progress.gardenLevel === null ? null : progress.gardenLevel >= unlocks.greenhouseEligibilityLevel,
     nextGardenCropUnlocks: progress.nextGardenLevel

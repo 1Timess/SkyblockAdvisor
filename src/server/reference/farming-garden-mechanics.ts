@@ -20,6 +20,26 @@ export const pestUnlocks = [
   { name: "Praying Mantis", crop: "Wild Rose", gardenLevel: 12 },
 ] as const;
 
+/** Potential pest drops and attraction materials, separate from active pests and owned supplies. */
+const pestDetails: Record<string, { spray: string; specialDrop: string }> = {
+  Fly: { spray: "Dung", specialDrop: "Beady Eyes" }, Cricket: { spray: "Honey Jar", specialDrop: "Chirping Stereo" },
+  Locust: { spray: "Plant Matter", specialDrop: "Locust Larva" }, Rat: { spray: "Tasty Cheese", specialDrop: "Rat Pet" },
+  Mosquito: { spray: "Compost", specialDrop: "Clipped Wings" }, Earthworm: { spray: "Compost", specialDrop: "Bookworm's Favorite Book" },
+  Mite: { spray: "Tasty Cheese", specialDrop: "Atmospheric Filter" }, Moth: { spray: "Honey Jar", specialDrop: "Wriggling Larva" },
+  Slug: { spray: "Plant Matter", specialDrop: "Slug Pet" }, Beetle: { spray: "Dung", specialDrop: "Pesterminator I" },
+  Dragonfly: { spray: "Jelly", specialDrop: "Vermin Vaporizer Chip" }, Firefly: { spray: "Jelly", specialDrop: "Fire in a Bottle" },
+  "Praying Mantis": { spray: "Jelly", specialDrop: "Mantid Claw" },
+};
+
+export function cropPestOptions(gardenLevel: number | null, cropMilestones: { crop: string }[]) {
+  if (gardenLevel === null) return [];
+  return cropMilestones.slice(0, 4).flatMap(milestone => {
+    const pest = pestUnlocks.find(entry => entry.crop.toUpperCase().replaceAll(" ", "_") === milestone.crop && entry.gardenLevel <= gardenLevel);
+    if (!pest) return [];
+    return [{ name: pest.name, crop: pest.crop, gardenLevel: pest.gardenLevel, ...pestDetails[pest.name] }];
+  });
+}
+
 export function possibleGardenMechanics(gardenLevel: number | null) {
   if (gardenLevel === null) return { mutationOptions: [], nextPestUnlocks: [] };
   const nextPestLevel = pestUnlocks.find(pest => pest.gardenLevel > gardenLevel)?.gardenLevel;
