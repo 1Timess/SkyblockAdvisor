@@ -111,7 +111,8 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     observedPestKills: z.record(z.string(), z.number()), visibleEquipmentCount: z.number().int().nonnegative(),
     visibleEquipment: z.array(z.object({ id: z.string().nullable(), name: z.string(), source: z.string(),
       reforge: z.string().nullable(), enchantments: z.record(z.string(), z.number()), farmingFortune: z.number().nullable(),
-      toolProgress: z.object({ rawLevel: z.number().nullable(), rawExperience: z.number().nullable(), farmingForDummiesCount: z.number().nullable() }).nullable() })).max(16),
+      toolProgress: z.object({ rawLevel: z.number().nullable(), rawExperience: z.number().nullable(), farmingForDummiesCount: z.number().nullable() }).nullable(),
+      levelingCrop: z.string().nullable() })).max(16),
     inventoryApiLimited: z.boolean(),
     greenhouseEligibility: z.boolean().nullable(), greenhouseSlotObservation: z.object({
       status: z.enum(["REPORTED", "UNREPORTED"]), count: z.number().int().nonnegative().nullable(),

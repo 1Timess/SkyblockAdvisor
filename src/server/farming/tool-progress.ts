@@ -9,3 +9,14 @@ export function extractFarmingToolProgress(id: string | null, extra: Record<stri
   if (rawLevel === null && rawExperience === null && dummies === null) return null;
   return { rawLevel, rawExperience, farmingForDummiesCount: dummies };
 }
+
+/** Crop identity is encoded by these specialized tool IDs; generic hoes have no implied crop. */
+export function farmingToolCrop(id: string | null): string | null {
+  if (!id) return null;
+  const theoretical = /^THEORETICAL_HOE_(WHEAT|CARROT|POTATO|SUGAR_CANE|NETHER_WART|COCOA_BEANS)(?:_|$)/i.exec(id);
+  if (theoretical) return theoretical[1].replaceAll("_", " ").toLowerCase();
+  const dicer = /^(MELON|PUMPKIN)_DICER(?:_|$)/i.exec(id);
+  if (dicer) return dicer[1].toLowerCase();
+  const specialized: Record<string, string> = { CACTUS_KNIFE: "cactus", COCO_CHOPPER: "cocoa beans", FUNGI_CUTTER: "mushroom" };
+  return Object.entries(specialized).find(([prefix]) => id.toUpperCase().startsWith(prefix))?.[1] ?? null;
+}
