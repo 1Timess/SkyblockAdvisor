@@ -12,7 +12,10 @@ export function greenhouseMechanics() {
       nearbyEffectsLockOnMaturity: true },
     adjacency: "ORTHOGONAL_ONLY" as const,
     unlocks: { carpenterOfferThenBlueprintHandoff: true, plotLimit: 3,
+      vinesPerAdjacentCropSlot: 1, additionalGreenhousesHaveAllSlots: true,
       mutationHarvestCanDropEtherealVine: true, allCropSlotsBeforeExpansion: true },
+    vineDropChancePercentByMutationRarity: { COMMON: 15, UNCOMMON: 20, RARE: 25, EPIC: 30, LEGENDARY: 40 },
+    bonusDropsVineChancePercent: 5,
     profileTimerStatus: "UNREPORTED" as const,
     profileWaterAndEffectsStatus: "UNREPORTED" as const,
   };

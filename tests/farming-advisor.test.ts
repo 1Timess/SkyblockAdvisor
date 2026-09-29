@@ -23,6 +23,9 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.equal(value.carpenterOfferCompletions, 2);
   assert.equal(value.mutationKnowledge.total, 40);
   assert.equal(value.mutationKnowledge.profileAnalysisStatus, "UNREPORTED");
+  assert.equal(value.mutationKnowledge.actualSpawnChanceStatus, "UNREPORTED");
+  assert.equal(value.mutationPaths.find(path => path.name === "Soggybud")?.spawnWeight, 25);
+  assert.ok(value.mutationSpecialBehaviors.some(behavior => behavior.name === "Blastberry"));
   assert.ok(value.mutationOptions.some(mutation => mutation.name === "Witherbloom" && mutation.layoutStatus === "COUNT_ONLY" && mutation.inputAccess === "UNDETERMINED"));
   assert.equal(value.mutationPaths.find(path => path.name === "Duskbloom")?.cropAccess, "FUTURE_LEVEL");
   assert.equal(value.greenhouseMechanics.profileTimerStatus, "UNREPORTED");

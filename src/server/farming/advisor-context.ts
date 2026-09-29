@@ -5,7 +5,7 @@ import unlocks from "../reference/garden-unlocks.json";
 import { buildObservedFarmingState } from "./observed-state";
 import { cropPestOptions, possibleGardenMechanics } from "../reference/farming-garden-mechanics";
 import { greenhouseExpansionOptions, plotExpansionOptions } from "./plot-progress";
-import { mutationCatalogSummary, mutationProgressionPaths } from "./mutation-knowledge";
+import { mutationCatalogSummary, mutationProgressionPaths, mutationSpecialBehaviors } from "./mutation-knowledge";
 import { greenhouseMechanics } from "./greenhouse-knowledge";
 
 export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown): AdvisorDomainContext {
@@ -28,6 +28,7 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     carpenterOfferCompletions: (progress.visitorCompletions as Record<string, number>).carpenter ?? null,
     mutationKnowledge: mutationCatalogSummary(),
     mutationPaths: mutationProgressionPaths(progress.gardenLevel),
+    mutationSpecialBehaviors: mutationSpecialBehaviors(),
     greenhouseMechanics: greenhouseMechanics(),
     greenhouseEligibility: progress.gardenLevel === null ? null : progress.gardenLevel >= unlocks.greenhouseEligibilityLevel,
     nextGardenCropUnlocks: progress.nextGardenLevel

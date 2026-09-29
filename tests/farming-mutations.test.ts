@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import catalog from "../src/server/reference/greenhouse-mutations.json";
-import { mutationCatalogSummary, mutationLayout, mutationPrerequisites, mutationProgressionPaths } from "../src/server/farming/mutation-knowledge";
+import { mutationCatalogSummary, mutationLayout, mutationPrerequisites, mutationProgressionPaths,
+  mutationSpawnWeight, mutationSpecialBehaviors } from "../src/server/farming/mutation-knowledge";
 import { greenhouseMechanics } from "../src/server/farming/greenhouse-knowledge";
 
 test("the complete mutation dependency graph resolves without cycles or missing names", () => {
@@ -13,6 +14,9 @@ test("the complete mutation dependency graph resolves without cycles or missing 
     assert.ok(path && new Set(path.path).size === path.path.length);
     assert.ok(entry.growthStages !== null && entry.growthStages >= 0);
     if (entry.condition === "ADJACENT") assert.equal(entry.specialRule, null);
+    assert.ok(mutationSpawnWeight(entry.name));
+    assert.equal(mutationSpawnWeight(entry.name)?.actualChance, null);
+    assert.equal(mutationSpawnWeight(entry.name)?.weight === 0, ["Jerryflower", "Shellfruit"].includes(entry.name));
   }
   const shellfruit = mutationPrerequisites("Shellfruit");
   assert.ok(shellfruit?.path.includes("Turtlellini"));
@@ -35,6 +39,9 @@ test("the complete mutation dependency graph resolves without cycles or missing 
     }
   }
   assert.equal(mutationCatalogSummary().profileAnalysisStatus, "UNREPORTED");
+  assert.equal(mutationCatalogSummary().spawnWeightCoverage, 40);
+  assert.equal(mutationCatalogSummary().actualSpawnChanceStatus, "UNREPORTED");
+  assert.equal(catalog.mutations.find(mutation => mutation.name === "Glasscorn")?.growthStages, 8);
 });
 
 test("mutation branches report only crop-level access and preserve unknown physical prerequisites", () => {
@@ -51,6 +58,12 @@ test("mutation branches report only crop-level access and preserve unknown physi
   const timestalk = mutationProgressionPaths(12).find(path => path.name === "Timestalk")!;
   assert.ok(timestalk.specialSteps.includes("Shellfruit"));
   assert.equal(timestalk.profileDiscoveryStatus, "UNREPORTED");
+  assert.equal(timestalk.spawnWeight, 20);
   assert.equal(greenhouseMechanics().baseStageSeconds, 4 * 60 * 60);
   assert.equal(greenhouseMechanics().profileTimerStatus, "UNREPORTED");
+  assert.equal(greenhouseMechanics().unlocks.vinesPerAdjacentCropSlot, 1);
+  assert.equal(greenhouseMechanics().unlocks.additionalGreenhousesHaveAllSlots, true);
+  assert.equal(greenhouseMechanics().vineDropChancePercentByMutationRarity.LEGENDARY, 40);
+  assert.equal(mutationSpecialBehaviors().length, 10);
+  assert.ok(mutationSpecialBehaviors().find(behavior => behavior.name === "Snoozling")?.rule.includes("5, 10 and 15"));
 });

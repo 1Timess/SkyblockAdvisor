@@ -8,7 +8,7 @@ import { buildNormalizedProfile } from "../skyblock/profile/build-normalized-pro
 import { buildMiningKnowledge, miningRelevantStats } from "../reference/mining-knowledge";
 import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 import { buildObservedFarmingState } from "../farming/observed-state";
-import { mutationCatalogSummary } from "../farming/mutation-knowledge";
+import { mutationCatalogSummary, mutationSpecialBehaviors } from "../farming/mutation-knowledge";
 import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
 
 export interface ProfileIntelligenceSnapshot {
@@ -71,7 +71,8 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         unlockedPlotIds: [], plotExpansionOptions: [], greenhouseExpansionOptions: [], cropPestOptions: [],
         nextGardenCropUnlocks: [], mutationOptions: [], nextPestUnlocks: [], greenhouseEligibility: null,
         greenhouseSlotObservation: { status: "UNREPORTED", count: null }, carpenterOfferCompletions: null,
-        mutationKnowledge: mutationCatalogSummary(), mutationPaths: [], greenhouseMechanics: greenhouseMechanics(),
+        mutationKnowledge: mutationCatalogSummary(), mutationPaths: [], mutationSpecialBehaviors: mutationSpecialBehaviors(),
+        greenhouseMechanics: greenhouseMechanics(),
         activeOffers: [], activeOfferCount: 0, note: "Garden state has not been loaded for this snapshot." },
       SLAYER: { domain: "SLAYER", totalLevelUnlocks: 0, totalBossDrops: 0, possibleRngOptionCount: 0,
         focusFamilies: [], families: [], unlockFocus: [], dropFocus: [], craftedSlayerMinions: [], note: "Slayer reward sources have not been joined." },
