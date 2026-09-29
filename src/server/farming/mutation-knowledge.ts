@@ -27,6 +27,31 @@ export function mutationLayout(name: string) {
   return layoutsByName[name] ?? null;
 }
 
+export function requestedMutationName(question: string) {
+  return catalog.mutations.find(mutation => question.toLowerCase().includes(mutation.name.toLowerCase()))?.name ?? null;
+}
+
+/** Named targets receive a complete reference recipe sequence; no profile discovery or planted state is inferred. */
+export function mutationRecipeSteps(question: string) {
+  const name = requestedMutationName(question);
+  if (!name) return [];
+  return mutationPrerequisites(name)!.path.map(step => {
+    const mutation = byName.get(step)!;
+    const layout = mutationLayout(step);
+    const condition = mutation.condition;
+    if (condition !== "ADJACENT" && condition !== "SPECIAL") throw new Error(`Unsupported mutation condition: ${condition}`);
+    return { name: step, surface: mutation.surface, size: mutation.size,
+      condition: condition === "ADJACENT" ? "ADJACENT" as const : "SPECIAL" as const,
+      requirements: mutation.requirements, specialRule: mutation.specialRule,
+      growthStages: mutation.growthStages, effects: mutation.effects,
+      plantingLayout: layout ? { width: layout.width,
+        cells: layout.cells.map(cell => cell === step ? "EMPTY" : cell),
+        resultCellIndices: layout.cells.flatMap((cell, index) => cell === step ? [index] : []) } : null,
+      layoutStatus: layout ? "REFERENCE_PLANTING_GRID" as const : "SPECIAL_OR_COUNT_ONLY" as const,
+      cultivationStatus: "UNVERIFIED" as const };
+  });
+}
+
 /** Reference-only dependency closure. It does not model physical placement or a player's discoveries. */
 export function mutationPrerequisites(name: string) {
   const target = byName.get(name);
@@ -64,8 +89,8 @@ export function mutationCatalogSummary() {
 /** Reference paths only: crop access is a level gate, not evidence of planted crops or mutation discovery. */
 export function mutationProgressionPaths(gardenLevel: number | null, question = "") {
   if (gardenLevel === null || gardenLevel < 7) return [];
-  const requested = catalog.mutations.find(mutation => question.toLowerCase().includes(mutation.name.toLowerCase()));
-  const names = requested ? [requested.name] : ["Chocoberry", "Soggybud", "Duskbloom", ...(gardenLevel >= 12 ? ["Snoozling"] : [])];
+  const requested = requestedMutationName(question);
+  const names = requested ? [requested] : ["Chocoberry", "Soggybud", "Duskbloom", ...(gardenLevel >= 12 ? ["Snoozling"] : [])];
   return names.map(name => {
     const closure = mutationPrerequisites(name)!;
     const baseCrops = [...new Set(closure.path.flatMap(step => byName.get(step)!.requirements

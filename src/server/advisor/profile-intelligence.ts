@@ -74,7 +74,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         unlockedPlotIds: [], plotExpansionOptions: [], greenhouseExpansionOptions: [], cropPestOptions: [],
         nextGardenCropUnlocks: [], mutationOptions: [], nextPestUnlocks: [], greenhouseEligibility: null,
         greenhouseSlotObservation: { status: "UNREPORTED", count: null }, greenhouseAccessStatus: "UNREPORTED", carpenterOfferCompletions: null,
-        mutationKnowledge: mutationCatalogSummary(), mutationPaths: [], mutationSpecialBehaviors: [],
+        mutationKnowledge: mutationCatalogSummary(), mutationPaths: [], mutationRecipeSteps: [], mutationSpecialBehaviors: [],
         greenhouseMechanics: greenhouseMechanics(),
         activeOffers: [], activeOfferCount: 0, note: "Garden state has not been loaded for this snapshot." },
       SLAYER: { domain: "SLAYER", totalLevelUnlocks: 0, totalBossDrops: 0, possibleRngOptionCount: 0,

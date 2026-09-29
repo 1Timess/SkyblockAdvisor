@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import catalog from "../src/server/reference/greenhouse-mutations.json";
-import { mutationCatalogSummary, mutationLayout, mutationPrerequisites, mutationProgressionPaths,
+import { mutationCatalogSummary, mutationLayout, mutationPrerequisites, mutationProgressionPaths, mutationRecipeSteps,
   mutationSpawnWeight, mutationSpecialBehaviors } from "../src/server/farming/mutation-knowledge";
 import { greenhouseMechanics } from "../src/server/farming/greenhouse-knowledge";
 
@@ -42,6 +42,27 @@ test("the complete mutation dependency graph resolves without cycles or missing 
   assert.equal(mutationCatalogSummary().spawnWeightCoverage, 40);
   assert.equal(mutationCatalogSummary().actualSpawnChanceStatus, "UNREPORTED");
   assert.equal(catalog.mutations.find(mutation => mutation.name === "Glasscorn")?.growthStages, 8);
+});
+
+test("named recipe sequences leave spawn footprints empty and retain special acquisition steps", () => {
+  assert.deepEqual(mutationRecipeSteps("What Farming progression should I focus on?"), []);
+  for (const mutation of catalog.mutations) {
+    const steps = mutationRecipeSteps(`How do I grow ${mutation.name}?`);
+    assert.equal(steps.at(-1)?.name, mutation.name);
+    for (const [index, step] of steps.entries()) {
+      for (const dependency of catalog.mutations.find(entry => entry.name === step.name)!.dependencies)
+        assert.ok(steps.slice(0, index).some(prior => prior.name === dependency));
+      if (!step.plantingLayout) continue;
+      assert.equal(step.plantingLayout.cells.includes(step.name), false);
+      assert.ok(step.plantingLayout.resultCellIndices.length > 0);
+      assert.ok(step.plantingLayout.resultCellIndices.every(cell => step.plantingLayout!.cells[cell] === "EMPTY"));
+      assert.equal(step.plantingLayout.cells.length, step.plantingLayout.width ** 2);
+    }
+  }
+  const steps = mutationRecipeSteps("How do I make Timestalk?");
+  assert.equal(steps.find(step => step.name === "Shellfruit")?.specialRule, "Explode a Turtlellini with a Blastberry.");
+  assert.equal(steps.find(step => step.name === "Shellfruit")?.plantingLayout, null);
+  assert.equal(mutationRecipeSteps("Witherbloom").at(-1)?.plantingLayout, null);
 });
 
 test("mutation branches report only crop-level access and preserve unknown physical prerequisites", () => {

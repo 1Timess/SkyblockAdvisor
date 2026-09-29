@@ -5,6 +5,7 @@ import { buildFarmingAdvisorContext } from "../src/server/farming/advisor-contex
 import { nextCropMilestones } from "../src/server/farming/garden-progress";
 import { advisorDomainContextSchema } from "../src/schemas/advisor";
 import { fixtureSources } from "./fixtures/profile";
+import { turboCropChecks } from "../src/server/farming/observed-state";
 
 test("Farming context keeps distinct Garden thresholds and observed offers", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
@@ -31,6 +32,7 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.equal(value.greenhouseAccessStatus, "UNREPORTED");
   assert.equal(value.carpenterOfferCompletions, 2);
   assert.equal(value.mutationKnowledge.total, 40);
+  assert.deepEqual(value.mutationRecipeSteps, []);
   assert.equal(value.mutationKnowledge.profileAnalysisStatus, "UNREPORTED");
   assert.equal(value.mutationKnowledge.actualSpawnChanceStatus, "UNREPORTED");
   assert.equal(value.mutationPaths.find(path => path.name === "Soggybud")?.spawnWeight, 25);
@@ -99,10 +101,11 @@ test("Lemon Garden level 10 identifies the next crop access without assuming gre
 
 test("named mutation questions select any catalog target and retain special behavior gates", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
-  const target = buildFarmingAdvisorContext(profile, { garden_experience: 12181 }, "How do I make Timestalk?");
+  const target = buildFarmingAdvisorContext(profile, { garden_experience: 12181 }, "Can visitor offers help me make Timestalk?");
   assert.equal(target.domain, "FARMING");
   if (target.domain !== "FARMING") return;
   assert.deepEqual(target.mutationPaths.map(path => path.name), ["Timestalk"]);
+  assert.equal(target.mutationRecipeSteps.at(-1)?.name, "Timestalk");
   assert.ok(target.mutationPaths[0].specialSteps.includes("Shellfruit"));
   assert.ok(target.mutationSpecialBehaviors.some(behavior => behavior.name === "Blastberry"));
   assert.ok(target.mutationSpecialBehaviors.some(behavior => behavior.name === "Stoplight Petal"));
@@ -121,6 +124,15 @@ test("visitor questions retain observed offers and milestones without unrelated 
   assert.deepEqual(visitor.activeOffers[0].requirements, [{ itemId: "ENCHANTED_CACTUS", amount: 2 }]);
   assert.deepEqual(visitor.mutationOptions, []);
   assert.deepEqual(visitor.mutationPaths, []);
+  assert.deepEqual(visitor.mutationRecipeSteps, []);
   assert.deepEqual(visitor.mutationSpecialBehaviors, []);
   advisorDomainContextSchema.parse(visitor);
+});
+
+test("observed higher Turbo-Crop enchantments require investigation, not assumed inactive gear", () => {
+  const checks = turboCropChecks([{ id: "THEORETICAL_HOE_POTATO_1", name: "Potato Hoe", source: "backpack:0",
+    enchantments: { turbo_potato: 5, turbo_carrot: 4, turbo_melon: 3, harvesting: 5 } }]);
+  assert.deepEqual(checks.map(check => [check.enchantment, check.requiredBracket, check.eligibilityStatus]),
+    [["turbo_potato", "SILVER", "UNREPORTED"], ["turbo_carrot", "BRONZE", "UNREPORTED"]]);
+  assert.ok(checks.every(check => check.source === "backpack:0"));
 });

@@ -5,15 +5,17 @@ import unlocks from "../reference/garden-unlocks.json";
 import { buildObservedFarmingState } from "./observed-state";
 import { cropPestOptions, possibleGardenMechanics } from "../reference/farming-garden-mechanics";
 import { greenhouseExpansionOptions, plotExpansionOptions } from "./plot-progress";
-import { mutationCatalogSummary, mutationProgressionPaths, mutationSpecialBehaviors } from "./mutation-knowledge";
+import { mutationCatalogSummary, mutationProgressionPaths, mutationRecipeSteps, requestedMutationName, mutationSpecialBehaviors } from "./mutation-knowledge";
 import { greenhouseMechanics } from "./greenhouse-knowledge";
 import { composterFocus, farmingSkillFocus } from "./progression-focus";
 
 export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown, question = ""): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
-  const visitorFocused = /\b(visitors?|offers?)\b/i.test(question) && !/\b(mutations?|greenhouses?)\b/i.test(question);
+  const visitorFocused = /\b(visitors?|offers?)\b/i.test(question) && !/\b(mutations?|greenhouses?)\b/i.test(question) && !requestedMutationName(question);
   const mutationPaths = visitorFocused ? [] : mutationProgressionPaths(progress.gardenLevel, question);
-  const relevantBehaviors = mutationPaths.flatMap(path => [...path.prerequisiteMutations, path.name, ...path.unknownInputs]);
+  const recipeSteps = mutationRecipeSteps(question);
+  const relevantBehaviors = [...mutationPaths.flatMap(path => [...path.prerequisiteMutations, path.name, ...path.unknownInputs]),
+    ...recipeSteps.flatMap(step => [step.name, ...step.requirements.map(requirement => requirement.name)])];
   if (!visitorFocused && progress.gardenLevel !== null && progress.gardenLevel >= 7) relevantBehaviors.push("Dead Plant");
   return {
     domain: "FARMING", ...buildObservedFarmingState(profile), ...possibleGardenMechanics(progress.gardenLevel),
@@ -39,6 +41,7 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     carpenterOfferCompletions: (progress.visitorCompletions as Record<string, number>).carpenter ?? null,
     mutationKnowledge: mutationCatalogSummary(),
     mutationPaths,
+    mutationRecipeSteps: recipeSteps,
     mutationSpecialBehaviors: mutationSpecialBehaviors(relevantBehaviors),
     greenhouseMechanics: greenhouseMechanics(),
     greenhouseEligibility: progress.gardenLevel === null ? null : progress.gardenLevel >= unlocks.greenhouseEligibilityLevel,
