@@ -5,7 +5,7 @@ export type Fetcher = typeof fetch;
 
 function upstreamLabel(url: string) {
   const { hostname, pathname } = new URL(url);
-  if (hostname === "api.mojang.com" || hostname === "sessionserver.mojang.com") return "Minecraft identity lookup";
+  if (hostname === "api.mojang.com" || hostname === "sessionserver.mojang.com" || hostname === "api.minecraftservices.com") return "Minecraft identity lookup";
   if (hostname === "api.hypixel.net") {
     if (pathname === "/v2/skyblock/profiles") return "Hypixel profile lookup";
     if (pathname === "/v2/skyblock/garden") return "Hypixel Garden lookup";

@@ -1,12 +1,10 @@
 import "server-only";
 import { mkdir, writeFile } from "node:fs/promises";
 import { buildAdvisorContextInspectionForPlayer } from "../src/server/advisor/build-live-context";
-import { primePlayerIdentityForValidation } from "../src/server/minecraft/resolve-player";
 
 async function main() {
-  const [usernameOrUuid, profileArg, knownUuid] = process.argv.slice(2);
-  if (!usernameOrUuid) throw new Error("Usage: npm run validate:farming-advisor -- <username-or-uuid> [profile] [previously-verified-uuid]");
-  if (knownUuid) primePlayerIdentityForValidation(usernameOrUuid, knownUuid);
+  const [usernameOrUuid, profileArg] = process.argv.slice(2);
+  if (!usernameOrUuid) throw new Error("Usage: npm run validate:farming-advisor -- <username-or-uuid> [profile]");
   const requestedProfile = profileArg && profileArg !== "-" ? profileArg : undefined;
   const questions = ["What Farming and Garden progression should I focus on next?", "What are my next visitor milestones and current Garden offers?"];
   const inspections = [];
@@ -16,7 +14,6 @@ async function main() {
   const output = `docs/farming-advisor-${safe(inspections[0].context.canonical.identity.username)}-${safe(selected)}.json`;
   await mkdir("docs", { recursive: true });
   await writeFile(output, `${JSON.stringify({ generatedAt: new Date().toISOString(), lunaCalls: 0,
-    identitySource: knownUuid ? "SUPPLIED_PREVIOUS_UUID_MOJANG_BYPASS" : "MOJANG_LOOKUP",
     player: { username: inspections[0].context.canonical.identity.username, profile: selected },
     inspections: inspections.map((result, index) => ({ question: questions[index], route: result.route,
       domainContext: result.context.domainContext, available: result.availableAnalysis.farming,

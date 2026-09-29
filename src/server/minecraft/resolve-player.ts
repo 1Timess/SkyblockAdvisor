@@ -10,18 +10,6 @@ const identitySchema = z.object({ id: z.string().regex(UUID), name: z.string().m
 const cache = new TtlCache();
 export type Identity = { uuid: string; username: string };
 
-/** Local validation only. Caller must supply a known username/UUID pair from a prior verified artifact. */
-export function primePlayerIdentityForValidation(username: string, uuid: string): Identity {
-  const name = validatePlayerInput(username);
-  const normalizedUuid = uuid.replaceAll("-", "").toLowerCase();
-  if (UUID.test(name) || HYPHENATED_UUID.test(name) || !UUID.test(normalizedUuid))
-    throw new AppError("INVALID_VALIDATION_IDENTITY", "Provide a username and a known 32-character UUID for validation.", 400);
-  const identity = { uuid: normalizedUuid, username: name };
-  cache.set(name.toLowerCase(), identity, 300);
-  cache.set(normalizedUuid, identity, 300);
-  return identity;
-}
-
 export function validatePlayerInput(input: string): string {
   const trimmed = input.trim();
   if (!UUID.test(trimmed) && !HYPHENATED_UUID.test(trimmed) && !/^[A-Za-z0-9_]{1,16}$/.test(trimmed)) {
@@ -39,7 +27,17 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
   const url = isUuid
     ? `https://sessionserver.mojang.com/session/minecraft/profile/${key}`
     : `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(valid)}`;
-  const response = await fetchUpstream(url, fetcher);
+  const fallbackUrl = isUuid
+    ? `https://api.minecraftservices.com/minecraft/profile/lookup/${key}`
+    : `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(valid)}`;
+  let response: Response;
+  try {
+    response = await fetchUpstream(url, fetcher);
+    if (response.status >= 500) response = await fetchUpstream(fallbackUrl, fetcher);
+  } catch (error) {
+    if (!(error instanceof AppError) || error.code !== "UPSTREAM_UNAVAILABLE") throw error;
+    response = await fetchUpstream(fallbackUrl, fetcher);
+  }
   if (response.status === 404 || response.status === 204) throw new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
   if (!response.ok) throw new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
   const body = await response.text();
