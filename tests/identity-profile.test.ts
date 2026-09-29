@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { TtlCache } from "../src/server/cache/ttl-cache";
-import { resolvePlayer } from "../src/server/minecraft/resolve-player";
+import { primePlayerIdentityForValidation, resolvePlayer } from "../src/server/minecraft/resolve-player";
 import { selectProfile } from "../src/server/hypixel/profiles";
 import { HypixelClient } from "../src/server/hypixel/client";
 import { fixtureProfiles, fixtureUuid } from "./fixtures/profile";
@@ -15,6 +15,14 @@ test("identity uses official routes, canonical UUID and successful lookup cache"
   assert.equal(calls.length, 1);
   await resolvePlayer("01234567-89ab-cdef-0123-456789abcdef", fetcher, new TtlCache());
   assert.equal(calls[1], `https://sessionserver.mojang.com/session/minecraft/profile/${fixtureUuid}`);
+});
+test("explicit validation identity bypasses Mojang only for that username in this process", async () => {
+  const seeded = primePlayerIdentityForValidation("KnownPlayer", fixtureUuid.toUpperCase());
+  assert.deepEqual(seeded, { uuid: fixtureUuid, username: "KnownPlayer" });
+  const unavailable: typeof fetch = async () => { throw new Error("Mojang unavailable"); };
+  assert.deepEqual(await resolvePlayer("knownplayer", unavailable), seeded);
+  await assert.rejects(resolvePlayer("OtherPlayer", unavailable), { code: "UPSTREAM_UNAVAILABLE" });
+  assert.throws(() => primePlayerIdentityForValidation("KnownPlayer", "wrong"), { code: "INVALID_VALIDATION_IDENTITY" });
 });
 test("identity distinguishes absent players, malformed responses and upstream failures", async () => {
   for (const status of [204, 404]) await assert.rejects(resolvePlayer("Nobody", async () => new Response(null, { status }), new TtlCache()), { code: "PLAYER_NOT_FOUND" });

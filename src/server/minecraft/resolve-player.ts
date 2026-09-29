@@ -10,6 +10,18 @@ const identitySchema = z.object({ id: z.string().regex(UUID), name: z.string().m
 const cache = new TtlCache();
 export type Identity = { uuid: string; username: string };
 
+/** Local validation only. Caller must supply a known username/UUID pair from a prior verified artifact. */
+export function primePlayerIdentityForValidation(username: string, uuid: string): Identity {
+  const name = validatePlayerInput(username);
+  const normalizedUuid = uuid.replaceAll("-", "").toLowerCase();
+  if (UUID.test(name) || HYPHENATED_UUID.test(name) || !UUID.test(normalizedUuid))
+    throw new AppError("INVALID_VALIDATION_IDENTITY", "Provide a username and a known 32-character UUID for validation.", 400);
+  const identity = { uuid: normalizedUuid, username: name };
+  cache.set(name.toLowerCase(), identity, 300);
+  cache.set(normalizedUuid, identity, 300);
+  return identity;
+}
+
 export function validatePlayerInput(input: string): string {
   const trimmed = input.trim();
   if (!UUID.test(trimmed) && !HYPHENATED_UUID.test(trimmed) && !/^[A-Za-z0-9_]{1,16}$/.test(trimmed)) {
