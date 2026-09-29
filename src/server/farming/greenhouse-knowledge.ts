@@ -10,7 +10,7 @@ export function greenhouseMechanics() {
     yield: { uniqueBaseCropPercentEach: 3, plantYieldUpgradeMaxLevel: 9,
       plantYieldUpgradePercent: "2% per level through 8; 20% at 9",
       nearbyEffectsLockOnMaturity: true },
-    adjacency: "ORTHOGONAL_ONLY" as const,
+    effectAdjacency: "ORTHOGONAL_ONLY" as const,
     unlocks: { carpenterOfferThenBlueprintHandoff: true, plotLimit: 3,
       vinesPerAdjacentCropSlot: 1, additionalGreenhousesHaveAllSlots: true,
       mutationHarvestCanDropEtherealVine: true, allCropSlotsBeforeExpansion: true },

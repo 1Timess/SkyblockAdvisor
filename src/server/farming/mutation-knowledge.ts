@@ -99,6 +99,7 @@ export function mutationProgressionPaths(gardenLevel: number | null, question = 
     const requiredGardenLevel = Math.max(7, ...baseCrops.map(crop => baseCropLevels[crop] ?? 0));
     return { name, prerequisiteMutations: closure.path.slice(0, -1), baseCrops,
       spawnWeight: mutationSpawnWeight(name)!.weight,
+      levelAccess: gardenLevel >= requiredGardenLevel ? "LEVEL_ELIGIBLE" as const : "FUTURE_LEVEL" as const,
       requiredGardenLevel, cropAccess: unknownInputs.length ? "UNDETERMINED" as const
         : gardenLevel >= requiredGardenLevel ? "LEVEL_ELIGIBLE" as const : "FUTURE_LEVEL" as const,
       unknownInputs, specialSteps: closure.specialSteps,

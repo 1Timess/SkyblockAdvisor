@@ -81,6 +81,11 @@ test("mutation branches report only crop-level access and preserve unknown physi
   assert.equal(timestalk.profileDiscoveryStatus, "UNREPORTED");
   assert.equal(timestalk.spawnWeight, 20);
   assert.equal(mutationProgressionPaths(10, "What about Glasscorn?")[0].name, "Glasscorn");
+  const future = mutationProgressionPaths(10, "Timestalk")[0];
+  assert.equal(future.cropAccess, "UNDETERMINED");
+  assert.equal(future.levelAccess, "FUTURE_LEVEL");
+  assert.equal(future.requiredGardenLevel, 12);
+  assert.equal(greenhouseMechanics().effectAdjacency, "ORTHOGONAL_ONLY");
   assert.equal(greenhouseMechanics().baseStageSeconds, 4 * 60 * 60);
   assert.equal(greenhouseMechanics().profileTimerStatus, "UNREPORTED");
   assert.equal(greenhouseMechanics().unlocks.vinesPerAdjacentCropSlot, 1);

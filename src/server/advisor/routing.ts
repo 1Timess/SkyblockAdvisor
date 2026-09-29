@@ -17,7 +17,8 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
   const inferredRole = explicitRole ?? input.conversationState?.role ?? normalizeRole(input.profile.progression.dungeons.selectedClass);
   const explicitDomain = detectDomain(text), followUpDomain = isFollowUp(text) ? input.conversationState?.currentDomain : undefined;
   const domain = explicitDomain ?? followUpDomain ?? null;
-  const goal = explicitGoal ?? (followUpDomain ? input.conversationState?.goal : undefined) ?? goalFromExplicitScope(text) ?? "GENERAL_UPGRADE";
+  const goal = explicitGoal ?? (followUpDomain ? input.conversationState?.goal : undefined) ?? goalFromExplicitScope(text)
+    ?? (domain === "FARMING" ? "FARMING" : "GENERAL_UPGRADE");
   const mechanics = /\bsweep\b/.test(text) ? ["SWEEP"] : [];
   let scope: AnalysisScope, reason: string, routedDomain: ProfileIntelligenceDomain | null = domain;
   if (domain === "ACCESSORIES") [scope, reason] = ["ACCESSORIES", "The question explicitly asks about accessories or Magical Power."];
