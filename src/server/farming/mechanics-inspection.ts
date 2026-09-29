@@ -25,7 +25,7 @@ export function inspectFarmingMechanics(profile: NormalizedSkyBlockProfile) {
     pestHistory: { killStats: pestStats, deathStats: pestDeaths, bestiaryKills: pestBestiary,
       note: "Historical counts are not active Garden pests or proof of captured pest rewards." },
     visibleGear: { totalMatches: observed.length, items: observed.slice(0, 24).map(item => ({ id: item.id, name: item.name,
-      categories: item.categories, source: item.source, reforge: item.reforge, enchantments: item.enchantments, stats: item.stats })) },
+      categories: item.categories, source: item.source, reforge: item.reforge, enchantments: item.enchantments, stats: item.stats, farmingToolProgress: item.farmingToolProgress ?? null })) },
     inventoryWarnings: profile.warnings.filter(warning => warning.code === "API_DATA_DISABLED" || warning.code === "INVENTORY_DECODE_FAILED")
       .map(warning => ({ code: warning.code, scope: warning.scope ?? null })),
   };

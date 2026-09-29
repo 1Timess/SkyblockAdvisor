@@ -10,7 +10,8 @@ export function buildObservedFarmingState(profile: NormalizedSkyBlockProfile) {
     observedPestKills: observation.pestHistory.killStats,
     visibleEquipmentCount: observation.visibleGear.totalMatches,
     visibleEquipment: observation.visibleGear.items.slice(0, 16).map(item => ({ id: item.id, name: item.name, source: item.source,
-      reforge: item.reforge, enchantments: item.enchantments, farmingFortune: item.stats.farmingFortune ?? null })),
+      reforge: item.reforge, enchantments: item.enchantments, farmingFortune: item.stats.farmingFortune ?? null,
+      toolProgress: item.farmingToolProgress ?? null })),
     inventoryApiLimited: observation.inventoryWarnings.length > 0,
   };
 }

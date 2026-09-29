@@ -29,7 +29,10 @@ export const profileItemSchema = z.object({
   rarity: raritySchema.nullable(), categories: z.array(z.string()), stats: statsSchema,
   reforge: z.string().nullable(), enchantments: statsSchema, stars: z.number().nullable(), recombobulated: z.boolean(),
   lore: z.array(z.string()), abilityText: z.array(z.string()), setBonusText: z.array(z.string()),
-  source: z.string(), gemstones: gemstoneStateSchema.optional(), drillComponents: drillComponentStateSchema.optional(), texture: z.string().nullable().optional(),
+  source: z.string(), gemstones: gemstoneStateSchema.optional(), farmingToolProgress: z.object({
+    rawLevel: z.number().nonnegative().nullable(), rawExperience: z.number().nonnegative().nullable(),
+    farmingForDummiesCount: z.number().nonnegative().nullable(),
+  }).nullable().optional(), drillComponents: drillComponentStateSchema.optional(), texture: z.string().nullable().optional(),
 });
 export type ItemRarity = z.infer<typeof raritySchema>;
 export type ProfileItem = z.infer<typeof profileItemSchema>;
