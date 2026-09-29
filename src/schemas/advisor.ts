@@ -107,6 +107,11 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     nextUniqueVisitorsMilestone: z.object({ tier: z.number(), threshold: z.number(), remaining: z.number() }).nullable(),
     resourcesCollected: z.record(z.string(), z.number()), cropUpgradeLevels: z.record(z.string(), z.number()),
     unlockedPlotIds: z.array(z.string()).max(24), nextGardenCropUnlocks: z.array(z.string()),
+    contestCount: z.number().int().nonnegative(), medalInventory: z.record(z.string(), z.number()),
+    observedPestKills: z.record(z.string(), z.number()), visibleEquipmentCount: z.number().int().nonnegative(),
+    visibleEquipment: z.array(z.object({ id: z.string().nullable(), name: z.string(), source: z.string(),
+      reforge: z.string().nullable(), enchantments: z.record(z.string(), z.number()), farmingFortune: z.number().nullable() })).max(16),
+    inventoryApiLimited: z.boolean(),
     greenhouseEligibility: z.boolean().nullable(), greenhouseSlotObservation: z.object({
       status: z.enum(["REPORTED", "UNREPORTED"]), count: z.number().int().nonnegative().nullable(),
     }),

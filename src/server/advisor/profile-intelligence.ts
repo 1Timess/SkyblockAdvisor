@@ -7,6 +7,7 @@ import { TtlCache } from "../cache/ttl-cache";
 import { buildNormalizedProfile } from "../skyblock/profile/build-normalized-profile";
 import { buildMiningKnowledge, miningRelevantStats } from "../reference/mining-knowledge";
 import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
+import { buildObservedFarmingState } from "../farming/observed-state";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -61,7 +62,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
       magicalPower: profile.accessories.magicalPower.total,
     },
     domains: {
-      FARMING: { domain: "FARMING", farmingLevel: profile.progression.skills.farming?.level ?? null,
+      FARMING: { domain: "FARMING", ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
         farmingXp: profile.progression.skills.farming?.xp ?? null, gardenAvailable: false, gardenXp: null, gardenLevel: null,
         nextGardenLevel: null, totalOffersAccepted: null, uniqueVisitorsServed: null,
         nextOffersMilestone: null, nextUniqueVisitorsMilestone: null, resourcesCollected: {}, cropUpgradeLevels: {},

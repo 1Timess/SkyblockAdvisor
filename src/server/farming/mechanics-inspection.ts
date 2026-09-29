@@ -1,9 +1,10 @@
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
-const numeric = (value: unknown) => Object.fromEntries(Object.entries(record(value)).filter(([, raw]) => typeof raw === "number" && Number.isFinite(raw)));
-const relevant = /pest|fly|cricket|locust|field_mouse|mosquito|earthworm|mite|moth|slug|beetle|firefly|dragonfly|mantis/i;
-const farmingItem = /farm|crop|hoe|vacuum|melon|pumpkin|cactus|mushroom|wheat|carrot|potato|cane|wart|greenhouse|cultivat|harvest|chopper/i;
+const numeric = (value: unknown): Record<string, number> => Object.fromEntries(Object.entries(record(value))
+  .filter((entry): entry is [string, number] => typeof entry[1] === "number" && Number.isFinite(entry[1])));
+const relevant = /^pest_[a-z_]+(?:_\d+)?$/i;
+const farmingId = /^(?:FARM_SUIT_|FARM_ARMOR_|FARMER_BOOTS|MELON_(?:HELMET|CHESTPLATE|LEGGINGS|BOOTS|DICER)|CROPIE_|SQUASH_|FERMENTO_|THEORETICAL_HOE_|ADVANCED_GARDENING_HOE|PUMPKIN_DICER|CACTUS_KNIFE|COCO_CHOPPER|FUNGI_CUTTER|NETHER_WART_HOE|WHEAT_HOE|PEST_VACUUM|SKYMART_VACUUM|INFINI_VACUUM|FARMING_TALISMAN|FARMER_ORB)/i;
 
 /** Captures observed contest field shapes and visible gear, without raw NBT or full contest history. */
 export function inspectFarmingMechanics(profile: NormalizedSkyBlockProfile) {
@@ -12,8 +13,8 @@ export function inspectFarmingMechanics(profile: NormalizedSkyBlockProfile) {
     fields: Object.keys(record(raw)).sort(), primitiveTypes: Object.fromEntries(Object.entries(record(raw))
       .filter(([, value]) => value === null || ["string", "number", "boolean"].includes(typeof value))
       .map(([field, value]) => [field, value === null ? "null" : typeof value])) }));
-  const observed = profile.inventoryItems.filter(item => item.categories.some(category => farmingItem.test(category)) ||
-    farmingItem.test(item.id ?? "") || farmingItem.test(item.name));
+  const observed = profile.inventoryItems.filter(item => farmingId.test(item.id ?? "") ||
+    (item.stats.farmingFortune ?? 0) > 0 && !item.categories.includes("pet"));
   const pestStats = Object.fromEntries(Object.entries(profile.playerStats.kills).filter(([key]) => relevant.test(key)));
   const pestDeaths = Object.fromEntries(Object.entries(profile.playerStats.deaths).filter(([key]) => relevant.test(key)));
   const pestBestiary = Object.fromEntries(Object.entries(profile.bestiary.kills).filter(([key]) => relevant.test(key)));

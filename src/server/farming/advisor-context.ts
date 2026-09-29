@@ -2,11 +2,12 @@ import type { AdvisorDomainContext } from "../../schemas/advisor";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { buildGardenProgress } from "./garden-progress";
 import unlocks from "../reference/garden-unlocks.json";
+import { buildObservedFarmingState } from "./observed-state";
 
 export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, rawGarden: unknown): AdvisorDomainContext {
   const progress = buildGardenProgress(rawGarden);
   return {
-    domain: "FARMING", farmingLevel: profile.progression.skills.farming?.level ?? null,
+    domain: "FARMING", ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
     farmingXp: profile.progression.skills.farming?.xp ?? null,
     gardenAvailable: progress.available, gardenXp: progress.gardenXp, gardenLevel: progress.gardenLevel,
     nextGardenLevel: progress.nextGardenLevel, totalOffersAccepted: progress.totalOffersAccepted,
@@ -19,6 +20,6 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
     nextGardenCropUnlocks: progress.nextGardenLevel
       ? unlocks.cropsByLevel[String(progress.nextGardenLevel.level) as keyof typeof unlocks.cropsByLevel] ?? [] : [],
     activeOffers: progress.activeOffers.slice(0, 8), activeOfferCount: progress.activeOffers.length,
-    note: "Garden data is profile-wide. Crops collected do not imply a crop milestone tier or a collection unlock. Active visitor requirements do not establish inventory feasibility, price, or value. Pest counts, planted crops, greenhouse completion, mutation discovery, contest ranks, and Farming Fortune are unreported.",
+    note: "Garden data is profile-wide. Crops collected do not imply a crop milestone tier or a collection unlock. Active visitor requirements do not establish inventory feasibility, price, or value. Current pests, planted crops, greenhouse completion, mutation discovery, contest ranks, effective Farming Fortune, and missing wardrobe items are unreported.",
   };
 }
