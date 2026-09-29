@@ -20,6 +20,9 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.deepEqual(value.nextGardenCropUnlocks, ["Nether Wart"]);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "REPORTED", count: 0 });
   assert.equal(value.greenhouseEligibility, true);
+  assert.deepEqual(value.nextPestUnlocks, [{ name: "Beetle", crop: "Nether Wart", gardenLevel: 10 }]);
+  assert.ok(value.mutationOptions.some(mutation => mutation.name === "Scourroot" && mutation.adjacent.some(crop => crop.crop === "Potato")));
+  assert.equal(value.mutationOptions.some(mutation => mutation.name === "Ashwreath"), false);
   assert.equal(value.nextOffersMilestone?.remaining, 2);
   assert.equal(value.nextUniqueVisitorsMilestone?.remaining, 4);
   assert.deepEqual(value.activeOffers[0].requirements, [{ itemId: "ENCHANTED_CACTUS", amount: 2 }]);
@@ -46,6 +49,8 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.equal(value.totalOffersAccepted, null);
   assert.equal(value.nextGardenLevel, null);
   assert.deepEqual(value.nextCropMilestones, []);
+  assert.deepEqual(value.mutationOptions, []);
+  assert.deepEqual(value.nextPestUnlocks, []);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "UNREPORTED", count: null });
 });
 
@@ -57,4 +62,6 @@ test("Lemon Garden level 10 identifies the next crop access without assuming gre
   assert.equal(value.nextGardenLevel?.level, 11);
   assert.deepEqual(value.nextGardenCropUnlocks, ["Sunflower", "Moonflower"]);
   assert.equal(value.greenhouseSlotObservation.count, 0);
+  assert.deepEqual(value.nextPestUnlocks.map(pest => pest.name), ["Dragonfly", "Firefly"]);
+  assert.ok(value.mutationOptions.some(mutation => mutation.name === "Ashwreath"));
 });
