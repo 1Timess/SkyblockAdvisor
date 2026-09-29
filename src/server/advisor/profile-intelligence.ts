@@ -65,7 +65,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
       FARMING: { domain: "FARMING", ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
         farmingXp: profile.progression.skills.farming?.xp ?? null, gardenAvailable: false, gardenXp: null, gardenLevel: null,
         nextGardenLevel: null, totalOffersAccepted: null, uniqueVisitorsServed: null,
-        nextOffersMilestone: null, nextUniqueVisitorsMilestone: null, resourcesCollected: {}, cropUpgradeLevels: {},
+        nextOffersMilestone: null, nextUniqueVisitorsMilestone: null, resourcesCollected: {}, nextCropMilestones: [], cropUpgradeLevels: {},
         unlockedPlotIds: [], nextGardenCropUnlocks: [], greenhouseEligibility: null,
         greenhouseSlotObservation: { status: "UNREPORTED", count: null }, activeOffers: [], activeOfferCount: 0, note: "Garden state has not been loaded for this snapshot." },
       SLAYER: { domain: "SLAYER", totalLevelUnlocks: 0, totalBossDrops: 0, possibleRngOptionCount: 0,

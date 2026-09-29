@@ -1,3 +1,4 @@
+import levels from "../reference/farming-tool-levels.json";
 const toolId = /^(?:THEORETICAL_HOE_|ADVANCED_GARDENING_HOE|MELON_DICER|PUMPKIN_DICER|CACTUS_KNIFE|COCO_CHOPPER|FUNGI_CUTTER|NETHER_WART_HOE|WHEAT_HOE|ECLIPSE_HOE)/i;
 const finiteNonnegative = (value: unknown): number | null => typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null;
 
@@ -19,4 +20,14 @@ export function farmingToolCrop(id: string | null): string | null {
   if (dicer) return dicer[1].toLowerCase();
   const specialized: Record<string, string> = { CACTUS_KNIFE: "cactus", COCO_CHOPPER: "cocoa beans", FUNGI_CUTTER: "mushroom" };
   return Object.entries(specialized).find(([prefix]) => id.toUpperCase().startsWith(prefix))?.[1] ?? null;
+}
+
+/** The level-39 live sample excludes cumulative XP. Within-level XP is an inference, guarded by the published next cost. */
+export function nextFarmingToolLevel(progress: { rawLevel: number | null; rawExperience: number | null }) {
+  const { rawLevel, rawExperience } = progress;
+  if (rawLevel === null || !Number.isInteger(rawLevel) || rawLevel < 1 || rawLevel >= levels.experienceToReachLevel.length || rawExperience === null) return null;
+  const experienceRequired = levels.experienceToReachLevel[rawLevel];
+  if (rawExperience >= experienceRequired) return null;
+  return { level: rawLevel + 1, experienceRequired, experienceRemaining: experienceRequired - rawExperience,
+    interpretation: "INFERRED_WITHIN_LEVEL" as const };
 }

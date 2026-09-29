@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
 import { buildFarmingAdvisorContext } from "../src/server/farming/advisor-context";
+import { nextCropMilestones } from "../src/server/farming/garden-progress";
 import { advisorDomainContextSchema } from "../src/schemas/advisor";
 import { fixtureSources } from "./fixtures/profile";
 
@@ -22,7 +23,18 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.equal(value.nextOffersMilestone?.remaining, 2);
   assert.equal(value.nextUniqueVisitorsMilestone?.remaining, 4);
   assert.deepEqual(value.activeOffers[0].requirements, [{ itemId: "ENCHANTED_CACTUS", amount: 2 }]);
+  assert.deepEqual(value.nextCropMilestones.find(crop => crop.crop === "WHEAT"),
+    { crop: "WHEAT", resourceId: "WHEAT", collected: 123, tier: 3, threshold: 160, remaining: 37 });
   advisorDomainContextSchema.parse(value);
+});
+
+test("crop milestones use crop-specific Garden counters and leave absent crops unreported", () => {
+  const next = nextCropMilestones({ POTATO_ITEM: 469373, MELON: 2885695, UNKNOWN: 100 });
+  assert.deepEqual(next, [
+    { crop: "POTATO", resourceId: "POTATO_ITEM", collected: 469373, tier: 16, threshold: 494500, remaining: 25127 },
+    { crop: "MELON_SLICE", resourceId: "MELON", collected: 2885695, tier: 20, threshold: 3667100, remaining: 781405 },
+  ]);
+  assert.deepEqual(nextCropMilestones({}), []);
 });
 
 test("missing Garden response leaves counts unreported", async () => {
@@ -33,6 +45,7 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.equal(value.gardenAvailable, false);
   assert.equal(value.totalOffersAccepted, null);
   assert.equal(value.nextGardenLevel, null);
+  assert.deepEqual(value.nextCropMilestones, []);
   assert.deepEqual(value.greenhouseSlotObservation, { status: "UNREPORTED", count: null });
 });
 
