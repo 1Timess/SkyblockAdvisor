@@ -40,6 +40,7 @@
     "inspect:farming-research": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-research.ts",
     "inspect:farming-depth": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-depth.ts",
     "inspect:farming-mechanics": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-mechanics.ts",
+    "inspect:farming-tool-attributes": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-tool-attributes.ts",
     "validate:farming-state": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-state.ts",
     "validate:farming-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-advisor.ts",
     "validate:farming-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-luna.ts"
