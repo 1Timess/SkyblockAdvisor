@@ -23,6 +23,9 @@ test("Farming context keeps distinct Garden thresholds and observed offers", asy
   assert.equal(value.carpenterOfferCompletions, 2);
   assert.equal(value.mutationKnowledge.total, 40);
   assert.equal(value.mutationKnowledge.profileAnalysisStatus, "UNREPORTED");
+  assert.ok(value.mutationOptions.some(mutation => mutation.name === "Witherbloom" && mutation.layoutStatus === "COUNT_ONLY" && mutation.inputAccess === "UNDETERMINED"));
+  assert.equal(value.mutationPaths.find(path => path.name === "Duskbloom")?.cropAccess, "FUTURE_LEVEL");
+  assert.equal(value.greenhouseMechanics.profileTimerStatus, "UNREPORTED");
   assert.deepEqual(value.nextPestUnlocks, [{ name: "Beetle", crop: "Nether Wart", gardenLevel: 10 }]);
   assert.equal(value.cropPestOptions[0]?.name, "Fly");
   assert.deepEqual(value.greenhouseExpansionOptions.map(option => option.greenhouseNumber), [2, 3]);
@@ -55,6 +58,7 @@ test("missing Garden response leaves counts unreported", async () => {
   assert.equal(value.nextGardenLevel, null);
   assert.deepEqual(value.nextCropMilestones, []);
   assert.deepEqual(value.mutationOptions, []);
+  assert.deepEqual(value.mutationPaths, []);
   assert.deepEqual(value.nextPestUnlocks, []);
   assert.deepEqual(value.plotExpansionOptions, []);
   assert.deepEqual(value.greenhouseExpansionOptions, []);

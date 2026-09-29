@@ -4,6 +4,11 @@ import layouts from "../reference/greenhouse-mutation-layouts.json";
 export type MutationDefinition = (typeof catalog.mutations)[number];
 const byName = new Map(catalog.mutations.map(mutation => [mutation.name, mutation]));
 const layoutsByName: Record<string, { width: number; cells: string[] }> = layouts.layouts;
+const baseCropLevels: Record<string, number> = {
+  Wheat: 1, Carrot: 2, Potato: 3, Pumpkin: 4, "Sugar Cane": 5, "Melon": 6,
+  Cactus: 7, "Cocoa Beans": 8, "Red Mushroom": 9, "Brown Mushroom": 9,
+  "Nether Wart": 10, Sunflower: 11, Moonflower: 11, "Wild Rose": 12,
+};
 
 export function mutationLayout(name: string) {
   return layoutsByName[name] ?? null;
@@ -39,4 +44,22 @@ export function mutationCatalogSummary() {
     countOnlyOrSpecial: catalog.mutations.filter(mutation => !layoutsByName[mutation.name]).map(mutation => mutation.name),
     analysisMilestones: [1, 10, 15, 20, 30, 40],
     profileAnalysisStatus: "UNREPORTED" as const };
+}
+
+/** Reference paths only: crop access is a level gate, not evidence of planted crops or mutation discovery. */
+export function mutationProgressionPaths(gardenLevel: number | null) {
+  if (gardenLevel === null || gardenLevel < 7) return [];
+  return ["Chocoberry", "Soggybud", "Duskbloom", "Snoozling", "Timestalk"].map(name => {
+    const closure = mutationPrerequisites(name)!;
+    const baseCrops = [...new Set(closure.path.flatMap(step => byName.get(step)!.requirements
+      .filter(requirement => !byName.has(requirement.name)).map(requirement => requirement.name)))].sort();
+    const unknownInputs = baseCrops.filter(crop => baseCropLevels[crop] === undefined);
+    const requiredGardenLevel = Math.max(7, ...baseCrops.map(crop => baseCropLevels[crop] ?? 0));
+    return { name, prerequisiteMutations: closure.path.slice(0, -1), baseCrops,
+      requiredGardenLevel, cropAccess: unknownInputs.length ? "UNDETERMINED" as const
+        : gardenLevel >= requiredGardenLevel ? "LEVEL_ELIGIBLE" as const : "FUTURE_LEVEL" as const,
+      unknownInputs, specialSteps: closure.specialSteps,
+      layoutStatus: mutationLayout(name) ? "REFERENCE_GRID" as const : "SPECIAL_OR_COUNT_ONLY" as const,
+      profileDiscoveryStatus: "UNREPORTED" as const };
+  });
 }

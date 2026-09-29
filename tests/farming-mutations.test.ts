@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import catalog from "../src/server/reference/greenhouse-mutations.json";
-import { mutationCatalogSummary, mutationLayout, mutationPrerequisites } from "../src/server/farming/mutation-knowledge";
+import { mutationCatalogSummary, mutationLayout, mutationPrerequisites, mutationProgressionPaths } from "../src/server/farming/mutation-knowledge";
+import { greenhouseMechanics } from "../src/server/farming/greenhouse-knowledge";
 
 test("the complete mutation dependency graph resolves without cycles or missing names", () => {
   assert.equal(catalog.mutations.length, 40);
@@ -34,4 +35,22 @@ test("the complete mutation dependency graph resolves without cycles or missing 
     }
   }
   assert.equal(mutationCatalogSummary().profileAnalysisStatus, "UNREPORTED");
+});
+
+test("mutation branches report only crop-level access and preserve unknown physical prerequisites", () => {
+  assert.deepEqual(mutationProgressionPaths(null), []);
+  assert.deepEqual(mutationProgressionPaths(6), []);
+  const early = mutationProgressionPaths(9);
+  assert.equal(early.length, 5);
+  assert.equal(early.find(path => path.name === "Chocoberry")?.cropAccess, "LEVEL_ELIGIBLE");
+  assert.equal(early.find(path => path.name === "Duskbloom")?.cropAccess, "FUTURE_LEVEL");
+  const snoozling = early.find(path => path.name === "Snoozling")!;
+  assert.ok(snoozling.prerequisiteMutations.includes("Witherbloom"));
+  assert.ok(snoozling.unknownInputs.includes("Dead Plant"));
+  assert.equal(snoozling.cropAccess, "UNDETERMINED");
+  const timestalk = mutationProgressionPaths(12).find(path => path.name === "Timestalk")!;
+  assert.ok(timestalk.specialSteps.includes("Shellfruit"));
+  assert.equal(timestalk.profileDiscoveryStatus, "UNREPORTED");
+  assert.equal(greenhouseMechanics().baseStageSeconds, 4 * 60 * 60);
+  assert.equal(greenhouseMechanics().profileTimerStatus, "UNREPORTED");
 });

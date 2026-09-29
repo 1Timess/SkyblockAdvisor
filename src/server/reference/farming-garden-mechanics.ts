@@ -1,4 +1,4 @@
-/** Current Garden greenhouse starter patterns; adjacent means orthogonally adjacent to an empty slot. */
+/** Common Greenhouse patterns; count-only Witherbloom has no verified full grid. */
 export const starterMutations = [
   { name: "Lonelily", gardenLevel: 7, surface: "Farmland or Dirt", adjacent: [] },
   { name: "Dustgrain", gardenLevel: 7, surface: "Farmland", adjacent: [{ crop: "Wheat", count: 2 }] },
@@ -8,6 +8,7 @@ export const starterMutations = [
   { name: "Shadevine", gardenLevel: 7, surface: "Farmland", adjacent: [{ crop: "Cactus", count: 1 }, { crop: "Sugar Cane", count: 1 }] },
   { name: "Veilshroom", gardenLevel: 9, surface: "Mycelium", adjacent: [{ crop: "Red Mushroom", count: 1 }, { crop: "Brown Mushroom", count: 1 }] },
   { name: "Ashwreath", gardenLevel: 10, surface: "Soul Sand", adjacent: [{ crop: "Nether Wart", count: 2 }, { crop: "Fire", count: 2 }] },
+  { name: "Witherbloom", gardenLevel: 7, surface: "Soul Sand", adjacent: [{ crop: "Dead Plant", count: 4 }] },
 ] as const;
 
 export const pestUnlocks = [
@@ -45,7 +46,9 @@ export function possibleGardenMechanics(gardenLevel: number | null) {
   const nextPestLevel = pestUnlocks.find(pest => pest.gardenLevel > gardenLevel)?.gardenLevel;
   return {
     mutationOptions: gardenLevel >= 7 ? starterMutations.filter(mutation => mutation.gardenLevel <= gardenLevel)
-      .map(mutation => ({ ...mutation, adjacent: [...mutation.adjacent] })) : [],
+      .map(mutation => ({ ...mutation, adjacent: [...mutation.adjacent],
+        layoutStatus: mutation.name === "Witherbloom" ? "COUNT_ONLY" as const : "REFERENCE_GRID" as const,
+        inputAccess: mutation.name === "Witherbloom" ? "UNDETERMINED" as const : "LEVEL_ELIGIBLE" as const })) : [],
     nextPestUnlocks: nextPestLevel === undefined ? [] : pestUnlocks.filter(pest => pest.gardenLevel === nextPestLevel),
   };
 }
