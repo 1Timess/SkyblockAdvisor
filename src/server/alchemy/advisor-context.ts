@@ -1,5 +1,6 @@
 import type { AdvisorDomainContext } from "../../schemas/advisor";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import type { MarketQuote } from "../../schemas/market";
 import xpTables from "../reference/xp-tables.json";
 import { alchemyDurationBonusPercent, brewablePotions, brewingMechanics, godPotionDurationHours, potionFocusForQuestion } from "./reference";
 import { buildAlchemyWisdomState } from "./wisdom";
@@ -8,7 +9,7 @@ import { alchemyLevelingMethods, effectiveAlchemyXp } from "./leveling";
 const ALCHEMY_CAP = 50;
 const ALCHEMY_XP_TO_50 = xpTables.skill.slice(0, ALCHEMY_CAP).reduce((sum, value) => sum + value, 0);
 
-export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, question: string): AdvisorDomainContext {
+export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, question: string, quotes: ReadonlyMap<string, MarketQuote> = new Map()): AdvisorDomainContext {
   const skill = profile.progression.skills.alchemy;
   const xp = skill?.xp ?? null;
   const level = skill?.level ?? null;
@@ -17,7 +18,9 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
   const wisdom = buildAlchemyWisdomState(profile);
   const levelingMethods = alchemyLevelingMethods.map(method => {
     const effectiveXpPerBatchFloor = effectiveAlchemyXp(method.xpPerBatch, wisdom.confirmedWisdom);
-    return { ...method, effectiveXpPerBatchFloor,
+    const ingredientPriceCoins = quotes.get(method.marketKey)?.coins ?? null;
+    return { ...method, effectiveXpPerBatchFloor, ingredientPriceCoins,
+      grossCoinsPerXpFloor: ingredientPriceCoins === null ? null : ingredientPriceCoins / effectiveXpPerBatchFloor,
       batchesTo50Floor: xpTo50 === null ? null : Math.ceil(xpTo50 / effectiveXpPerBatchFloor) };
   });
   return {
