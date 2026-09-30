@@ -43,15 +43,24 @@ function parseTier(item: NeuItem, lore: readonly string[]) {
 function parseRequirement(lore: readonly string[]) {
   for (const line of lore) {
     const match = line.match(/(?:requires?|requirement:?)[^\d]*runecrafting[^\d]*(\d+)/i)
-      ?? line.match(/runecrafting\s+(\d+)/i);
+      ?? line.match(/runecrafting\s+(\d+)/i)
+      ?? line.match(/^requires?\s+level\s+(\d+)$/i);
     if (match) return Number(match[1]);
   }
   return null;
 }
 
 function parseApplicableTo(lore: readonly string[]) {
+  const requirementIndex = lore.findIndex(line =>
+    /(?:requires?|requirement:?)[^\d]*runecrafting[^\d]*(\d+)/i.test(line)
+    || /runecrafting\s+(\d+)/i.test(line)
+    || /^requires?\s+level\s+(\d+)$/i.test(line));
+  if (requirementIndex >= 0) {
+    const target = lore.slice(requirementIndex + 1).find(line => line.trim().length > 0);
+    if (target && !/^apply\b/i.test(target)) return target.trim();
+  }
   for (const line of lore) {
-    const match = line.match(/(?:apply|applicable|can be applied)\s+(?:this rune\s+)?to\s+(?:an?\s+)?(.+?)(?:\.|$)/i);
+    const match = line.match(/(?:apply|applicable|can be applied)\s+(?:this rune\s+)?to\s+(?:an?\s+)?(.+?)(?:\s+or\s+fuse.*|\.|$)/i);
     if (match) return match[1].trim();
   }
   return null;
