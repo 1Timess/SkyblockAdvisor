@@ -5,7 +5,7 @@ import greenhouseMutations from "../reference/greenhouse-mutations.json";
 const roleScopes: Record<AdvisorRole, AnalysisScope> = { mage: "MAGE", archer: "ARCHER", berserk: "BERSERK", tank: "SURVIVABILITY", healer: "SURVIVABILITY" };
 const domainsByScope: Record<AnalysisScope, AnalysisDomain[]> = {
   GEAR: ["ARMOR", "WEAPONS"], ARMOR: ["ARMOR"], WEAPONS: ["WEAPONS"], ACCESSORIES: ["ACCESSORIES"], PETS: ["PETS"],
-  FISHING: ["FISHING"], MINING: ["MINING"], ENCHANTING: ["ENCHANTING"], COLLECTIONS: ["COLLECTIONS"], SLAYER: ["SLAYER"], FARMING: ["FARMING"], SURVIVABILITY: ["ARMOR"], DAMAGE: ["ARMOR", "WEAPONS"], MAGE: ["ARMOR", "WEAPONS"],
+  FISHING: ["FISHING"], MINING: ["MINING"], ENCHANTING: ["ENCHANTING"], COLLECTIONS: ["COLLECTIONS"], SLAYER: ["SLAYER"], FARMING: ["FARMING"], FORAGING: ["FORAGING"], SURVIVABILITY: ["ARMOR"], DAMAGE: ["ARMOR", "WEAPONS"], MAGE: ["ARMOR", "WEAPONS"],
   ARCHER: ["ARMOR", "WEAPONS"], BERSERK: ["ARMOR", "WEAPONS"], GENERAL: ["ARMOR", "WEAPONS"], CLARIFY: [],
 };
 
@@ -18,7 +18,7 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
   const explicitDomain = detectDomain(text), followUpDomain = isFollowUp(text) ? input.conversationState?.currentDomain : undefined;
   const domain = explicitDomain ?? followUpDomain ?? null;
   const goal = explicitGoal ?? (followUpDomain ? input.conversationState?.goal : undefined) ?? goalFromExplicitScope(text)
-    ?? (domain === "FARMING" ? "FARMING" : "GENERAL_UPGRADE");
+    ?? (domain === "FARMING" ? "FARMING" : domain === "FORAGING" ? "FORAGING" : "GENERAL_UPGRADE");
   const mechanics = /\bsweep\b/.test(text) ? ["SWEEP"] : [];
   let scope: AnalysisScope, reason: string, routedDomain: ProfileIntelligenceDomain | null = domain;
   if (domain === "ACCESSORIES") [scope, reason] = ["ACCESSORIES", "The question explicitly asks about accessories or Magical Power."];
@@ -27,6 +27,7 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
   else if (domain === "ENCHANTING") [scope, reason] = ["ENCHANTING", "The question explicitly asks about Enchanting or Experimentation."];
   else if (domain === "COLLECTIONS") [scope, reason] = ["COLLECTIONS", "The question asks about collections or crafted minions."];
   else if (domain === "FARMING") [scope, reason] = ["FARMING", "The question asks about Farming or Garden progression."];
+  else if (domain === "FORAGING") [scope, reason] = ["FORAGING", "The question asks about Foraging or Heart of the Forest progression."];
   else if (domain === "SLAYER") [scope, reason] = ["SLAYER", "The question asks about Slayer progression or boss rewards."];
   else if (domain === "DUNGEONS") [scope, reason] = [scopeForDungeonQuestion(text, goal, armorSlots), "The question asks about Dungeon progression or combat gear."];
   else if (/\bpets?\b/.test(text)) [scope, reason] = ["PETS", "The question explicitly asks about pets."];
@@ -36,12 +37,13 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
 }
 
 function detectDomain(text: string): ProfileIntelligenceDomain | null {
+  if (/\bmagical power\b|\bmp\b|\baccessor(?:y|ies)\b|\btalismans?\b/.test(text)) return "ACCESSORIES";
+  if (/\bforaging\b|\bhotf\b|\bheart of the forest\b|\b(?:fig|mangrove|helix) logs?\b|\btree gifts?\b/.test(text)) return "FORAGING";
   if (/\bslayers?\b|\b(revenant|tarantula|sven|voidgloom|inferno demonlord|riftstalker)\b|\b(warden heart|overflux capacitor|judgement core)\b/.test(text)) return "SLAYER";
   if (/\bfarming\b|\bgarden\b|\bgreenhouse\b|\bmutations?\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)
     || greenhouseMutations.mutations.some(mutation => text.includes(mutation.name.toLowerCase()))) return "FARMING";
   if (/\bcollections?\b|\bminions?\b|\bcrafted generators?\b/.test(text)) return "COLLECTIONS";
   if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
-  if (/\bmagical power\b|\bmp\b|\baccessor(?:y|ies)\b|\btalismans?\b/.test(text)) return "ACCESSORIES";
   if (/\bfishing\b|\bfish(?:ing)? rod\b|\bsea creature\b/.test(text)) return "FISHING";
   if (/\bmining\b|\bhotm\b|\bheart of the mountain\b|\bpowder\b|\bdrill\b|\bpickaxe\b/.test(text)) return "MINING";
   if (/\bf\d+\b|\bfloor\b|\bcatacombs?\b|\bdungeons?\b|\bmage\b|\barcher\b|\bberserk\b|\bmelee\b|\bshortbow\b|\bbow\b|\barmor\b|\bhelmet\b|\bchestplate\b|\bleggings\b|\bboots\b|\bweapons?\b|\bsword\b|\bwand\b/.test(text)) return "DUNGEONS";

@@ -5,7 +5,7 @@ import type { AdvisorCandidate } from "../src/schemas/candidates";
 import type { CandidateItem } from "../src/schemas/catalog";
 import type { MarketQuote } from "../src/schemas/market";
 import { buildCandidateFeasibility, selectDetailedCandidates, type TaggedCandidateLane } from "../src/server/advisor/context";
-import { filterCandidateLanesForGoal } from "../src/server/advisor/relevance";
+import { buildCandidateRelevance, filterCandidateLanesForGoal } from "../src/server/advisor/relevance";
 import { routeAdvisorQuestion } from "../src/server/advisor/routing";
 import { prepareCandidate } from "../src/server/candidates/common";
 import { parseRequirementText } from "../src/server/reference/requirements";
@@ -101,4 +101,45 @@ test("mixed and unknown requirements preserve individual states", async () => {
   assert.equal(unknownFeasibility.requirementStatus, "UNKNOWN");
   assert.equal(unknownFeasibility.requirements[0].type, "UNKNOWN");
   assert.ok(unknown.warnings.some(warning => warning.includes("not structurally understood")));
+});
+
+
+test("Foraging activity lanes bypass combat-role filtering", () => {
+  const foragingRoute: AdvisorRoute = {
+    scope: "FORAGING", goal: "FORAGING", inferredRole: "tank", activeDomains: ["FORAGING"],
+    clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "FORAGING", mechanics: [],
+  };
+  const axe = candidate("FIGSTONE_SPLITTER", "sweep", 25, { domain: "tool" });
+  const pet = candidate("SLOTH;LEGENDARY", "foragingFortune", 20, {
+    domain: "pet", semanticEvidence: ["FORAGING_FORTUNE"],
+    petAcquisitionFamily: {
+      kind: "PET_ACQUISITION",
+      familyId: "SLOTH",
+      petType: "SLOTH",
+      members: [{ id: "SLOTH;LEGENDARY", canonicalPetId: "SLOTH;LEGENDARY", rarity: "LEGENDARY", level: 1, maxLevel: 100 }],
+    },
+  });
+  const lanes: TaggedCandidateLane[] = [
+    { domain: "FORAGING", label: "foraging:axe", candidates: [axe] },
+    { domain: "FORAGING", label: "foraging:petAcquisition", candidates: [pet] },
+  ];
+  assert.deepEqual(
+    selectDetailedCandidates(filterCandidateLanesForGoal(lanes, foragingRoute)).map(value => value.id).sort(),
+    ["FIGSTONE_SPLITTER", "SLOTH;LEGENDARY"].sort(),
+  );
+});
+
+
+test("Foraging semantic evidence does not label non-pet gear as a pet operation", () => {
+  const foragingRoute: AdvisorRoute = {
+    scope: "FORAGING", goal: "FORAGING", inferredRole: "berserk", activeDomains: ["FORAGING"],
+    clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "FORAGING", mechanics: [],
+  };
+  const gear = candidate("TORRHUS_BELT", "foragingFortune", 10, {
+    domain: "accessory", semanticEvidence: ["Verified Starlyn Contest point bonus: +10%."],
+  });
+  const lanes: TaggedCandidateLane[] = [{ domain: "FORAGING", label: "foraging:belt", candidates: [gear] }];
+  const relevance = buildCandidateRelevance(lanes, gear.id, foragingRoute);
+  assert.equal(relevance.reason, "The candidate has repo-supported Foraging progression evidence.");
+  assert.deepEqual(relevance.relevantStats, ["Verified Starlyn Contest point bonus: +10%."]);
 });

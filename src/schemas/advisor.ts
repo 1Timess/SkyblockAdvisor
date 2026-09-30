@@ -4,11 +4,11 @@ import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 import { experimentObservationSchema } from "./owned-enchanting";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "DUNGEONS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
-export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING"]);
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
@@ -85,6 +85,7 @@ export const availableAnalysisSchema = z.object({
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  foraging: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
 });
 export type AvailableAnalysis = z.infer<typeof availableAnalysisSchema>;
 
@@ -108,6 +109,35 @@ const farmingBonusMechanicsSchema = z.object({
   displayedPestChancePercent: z.number().nullable(), note: z.string(),
 });
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
+  z.object({ domain: z.literal("FORAGING"),
+    foragingLevel: compactLevelSchema.nullable(), foragingXp: z.number().nullable(), extraLevelCap: z.number().nullable(),
+    hotfLevel: z.number().nullable(), treeExperience: z.number().nullable(), activePreset: z.number().nullable(),
+    nodes: z.record(z.string(), compactNodeSchema), presets: z.record(z.string(), z.object({ nodes: z.record(z.string(), compactNodeSchema) })),
+    selectedAbility: z.string().nullable(), selectedAbilities: z.record(z.string(), z.string()), tokensSpentByPreset: statsSchema,
+    whispers: z.object({ forest: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }),
+      desert: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }) }),
+    treeGifts: z.object({ counts: statsSchema, milestoneTierClaimed: statsSchema }),
+    collections: statsSchema, relevantAttributes: statsSchema, pets: z.array(compactPetSchema),
+    progressionFocus: z.object({
+      targets: z.array(z.discriminatedUnion("kind", [
+        z.object({ kind: z.literal("HOTF_TIER"), currentTier: z.number().int().positive(), targetTier: z.number().int().positive(),
+          currentXp: z.number().nonnegative(), requiredXp: z.number().nonnegative(), xpRemaining: z.number().nonnegative() }),
+        z.object({ kind: z.literal("TORRHUS_ACCESS"), requiredHotfTier: z.number().int().positive(), currentHotfTier: z.number().int().positive() }),
+        z.object({ kind: z.literal("TREE_GIFT_MILESTONE"), tree: z.string(), currentGifts: z.number().nonnegative(),
+          targetGifts: z.number().positive(), giftsRemaining: z.number().positive() }),
+      ])),
+      collectionCapSources: z.array(z.object({ kind: z.literal("COLLECTION_CAP_SOURCE"),
+        collection: z.enum(["FIG_LOG", "MANGROVE_LOG", "HELIX_LOG"]), status: z.literal("UNRESOLVED") })).max(3),
+      note: z.string(),
+    }),
+    gearMechanics: z.object({ items: z.array(z.object({ itemId: z.string(), name: z.string(), source: z.string(),
+      verifiedBaseSweep: z.number().nullable(), observedSweep: z.number().nullable(), observedForagingFortune: z.number().nullable(),
+      observedForagingWisdom: z.number().nullable(), stars: z.number().int().nonnegative().nullable(), gemstones: gemstoneStateSchema.nullable(),
+      foragingState: z.unknown().nullable(), warnings: z.array(z.string()) })), note: z.string() }),
+    gear: z.object({ visible: z.array(z.unknown()), loadouts: z.object({ armor: z.record(z.string(), z.unknown()), equipment: z.record(z.string(), z.unknown()) }),
+      equipped: z.object({ armor: z.unknown().nullable(), equipment: z.unknown().nullable() }), pets: z.array(z.unknown()), note: z.string() }),
+    unavailableFacts: z.array(z.string()), note: z.string() }),
+
   z.object({ domain: z.literal("FARMING"), farmingLevel: z.number().nullable(), farmingXp: z.number().nullable(),
     farmingSkillFocus: z.object({ cap: z.number().nullable(), capEvidence: z.enum(["UNREPORTED", "REPORTED_PERK", "BASE_CAP_ASSUMED"]),
       nextLevel: z.object({ level: z.number().int().positive(), xpRemaining: z.number().nonnegative() }).nullable() }),

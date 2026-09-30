@@ -36,3 +36,6 @@ export function hotmLevelFromXp(xp: number | null | undefined): number | null {
   }
   return tier;
 }
+
+// Current Heart of the Forest thresholds are separate from HOTM and stop at tier 8.
+export { hotfCumulativeXp, hotfLevelFromXp } from "../foraging/reference";

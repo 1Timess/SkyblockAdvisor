@@ -56,9 +56,13 @@ test("combined profile validates and shares items across all required domains", 
   assert.deepEqual(profile.progression.mining.glaciteTunnels.fossilsDonated, ["CLUBBED", "UGLY"]);
   assert.equal(profile.progression.mining.glaciteTunnels.fossilDust, 7);
   assert.equal(profile.progression.mining.glaciteTunnels.coldResistance, 24);
-  assert.equal(profile.progression.foraging.sweepLevel, 4);
-  assert.equal(profile.progression.foraging.foragingFortuneNodeLevel, 6);
-  assert.equal(profile.progression.foraging.nodes.arbitrary_foraging_node.state.toggle, true);
+  assert.equal(profile.progression.foraging.activePreset, null);
+  assert.equal(profile.progression.foraging.sweepLevel, null);
+  assert.equal(profile.progression.foraging.foragingFortuneNodeLevel, null);
+  assert.deepEqual(profile.progression.foraging.nodes, {});
+  assert.equal(profile.progression.foraging.presets.foraging.nodes.sweep.level, 4);
+  assert.equal(profile.progression.foraging.presets.foraging.nodes.foraging_fortune.level, 6);
+  assert.equal(profile.progression.foraging.presets.foraging.nodes.arbitrary_foraging_node.state.toggle, true);
   assert.equal(profile.accessories.selectedPower, "fortuitous");
   assert.deepEqual(profile.accessories.tuning.slots.slot_0, { strength: 5, critical_damage: 2 });
   assert.deepEqual(profile.progression.fishing.itemsFished, { total: 321, normal: 300 });

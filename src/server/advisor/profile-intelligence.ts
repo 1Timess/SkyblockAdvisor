@@ -11,6 +11,9 @@ import { buildObservedFarmingState } from "../farming/observed-state";
 import { mutationCatalogSummary } from "../farming/mutation-knowledge";
 import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
 import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";
+import { indexForagingGear } from "../foraging/gear-state";
+import { buildForagingProgressionFocus } from "../foraging/progression-focus";
+import { buildForagingGearMechanics } from "../foraging/gear-mechanics";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -49,6 +52,9 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
   const miningEquipment = withStats(ownedEquipment, miningStats);
   const fishingPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, fishingStats));
   const miningPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, miningStats));
+  const foraging = profile.progression.foraging, foragingGear = indexForagingGear(profile);
+  const relevantAttributes = Object.fromEntries(Object.entries(profile.attributes).filter(([key]) =>
+    /(?:forag|sweep|forest|galatea|moonglade|torrhus|tree|woodland|starlyn|spirit_axe|fig_)/i.test(key)));
   return {
     snapshotId,
     profile,
@@ -113,6 +119,15 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         equipment: miningEquipment.map(compact), pets: miningPets.map(compactPet),
         knownStats: knownStats([...miningTools, ...miningArmor, ...miningEquipment], miningPets, miningStats),
         unavailableFacts: miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."] },
+      FORAGING: { domain: "FORAGING", foragingLevel: compactLevel(profile.progression.skills.foraging),
+        foragingXp: profile.progression.skills.foraging?.xp ?? null, extraLevelCap: foraging.extraLevelCap,
+        hotfLevel: foraging.hotfLevel, treeExperience: foraging.treeExperience, activePreset: foraging.activePreset,
+        nodes: foraging.nodes, presets: foraging.presets, selectedAbility: foraging.selectedAbility, selectedAbilities: foraging.selectedAbilities,
+        tokensSpentByPreset: foraging.tokensSpentByPreset, whispers: foraging.whispers, treeGifts: foraging.treeGifts,
+        collections: Object.fromEntries(Object.entries(profile.collections).filter(([key]) => ["FIG_LOG", "MANGROVE_LOG", "HELIX_LOG", "HONEYCOMB", "RUBY_VEILSHROOM", "TENDER_WOOD"].includes(key))),
+        relevantAttributes, pets: foragingGear.pets, progressionFocus: buildForagingProgressionFocus(profile), gearMechanics: buildForagingGearMechanics(profile), gear: foragingGear,
+        unavailableFacts: ["Effective Sweep, effective Foraging Fortune, logs per action, hourly profit, and unobserved modifier state are not reconstructed."],
+        note: "Foraging context reports observed progression and gear state. Supported candidate families are bounded to verified Foraging integrations; effective account-level Sweep and Fortune remain unavailable." },
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
         enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
         matchedRewards: [], possibleRewardCount: 0, experimentation: profile.progression.enchanting.experimentation,
@@ -124,7 +139,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
 export function enrichActivityPetDomainContext(input: {
   context: AdvisorDomainContext;
   profile: NormalizedSkyBlockProfile;
-  domain: "MINING" | "FISHING";
+  domain: "MINING" | "FISHING" | "FORAGING";
   setups: readonly OwnedPetSetup[];
   definitions: readonly CanonicalPetDefinition[];
   petItems: readonly CanonicalPetItemDefinition[];
@@ -141,7 +156,9 @@ export function enrichActivityPetDomainContext(input: {
     const petItem = setup.canonicalPetItemId ? petItems.get(setup.canonicalPetItemId) ?? null : null;
     return evaluatePetDomainRelevance(definition, input.domain, petItem).relevant;
   });
-  const unavailablePrefix = input.domain === "MINING" ? "Pet mining effects are unavailable" : "Pet fishing effects are unavailable";
+  const unavailablePrefix = input.domain === "MINING" ? "Pet mining effects are unavailable"
+    : input.domain === "FISHING" ? "Pet fishing effects are unavailable"
+    : "Pet foraging effects are unavailable";
   return {
     ...input.context,
     pets: relevantPets.map(compactPet),

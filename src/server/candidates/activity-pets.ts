@@ -48,7 +48,9 @@ export function buildActivityPetLanes(input: {
     (lanes[lane] ??= []).push(candidate);
   }
 
-  for (const family of buildPetMutationFamilies(input.domain, domainMutations).filter(value => value.kind === "ACQUIRE_FAMILY")) {
+  const ownedPetTypes = new Set(input.setups.map(setup => setup.type.toUpperCase()));
+  for (const family of buildPetMutationFamilies(input.domain, domainMutations)
+    .filter(value => value.kind === "ACQUIRE_FAMILY" && !ownedPetTypes.has(value.petType.toUpperCase()))) {
     const first = family.children[0];
     const item = first ? catalog.get(first.after.canonicalPetId) : undefined;
     if (!item) continue;
@@ -85,7 +87,7 @@ export function buildActivityPetLanes(input: {
     if (!definition) return [];
     const heldItem = heldItemId ? petItems.get(heldItemId) ?? null : null;
     return [...new Set(evaluatePetDomainRelevance(definition, input.domain, heldItem).evidence
-      .filter(value => value.source === "PET_EFFECT" || value.source === "PET_ITEM_EFFECT")
+      .filter(value => value.source === "PET_BASE_STAT" || value.source === "PET_EFFECT" || value.source === "PET_ITEM_EFFECT")
       .map(value => value.mechanic))].sort();
   }
 }
