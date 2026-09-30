@@ -4,8 +4,8 @@ import { verifiedForagingGearSweep } from "./reference";
 
 const verifiedItemSweep: Record<string, number> = {
   SERIOUSLY_DAMAGED_AXE: verifiedForagingGearSweep.SERIOUSLY_DAMAGED_AXE,
-  FIG_HEW: verifiedForagingGearSweep.FIG_HEW,
-  FIGSTONE_SPLITTER: verifiedForagingGearSweep.FIGSTONE_SPLITTER,
+  FIG_AXE: verifiedForagingGearSweep.FIG_HEW,
+  FIGSTONE_AXE: verifiedForagingGearSweep.FIGSTONE_SPLITTER,
   HELIX_CHOPPER: verifiedForagingGearSweep.HELIX_CHOPPER,
   FIG_ARMOR_HELMET: verifiedForagingGearSweep.FIG_ARMOR_PER_PIECE,
   FIG_ARMOR_CHESTPLATE: verifiedForagingGearSweep.FIG_ARMOR_PER_PIECE,
