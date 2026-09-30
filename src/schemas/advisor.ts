@@ -83,6 +83,7 @@ export const availableAnalysisSchema = z.object({
   mining: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   enchanting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   alchemy: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  carpentry: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
