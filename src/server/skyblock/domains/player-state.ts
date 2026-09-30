@@ -54,8 +54,10 @@ function normalizeForaging(member: RawMember) {
   const presets = Object.fromEntries(presetNames.map(name => [name, { nodes: normalizeForagingNodes(nodeGroups[name]) }]));
   const selectedSlots = numericMap(tree?.selected_skill_tree_slot);
   const activePreset = finiteNumber(selectedSlots.foraging);
-  const activeName = activePreset && activePreset > 1 ? `foraging_${activePreset}` : "foraging";
-  const activeNodes = presets[activeName]?.nodes ?? presets.foraging.nodes;
+  const activeName = activePreset !== null && activePreset >= 1 && activePreset <= presetNames.length
+    ? activePreset === 1 ? "foraging" : `foraging_${activePreset}`
+    : null;
+  const activeNodes = activeName === null ? {} : presets[activeName]?.nodes ?? {};
   const core = dynamicRecord(member.foraging_core), whispers = dynamicRecord(core.whispers);
   const forest = dynamicRecord(whispers.forest), desert = dynamicRecord(whispers.desert);
   const foraging = dynamicRecord(member.foraging), gifts = dynamicRecord(foraging.tree_gifts);
@@ -66,7 +68,7 @@ function normalizeForaging(member: RawMember) {
     presets,
     activePreset,
     nodes: activeNodes,
-    selectedAbility: stringMap(tree?.selected_ability)[activeName] ?? stringMap(tree?.selected_ability).foraging ?? null,
+    selectedAbility: activeName === null ? null : stringMap(tree?.selected_ability)[activeName] ?? null,
     selectedAbilities: Object.fromEntries(Object.entries(stringMap(tree?.selected_ability)).filter(([key]) => key.startsWith("foraging"))),
     tokensSpentByPreset: Object.fromEntries(Object.entries(numericMap(tree?.tokens_spent)).filter(([key]) => key.startsWith("forest"))),
     sweepLevel: nodeLevel(activeNodes.sweep),
