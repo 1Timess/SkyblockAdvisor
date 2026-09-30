@@ -12,7 +12,7 @@ import { godPotionMixins, mixinRequirementStatus } from "./mixins";
 const ALCHEMY_CAP = 50;
 const ALCHEMY_XP_TO_50 = xpTables.skill.slice(0, ALCHEMY_CAP).reduce((sum, value) => sum + value, 0);
 
-export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, question: string, quotes: ReadonlyMap<string, MarketQuote> = new Map()): AdvisorDomainContext {
+export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, question: string, quotes: ReadonlyMap<string, MarketQuote> = new Map(), budgetCoins: number | null = null): AdvisorDomainContext {
   const skill = profile.progression.skills.alchemy;
   const xp = skill?.xp ?? null;
   const level = skill?.level ?? null;
@@ -24,7 +24,16 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
   const levelingMethods = alchemyLevelingMethods.map(method => {
     const effectiveXpPerBatchFloor = effectiveAlchemyXp(method.xpPerBatch, wisdom.confirmedWisdom);
     const ingredientPriceCoins = quotes.get(method.marketKey)?.coins ?? null;
+    const batchesTo50Floor = xpTo50 === null ? null : Math.ceil(xpTo50 / effectiveXpPerBatchFloor);
+    const estimatedIngredientCostTo50Floor = ingredientPriceCoins === null || batchesTo50Floor === null ? null : ingredientPriceCoins * batchesTo50Floor;
+    const budgetStatus = budgetCoins === null ? "NO_BUDGET" as const
+      : estimatedIngredientCostTo50Floor === null ? "UNKNOWN" as const
+      : estimatedIngredientCostTo50Floor <= budgetCoins ? "WITHIN_BUDGET" as const : "OVER_BUDGET" as const;
     return { ...method, effectiveXpPerBatchFloor, ingredientPriceCoins,
+      grossCoinsPerXpFloor: ingredientPriceCoins === null ? null : ingredientPriceCoins / effectiveXpPerBatchFloor,
+      batchesTo50Floor, estimatedIngredientCostTo50Floor, budgetStatus };
+  });
+  return { ...method, effectiveXpPerBatchFloor, ingredientPriceCoins,
       grossCoinsPerXpFloor: ingredientPriceCoins === null ? null : ingredientPriceCoins / effectiveXpPerBatchFloor,
       batchesTo50Floor: xpTo50 === null ? null : Math.ceil(xpTo50 / effectiveXpPerBatchFloor) };
   });
