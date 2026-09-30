@@ -284,7 +284,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     godPotion: z.object({ durationHours: z.number().nonnegative().nullable(), potionAffinityApplies: z.boolean(), parrotDurationBonusMaxPercent: z.number().nonnegative(), maxStackedDurationHours: z.number().positive(), mixinCount: z.number().int().nonnegative(), effects: z.array(z.object({ name: z.string(), level: z.number().int().positive() })), mixins: z.array(z.object({ id: z.string(), name: z.string(), effect: z.string(), requirement: z.object({ slayer: z.string(), level: z.number().int().positive() }).nullable(), requirementStatus: z.enum(["AVAILABLE","LOCKED","NO_REQUIREMENT","UNKNOWN"]) })) }),
     wisdom: z.object({ confirmedWisdom: z.number().nonnegative(), effectiveWisdomStatus: z.literal("PARTIAL"), effectiveXpMultiplierFloor: z.number().min(1),
       sources: z.array(z.object({ id: z.string(), name: z.string(), wisdom: z.number().nonnegative().nullable(),
-        status: z.enum(["ACTIVE","OWNED_INACTIVE","UNOBSERVED","UNREPORTED"]), evidence: z.string() })),
+        status: z.enum(["ACTIVE","INACTIVE","OWNED_INACTIVE","UNOBSERVED","UNREPORTED"]), evidence: z.string() })),
       witch: z.object({ owned: z.boolean(), active: z.boolean(), rarity: z.string().nullable(), level: z.number().nullable(),
         wisdom: z.number().nullable(), brewTimeReductionPercent: z.number().nullable(), brewSeconds: z.number().nullable() }) }),
     levelingMethods: z.array(z.object({ id: z.string(), potion: z.string(), resultingLevel: z.number().int().positive(),
