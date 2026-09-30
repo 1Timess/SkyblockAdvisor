@@ -85,7 +85,7 @@ export function buildActivityPetLanes(input: {
     if (!definition) return [];
     const heldItem = heldItemId ? petItems.get(heldItemId) ?? null : null;
     return [...new Set(evaluatePetDomainRelevance(definition, input.domain, heldItem).evidence
-      .filter(value => value.source === "PET_EFFECT" || value.source === "PET_ITEM_EFFECT")
+      .filter(value => value.source === "PET_BASE_STAT" || value.source === "PET_EFFECT" || value.source === "PET_ITEM_EFFECT")
       .map(value => value.mechanic))].sort();
   }
 }
