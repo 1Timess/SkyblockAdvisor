@@ -4,11 +4,11 @@ import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 import { experimentObservationSchema } from "./owned-enchanting";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
-export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
@@ -82,6 +82,7 @@ export const availableAnalysisSchema = z.object({
   fishing: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   mining: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   enchanting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  alchemy: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
@@ -268,6 +269,23 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
       requiredEnchantingLevel: z.number().nullable(), lowerEnchantedItems: z.array(z.string()).max(8),
       lowerEnchantedItemCount: z.number().int().nonnegative(), itemFit: z.string() })),
     possibleRewardCount: z.number().int().nonnegative(), experimentation: experimentObservationSchema, note: z.string() }),
+  z.object({ domain: z.literal("ALCHEMY"), skill: z.object({
+    level: z.number().nullable(), xp: z.number().nullable(), cap: z.literal(50), xpToNext: z.number().nonnegative().nullable(),
+    xpTo50: z.number().nonnegative().nullable(), potionDurationBonusPercent: z.number().nonnegative().nullable(),
+  }), brewing: z.object({ standOperationSeconds: z.number().positive(), potionSlotsPerBatch: z.number().int().positive(),
+    modifierRules: z.object({
+      level: z.array(z.object({ item: z.string(), levelIncrease: z.number().int().positive() })),
+      duration: z.array(z.object({ item: z.string(), baseDurationMinutes: z.number().positive() })),
+      splash: z.array(z.object({ item: z.string(), durationMultiplier: z.number().nonnegative() })),
+      combined: z.object({ item: z.string(), levelIncrease: z.number().int().positive(), baseDurationMinutes: z.number().positive() }),
+      orderingRules: z.array(z.string()),
+    }) }),
+    godPotion: z.object({ durationHours: z.number().nonnegative().nullable(), potionAffinityApplies: z.boolean(), parrotDurationBonusMaxPercent: z.number().nonnegative() }),
+    potionCatalog: z.object({ brewableCount: z.number().int().nonnegative(), recipeCoverage: z.literal("UNRESOLVED"),
+      focus: z.array(z.object({ id: z.string(), name: z.string(), effect: z.string(), maxLevel: z.number().int().positive(),
+        tags: z.array(z.string()), unlock: z.object({ collection: z.string(), tier: z.number().int().positive() }).nullable(),
+        recipeStatus: z.literal("UNRESOLVED") })).max(12) }),
+    unavailableFacts: z.array(z.string()), note: z.string() }),
   z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
     highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),
     weapons: z.array(compactItemSchema), equipment: z.array(compactItemSchema), activePet: compactPetSchema.nullable() }),
