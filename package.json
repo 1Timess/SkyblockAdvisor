@@ -38,6 +38,7 @@
     "validate:slayer": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-slayer.ts",
     "validate:slayer-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-slayer-luna.ts",
     "inspect:farming-research": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-research.ts",
+    "inspect:foraging-api": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-foraging-api.ts",
     "inspect:farming-depth": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-depth.ts",
     "inspect:farming-mechanics": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-mechanics.ts",
     "inspect:farming-tool-attributes": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-farming-tool-attributes.ts",
