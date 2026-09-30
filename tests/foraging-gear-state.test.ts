@@ -34,6 +34,8 @@ test("Foraging gear index keeps inventory and equipped loadout evidence distinct
 test("Foraging classifier accepts canonical and mechanic evidence without generic armor leakage", () => {
   assert.equal(isForagingItem(item("HELIX_CHOPPER")), true);
   assert.equal(isForagingItem(item("FUTURE_AXE", ["Sweep: +5"])), true);
+  assert.equal(isForagingItem(item("GENERIC_COMBAT_AXE")), false);
+  assert.equal(isForagingItem({ ...item("TAGGED_FORAGING_TOOL"), categories: ["tool", "foraging_tool"] }), true);
   const armor = { ...item("RANDOM_HELMET"), categories: ["armor", "helmet"], lore: ["Health: +100"] };
   assert.equal(isForagingItem(armor), false);
 });
