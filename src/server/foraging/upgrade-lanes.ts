@@ -1,0 +1,54 @@
+import type { CandidateItem } from "../../schemas/catalog";
+import type { AdvisorCandidate } from "../../schemas/candidates";
+import type { MarketQuote } from "../../schemas/market";
+import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import { prepareCandidate } from "../candidates/common";
+
+const axeOrder = ["SERIOUSLY_DAMAGED_AXE", "FIG_HEW", "FIGSTONE_SPLITTER", "HELIX_CHOPPER"] as const;
+const armorTiers = ["FIG_ARMOR", "HELIX_ARMOR"] as const;
+const armorSlots = ["HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"] as const;
+const stats = ["sweep", "foragingFortune", "foragingWisdom"] as const;
+
+export function buildForagingUpgradeLanes(input: {
+  profile: NormalizedSkyBlockProfile; catalog: readonly CandidateItem[]; quotes: ReadonlyMap<string, MarketQuote>; budgetCoins?: number;
+}): Record<string, AdvisorCandidate[]> {
+  const byId = new Map(input.catalog.map(item => [item.id, item]));
+  const ownedIds = new Set(input.profile.inventoryItems.flatMap(item => item.id ? [item.id] : []));
+  const lanes: Record<string, AdvisorCandidate[]> = { axe: [], helmet: [], chestplate: [], leggings: [], boots: [] };
+
+  const ownedAxeRank = Math.max(-1, ...input.profile.inventoryItems.map(item => item.id ? axeOrder.indexOf(item.id as typeof axeOrder[number]) : -1));
+  for (let rank = ownedAxeRank + 1; rank < axeOrder.length; rank++) {
+    const item = byId.get(axeOrder[rank]); if (!item) continue;
+    const candidate = prepareCandidate("tool", item, input.profile, input.quotes,
+      { budgetCoins: input.budgetCoins, ownedItemIds: ownedIds, eligibilityMode: "ADVISOR_DISCOVERY" });
+    if (candidate) lanes.axe.push(withChanges(candidate, bestOwned(input.profile, axeOrder)));
+  }
+
+  for (const slot of armorSlots) {
+    const lane = slot.toLowerCase();
+    const ids = armorTiers.map(tier => `${tier}_${slot}`);
+    const ownedRank = Math.max(-1, ...input.profile.inventoryItems.map(item => item.id ? ids.indexOf(item.id) : -1));
+    for (let rank = ownedRank + 1; rank < ids.length; rank++) {
+      const item = byId.get(ids[rank]); if (!item) continue;
+      const candidate = prepareCandidate("armor", item, input.profile, input.quotes,
+        { budgetCoins: input.budgetCoins, ownedItemIds: ownedIds, eligibilityMode: "ADVISOR_DISCOVERY" });
+      if (candidate) lanes[lane].push(withChanges(candidate, bestOwned(input.profile, ids)));
+    }
+  }
+  return lanes;
+}
+
+function bestOwned(profile: NormalizedSkyBlockProfile, ids: readonly string[]) {
+  const rank = Math.max(-1, ...profile.inventoryItems.map(item => item.id ? ids.indexOf(item.id) : -1));
+  return rank < 0 ? null : profile.inventoryItems.find(item => item.id === ids[rank]) ?? null;
+}
+
+function withChanges(candidate: AdvisorCandidate, current: NormalizedSkyBlockProfile["inventoryItems"][number] | null): AdvisorCandidate {
+  const knownChanges: NonNullable<AdvisorCandidate["knownChanges"]> = {};
+  for (const stat of stats) {
+    const currentValue = current?.stats[stat] ?? null, candidateValue = candidate.item.stats[stat] ?? null;
+    if (currentValue !== null || candidateValue !== null) knownChanges[stat] = { current: currentValue, candidate: candidateValue };
+  }
+  return { ...candidate, knownChanges, warnings: [...candidate.warnings,
+    "Foraging upgrade comparisons report visible item contributions only; they do not reconstruct effective account Sweep or Foraging Fortune."] };
+}
