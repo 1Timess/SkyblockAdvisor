@@ -19,6 +19,9 @@ test("discovers only later supported axe-family upgrades", () => {
   const lanes = buildForagingUpgradeLanes({ profile: profile([{ id: "FIG_HEW", stats: { sweep: 15 } }]), catalog, quotes: new Map() });
   assert.deepEqual(lanes.axe.map(value => value.id), ["FIGSTONE_SPLITTER", "HELIX_CHOPPER"]);
   assert.deepEqual(lanes.axe[0].knownChanges?.sweep, { current: 15, candidate: 25 });
+  assert.ok(lanes.axe[0].semanticEvidence?.some(value => value.includes("1 step")));
+  assert.ok(lanes.axe[1].semanticEvidence?.some(value => value.includes("2 steps")));
+  assert.ok(lanes.axe[1].warnings.some(value => value.includes("not an inferred usage requirement")));
   assert.ok(!Object.values(lanes).flat().some(value => value.id === "UNRELATED_AXE"));
 });
 
@@ -30,4 +33,13 @@ test("keeps Foraging armor upgrades slot-aware", () => {
   assert.deepEqual(lanes.boots.map(value => value.id), ["HELIX_ARMOR_BOOTS"]);
   assert.deepEqual(lanes.helmet[0].knownChanges?.sweep, { current: 10, candidate: 20 });
   assert.deepEqual(lanes.boots[0].knownChanges?.sweep, { current: null, candidate: 20 });
+});
+
+test("keeps farther family members discoverable without inventing requirements", () => {
+  const catalog = [candidate("SERIOUSLY_DAMAGED_AXE", { sweep: 10 }), candidate("FIG_HEW", { sweep: 15 }),
+    candidate("FIGSTONE_SPLITTER", { sweep: 25 }), candidate("HELIX_CHOPPER", { sweep: 50 })];
+  const lanes = buildForagingUpgradeLanes({ profile: profile([]), catalog, quotes: new Map() });
+  assert.deepEqual(lanes.axe.map(value => value.id), ["SERIOUSLY_DAMAGED_AXE", "FIG_HEW", "FIGSTONE_SPLITTER", "HELIX_CHOPPER"]);
+  assert.ok(lanes.axe[3].semanticEvidence?.some(value => value.includes("4 steps")));
+  assert.deepEqual(lanes.axe[3].requirements, []);
 });
