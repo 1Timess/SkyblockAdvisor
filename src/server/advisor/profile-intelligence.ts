@@ -127,7 +127,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         collections: Object.fromEntries(Object.entries(profile.collections).filter(([key]) => ["FIG_LOG", "MANGROVE_LOG", "HELIX_LOG", "HONEYCOMB", "RUBY_VEILSHROOM", "TENDER_WOOD"].includes(key))),
         relevantAttributes, pets: foragingGear.pets, progressionFocus: buildForagingProgressionFocus(profile), gearMechanics: buildForagingGearMechanics(profile), gear: foragingGear,
         unavailableFacts: ["Effective Sweep, effective Foraging Fortune, logs per action, hourly profit, and unobserved modifier state are not reconstructed."],
-        note: "Foraging context reports observed progression and gear state. Candidate recommendations are not enabled yet." },
+        note: "Foraging context reports observed progression and gear state. Supported candidate families are bounded to verified Foraging integrations; effective account-level Sweep and Fortune remain unavailable." },
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
         enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
         matchedRewards: [], possibleRewardCount: 0, experimentation: profile.progression.enchanting.experimentation,
