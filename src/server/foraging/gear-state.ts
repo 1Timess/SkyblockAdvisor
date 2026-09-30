@@ -44,7 +44,7 @@ function equippedLoadout(set: number | null, indexed: ReturnType<typeof matching
 function observedItem(item: ProfileItem) {
   return { id: item.id, name: item.name, rarity: item.rarity, categories: item.categories, source: item.source,
     reforge: item.reforge, enchantments: item.enchantments, stars: item.stars, recombobulated: item.recombobulated,
-    stats: item.stats, gemstones: item.gemstones ?? null, abilityText: item.abilityText, setBonusText: item.setBonusText,
+    stats: item.stats, gemstones: item.gemstones ?? null, foragingState: item.foragingState ?? null, abilityText: item.abilityText, setBonusText: item.setBonusText,
     mechanicLore: item.lore.filter(line => foragingText.test(line)).slice(0, 12) };
 }
 function uniqueItems(items: readonly ProfileItem[]) {
