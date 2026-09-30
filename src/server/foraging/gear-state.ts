@@ -10,7 +10,7 @@ const foragingText = /\b(?:Foraging Fortune|Foraging Wisdom|Sweep|Galatea|Moongl
 
 export function isForagingItem(item: ProfileItem) {
   return !!item.id && (foragingIdPatterns.some(pattern => pattern.test(item.id!))
-    || item.categories.some(category => category === "axe" || category === "foraging_tool")
+    || item.categories.includes("foraging_tool")
     || [...item.lore, ...item.abilityText, ...item.setBonusText].some(line => foragingText.test(line)));
 }
 
