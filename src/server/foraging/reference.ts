@@ -30,3 +30,39 @@ export const treeGiftMilestones = [10, 25, 100, 250, 500, 1_000, 2_500] as const
 export const treeGiftHotfXp = { FIG: 10, MANGROVE: 20, HELIX: 30 } as const;
 export const treeToughness = { FIG: 10, MANGROVE: 50, HELIX: 150 } as const;
 export const torrhusRequiredHotfTier = 4;
+
+
+export const foragingTreeMechanics = {
+  FIG: { toughness: 10, style: ["trunk", "branches"], giftContributionPercent: 10 },
+  MANGROVE: { toughness: 50, style: ["branches", "trunk", "roots"], giftContributionPercent: 10 },
+  HELIX: { toughness: 150, style: ["light_logs", "red_logs"], giftContributionPercent: 10 },
+} as const;
+
+export const throwingAxeMechanics = {
+  allowedOnForagingIslands: true,
+  normalLogBreakFraction: 0.5,
+} as const;
+
+export const currentFlatSweepChanges = {
+  lottery: 10,
+  agathaPowerPerRank: 5,
+  agathaPowerMaxRank: 5,
+  agathaPowerMaxSweep: 25,
+  miriaPowerPerRank: 5,
+  miriaPowerMaxRank: 5,
+  miriaPowerMaxSweep: 25,
+} as const;
+
+export const centerOfForestVerifiedEffects = {
+  2: { axeAbilityLevels: 1 },
+  4: { treeGiftTracking: 5 },
+} as const;
+
+export const currentTreeGiftMilestoneSweepPerTier = 3;
+export const halfFullEmptyScope = "island_wide" as const;
+
+export const foragingLevelCapSources = {
+  collectionTierNine: { FIG_LOG: 1, MANGROVE_LOG: 1, HELIX_LOG: 1 },
+  agathaPrizeShop: 2,
+  miriaPrizeShop: 2,
+} as const;
