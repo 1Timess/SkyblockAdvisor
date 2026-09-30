@@ -12,6 +12,7 @@ import { mutationCatalogSummary } from "../farming/mutation-knowledge";
 import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
 import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";
 import { indexForagingGear } from "../foraging/gear-state";
+import { buildForagingProgressionFocus } from "../foraging/progression-focus";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -123,7 +124,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         nodes: foraging.nodes, presets: foraging.presets, selectedAbility: foraging.selectedAbility, selectedAbilities: foraging.selectedAbilities,
         tokensSpentByPreset: foraging.tokensSpentByPreset, whispers: foraging.whispers, treeGifts: foraging.treeGifts,
         collections: Object.fromEntries(Object.entries(profile.collections).filter(([key]) => /(?:LOG|HONEYCOMB|RUBY_VEILSHROOM|TENDER_WOOD)/.test(key))),
-        relevantAttributes, gear: foragingGear,
+        relevantAttributes, progressionFocus: buildForagingProgressionFocus(profile), gear: foragingGear,
         unavailableFacts: ["Effective Sweep, effective Foraging Fortune, logs per action, hourly profit, and unobserved modifier state are not reconstructed."],
         note: "Foraging context reports observed progression and gear state. Candidate recommendations are not enabled yet." },
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
