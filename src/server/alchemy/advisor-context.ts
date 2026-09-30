@@ -2,7 +2,7 @@ import type { AdvisorDomainContext } from "../../schemas/advisor";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import type { MarketQuote } from "../../schemas/market";
 import xpTables from "../reference/xp-tables.json";
-import { alchemyDurationBonusPercent, brewablePotions, brewingMechanics, godPotionDurationHours, potionFocusForQuestion } from "./reference";
+import { alchemyDurationBonusPercent, brewablePotions, brewingMechanics, godPotionDurationHours, potionFocusForQuestion, potionUnlockStatus } from "./reference";
 import { buildAlchemyWisdomState } from "./wisdom";
 import { alchemyLevelingMethods, effectiveAlchemyXp } from "./leveling";
 
@@ -48,6 +48,9 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       durationHours: godPotionDurationHours(level),
       potionAffinityApplies: brewingMechanics.godPotion.potionAffinityApplies,
       parrotDurationBonusMaxPercent: brewingMechanics.godPotion.parrotDurationBonusMaxPercent,
+      maxStackedDurationHours: brewingMechanics.godPotion.maxStackedDurationHours,
+      mixinCount: brewingMechanics.godPotion.mixinCount,
+      effects: brewingMechanics.godPotion.effects.map(([name, effectLevel]) => ({ name, level: effectLevel })),
     },
     wisdom,
     levelingMethods,
@@ -56,7 +59,7 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       recipeCoverage: "UNRESOLVED",
       focus: focus.slice(0, 12).map(entry => ({
         id: entry.id, name: entry.name, effect: entry.effect, maxLevel: entry.maxLevel,
-        tags: [...entry.tags], unlock: entry.unlock, recipeStatus: entry.recipeStatus,
+        tags: [...entry.tags], unlock: entry.unlock, unlockStatus: potionUnlockStatus(profile.unlockedCollectionTiers, entry), recipeStatus: entry.recipeStatus,
       })),
     },
     unavailableFacts: [
