@@ -83,6 +83,16 @@ export const brewingMechanics = {
     durationHoursPerAlchemyLevel: 0.24,
     potionAffinityApplies: false,
     parrotDurationBonusMaxPercent: 20,
+    maxStackedDurationHours: 192,
+    effects: [
+      ["Critical",4],["Regeneration",9],["Strength",8],["Agility",4],["Night Vision",1],["Absorption",8],
+      ["Burning",4],["Stun",4],["Dodge",4],["Experience",4],["Mana",8],["Speed",8],["Water Breathing",6],
+      ["Alchemy XP Boost",3],["Combat XP Boost",3],["Enchanting XP Boost",3],["Farming XP Boost",3],
+      ["Fishing XP Boost",3],["Foraging XP Boost",3],["Mining XP Boost",3],["Rabbit",6],["Resistance",8],
+      ["Archery",4],["Jump Boost",4],["Magic Find",4],["Pet Luck",4],["Spirit",4],["Spelunker",5],
+      ["Adrenaline",8],["Fire Resistance",1],["Haste",4],["True Resistance",4],
+    ] as readonly (readonly [string, number])[],
+    mixinCount: 13,
   },
 } as const;
 
@@ -110,4 +120,14 @@ export function potionFocusForQuestion(question: string): PotionReference[] {
   if (/\bspeed\b|\bmovement\b|\bjump\b|\butility\b/.test(text)) tags.push("UTILITY");
   if (!tags.length) return [];
   return brewablePotions.filter(entry => tags.some(tag => entry.tags.includes(tag)));
+}
+
+
+export function potionUnlockStatus(profileUnlockedTiers: readonly string[], potion: PotionReference): "AVAILABLE" | "LOCKED" | "NO_COLLECTION_GATE" | "UNKNOWN" {
+  if (!potion.unlock) return "NO_COLLECTION_GATE";
+  const prefix = potion.unlock.collection.toUpperCase();
+  const observed = profileUnlockedTiers.filter(value => value.toUpperCase().startsWith(prefix + "_"))
+    .map(value => Number(value.slice(prefix.length + 1))).filter(Number.isFinite);
+  if (!observed.length) return "UNKNOWN";
+  return Math.max(...observed) >= potion.unlock.tier ? "AVAILABLE" : "LOCKED";
 }
