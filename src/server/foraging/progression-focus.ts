@@ -4,8 +4,7 @@ import { hotfCumulativeXp, torrhusRequiredHotfTier, treeGiftMilestones } from ".
 export type ForagingProgressionTarget =
   | { kind: "HOTF_TIER"; currentTier: number; targetTier: number; currentXp: number; requiredXp: number; xpRemaining: number }
   | { kind: "TORRHUS_ACCESS"; requiredHotfTier: number; currentHotfTier: number }
-  | { kind: "TREE_GIFT_MILESTONE"; tree: string; currentGifts: number; targetGifts: number; giftsRemaining: number }
-  | { kind: "COLLECTION_CAP_SOURCE"; collection: "FIG_LOG" | "MANGROVE_LOG" | "HELIX_LOG"; status: "UNRESOLVED" };
+  | { kind: "TREE_GIFT_MILESTONE"; tree: string; currentGifts: number; targetGifts: number; giftsRemaining: number };
 
 export function buildForagingProgressionFocus(profile: NormalizedSkyBlockProfile) {
   const state = profile.progression.foraging;
