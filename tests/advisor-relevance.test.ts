@@ -102,3 +102,23 @@ test("mixed and unknown requirements preserve individual states", async () => {
   assert.equal(unknownFeasibility.requirements[0].type, "UNKNOWN");
   assert.ok(unknown.warnings.some(warning => warning.includes("not structurally understood")));
 });
+
+
+test("Foraging activity lanes bypass combat-role filtering", () => {
+  const foragingRoute: AdvisorRoute = {
+    scope: "FORAGING", goal: "FORAGING", inferredRole: "tank", activeDomains: ["FORAGING"],
+    clarificationRecommended: false, reason: "fixture", armorSlots: [], domain: "FORAGING", mechanics: [],
+  };
+  const axe = candidate("FIGSTONE_SPLITTER", "sweep", 25, { domain: "tool" });
+  const pet = candidate("SLOTH;LEGENDARY", "foragingFortune", 20, {
+    domain: "pet", semanticEvidence: ["FORAGING_FORTUNE"], petAcquisitionFamily: "SLOTH",
+  });
+  const lanes: TaggedCandidateLane[] = [
+    { domain: "FORAGING", label: "foraging:axe", candidates: [axe] },
+    { domain: "FORAGING", label: "foraging:petAcquisition", candidates: [pet] },
+  ];
+  assert.deepEqual(
+    selectDetailedCandidates(filterCandidateLanesForGoal(lanes, foragingRoute)).map(value => value.id).sort(),
+    ["FIGSTONE_SPLITTER", "SLOTH;LEGENDARY"].sort(),
+  );
+});
