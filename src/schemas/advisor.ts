@@ -84,7 +84,8 @@ export const availableAnalysisSchema = z.object({
   enchanting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
-  farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),\n  foraging: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  foraging: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
 });
 export type AvailableAnalysis = z.infer<typeof availableAnalysisSchema>;
 
@@ -107,7 +108,8 @@ const farmingBonusMechanicsSchema = z.object({
     displayedDropChancePercent: z.array(z.number()), effectText: z.string() }).nullable(),
   displayedPestChancePercent: z.number().nullable(), note: z.string(),
 });
-export const advisorDomainContextSchema = z.discriminatedUnion("domain", [\n  z.object({ domain: z.literal("FORAGING"),
+export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
+  z.object({ domain: z.literal("FORAGING"),
     foragingLevel: compactLevelSchema.nullable(), foragingXp: z.number().nullable(), extraLevelCap: z.number().nullable(),
     hotfLevel: z.number().nullable(), treeExperience: z.number().nullable(), activePreset: z.number().nullable(),
     nodes: z.record(z.string(), compactNodeSchema), presets: z.record(z.string(), z.object({ nodes: z.record(z.string(), compactNodeSchema) })),
@@ -118,7 +120,8 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [\n  z.
     collections: statsSchema, relevantAttributes: statsSchema,
     gear: z.object({ visible: z.array(z.unknown()), loadouts: z.object({ armor: z.record(z.string(), z.unknown()), equipment: z.record(z.string(), z.unknown()) }),
       equipped: z.object({ armor: z.unknown().nullable(), equipment: z.unknown().nullable() }), pets: z.array(z.unknown()), note: z.string() }),
-    unavailableFacts: z.array(z.string()), note: z.string() }),\n
+    unavailableFacts: z.array(z.string()), note: z.string() }),
+
   z.object({ domain: z.literal("FARMING"), farmingLevel: z.number().nullable(), farmingXp: z.number().nullable(),
     farmingSkillFocus: z.object({ cap: z.number().nullable(), capEvidence: z.enum(["UNREPORTED", "REPORTED_PERK", "BASE_CAP_ASSUMED"]),
       nextLevel: z.object({ level: z.number().int().positive(), xpRemaining: z.number().nonnegative() }).nullable() }),
