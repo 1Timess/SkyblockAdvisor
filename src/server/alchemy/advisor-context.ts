@@ -7,6 +7,7 @@ import { buildAlchemyWisdomState } from "./wisdom";
 import { alchemyLevelingMethods, effectiveAlchemyXp } from "./leveling";
 import { recipesForPotion } from "./recipes";
 import { compatibleBrews, potionAffinity } from "./modifiers";
+import { godPotionMixins, mixinRequirementStatus } from "./mixins";
 
 const ALCHEMY_CAP = 50;
 const ALCHEMY_XP_TO_50 = xpTables.skill.slice(0, ALCHEMY_CAP).reduce((sum, value) => sum + value, 0);
@@ -46,6 +47,8 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
         splash: brewingMechanics.modifiers.splash.map(value => ({ ...value })),
         combined: { ...brewingMechanics.modifiers.combined },
         orderingRules: [...brewingMechanics.orderingRules],
+        skillXpBoostRules: [...brewingMechanics.skillXpBoostRules],
+        ordinaryPotionParrotDurationBonusMaxPercent: brewingMechanics.ordinaryPotionParrotDurationBonusMaxPercent,
       },
     },
     godPotion: {
@@ -55,6 +58,7 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       maxStackedDurationHours: brewingMechanics.godPotion.maxStackedDurationHours,
       mixinCount: brewingMechanics.godPotion.mixinCount,
       effects: brewingMechanics.godPotion.effects.map(([name, effectLevel]) => ({ name, level: effectLevel })),
+      mixins: godPotionMixins.map(mixin => ({ ...mixin, requirement: mixin.requirement ? { ...mixin.requirement } : null, requirementStatus: mixinRequirementStatus(profile, mixin) })),
     },
     wisdom,
     levelingMethods,
@@ -78,9 +82,9 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       tiers: potionAffinity.map(tier => ({ ...tier })),
     },
     unavailableFacts: [
-      "Recipe coverage is partial: verified Speed, Weakness, Strength, Haste, Spelunker, and Cold Resistance ingredient paths are encoded; other potion recipes remain unresolved rather than inferred.",
+      "Recipe coverage is partial: verified high-value progression, mining, combat, archery, and pet-luck ingredient paths are encoded; other potion recipes remain unresolved rather than inferred.",
       "Effective Alchemy Wisdom is a lower bound: Booster Cookie, active potion effects, temporary consumables, event multipliers, and some other sources are not normalized.",
-      "Potion Affinity ownership/effective tier and active God Potion/Mixin state are not yet reconstructed.",
+      "Active God Potion, Cookie Buff, and applied/consumed Mixin timers are not reconstructed; Mixin eligibility is derived only from observable requirements.",
     ],
     note: "Alchemy context separates skill progression, brewing mechanics, potion selection, XP methods, observed Wisdom, Witch throughput, and God Potion duration. Unresolved recipe and multiplier facts remain explicit rather than inferred.",
   };
