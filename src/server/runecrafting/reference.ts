@@ -69,9 +69,7 @@ function parseApplicableTo(lore: readonly string[]) {
 export function isRuneItem(item: NeuItem) {
   const text = `${item.internalname} ${item.displayname ?? ""}`;
   if (!/(?:^|[_ ])RUNE(?:$|[_ ])/i.test(text)) return false;
-  const lore = (item.lore ?? []).map(stripFormatting);
-  return lore.some(line => /^requires?\s+level\s+\d+$/i.test(line))
-    || lore.some(line => /(?:apply|applicable|can be applied)\s+(?:this rune\s+)?to\b/i.test(line));
+  return !/(?:^|[_ ])RUNE[_ ]SACK(?:$|[_ ])/i.test(text);
 }
 
 export function parseRuneReference(item: NeuItem): RuneReference | null {
