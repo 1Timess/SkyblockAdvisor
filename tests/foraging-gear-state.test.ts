@@ -23,7 +23,10 @@ test("Foraging gear index keeps inventory and equipped loadout evidence distinct
   const state = indexForagingGear(profile);
   assert.equal(state.visible.length, 3);
   assert.equal(state.visible[0].gemstones?.slots[0].slotType, "CITRINE");
-  assert.equal(state.equipped.armor?.HELMET.id, "FIG_HELMET");\n  const chopper = indexForagingGear({ ...profile, inventoryItems: [item("HELIX_CHOPPER")] } as unknown as NormalizedSkyBlockProfile).visible[0];\n  assert.deepEqual(chopper.foragingState?.boosterTiers, { foraging_wisdom: 1 });\n  assert.equal(chopper.foragingState?.logsCut, 8181);
+  assert.equal(state.equipped.armor?.HELMET.id, "FIG_HELMET");
+  const chopper = indexForagingGear({ ...profile, inventoryItems: [item("HELIX_CHOPPER")] } as unknown as NormalizedSkyBlockProfile).visible[0];
+  assert.deepEqual(chopper.foragingState?.boosterTiers, { foraging_wisdom: 1 });
+  assert.equal(chopper.foragingState?.logsCut, 8181);
   assert.equal(state.equipped.equipment, null);
   assert.equal(state.pets[0].type, "FROG");
 });
