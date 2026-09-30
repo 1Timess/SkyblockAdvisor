@@ -165,3 +165,18 @@ test("2026 potion catalog keeps brewable caps distinct from special effect tiers
   assert.equal(nightVision?.maxLevel, 1);
   assert.equal(regeneration?.maxLevel, 8);
 });
+
+
+test("derived potion recipes preserve their prerequisite potion instead of pretending to start from Awkward", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const context = buildAlchemyAdvisorContext(profile, "How do I brew Invisibility?");
+  assert.equal(context.domain, "ALCHEMY");
+  if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+  const invisibility = context.potionCatalog.focus.find(entry => entry.name === "Invisibility");
+  assert.equal(invisibility?.recipeStatus, "VERIFIED");
+  const recipe = invisibility?.recipes[0];
+  assert.equal(recipe?.basePotion, "DERIVED_POTION");
+  assert.equal(recipe?.basePotionId, "NIGHT_VISION");
+  assert.equal(recipe?.basePotionLevel, 1);
+  assert.equal(recipe?.ingredientId, "FERMENTED_SPIDER_EYE");
+});
