@@ -205,3 +205,36 @@ test("audited potion recipes preserve Awkward bases for collection potions", asy
     assert.equal(potion?.recipes[0]?.basePotion, "AWKWARD_POTION");
   }
 });
+
+
+test("Alchemy progression focus ranks covered leveling economics without pretending full-cap budget means session affordability", async () => {
+  const member = fixtureMember();
+  member.player_data!.experience!.SKILL_ALCHEMY = 0;
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources(member));
+  const quote = (marketKey: string, coins: number) => [marketKey, {
+    marketKey, coins, observedAt: new Date(0).toISOString(), basis: "BAZAAR" as const, confidence: "HIGH" as const,
+  }] as const;
+  const quotes = new Map([
+    quote("ENCHANTED_SUGAR_CANE", 100_000),
+    quote("ENCHANTED_FERMENTED_SPIDER_EYE", 75_000),
+    quote("ENCHANTED_BLAZE_ROD", 320_000),
+  ]);
+  const context = buildAlchemyAdvisorContext(profile, "What should I focus on next for Alchemy?", quotes, 50_000_000);
+  assert.equal(context.domain, "ALCHEMY");
+  if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+  assert.equal(context.progressionFocus.actions[0]?.kind, "LEVELING_METHOD");
+  assert.match(context.progressionFocus.actions[0]?.title ?? "", /Weakness 5/);
+  assert.ok(context.progressionFocus.actions[0]?.evidence.some(value => value.includes("partial leveling session")));
+  assert.ok(context.progressionFocus.actions.some(action => action.kind === "WITCH_PET"));
+});
+
+test("Alchemy progression focus stops recommending skill leveling at the observed cap", async () => {
+  const member = fixtureMember();
+  member.player_data!.experience!.SKILL_ALCHEMY = 55_172_425;
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources(member));
+  const context = buildAlchemyAdvisorContext(profile, "What should I focus on next for Alchemy?");
+  assert.equal(context.domain, "ALCHEMY");
+  if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+  assert.equal(context.progressionFocus.actions[0]?.kind, "HOLD");
+  assert.ok(!context.progressionFocus.actions.some(action => action.kind === "WITCH_PET"));
+});
