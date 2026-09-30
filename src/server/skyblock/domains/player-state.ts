@@ -1,5 +1,6 @@
 import type { RawMember } from "../../hypixel/types";
 import { hotmLevelFromXp } from "../../reference/leveling";
+import { hotfLevelFromXp } from "../../foraging/reference";
 
 export function buildExtendedPlayerState(member: RawMember) {
   const miningNodes = normalizeNodes(member.skill_tree?.nodes?.mining);
@@ -60,6 +61,7 @@ function normalizeForaging(member: RawMember) {
   const foraging = dynamicRecord(member.foraging), gifts = dynamicRecord(foraging.tree_gifts);
   return {
     treeExperience: finiteNumber(tree?.experience?.foraging),
+    hotfLevel: hotfLevelFromXp(finiteNumber(tree?.experience?.foraging)),
     extraLevelCap: finiteNumber(member.player_data?.experience?.SKILL_FORAGING_extra_level_cap),
     presets,
     activePreset,
