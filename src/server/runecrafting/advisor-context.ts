@@ -29,10 +29,10 @@ export function buildRunecraftingAdvisorContext(profile: NormalizedSkyBlockProfi
       effectiveCap: null,
       xpMultiplier: null,
       defaultRankCap: 3,
-      ranks: runecraftingRankMechanics,
+      ranks: runecraftingRankMechanics.map(rank => ({ ...rank })),
       note: "Rank is not present in the normalized profile. Do not infer rank from observed Runecrafting XP or level.",
     },
-    mechanics: runecraftingMechanics,
+    mechanics: { ...runecraftingMechanics, xpSources: [...runecraftingMechanics.xpSources], runeTiers: [...runecraftingMechanics.runeTiers] },
     runeCatalog: {
       source: neu ? "NEU" : "UNAVAILABLE",
       total: runes.length,
