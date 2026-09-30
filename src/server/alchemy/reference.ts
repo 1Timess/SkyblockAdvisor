@@ -29,7 +29,7 @@ export const brewablePotions: readonly PotionReference[] = [
   potion("EXPERIENCE", "Experience", 4, "Increases experience orb gain.", ["ENCHANTING", "UTILITY"], { collection: "INK_SACK:4", tier: 6 }),
   potion("FIRE_RESISTANCE", "Fire Resistance", 1, "Grants immunity to fire and lava.", ["SURVIVABILITY", "UTILITY"]),
   potion("HASTE", "Haste", 4, "Increases Mining Speed.", ["MINING"], { collection: "COAL", tier: 3 }),
-  potion("HEALING", "Healing", 9, "Grants Health regeneration for a short duration.", ["SURVIVABILITY"]),
+  potion("HEALING", "Healing", 9, "Grants an instant Health boost.", ["SURVIVABILITY"]),
   potion("INVISIBILITY", "Invisibility", 1, "Makes the affected entity invisible.", ["UTILITY"]),
   potion("JUMP_BOOST", "Jump Boost", 4, "Increases jump height.", ["UTILITY"]),
   potion("KNOCKBACK", "Knockback", 4, "Increases knockback dealt when damaging enemies.", ["COMBAT"], { collection: "SLIME_BALL", tier: 4 }),
