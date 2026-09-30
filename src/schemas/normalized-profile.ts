@@ -49,8 +49,26 @@ const miningProgressionSchema = z.object({
     totalCorpsesLooted: z.number().nullable(), fossilsDonated: z.array(z.string()), fossilDust: z.number().nullable(), coldResistance: z.number().nullable() }),
   crystals: dynamicStateSchema, biomes: dynamicStateSchema,
 });
-const foragingProgressionSchema = z.object({ treeExperience: z.number().nullable(), nodes: z.record(z.string(), progressionNodeSchema),
-  sweepLevel: z.number().nullable(), foragingFortuneNodeLevel: z.number().nullable(), core: dynamicStateSchema });
+const foragingProgressionSchema = z.object({
+  treeExperience: z.number().nullable(),
+  extraLevelCap: z.number().nullable(),
+  presets: z.record(z.string(), z.object({ nodes: z.record(z.string(), progressionNodeSchema) })),
+  activePreset: z.number().nullable(),
+  nodes: z.record(z.string(), progressionNodeSchema),
+  selectedAbility: z.string().nullable(),
+  selectedAbilities: z.record(z.string(), z.string()),
+  tokensSpentByPreset: statsSchema,
+  sweepLevel: z.number().nullable(),
+  foragingFortuneNodeLevel: z.number().nullable(),
+  core: dynamicStateSchema,
+  whispers: z.object({
+    forest: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }),
+    desert: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }),
+  }),
+  treeGifts: z.object({ counts: statsSchema, milestoneTierClaimed: statsSchema }),
+  hina: dynamicStateSchema,
+  starlyn: dynamicStateSchema,
+});
 const fishingProgressionSchema = z.object({ itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), trophyFish: statsSchema });
 const bestiarySchema = z.object({ kills: statsSchema, deaths: statsSchema, milestone: statsSchema, miscellaneous: statsSchema });
 export const normalizedProfileSchema = z.object({
