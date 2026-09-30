@@ -78,7 +78,7 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       tiers: potionAffinity.map(tier => ({ ...tier })),
     },
     unavailableFacts: [
-      "Recipe coverage is partial: verified Speed, Weakness, and Strength ingredient paths are encoded; other potion recipes remain unresolved rather than inferred.",
+      "Recipe coverage is partial: verified Speed, Weakness, Strength, Haste, Spelunker, and Cold Resistance ingredient paths are encoded; other potion recipes remain unresolved rather than inferred.",
       "Effective Alchemy Wisdom is a lower bound: Booster Cookie, active potion effects, temporary consumables, event multipliers, and some other sources are not normalized.",
       "Potion Affinity ownership/effective tier and active God Potion/Mixin state are not yet reconstructed.",
     ],
