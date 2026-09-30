@@ -49,7 +49,8 @@
     "validate:foraging-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-foraging-advisor.ts",
     "validate:alchemy-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-alchemy-advisor.ts",
     "validate:carpentry-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-carpentry-advisor.ts",
-    "validate:runecrafting-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-runecrafting-advisor.ts"
+    "validate:runecrafting-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-runecrafting-advisor.ts",
+    "validate:taming-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-taming-advisor.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
