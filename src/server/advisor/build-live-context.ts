@@ -28,6 +28,7 @@ import { buildFarmingAdvisorContext } from "../farming/advisor-context";
 import { buildForagingUpgradeLanes } from "../foraging/upgrade-lanes";
 import { buildAlchemyAdvisorContext } from "../alchemy/advisor-context";
 import { buildCarpentryAdvisorContext } from "../carpentry/advisor-context";
+import { buildRunecraftingAdvisorContext } from "../runecrafting/advisor-context";
 
 export interface AdvisorContextDiagnostics {
   profileWarningCount: number; compactWarningCount: number; petOwnedCount: number; petUniqueTypeCount: number; petDuplicateCount: number;
@@ -60,6 +61,8 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
     : route.domain === "CARPENTRY"
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
+    : route.domain === "RUNECRAFTING"
+      ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, await loadNeuRepository(), null, null] as const
     : route.domain === "FARMING"
       ? [...await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]), null] as const
     : route.domain === "FORAGING"
@@ -80,6 +83,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
   if (route.domain === "ALCHEMY") activeDomainContext = buildAlchemyAdvisorContext(profile, input.question, quotes, effectiveBudgetCoins);
   if (route.domain === "CARPENTRY") activeDomainContext = buildCarpentryAdvisorContext(profile, quotes, effectiveBudgetCoins);
+  if (route.domain === "RUNECRAFTING") activeDomainContext = buildRunecraftingAdvisorContext(profile, neu ?? undefined);
   if (route.domain === "SLAYER") activeDomainContext = buildSlayerAdvisorContext(profile, input.question, neu!);
   if (route.domain === "COLLECTIONS") {
     const resource = await hypixelClient.getCollections();
@@ -180,6 +184,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     enchanting: { available: profile.progression.skills.enchanting !== undefined, candidateCount: 0 },
     alchemy: { available: profile.progression.skills.alchemy !== undefined, candidateCount: 0 },
     carpentry: { available: profile.progression.skills.carpentry !== undefined, candidateCount: 0 },
+    runecrafting: { available: profile.progression.skills.runecrafting !== undefined, candidateCount: 0 },
     collections: { available: Object.keys(profile.collections).length > 0 || profile.craftedGenerators.length > 0, candidateCount: 0 },
     slayer: { available: Object.keys(profile.progression.slayers).length > 0, candidateCount: 0 },
     farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },
@@ -209,7 +214,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     name: candidate.item.name, sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label), reason: "Only appeared in lanes irrelevant to the active goal." }));
   const buckets: SelectionBucket[] = ["ACTIONABLE", "MONEY_GATED", "PROGRESSION_GATED", "DISTANT_OR_UNCERTAIN"];
   const exclusions: ExclusionReason[] = ["REDUNDANCY_LIMIT", "BUCKET_LIMIT", "FINAL_CAP", "LOWER_CONTEXT_PRIORITY", "NO_OP", "OTHER"];
-  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"];
+  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"];
   return { context, route, availableAnalysis, detailedCandidates, candidateLanes, frontierCandidates: frontier.candidates,
     rawScopeCandidates: rawScopedCandidates.map(candidate => ({ candidateId: candidate.id, domain: candidate.domain, name: candidate.item.name,
       sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label) })), nextConversationState,
