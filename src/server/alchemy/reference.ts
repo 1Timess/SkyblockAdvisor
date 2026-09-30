@@ -16,7 +16,7 @@ const potion = (id: string, name: string, maxLevel: number, effect: string, tags
   ({ id, name, brewable: true, unlock, maxLevel, effect, tags, recipeStatus: "UNRESOLVED" });
 
 export const brewablePotions: readonly PotionReference[] = [
-  potion("ABSORPTION", "Absorption", 8, "Grants Absorption health.", ["SURVIVABILITY"], { collection: "GOLD_INGOT", tier: 6 }),
+  potion("ABSORPTION", "Absorption", 8, "Grants Absorption health.", ["SURVIVABILITY"], { collection: "GOLD_INGOT", tier: 5 }),
   potion("ADRENALINE", "Adrenaline", 8, "Grants Absorption health and Speed.", ["SURVIVABILITY", "UTILITY"], { collection: "INK_SACK:3", tier: 7 }),
   potion("AGILITY", "Agility", 4, "Grants Speed and a chance for mob attacks to miss.", ["COMBAT", "SURVIVABILITY", "UTILITY"], { collection: "RAW_CHICKEN", tier: 8 }),
   potion("ARCHERY", "Archery", 4, "Increases bow damage.", ["COMBAT", "ARCHERY"], { collection: "FEATHER", tier: 3 }),
