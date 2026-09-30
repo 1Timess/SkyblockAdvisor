@@ -68,6 +68,23 @@ test("active Foraging convenience fields follow the selected preset", () => {
 });
 
 
+test("does not infer preset 1 as active when the selected Foraging slot is unreported", () => {
+  const member = {
+    skill_tree: {
+      nodes: { foraging: { sweep: 10, foraging_fortune: 7 } },
+      selected_ability: { foraging: "damage_boost" },
+    },
+  } satisfies RawMember;
+  const state = buildExtendedPlayerState(member).foraging;
+  assert.equal(state.activePreset, null);
+  assert.equal(state.sweepLevel, null);
+  assert.equal(state.foragingFortuneNodeLevel, null);
+  assert.equal(state.selectedAbility, null);
+  assert.equal(state.presets.foraging.nodes.sweep.level, 10);
+  assert.equal(state.presets.foraging.nodes.foraging_fortune.level, 7);
+  assert.equal(state.selectedAbilities.foraging, "damage_boost");
+});
+
 test("verified HOTF reference mechanics remain distinct from HOTM", () => {
   assert.deepEqual(hotfCumulativeXp, [0, 3000, 12000, 37000, 97000, 197000, 347000, 547000]);
   assert.equal(hotfLevelFromXp(165399.5), 5);
