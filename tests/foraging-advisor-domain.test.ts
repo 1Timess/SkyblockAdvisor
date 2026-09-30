@@ -26,7 +26,3 @@ test("builds Foraging intelligence from normalized profile evidence", async () =
   assert.deepEqual(context.relevantAttributes, {});
   assert.ok(context.unavailableFacts.some(fact => fact.includes("Effective Sweep")));
 });
-  assert.deepEqual(context.relevantAttributes, { foragers_fortune: 32 });
-  assert.equal(context.gear.visible.length, 0);
-  assert.ok(context.unavailableFacts.some(fact => fact.includes("Effective Sweep")));
-});
