@@ -141,7 +141,8 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     enchanting: { available: profile.progression.skills.enchanting !== undefined, candidateCount: 0 },
     collections: { available: Object.keys(profile.collections).length > 0 || profile.craftedGenerators.length > 0, candidateCount: 0 },
     slayer: { available: Object.keys(profile.progression.slayers).length > 0, candidateCount: 0 },
-    farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },\n    foraging: { available: profile.progression.skills.foraging !== undefined || profile.progression.foraging.treeExperience !== null || Object.keys(profile.progression.foraging.treeGifts.counts).length > 0, candidateCount: 0 },
+    farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },
+    foraging: { available: profile.progression.skills.foraging !== undefined || profile.progression.foraging.treeExperience !== null || Object.keys(profile.progression.foraging.treeGifts.counts).length > 0, candidateCount: 0 },
   };
   const frontier = selectProgressionFrontier({ route, candidates: relevantCandidates.map((candidate, stableOrder) => ({ candidate, stableOrder,
     relevance: buildCandidateRelevance(relevantLanes, candidate.id, route), feasibility: buildCandidateFeasibility(candidate, profile, effectiveBudgetCoins),
