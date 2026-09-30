@@ -24,5 +24,6 @@ test("builds Foraging intelligence from normalized profile evidence", async () =
   assert.equal(context.presets.foraging.nodes.sweep.level, 4);
   assert.equal(context.presets.foraging.nodes.foraging_fortune.level, 6);
   assert.deepEqual(context.relevantAttributes, {});
+  assert.ok(Object.keys(context.collections).every(key => ["FIG_LOG", "MANGROVE_LOG", "HELIX_LOG", "HONEYCOMB", "RUBY_VEILSHROOM", "TENDER_WOOD"].includes(key)));
   assert.ok(context.unavailableFacts.some(fact => fact.includes("Effective Sweep")));
 });
