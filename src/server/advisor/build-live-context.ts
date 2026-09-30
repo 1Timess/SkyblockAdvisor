@@ -75,7 +75,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
 
   if (route.domain === "FARMING") activeDomainContext = buildFarmingAdvisorContext(profile, await hypixelClient.getGarden(profile.profile.id), input.question, { catalog, neu, quotes });
   if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
-  if (route.domain === "ALCHEMY") activeDomainContext = buildAlchemyAdvisorContext(profile, input.question, quotes);
+  if (route.domain === "ALCHEMY") activeDomainContext = buildAlchemyAdvisorContext(profile, input.question, quotes, effectiveBudgetCoins);
   if (route.domain === "SLAYER") activeDomainContext = buildSlayerAdvisorContext(profile, input.question, neu!);
   if (route.domain === "COLLECTIONS") {
     const resource = await hypixelClient.getCollections();
