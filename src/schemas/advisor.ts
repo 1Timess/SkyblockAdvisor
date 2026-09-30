@@ -117,7 +117,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     whispers: z.object({ forest: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }),
       desert: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }) }),
     treeGifts: z.object({ counts: statsSchema, milestoneTierClaimed: statsSchema }),
-    collections: statsSchema, relevantAttributes: statsSchema,
+    collections: statsSchema, relevantAttributes: statsSchema, pets: z.array(compactPetSchema),
     progressionFocus: z.object({
       targets: z.array(z.discriminatedUnion("kind", [
         z.object({ kind: z.literal("HOTF_TIER"), currentTier: z.number().int().positive(), targetTier: z.number().int().positive(),
