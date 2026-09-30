@@ -10,7 +10,8 @@ import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 import { buildObservedFarmingState } from "../farming/observed-state";
 import { mutationCatalogSummary } from "../farming/mutation-knowledge";
 import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
-import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";\nimport { indexForagingGear } from "../foraging/gear-state";
+import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";
+import { indexForagingGear } from "../foraging/gear-state";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
