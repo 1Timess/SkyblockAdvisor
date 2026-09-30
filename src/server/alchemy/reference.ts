@@ -42,7 +42,7 @@ export const brewablePotions: readonly PotionReference[] = [
   potion("RESISTANCE", "Resistance", 8, "Grants Defense.", ["SURVIVABILITY"], { collection: "CACTUS", tier: 3 }),
   potion("SLOWNESS", "Slowness", 8, "Reduces Speed.", ["COMBAT"]),
   potion("SPEED", "Speed", 8, "Grants Speed.", ["UTILITY"]),
-  potion("SPELUNKER", "Spelunker", 5, "Grants Mining Fortune.", ["MINING"], { collection: "MITHRIL_ORE", tier: 2 }),
+  potion("SPELUNKER", "Spelunker", 4, "Grants Mining Fortune.", ["MINING"], { collection: "MITHRIL_ORE", tier: 2 }),
   potion("STAMINA", "Stamina", 4, "Instantly restores Health and Mana.", ["SURVIVABILITY", "UTILITY"]),
   potion("STRENGTH", "Strength", 8, "Grants Strength.", ["COMBAT"],),
   potion("STUN", "Stun", 4, "Gives hits a chance to stun; splash potions stun affected enemies.", ["COMBAT"], { collection: "OBSIDIAN", tier: 6 }),
