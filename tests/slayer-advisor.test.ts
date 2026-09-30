@@ -89,8 +89,8 @@ test("Slayer advisor payload keeps unreported XP null and contains no purchase c
       pets: { available: false, candidateCount: 0, ownedCount: 0 }, dungeons: { available: false, candidateCount: 0 },
       fishing: { available: false, candidateCount: 0 }, mining: { available: false, candidateCount: 0 },
       enchanting: { available: false, candidateCount: 0 }, collections: { available: false, candidateCount: 0 },
-      slayer: { available: true, candidateCount: 0 }, farming: { available: false, candidateCount: 0 }
-  foraging: { available: false, candidateCount: 0 }, },
+      slayer: { available: true, candidateCount: 0 }, farming: { available: false, candidateCount: 0 },
+      foraging: { available: false, candidateCount: 0 } },
     candidates: [], domainContext: buildSlayerAdvisorContext(profile, question, neu) });
   assert.equal(context.canonical.slayers.zombie.xp, null);
   assert.equal(context.candidates.length, 0);
