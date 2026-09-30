@@ -296,7 +296,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
       focus: z.array(z.object({ id: z.string(), name: z.string(), effect: z.string(), maxLevel: z.number().int().positive(),
         tags: z.array(z.string()), unlock: z.object({ collection: z.string(), tier: z.number().int().positive() }).nullable(),
         unlockStatus: z.enum(["AVAILABLE","LOCKED","NO_COLLECTION_GATE","UNKNOWN"]), recipeStatus: z.enum(["VERIFIED","UNRESOLVED"]),
-        recipes: z.array(z.object({ basePotion: z.enum(["WATER_BOTTLE","AWKWARD_POTION"]), ingredientName: z.string(), ingredientId: z.string(),
+        recipes: z.array(z.object({ basePotion: z.enum(["WATER_BOTTLE","AWKWARD_POTION","DERIVED_POTION"]), basePotionId: z.string().optional(), basePotionLevel: z.number().int().positive().optional(), ingredientName: z.string(), ingredientId: z.string(),
           resultingLevel: z.number().int().positive(), alchemyXpPerPotion: z.number().nonnegative().nullable(), evidence: z.literal("VERIFIED") })).max(8),
         compatibleBrews: z.array(z.object({ name: z.string(), effect: z.string(), source: z.string() })).max(12) })).max(12) }),
     potionAffinity: z.object({ observed: z.object({ name: z.string(), durationBonusPercent: z.number().nonnegative() }).nullable(),
