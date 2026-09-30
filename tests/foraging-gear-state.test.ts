@@ -7,7 +7,7 @@ const item = (id: string, lore: string[] = [], source = "inventory") => ({
   id, uuid: `uuid-${id}-${source}`, name: id, count: 1, rarity: "legendary" as const,
   categories: id.includes("HELMET") ? ["armor", "helmet"] : ["axe"], stats: {}, reforge: "moil",
   enchantments: { efficiency: 5 }, stars: 3, recombobulated: true, lore, abilityText: [], setBonusText: [],
-  source, gemstones: { source: "NBT" as const, slots: [{ id: "CITRINE_0", slotType: "CITRINE", status: "FILLED" as const,
+  source, foragingState: id === "HELIX_CHOPPER" ? { boosterTiers: { foraging_wisdom: 1 }, absorbLogsChopped: 33522, logsCut: 8181, attributeMenuValue: null, source: "NBT" as const } : undefined, gemstones: { source: "NBT" as const, slots: [{ id: "CITRINE_0", slotType: "CITRINE", status: "FILLED" as const,
     gemstoneType: "CITRINE", quality: "PERFECT" as const, unlockMethod: "ITEM_DEFAULT" as const }] },
 });
 
@@ -23,7 +23,7 @@ test("Foraging gear index keeps inventory and equipped loadout evidence distinct
   const state = indexForagingGear(profile);
   assert.equal(state.visible.length, 3);
   assert.equal(state.visible[0].gemstones?.slots[0].slotType, "CITRINE");
-  assert.equal(state.equipped.armor?.HELMET.id, "FIG_HELMET");
+  assert.equal(state.equipped.armor?.HELMET.id, "FIG_HELMET");\n  const chopper = indexForagingGear({ ...profile, inventoryItems: [item("HELIX_CHOPPER")] } as unknown as NormalizedSkyBlockProfile).visible[0];\n  assert.deepEqual(chopper.foragingState?.boosterTiers, { foraging_wisdom: 1 });\n  assert.equal(chopper.foragingState?.logsCut, 8181);
   assert.equal(state.equipped.equipment, null);
   assert.equal(state.pets[0].type, "FROG");
 });
