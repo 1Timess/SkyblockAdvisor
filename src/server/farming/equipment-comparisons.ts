@@ -1,3 +1,5 @@
+import { farmingBonusMechanics } from "./equipment-bonuses";
+import type { NeuItem } from "../../schemas/neu";
 import type { CandidateItem } from "../../schemas/catalog";
 import type { MarketQuote } from "../../schemas/market";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
@@ -19,6 +21,26 @@ export function recipeConsumes(recipe: unknown, id: string): boolean {
   if (!recipe || typeof recipe !== "object" || Array.isArray(recipe)) return false;
   const cells = Object.entries(recipe).filter(([key]) => /^[ABC][123]$/.test(key));
   return cells.some(([, value]) => typeof value === "string" && value === `${id}:1`);
+}
+
+/** NEU supports legacy recipe and typed recipes; reject alternate outputs and non-crafting formats. */
+export function craftingRecipes(item: NeuItem | undefined): Record<string, unknown>[] {
+  if (!item) return [];
+  const legacy = item.recipe ? [item.recipe] : [];
+  const typed = (item.recipes ?? []).filter((value): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value))
+    .filter(value => value.type === "crafting" && (value.overrideOutputId === undefined || value.overrideOutputId === item.internalname));
+  return [...legacy, ...typed];
+}
+export function upgradeRecipeIngredients(item: NeuItem | undefined, currentId: string) {
+  const recipe = craftingRecipes(item).find(value => recipeConsumes(value, currentId));
+  if (!recipe) return [];
+  const totals = new Map<string, number>();
+  for (const [cell, value] of Object.entries(recipe)) {
+    if (!/^[ABC][123]$/.test(cell) || typeof value !== "string") continue;
+    const match = /^([A-Z0-9_]+):(\d+)$/.exec(value);
+    if (match && Number(match[2]) > 0) totals.set(match[1], (totals.get(match[1]) ?? 0) + Number(match[2]));
+  }
+  return [...totals].map(([itemId, amount]) => ({ itemId, amount }));
 }
 
 export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProfile, catalog: readonly CandidateItem[], neu: NeuRepository | null,
@@ -44,7 +66,7 @@ export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProf
     while (pending.length) {
       const id = pending.pop()!;
       for (const next of peers) {
-        if (seen.has(next.id) || farmingEquipmentFamily(next.id) !== farmingEquipmentFamily(target.id) || !recipeConsumes(neu?.getById(next.id)?.recipe, id)) continue;
+        if (seen.has(next.id) || farmingEquipmentFamily(next.id) !== farmingEquipmentFamily(target.id) || !craftingRecipes(neu?.getById(next.id)).some(recipe => recipeConsumes(recipe, id))) continue;
         if (owned.has(next.id)) { successorCache.set(target.id, true); return true; }
         seen.add(next.id); pending.push(next.id);
       }
@@ -56,6 +78,8 @@ export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProf
   const mechanics = [...new Map(relevant.map(item => [item.id!, item])).values()].slice(0, 16).map(item => {
     const reference = byId.get(item.id!);
     return { itemId: item.id!, observedName: item.name, catalogName: reference?.name ?? null,
+      observedBonuses: farmingBonusMechanics(item.lore, "OBSERVED_TOOLTIP"),
+      catalogBonuses: farmingBonusMechanics(reference?.lore ?? [], "CATALOG_TEMPLATE"),
       source: item.source, referenceLore: reference?.lore ?? [],
       catalogFortune: reference?.stats.farmingFortune ?? null, observedFortune: item.stats.farmingFortune ?? null,
       abilityText: reference?.abilityText ?? [], setBonusText: reference?.setBonusText ?? [],
@@ -70,7 +94,7 @@ export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProf
     const baseline = byId.get(current.id!);
     const peers = familyItems.get(family) ?? [];
     const direct = peers.filter(target => target.id !== current.id && !owned.has(target.id) &&
-      recipeConsumes(neu.getById(target.id)?.recipe, current.id!) && !hasOwnedSuccessor(target));
+      craftingRecipes(neu.getById(target.id)).some(recipe => recipeConsumes(recipe, current.id!)) && !hasOwnedSuccessor(target));
     // A fallback is a template-stat alternative, never an inferred crafting chain.
     // Only the strongest visible same-slot template may establish a replacement baseline.
     const baselineFortune = baseline?.stats.farmingFortune;
@@ -86,6 +110,9 @@ export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProf
       return { currentItemId: current.id!, currentName: current.name, targetItemId: target.id, targetName: target.name,
         basis: isDirect ? "DIRECT_CATALOG_RECIPE" as const : "SAME_SLOT_CATALOG_ALTERNATIVE" as const, currentCatalogFortune: currentFortune, targetCatalogFortune: targetFortune,
         catalogFortuneDifference: currentFortune !== null && targetFortune !== null ? targetFortune - currentFortune : null,
+        targetBonuses: farmingBonusMechanics(target.lore, "CATALOG_TEMPLATE"),
+        recipeIngredients: isDirect ? upgradeRecipeIngredients(neu.getById(target.id), current.id!) : [],
+        craftUnlockText: neu.getById(target.id)?.crafttext ?? null,
         requirements: checks(target), unparsedRequirements: target.unparsedRequirementText,
         abilityText: target.abilityText, setBonusText: target.setBonusText,
         purchasePrice: quote ? { coins: quote.coins, observedAt: quote.observedAt, confidence: quote.confidence,

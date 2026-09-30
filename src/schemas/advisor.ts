@@ -99,6 +99,14 @@ const compactMiningCrystalSchema = z.object({ rawId: z.string(), state: z.string
 const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals: z.record(z.string(), compactMiningCrystalSchema),
   nucleus: z.object({ required: z.array(z.string()), acquired: z.array(z.string()), placed: z.array(z.string()),
     missing: z.array(z.string()), ready: z.boolean(), complete: z.boolean() }), biomes: z.record(z.string(), z.unknown()) });
+const farmingBonusMechanicsSchema = z.object({
+  evidence: z.enum(["OBSERVED_TOOLTIP", "CATALOG_TEMPLATE"]),
+  visitorBonus: z.object({ name: z.string(), displayedFortune: z.number().nullable(), nextFortuneIncrement: z.number().nullable(),
+    displayedOffersProgress: z.number().nullable(), displayedOffersRequired: z.number().nullable(), remainingOffers: z.number().nullable() }).nullable(),
+  tieredBonus: z.object({ name: z.string(), displayedPieceCount: z.number(), displayedFortune: z.number().nullable(),
+    displayedDropChancePercent: z.array(z.number()), effectText: z.string() }).nullable(),
+  displayedPestChancePercent: z.number().nullable(), note: z.string(),
+});
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
   z.object({ domain: z.literal("FARMING"), farmingLevel: z.number().nullable(), farmingXp: z.number().nullable(),
     farmingSkillFocus: z.object({ cap: z.number().nullable(), capEvidence: z.enum(["UNREPORTED", "REPORTED_PERK", "BASE_CAP_ASSUMED"]),
@@ -135,11 +143,12 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     personalBestCropKeys: z.array(z.string()).max(13),
     equipmentComparisons: z.object({
       catalogDownloadedAt: z.string().datetime().nullable(), coverage: z.enum(["CATALOG_LOADED", "UNREPORTED"]),
-      mechanics: z.array(z.object({ itemId: z.string(), observedName: z.string(), catalogName: z.string().nullable(), source: z.string(), referenceLore: z.array(z.string()),
+      mechanics: z.array(z.object({ itemId: z.string(), observedName: z.string(), catalogName: z.string().nullable(), source: z.string(), observedBonuses: farmingBonusMechanicsSchema, catalogBonuses: farmingBonusMechanicsSchema, referenceLore: z.array(z.string()),
         catalogFortune: z.number().nullable(), observedFortune: z.number().nullable(), abilityText: z.array(z.string()),
         setBonusText: z.array(z.string()), requirements: z.array(requirementCheckSchema), utilityWarning: z.string().nullable(),
         sourceStatus: z.enum(["CATALOG_MATCHED", "UNREPORTED"]) })).max(16),
       comparisons: z.array(z.object({ currentItemId: z.string(), currentName: z.string(), targetItemId: z.string(), targetName: z.string(),
+        recipeIngredients: z.array(z.object({ itemId: z.string(), amount: z.number().int().positive() })), craftUnlockText: z.string().nullable(), targetBonuses: farmingBonusMechanicsSchema,
         basis: z.enum(["DIRECT_CATALOG_RECIPE", "SAME_SLOT_CATALOG_ALTERNATIVE"]), currentCatalogFortune: z.number().nullable(), targetCatalogFortune: z.number().nullable(),
         catalogFortuneDifference: z.number().nullable(), requirements: z.array(requirementCheckSchema), unparsedRequirements: z.array(z.string()),
         abilityText: z.array(z.string()), setBonusText: z.array(z.string()), purchasePrice: z.object({ coins: z.number(), observedAt: z.string().datetime(), confidence: marketConfidenceSchema, ageHours: z.number().nonnegative(), freshness: z.enum(["RECENT", "STALE"]) }).nullable(),

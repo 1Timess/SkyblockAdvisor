@@ -3,7 +3,7 @@ import test from "node:test";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
 import { fixtureSources } from "./fixtures/profile";
 import { candidateItemSchema } from "../src/schemas/catalog";
-import { buildFarmingEquipmentComparisons, recipeConsumes } from "../src/server/farming/equipment-comparisons";
+import { buildFarmingEquipmentComparisons, recipeConsumes, craftingRecipes, upgradeRecipeIngredients } from "../src/server/farming/equipment-comparisons";
 import { InMemoryNeuRepository } from "../src/server/reference/neu/repository";
 
 const item = (id: string, fortune: number) => candidateItemSchema.parse({ id, name: id, rarity: "rare", categories: ["armor"],
@@ -54,7 +54,7 @@ test("unrelated catalog items never enter farming recipe traversal", async () =>
   const unrelated = Array.from({ length: 6000 }, (_, index) => item(`UNRELATED_${index}`, 0));
   const result = buildFarmingEquipmentComparisons(profile, [...unrelated, item("MELON_HELMET", 15), item("CROPIE_HELMET", 25)], counted);
   assert.equal(result.comparisons.length, 1);
-  assert.ok(reads <= 3, `Expected bounded relevant recipe reads, got ${reads}`);
+  assert.ok(reads <= 6, `Expected bounded relevant recipe reads, got ${reads}`);
 });
 
 test("Garden gates and historical prices are explicit on non-recipe alternatives", async () => {
@@ -86,4 +86,21 @@ test("equipment alternatives stay in-slot and leveled tools do not use Fortune-o
   profile.inventoryItems.push({ ...observed, id: "BLOSSOM_CLOAK" });
   assert.equal(buildFarmingEquipmentComparisons(profile, [...catalog, item("PEONY_CLOAK", 15)], neu).comparisons.length, 1);
   assert.equal(buildFarmingEquipmentComparisons(profile, [...catalog, item("PEONY_CLOAK", 15)], neu).comparisons[0].currentItemId, "BLOSSOM_CLOAK");
+});
+
+test("typed specialized tool recipes surface requirements and aggregated ingredients", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.inventoryItems = [{ ...profile.inventoryItems[0], id: "THEORETICAL_HOE_POTATO_1" }];
+  const recipeItem = { internalname: "THEORETICAL_HOE_POTATO_2", recipes: [
+    { type: "crafting", overrideOutputId: "OTHER_TOOL", B2: "THEORETICAL_HOE_POTATO_1:1" },
+    { type: "forge", B2: "THEORETICAL_HOE_POTATO_1:1" },
+    { type: "crafting", overrideOutputId: "THEORETICAL_HOE_POTATO_2", A1: "JACOBS_TICKET:16", A3: "JACOBS_TICKET:16", B2: "THEORETICAL_HOE_POTATO_1:1" },
+  ] };
+  const repository = new InMemoryNeuRepository([recipeItem], neu.getMetadata());
+  assert.equal(craftingRecipes(recipeItem).length, 1);
+  assert.deepEqual(upgradeRecipeIngredients(recipeItem, "THEORETICAL_HOE_POTATO_1"), [
+    { itemId: "JACOBS_TICKET", amount: 32 }, { itemId: "THEORETICAL_HOE_POTATO_1", amount: 1 }]);
+  const result = buildFarmingEquipmentComparisons(profile, [item("THEORETICAL_HOE_POTATO_1", 0), item("THEORETICAL_HOE_POTATO_2", 0)], repository);
+  assert.equal(result.comparisons[0].basis, "DIRECT_CATALOG_RECIPE");
+  assert.equal(result.comparisons[0].recipeIngredients.length, 2);
 });
