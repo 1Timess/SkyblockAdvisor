@@ -5,7 +5,7 @@ import { buildAlchemyAdvisorContext } from "../src/server/alchemy/advisor-contex
 import { godPotionDurationHours, potionFocusForQuestion } from "../src/server/alchemy/reference";
 import { buildAlchemyWisdomState } from "../src/server/alchemy/wisdom";
 import { alchemyLevelingMethods, effectiveAlchemyXp } from "../src/server/alchemy/leveling";
-import { fixtureMember, fixtureSources } from "./fixtures/profile";
+import { encodeInventory, fixtureMember, fixtureSources } from "./fixtures/profile";
 
 test("Alchemy context preserves unknown skill evidence when Hypixel does not report XP", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
@@ -17,7 +17,9 @@ test("Alchemy context preserves unknown skill evidence when Hypixel does not rep
   assert.equal(context.godPotion.durationHours, null);
   assert.ok(context.potionCatalog.focus.some(entry => entry.name === "Haste"));
   assert.ok(context.potionCatalog.focus.some(entry => entry.name === "Spelunker"));
-  assert.equal(context.potionCatalog.recipeCoverage, "UNRESOLVED");
+  assert.equal(context.potionCatalog.recipeCoverage, "PARTIAL_VERIFIED");
+  const haste = context.potionCatalog.focus.find(entry => entry.name === "Haste");
+  assert.equal(haste?.recipeStatus, "UNRESOLVED");
   assert.equal(context.godPotion.mixinCount, 13);
   assert.ok(context.godPotion.effects.some(effect => effect.name === "Alchemy XP Boost" && effect.level === 3));
   assert.equal(context.potionCatalog.focus.find(entry => entry.name === "Haste")?.unlockStatus, "UNKNOWN");
@@ -87,4 +89,32 @@ test("Alchemy method economics use supplied market evidence without inventing re
   const eye = context.levelingMethods.find(method => method.marketKey === "ENCHANTED_FERMENTED_SPIDER_EYE");
   assert.equal(eye?.ingredientPriceCoins, null);
   assert.equal(eye?.grossCoinsPerXpFloor, null);
+});
+
+
+test("verified potion recipes and compatible Brews are attached to focused potion advice", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const speedContext = buildAlchemyAdvisorContext(profile, "How do I brew Speed?");
+  assert.equal(speedContext.domain, "ALCHEMY");
+  if (speedContext.domain !== "ALCHEMY") throw new Error("unreachable");
+  const speed = speedContext.potionCatalog.focus.find(entry => entry.name === "Speed");
+  assert.equal(speed?.recipeStatus, "VERIFIED");
+  assert.ok(speed?.recipes.some(recipe => recipe.ingredientId === "ENCHANTED_SUGAR_CANE" && recipe.resultingLevel === 5));
+  assert.ok(speed?.compatibleBrews.some(brew => brew.name === "Cheap Coffee"));
+  assert.ok(speed?.compatibleBrews.some(brew => brew.name === "Black Coffee"));
+});
+
+test("Potion Affinity remains separate from God Potion and splash duration", async () => {
+  const member = fixtureMember();
+  member.inventory!.bag_contents!.talisman_bag = { data: encodeInventory([
+    { id: "ARTIFACT_POTION_AFFINITY", name: "Potion Affinity Artifact", lore: ["RARE ACCESSORY"] },
+  ]) };
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources(member));
+  const context = buildAlchemyAdvisorContext(profile, "How long do my potions last?");
+  assert.equal(context.domain, "ALCHEMY");
+  if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+  assert.equal(context.potionAffinity.observed?.durationBonusPercent, 50);
+  assert.equal(context.potionAffinity.appliesToConsumedPotions, true);
+  assert.equal(context.potionAffinity.appliesToSplashPotions, false);
+  assert.equal(context.potionAffinity.appliesToGodPotion, false);
 });
