@@ -19,7 +19,8 @@ test("Alchemy context preserves unknown skill evidence when Hypixel does not rep
   assert.ok(context.potionCatalog.focus.some(entry => entry.name === "Spelunker"));
   assert.equal(context.potionCatalog.recipeCoverage, "PARTIAL_VERIFIED");
   const haste = context.potionCatalog.focus.find(entry => entry.name === "Haste");
-  assert.equal(haste?.recipeStatus, "UNRESOLVED");
+  assert.equal(haste?.recipeStatus, "VERIFIED");
+  assert.ok(haste?.recipes.some(recipe => recipe.ingredientId === "COAL" && recipe.resultingLevel === 1));
   assert.equal(context.godPotion.mixinCount, 13);
   assert.ok(context.godPotion.effects.some(effect => effect.name === "Alchemy XP Boost" && effect.level === 3));
   assert.equal(context.potionCatalog.focus.find(entry => entry.name === "Haste")?.unlockStatus, "UNKNOWN");
@@ -43,6 +44,7 @@ test("potion focus is semantic and named potion questions stay narrow", () => {
   assert.ok(mining.some(entry => entry.name === "Haste"));
   assert.ok(mining.some(entry => entry.name === "Spelunker"));
   assert.ok(mining.every(entry => entry.tags.includes("MINING")));
+  assert.equal(mining.find(entry => entry.name === "Spelunker")?.maxLevel, 4);
   assert.deepEqual(potionFocusForQuestion("How do I brew Critical?").map(entry => entry.name), ["Critical"]);
   assert.ok(Math.abs((godPotionDurationHours(50, 20) ?? 0) - 28.8) < 1e-9);
 });
