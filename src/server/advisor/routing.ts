@@ -37,13 +37,13 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
 }
 
 function detectDomain(text: string): ProfileIntelligenceDomain | null {
+  if (/\bmagical power\b|\bmp\b|\baccessor(?:y|ies)\b|\btalismans?\b/.test(text)) return "ACCESSORIES";
   if (/\bforaging\b|\bhotf\b|\bheart of the forest\b|\b(?:fig|mangrove|helix) logs?\b|\btree gifts?\b/.test(text)) return "FORAGING";
   if (/\bslayers?\b|\b(revenant|tarantula|sven|voidgloom|inferno demonlord|riftstalker)\b|\b(warden heart|overflux capacitor|judgement core)\b/.test(text)) return "SLAYER";
   if (/\bfarming\b|\bgarden\b|\bgreenhouse\b|\bmutations?\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)
     || greenhouseMutations.mutations.some(mutation => text.includes(mutation.name.toLowerCase()))) return "FARMING";
   if (/\bcollections?\b|\bminions?\b|\bcrafted generators?\b/.test(text)) return "COLLECTIONS";
   if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
-  if (/\bmagical power\b|\bmp\b|\baccessor(?:y|ies)\b|\btalismans?\b/.test(text)) return "ACCESSORIES";
   if (/\bfishing\b|\bfish(?:ing)? rod\b|\bsea creature\b/.test(text)) return "FISHING";
   if (/\bmining\b|\bhotm\b|\bheart of the mountain\b|\bpowder\b|\bdrill\b|\bpickaxe\b/.test(text)) return "MINING";
   if (/\bf\d+\b|\bfloor\b|\bcatacombs?\b|\bdungeons?\b|\bmage\b|\barcher\b|\bberserk\b|\bmelee\b|\bshortbow\b|\bbow\b|\barmor\b|\bhelmet\b|\bchestplate\b|\bleggings\b|\bboots\b|\bweapons?\b|\bsword\b|\bwand\b/.test(text)) return "DUNGEONS";
