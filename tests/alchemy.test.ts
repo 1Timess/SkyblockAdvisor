@@ -85,15 +85,15 @@ test("Alchemy method economics use supplied market evidence without inventing re
     marketKey: "ENCHANTED_SUGAR_CANE", coins: 90_000, observedAt: new Date(0).toISOString(),
     basis: "BAZAAR" as const, confidence: "HIGH" as const,
   }]]);
-  const context = buildAlchemyAdvisorContext(profile, "What is the fastest way to level Alchemy?", quotes);
+  const context = buildAlchemyAdvisorContext(profile, "What is the fastest way to level Alchemy?", quotes, 50_000_000);
   assert.equal(context.domain, "ALCHEMY");
   if (context.domain !== "ALCHEMY") throw new Error("unreachable");
   const cane = context.levelingMethods.find(method => method.marketKey === "ENCHANTED_SUGAR_CANE");
   assert.equal(cane?.ingredientPriceCoins, 90_000);
-  assert.equal(cane?.grossCoinsPerXpFloor, 2);
+  assert.equal(cane?.grossCoinsPerXpFloor, 2);\n  assert.equal(cane?.batchesTo50Floor, 1_227);\n  assert.equal(cane?.estimatedIngredientCostTo50Floor, 110_430_000);\n  assert.equal(cane?.budgetStatus, "OVER_BUDGET");
   const eye = context.levelingMethods.find(method => method.marketKey === "ENCHANTED_FERMENTED_SPIDER_EYE");
   assert.equal(eye?.ingredientPriceCoins, null);
-  assert.equal(eye?.grossCoinsPerXpFloor, null);
+  assert.equal(eye?.grossCoinsPerXpFloor, null);\n  assert.equal(eye?.estimatedIngredientCostTo50Floor, null);\n  assert.equal(eye?.budgetStatus, "UNKNOWN");
 });
 
 
