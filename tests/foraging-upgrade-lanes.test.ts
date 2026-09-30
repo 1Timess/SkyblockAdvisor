@@ -9,15 +9,15 @@ function candidate(id: string, stats: Record<string, number>): CandidateItem {
     stats, lore: [], abilityText: [], setBonusText: [], requirements: [], unparsedRequirementText: [], wiki: null, marketKey: id,
     sources: { hypixel: true, neu: true } };
 }
-function profile(items: Array<{ id: string; stats: Record<string, number> }>) {
-  return { inventoryItems: items.map(item => ({ id: item.id, stats: item.stats })) } as unknown as NormalizedSkyBlockProfile;
+function profile(items: Array<{ id: string; stats: Record<string, number>; categories?: string[] }>) {
+  return { inventoryItems: items.map(item => ({ id: item.id, stats: item.stats, categories: item.categories ?? [] })) } as unknown as NormalizedSkyBlockProfile;
 }
 
 test("discovers only later supported axe-family upgrades", () => {
-  const catalog = [candidate("SERIOUSLY_DAMAGED_AXE", { sweep: 10 }), candidate("FIG_HEW", { sweep: 15 }),
-    candidate("FIGSTONE_SPLITTER", { sweep: 25 }), candidate("HELIX_CHOPPER", { sweep: 50 }), candidate("UNRELATED_AXE", { sweep: 999 })];
-  const lanes = buildForagingUpgradeLanes({ profile: profile([{ id: "FIG_HEW", stats: { sweep: 15 } }]), catalog, quotes: new Map() });
-  assert.deepEqual(lanes.axe.map(value => value.id), ["FIGSTONE_SPLITTER", "HELIX_CHOPPER"]);
+  const catalog = [candidate("SERIOUSLY_DAMAGED_AXE", { sweep: 10 }), candidate("FIG_AXE", { sweep: 15 }),
+    candidate("FIGSTONE_AXE", { sweep: 25 }), candidate("HELIX_CHOPPER", { sweep: 50 }), candidate("UNRELATED_AXE", { sweep: 999 })];
+  const lanes = buildForagingUpgradeLanes({ profile: profile([{ id: "FIG_AXE", stats: { sweep: 15 } }]), catalog, quotes: new Map() });
+  assert.deepEqual(lanes.axe.map(value => value.id), ["FIGSTONE_AXE", "HELIX_CHOPPER"]);
   assert.deepEqual(lanes.axe[0].knownChanges?.sweep, { current: 15, candidate: 25 });
   assert.ok(lanes.axe[0].semanticEvidence?.some(value => value.includes("1 step")));
   assert.ok(lanes.axe[1].semanticEvidence?.some(value => value.includes("2 steps")));
@@ -36,10 +36,10 @@ test("keeps Foraging armor upgrades slot-aware", () => {
 });
 
 test("keeps farther family members discoverable without inventing requirements", () => {
-  const catalog = [candidate("SERIOUSLY_DAMAGED_AXE", { sweep: 10 }), candidate("FIG_HEW", { sweep: 15 }),
-    candidate("FIGSTONE_SPLITTER", { sweep: 25 }), candidate("HELIX_CHOPPER", { sweep: 50 })];
+  const catalog = [candidate("SERIOUSLY_DAMAGED_AXE", { sweep: 10 }), candidate("FIG_AXE", { sweep: 15 }),
+    candidate("FIGSTONE_AXE", { sweep: 25 }), candidate("HELIX_CHOPPER", { sweep: 50 })];
   const lanes = buildForagingUpgradeLanes({ profile: profile([]), catalog, quotes: new Map() });
-  assert.deepEqual(lanes.axe.map(value => value.id), ["SERIOUSLY_DAMAGED_AXE", "FIG_HEW", "FIGSTONE_SPLITTER", "HELIX_CHOPPER"]);
+  assert.deepEqual(lanes.axe.map(value => value.id), ["SERIOUSLY_DAMAGED_AXE", "FIG_AXE", "FIGSTONE_AXE", "HELIX_CHOPPER"]);
   assert.ok(lanes.axe[3].semanticEvidence?.some(value => value.includes("4 steps")));
   assert.deepEqual(lanes.axe[3].requirements, []);
 });
@@ -63,4 +63,18 @@ test("keeps direct Foraging equipment progression slot-aware and excludes Safari
   assert.deepEqual(lanes.bracelet.map(value => value.id), ["MANGROVE_GRIPPERS", "VEILSHROOM_BRACELET"]);
   assert.deepEqual(lanes.belt.map(value => value.id), ["MANGROVE_VINE", "MOONGLADE_BELT", "TORRHUS_BELT"]);
   assert.ok(!Object.values(lanes).flat().some(value => value.id === "SAFARI_BELT"));
+});
+
+
+test("uses an observed same-slot Safari Belt as the visible baseline while preserving Torrhus contest utility", () => {
+  const catalog = [candidate("MANGROVE_VINE", { sweep: 1, foragingFortune: 5 }),
+    candidate("MOONGLADE_BELT", { foragingFortune: 5 }), candidate("TORRHUS_BELT", { sweep: 2, foragingFortune: 10 })];
+  const lanes = buildForagingUpgradeLanes({
+    profile: profile([{ id: "SAFARI_BELT", categories: ["equipment", "belt"], stats: { sweep: 4, foragingFortune: 66 } }]),
+    catalog, quotes: new Map(),
+  });
+  const torrhus = lanes.belt.find(value => value.id === "TORRHUS_BELT")!;
+  assert.deepEqual(torrhus.knownChanges?.sweep, { current: 4, candidate: 2 });
+  assert.deepEqual(torrhus.knownChanges?.foragingFortune, { current: 66, candidate: 10 });
+  assert.ok(torrhus.semanticEvidence?.includes("Verified Starlyn Contest point bonus: +10%."));
 });
