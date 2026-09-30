@@ -58,7 +58,7 @@ async function main() {
         domain: candidate.domain,
         price: candidate.price,
         knownChanges: candidate.knownChanges,
-        semanticEvidence: candidate.semanticEvidence,
+        semanticEvidence: result.rawScopeCandidates.find(raw => raw.id === candidate.id)?.semanticEvidence ?? [],
         relevance: candidate.relevance,
         feasibility: candidate.feasibility,
         requirements: candidate.requirements,
