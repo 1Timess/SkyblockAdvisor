@@ -6,7 +6,7 @@ import { selectProfile } from "../src/server/hypixel/profiles";
 import { memberSchema } from "../src/server/hypixel/types";
 import { collectInventories } from "../src/server/skyblock/profile/inventory-sources";
 import { decodeInventory } from "../src/server/skyblock/nbt/decode-inventory";
-import { processItem, object, toProfileItem } from "../src/server/skyblock/items/process-item";
+import { processItem, toProfileItem } from "../src/server/skyblock/items/process-item";
 import { isForagingItem } from "../src/server/foraging/gear-state";
 import type { ProfileWarning } from "../src/schemas/items";
 
