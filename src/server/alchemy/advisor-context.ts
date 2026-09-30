@@ -5,6 +5,8 @@ import xpTables from "../reference/xp-tables.json";
 import { alchemyDurationBonusPercent, brewablePotions, brewingMechanics, godPotionDurationHours, potionFocusForQuestion, potionUnlockStatus } from "./reference";
 import { buildAlchemyWisdomState } from "./wisdom";
 import { alchemyLevelingMethods, effectiveAlchemyXp } from "./leveling";
+import { recipesForPotion } from "./recipes";
+import { compatibleBrews, potionAffinity } from "./modifiers";
 
 const ALCHEMY_CAP = 50;
 const ALCHEMY_XP_TO_50 = xpTables.skill.slice(0, ALCHEMY_CAP).reduce((sum, value) => sum + value, 0);
@@ -16,6 +18,8 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
   const xpTo50 = xp === null ? null : Math.max(0, ALCHEMY_XP_TO_50 - xp);
   const focus = potionFocusForQuestion(question);
   const wisdom = buildAlchemyWisdomState(profile);
+  const observedAffinity = [...potionAffinity].reverse().find(tier =>
+    profile.accessories.owned.some(item => item.active && (item.id === tier.id || item.name.toLowerCase() === tier.name.toLowerCase()))) ?? null;
   const levelingMethods = alchemyLevelingMethods.map(method => {
     const effectiveXpPerBatchFloor = effectiveAlchemyXp(method.xpPerBatch, wisdom.confirmedWisdom);
     const ingredientPriceCoins = quotes.get(method.marketKey)?.coins ?? null;
@@ -56,14 +60,22 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
     levelingMethods,
     potionCatalog: {
       brewableCount: brewablePotions.length,
-      recipeCoverage: "UNRESOLVED",
+      recipeCoverage: "PARTIAL_VERIFIED",
       focus: focus.slice(0, 12).map(entry => ({
         id: entry.id, name: entry.name, effect: entry.effect, maxLevel: entry.maxLevel,
-        tags: [...entry.tags], unlock: entry.unlock, unlockStatus: potionUnlockStatus(profile.unlockedCollectionTiers, entry), recipeStatus: entry.recipeStatus,
+        tags: [...entry.tags], unlock: entry.unlock, unlockStatus: potionUnlockStatus(profile.unlockedCollectionTiers, entry),
+        recipeStatus: recipesForPotion(entry.id).length ? "VERIFIED" as const : entry.recipeStatus,
+        recipes: recipesForPotion(entry.id).map(({ potionId: _potionId, ...recipe }) => recipe),
+        compatibleBrews: compatibleBrews(entry.id).map(({ name, effect, source }) => ({ name, effect, source })),
       })),
     },
+    potionAffinity: {
+      observed: observedAffinity ? { name: observedAffinity.name, durationBonusPercent: observedAffinity.durationBonusPercent } : null,
+      appliesToConsumedPotions: true, appliesToSplashPotions: false, appliesToGodPotion: false,
+      tiers: potionAffinity.map(tier => ({ ...tier })),
+    },
     unavailableFacts: [
-      "Exact potion ingredient sequences and ingredient-to-Alchemy-XP mappings are not yet encoded in this implementation slice.",
+      "Recipe coverage is partial: verified Speed, Weakness, and Strength ingredient paths are encoded; other potion recipes remain unresolved rather than inferred.",
       "Effective Alchemy Wisdom is a lower bound: Booster Cookie, active potion effects, temporary consumables, event multipliers, and some other sources are not normalized.",
       "Potion Affinity ownership/effective tier and active God Potion/Mixin state are not yet reconstructed.",
     ],
