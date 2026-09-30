@@ -5,7 +5,7 @@ export const petProgressionDomainSchema = z.enum([
 ]);
 
 export const petDomainEvidenceSchema = z.object({
-  source: z.enum(["PET_EFFECT", "PET_CONDITION", "PET_ITEM_EFFECT", "PET_ITEM_CONDITION", "PET_SKILL_TYPE"]),
+  source: z.enum(["PET_BASE_STAT", "PET_EFFECT", "PET_CONDITION", "PET_ITEM_EFFECT", "PET_ITEM_CONDITION", "PET_SKILL_TYPE"]),
   domain: petProgressionDomainSchema,
   mechanic: z.string(),
   rawText: z.string().nullable(),
