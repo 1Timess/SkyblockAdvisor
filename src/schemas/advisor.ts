@@ -12,7 +12,7 @@ export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES"
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
-export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
