@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildExtendedPlayerState } from "../src/server/skyblock/domains/player-state";
 import type { RawMember } from "../src/server/hypixel/types";
+import { hotfCumulativeXp, hotfLevelFromXp, hotfTierNodes, hotfWhisperCurrencyByTier, torrhusRequiredHotfTier, treeGiftHotfXp, treeGiftMilestones, treeToughness } from "../src/server/foraging/reference";
 
 test("normalizes Foraging presets without mixing inactive HOTF state", () => {
   const member = {
@@ -62,4 +63,18 @@ test("active Foraging convenience fields follow the selected preset", () => {
   assert.equal(state.sweepLevel, 41);
   assert.equal(state.foragingFortuneNodeLevel, 31);
   assert.equal(state.selectedAbility, "tree_whisperer");
+});
+
+
+test("verified HOTF reference mechanics remain distinct from HOTM", () => {
+  assert.deepEqual(hotfCumulativeXp, [0, 3000, 12000, 37000, 97000, 197000, 347000, 547000]);
+  assert.equal(hotfLevelFromXp(165399.5), 5);
+  assert.equal(hotfLevelFromXp(547000), 8);
+  assert.equal(Object.values(hotfTierNodes).flat().length, 36);
+  assert.equal(hotfWhisperCurrencyByTier[3], "forest");
+  assert.equal(hotfWhisperCurrencyByTier[4], "desert");
+  assert.equal(torrhusRequiredHotfTier, 4);
+  assert.deepEqual(treeGiftMilestones, [10, 25, 100, 250, 500, 1000, 2500]);
+  assert.deepEqual(treeGiftHotfXp, { FIG: 10, MANGROVE: 20, HELIX: 30 });
+  assert.deepEqual(treeToughness, { FIG: 10, MANGROVE: 50, HELIX: 150 });
 });
