@@ -10,7 +10,7 @@ import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 import { buildObservedFarmingState } from "../farming/observed-state";
 import { mutationCatalogSummary } from "../farming/mutation-knowledge";
 import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
-import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";
+import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";\nimport { indexForagingGear } from "../foraging/gear-state";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -49,6 +49,9 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
   const miningEquipment = withStats(ownedEquipment, miningStats);
   const fishingPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, fishingStats));
   const miningPets = profile.pets.owned.filter(pet => hasAnyStat(pet.stats, miningStats));
+  const foraging = profile.progression.foraging, foragingGear = indexForagingGear(profile);
+  const relevantAttributes = Object.fromEntries(Object.entries(profile.attributes).filter(([key]) =>
+    /(?:forag|sweep|forest|galatea|moonglade|torrhus|tree|woodland|starlyn|spirit_axe|fig_)/i.test(key)));
   return {
     snapshotId,
     profile,
@@ -113,6 +116,15 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         equipment: miningEquipment.map(compact), pets: miningPets.map(compactPet),
         knownStats: knownStats([...miningTools, ...miningArmor, ...miningEquipment], miningPets, miningStats),
         unavailableFacts: miningPets.length ? [] : ["Pet mining effects are unavailable in the normalized profile data."] },
+      FORAGING: { domain: "FORAGING", foragingLevel: compactLevel(profile.progression.skills.foraging),
+        foragingXp: profile.progression.skills.foraging?.xp ?? null, extraLevelCap: foraging.extraLevelCap,
+        hotfLevel: foraging.hotfLevel, treeExperience: foraging.treeExperience, activePreset: foraging.activePreset,
+        nodes: foraging.nodes, presets: foraging.presets, selectedAbility: foraging.selectedAbility, selectedAbilities: foraging.selectedAbilities,
+        tokensSpentByPreset: foraging.tokensSpentByPreset, whispers: foraging.whispers, treeGifts: foraging.treeGifts,
+        collections: Object.fromEntries(Object.entries(profile.collections).filter(([key]) => /(?:LOG|HONEYCOMB|RUBY_VEILSHROOM|TENDER_WOOD)/.test(key))),
+        relevantAttributes, gear: foragingGear,
+        unavailableFacts: ["Effective Sweep, effective Foraging Fortune, logs per action, hourly profit, and unobserved modifier state are not reconstructed."],
+        note: "Foraging context reports observed progression and gear state. Candidate recommendations are not enabled yet." },
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
         enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
         matchedRewards: [], possibleRewardCount: 0, experimentation: profile.progression.enchanting.experimentation,
