@@ -4,15 +4,15 @@ import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 import { experimentObservationSchema } from "./owned-enchanting";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
-export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
-export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
@@ -84,6 +84,7 @@ export const availableAnalysisSchema = z.object({
   enchanting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   alchemy: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   carpentry: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  runecrafting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
@@ -111,6 +112,16 @@ const farmingBonusMechanicsSchema = z.object({
   displayedPestChancePercent: z.number().nullable(), note: z.string(),
 });
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
+  z.object({ domain: z.literal("RUNECRAFTING"),
+    skill: z.object({ level: z.number().nullable(), xp: z.number().nullable(), nominalCap: z.literal(25), xpToNext: z.number().nullable(), xpTo25: z.number().nullable() }),
+    accountMechanics: z.object({ observedRank: z.null(), effectiveCap: z.null(), xpMultiplier: z.null(), defaultRankCap: z.literal(3),
+      ranks: z.array(z.object({ rank: z.string(), cap: z.number().int().positive(), xpMultiplier: z.number().positive() })).length(6), note: z.string() }),
+    mechanics: z.object({ purpose: z.string(), xpSources: z.array(z.string()), pedestal: z.string(), runeTiers: z.array(z.number().int()).length(3), note: z.string() }),
+    runeCatalog: z.object({ source: z.enum(["NEU","UNAVAILABLE"]), total: z.number().int().nonnegative(), complete: z.number().int().nonnegative(), partial: z.number().int().nonnegative(),
+      runes: z.array(z.object({ id: z.string(), name: z.string(), tier: z.number().int().min(1).max(3).nullable(), runecraftingLevelRequired: z.number().int().nonnegative().nullable(), applicableTo: z.string().nullable(), lore: z.array(z.string()), source: z.literal("NEU_LORE") })).max(256) }),
+    progressionFocus: z.object({ actions: z.array(z.object({ kind: z.enum(["LEVEL_RUNECRAFTING","INVESTIGATE","HOLD"]), priority: z.number().int().positive(), title: z.string(), reason: z.string() })) }),
+    unavailableFacts: z.array(z.string()), note: z.string() }),
+
   z.object({ domain: z.literal("FORAGING"),
     foragingLevel: compactLevelSchema.nullable(), foragingXp: z.number().nullable(), extraLevelCap: z.number().nullable(),
     hotfLevel: z.number().nullable(), treeExperience: z.number().nullable(), activePreset: z.number().nullable(),
