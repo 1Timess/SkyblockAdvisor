@@ -59,7 +59,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     : route.domain === "ALCHEMY"
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
     : route.domain === "CARPENTRY"
-      ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
+      ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
     : route.domain === "FARMING"
       ? [...await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]), null] as const
     : route.domain === "FORAGING"
@@ -79,7 +79,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   if (route.domain === "FARMING") activeDomainContext = buildFarmingAdvisorContext(profile, await hypixelClient.getGarden(profile.profile.id), input.question, { catalog, neu, quotes });
   if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
   if (route.domain === "ALCHEMY") activeDomainContext = buildAlchemyAdvisorContext(profile, input.question, quotes, effectiveBudgetCoins);
-  if (route.domain === "CARPENTRY") activeDomainContext = buildCarpentryAdvisorContext(profile);
+  if (route.domain === "CARPENTRY") activeDomainContext = buildCarpentryAdvisorContext(profile, quotes, effectiveBudgetCoins);
   if (route.domain === "SLAYER") activeDomainContext = buildSlayerAdvisorContext(profile, input.question, neu!);
   if (route.domain === "COLLECTIONS") {
     const resource = await hypixelClient.getCollections();
