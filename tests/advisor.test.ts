@@ -23,6 +23,7 @@ const available: AvailableAnalysis = {
   enchanting: { available: true, candidateCount: 0 },
   alchemy: { available: false, candidateCount: 0 },
   carpentry: { available: false, candidateCount: 0 },
+  runecrafting: { available: false, candidateCount: 0 },
   collections: { available: true, candidateCount: 0 },
   slayer: { available: true, candidateCount: 0 },
   farming: { available: true, candidateCount: 0 },
