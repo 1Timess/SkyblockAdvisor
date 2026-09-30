@@ -4,6 +4,9 @@ export interface PotionRecipe {
 }
 
 export const potionRecipes: readonly PotionRecipe[] = [
+  { potionId: "HASTE", basePotion: "AWKWARD_POTION", ingredientName: "Coal", ingredientId: "COAL", resultingLevel: 1, alchemyXpPerPotion: 5, evidence: "VERIFIED" },
+  { potionId: "SPELUNKER", basePotion: "WATER_BOTTLE", ingredientName: "Mithril", ingredientId: "MITHRIL_ORE", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
+  { potionId: "COLD_RESISTANCE", basePotion: "AWKWARD_POTION", ingredientName: "Enchanted Glacite", ingredientId: "ENCHANTED_GLACITE", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
   { potionId: "SPEED", basePotion: "AWKWARD_POTION", ingredientName: "Sugar", ingredientId: "SUGAR", resultingLevel: 1, alchemyXpPerPotion: 5, evidence: "VERIFIED" },
   { potionId: "SPEED", basePotion: "AWKWARD_POTION", ingredientName: "Enchanted Sugar", ingredientId: "ENCHANTED_SUGAR", resultingLevel: 3, alchemyXpPerPotion: 300, evidence: "VERIFIED" },
   { potionId: "SPEED", basePotion: "AWKWARD_POTION", ingredientName: "Enchanted Sugar Cane", ingredientId: "ENCHANTED_SUGAR_CANE", resultingLevel: 5, alchemyXpPerPotion: 15000, evidence: "VERIFIED" },
