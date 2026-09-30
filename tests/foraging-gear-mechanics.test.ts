@@ -5,7 +5,7 @@ import type { NormalizedSkyBlockProfile } from "../src/schemas/normalized-profil
 import type { ProfileItem } from "../src/schemas/items";
 
 function item(id: string, sweep: number): ProfileItem {
-  return { id, uuid: id, name: id, count: 1, rarity: "LEGENDARY", categories: ["axe"], source: "inventory",
+  return { id, uuid: id, name: id, count: 1, rarity: "legendary", categories: ["axe"], source: "inventory",
     stats: { sweep, foragingFortune: 83, foragingWisdom: 6 }, reforge: null, enchantments: {}, stars: 5, recombobulated: false,
     lore: ["Sweep: +" + sweep], abilityText: [], setBonusText: [], gemstones: undefined,
     foragingState: { boosterTiers: { foraging_wisdom: 1 }, absorbLogsChopped: 33522, logsCut: 8181, attributeMenuValue: null, source: "NBT" } };
