@@ -27,7 +27,17 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
   const url = isUuid
     ? `https://sessionserver.mojang.com/session/minecraft/profile/${key}`
     : `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(valid)}`;
-  const response = await fetchUpstream(url, fetcher);
+  const fallbackUrl = isUuid
+    ? `https://api.minecraftservices.com/minecraft/profile/lookup/${key}`
+    : `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(valid)}`;
+  let response: Response;
+  try {
+    response = await fetchUpstream(url, fetcher);
+    if (response.status >= 500) response = await fetchUpstream(fallbackUrl, fetcher);
+  } catch (error) {
+    if (!(error instanceof AppError) || error.code !== "UPSTREAM_UNAVAILABLE") throw error;
+    response = await fetchUpstream(fallbackUrl, fetcher);
+  }
   if (response.status === 404 || response.status === 204) throw new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
   if (!response.ok) throw new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
   const body = await response.text();

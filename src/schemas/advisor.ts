@@ -1,17 +1,18 @@
+import { requirementCheckSchema } from "./catalog";
 import { z } from "zod";
 import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 import { experimentObservationSchema } from "./owned-enchanting";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "DUNGEONS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
-export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER"]);
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING"]);
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
-export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FORAGING"]);
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
@@ -83,6 +84,7 @@ export const availableAnalysisSchema = z.object({
   enchanting: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   collections: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
   slayer: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
+  farming: z.object({ available: z.boolean(), candidateCount: z.number().int().nonnegative() }),
 });
 export type AvailableAnalysis = z.infer<typeof availableAnalysisSchema>;
 
@@ -97,7 +99,110 @@ const compactMiningCrystalSchema = z.object({ rawId: z.string(), state: z.string
 const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals: z.record(z.string(), compactMiningCrystalSchema),
   nucleus: z.object({ required: z.array(z.string()), acquired: z.array(z.string()), placed: z.array(z.string()),
     missing: z.array(z.string()), ready: z.boolean(), complete: z.boolean() }), biomes: z.record(z.string(), z.unknown()) });
+const farmingBonusMechanicsSchema = z.object({
+  evidence: z.enum(["OBSERVED_TOOLTIP", "CATALOG_TEMPLATE"]),
+  visitorBonus: z.object({ name: z.string(), displayedFortune: z.number().nullable(), nextDisplayedFortune: z.number().nullable(),
+    nextFortuneDelta: z.number().nullable(), displayedOffersProgress: z.number().nullable(), displayedOffersRequired: z.number().nullable(), remainingOffers: z.number().nullable() }).nullable(),
+  tieredBonus: z.object({ name: z.string(), displayedPieceCount: z.number(), displayedFortune: z.number().nullable(),
+    displayedDropChancePercent: z.array(z.number()), effectText: z.string() }).nullable(),
+  displayedPestChancePercent: z.number().nullable(), note: z.string(),
+});
 export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
+  z.object({ domain: z.literal("FARMING"), farmingLevel: z.number().nullable(), farmingXp: z.number().nullable(),
+    farmingSkillFocus: z.object({ cap: z.number().nullable(), capEvidence: z.enum(["UNREPORTED", "REPORTED_PERK", "BASE_CAP_ASSUMED"]),
+      nextLevel: z.object({ level: z.number().int().positive(), xpRemaining: z.number().nonnegative() }).nullable() }),
+    gardenAvailable: z.boolean(), gardenXp: z.number().nullable(), gardenLevel: z.number().nullable(),
+    nextGardenLevel: z.object({ level: z.number(), xpRequired: z.number(), xpRemaining: z.number() }).nullable(),
+    totalOffersAccepted: z.number().nullable(), uniqueVisitorsServed: z.number().nullable(),
+    nextOffersMilestone: z.object({ tier: z.number(), threshold: z.number(), remaining: z.number() }).nullable(),
+    nextUniqueVisitorsMilestone: z.object({ tier: z.number(), threshold: z.number(), remaining: z.number() }).nullable(),
+    resourcesCollected: z.record(z.string(), z.number()), nextCropMilestones: z.array(z.object({ crop: z.string(), resourceId: z.string(),
+      collected: z.number().nonnegative(), tier: z.number().int().positive(), threshold: z.number().positive(), remaining: z.number().positive() })).max(13),
+    cropUpgradeLevels: z.record(z.string(), z.number()),
+    composterUpgrades: z.record(z.string(), z.number()),
+    composterOptions: z.array(z.object({ key: z.string(), name: z.string(), gardenLevel: z.number().int().positive(),
+      effect: z.string(), observedLevel: z.number().nonnegative().nullable(),
+      levelAccess: z.enum(["LEVEL_ELIGIBLE", "FUTURE_LEVEL", "UNREPORTED"]), nextCostStatus: z.literal("UNREPORTED") })).max(5),
+    unlockedPlotIds: z.array(z.string()).max(24), nextGardenCropUnlocks: z.array(z.string()),
+    plotExpansionOptions: z.array(z.object({ group: z.string(), unlockedInGroup: z.number().int().nonnegative(),
+      totalInGroup: z.number().int().positive(), gardenLevelRequired: z.number().int().positive(),
+      cost: z.object({ item: z.enum(["COMPOST", "COMPOST_BUNDLE"]), amount: z.number().int().positive() }),
+      mapping: z.literal("INFERRED_API_GROUP") })).max(4),
+    greenhouseExpansionOptions: z.array(z.object({ greenhouseNumber: z.number().int().min(2).max(3),
+      etherealVines: z.number().int().positive(), compostBundles: z.number().int().positive(),
+      prerequisiteStatus: z.literal("UNREPORTED") })).max(2),
+    cropPestOptions: z.array(z.object({ name: z.string(), crop: z.string(), gardenLevel: z.number().int().positive(),
+      spray: z.string(), specialDrop: z.string() })).max(4),
+    mutationOptions: z.array(z.object({ name: z.string(), gardenLevel: z.number().int().positive(), surface: z.string(),
+      adjacent: z.array(z.object({ crop: z.string(), count: z.number().int().positive() })),
+      layoutStatus: z.enum(["REFERENCE_GRID", "COUNT_ONLY"]), inputAccess: z.enum(["LEVEL_ELIGIBLE", "UNDETERMINED"]),
+      cultivationStatus: z.literal("UNVERIFIED") })).max(9),
+    nextPestUnlocks: z.array(z.object({ name: z.string(), crop: z.string(), gardenLevel: z.number().int().positive() })).max(3),
+    contestCount: z.number().int().nonnegative(), medalInventory: z.record(z.string(), z.number()),
+    contestPerkLevels: z.record(z.string(), z.number()), uniqueContestBracketKeys: z.array(z.string()).max(8),
+    personalBestCropKeys: z.array(z.string()).max(13),
+    equipmentComparisons: z.object({
+      catalogDownloadedAt: z.string().datetime().nullable(), coverage: z.enum(["CATALOG_LOADED", "UNREPORTED"]),
+      mechanics: z.array(z.object({ itemId: z.string(), observedName: z.string(), catalogName: z.string().nullable(), source: z.string(), observedBonuses: farmingBonusMechanicsSchema, catalogBonuses: farmingBonusMechanicsSchema, referenceLore: z.array(z.string()),
+        catalogFortune: z.number().nullable(), observedFortune: z.number().nullable(), abilityText: z.array(z.string()),
+        setBonusText: z.array(z.string()), requirements: z.array(requirementCheckSchema), utilityWarning: z.string().nullable(),
+        sourceStatus: z.enum(["CATALOG_MATCHED", "UNREPORTED"]) })).max(16),
+      comparisons: z.array(z.object({ currentItemId: z.string(), currentName: z.string(), targetItemId: z.string(), targetName: z.string(),
+        recipeIngredients: z.array(z.object({ itemId: z.string(), amount: z.number().int().positive() })), craftUnlockText: z.string().nullable(), targetBonuses: farmingBonusMechanicsSchema,
+        basis: z.enum(["DIRECT_CATALOG_RECIPE", "SAME_SLOT_CATALOG_ALTERNATIVE"]), currentCatalogFortune: z.number().nullable(), targetCatalogFortune: z.number().nullable(),
+        catalogFortuneDifference: z.number().nullable(), requirements: z.array(requirementCheckSchema), unparsedRequirements: z.array(z.string()),
+        abilityText: z.array(z.string()), setBonusText: z.array(z.string()), purchasePrice: z.object({ coins: z.number(), observedAt: z.string().datetime(), confidence: marketConfidenceSchema, ageHours: z.number().nonnegative(), freshness: z.enum(["RECENT", "STALE"]) }).nullable(),
+        warnings: z.array(z.string()) })).max(12),
+    }),
+    turboCropChecks: z.array(z.object({ itemId: z.string().nullable(), itemName: z.string(), source: z.string(),
+      enchantment: z.string(), level: z.number().int().min(4).max(5), requiredBracket: z.enum(["BRONZE", "SILVER"]),
+      eligibilityStatus: z.literal("UNREPORTED") })).max(16),
+    observedPestKills: z.record(z.string(), z.number()), visibleEquipmentCount: z.number().int().nonnegative(),
+    visibleEquipment: z.array(z.object({ id: z.string().nullable(), name: z.string(), source: z.string(),
+      reforge: z.string().nullable(), enchantments: z.record(z.string(), z.number()), farmingFortune: z.number().nullable(),
+      toolProgress: z.object({ rawLevel: z.number().nullable(), rawExperience: z.number().nullable(), farmingForDummiesCount: z.number().nullable() }).nullable(),
+      levelingCrop: z.string().nullable(), nextToolLevel: z.object({ level: z.number().int().positive(),
+        experienceRequired: z.number().positive(), experienceRemaining: z.number().positive(),
+        interpretation: z.literal("INFERRED_WITHIN_LEVEL") }).nullable() })).max(16),
+    inventoryApiLimited: z.boolean(),
+    greenhouseEligibility: z.boolean().nullable(), greenhouseAccessStatus: z.literal("UNREPORTED"), greenhouseSlotObservation: z.object({
+      status: z.enum(["REPORTED", "UNREPORTED"]), count: z.number().int().nonnegative().nullable(),
+    }),
+    carpenterOfferCompletions: z.number().int().nonnegative().nullable(),
+    mutationKnowledge: z.object({ total: z.number().int().positive(), byRarity: z.record(z.string(), z.number().int().nonnegative()),
+      specialCount: z.number().int().nonnegative(), spawnWeightCoverage: z.number().int().nonnegative(),
+      actualSpawnChanceStatus: z.literal("UNREPORTED"), verifiedLayoutCount: z.number().int().nonnegative(),
+      countOnlyOrSpecial: z.array(z.string()).max(8), analysisMilestones: z.array(z.number().int().positive()).max(6),
+      profileAnalysisStatus: z.literal("UNREPORTED") }),
+    mutationPaths: z.array(z.object({ name: z.string(), spawnWeight: z.number().int().nonnegative(), prerequisiteMutations: z.array(z.string()).max(40),
+      baseCrops: z.array(z.string()).max(20), requiredGardenLevel: z.number().int().positive(),
+      levelAccess: z.enum(["LEVEL_ELIGIBLE", "FUTURE_LEVEL"]),
+      cropAccess: z.enum(["LEVEL_ELIGIBLE", "FUTURE_LEVEL", "UNDETERMINED"]), unknownInputs: z.array(z.string()).max(20),
+      specialSteps: z.array(z.string()).max(3), layoutStatus: z.enum(["REFERENCE_GRID", "SPECIAL_OR_COUNT_ONLY"]),
+      profileDiscoveryStatus: z.literal("UNREPORTED"), cultivationStatus: z.literal("UNVERIFIED") })).max(5),
+    mutationSpecialBehaviors: z.array(z.object({ name: z.string(), rule: z.string() })).max(12),
+    mutationRecipeSteps: z.array(z.object({ name: z.string(), surface: z.string(), size: z.string(),
+      condition: z.enum(["ADJACENT", "SPECIAL"]), requirements: z.array(z.object({ name: z.string(), count: z.number().int().positive() })).max(8),
+      specialRule: z.string().nullable(), growthStages: z.number().int().nonnegative(), effects: z.array(z.string()).max(8),
+      plantingLayout: z.object({ width: z.number().int().min(1).max(5), cells: z.array(z.string()).max(25),
+        resultCellIndices: z.array(z.number().int().min(0).max(24)).max(9) }).nullable(),
+      layoutStatus: z.enum(["REFERENCE_PLANTING_GRID", "SPECIAL_OR_COUNT_ONLY"]), cultivationStatus: z.literal("UNVERIFIED") })).max(40),
+    greenhouseMechanics: z.object({ baseStageSeconds: z.number().int().positive(), growth: z.object({
+      offline: z.boolean(), uniqueBaseCropCountCap: z.number().int().positive(), uniqueBaseCropSpeedPercentEach: z.number(),
+      cropGrowthSpeedPercentPerPoint: z.number(), growthSpeedUpgradeMaxLevel: z.number().int().positive(),
+      growthSpeedUpgradePercent: z.string(), greenhouseSpeedAttributePercentPerPoint: z.number() }),
+    water: z.object({ lossPerStageMin: z.number(), lossPerStageMax: z.number(), dryStageCanStall: z.boolean() }),
+    yield: z.object({ uniqueBaseCropPercentEach: z.number(), plantYieldUpgradeMaxLevel: z.number().int().positive(),
+      plantYieldUpgradePercent: z.string(), nearbyEffectsLockOnMaturity: z.boolean() }),
+    effectAdjacency: z.literal("ORTHOGONAL_ONLY"), unlocks: z.object({ carpenterOfferThenBlueprintHandoff: z.boolean(),
+      plotLimit: z.number().int().positive(), vinesPerAdjacentCropSlot: z.number().int().positive(),
+      additionalGreenhousesHaveAllSlots: z.boolean(), mutationHarvestCanDropEtherealVine: z.boolean(),
+      allCropSlotsBeforeExpansion: z.boolean() }),
+    vineDropChancePercentByMutationRarity: z.record(z.string(), z.number().nonnegative()),
+    bonusDropsVineChancePercent: z.number().nonnegative(), profileTimerStatus: z.literal("UNREPORTED"),
+    profileWaterAndEffectsStatus: z.literal("UNREPORTED") }),
+    activeOffers: z.array(z.object({ visitor: z.string(), status: z.string().nullable(), requirements: z.array(z.object({ itemId: z.string(), amount: z.number() })) })).max(8),
+    activeOfferCount: z.number().int().nonnegative(), note: z.string() }),
   z.object({ domain: z.literal("SLAYER"), totalLevelUnlocks: z.number().int().nonnegative(), totalBossDrops: z.number().int().nonnegative(),
     possibleRngOptionCount: z.number().int().nonnegative(), focusFamilies: z.array(z.string()).max(6),
     families: z.array(z.object({ id: z.string(), bossName: z.string(), status: z.enum(["OBSERVED", "UNREPORTED"]),

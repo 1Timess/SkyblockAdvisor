@@ -16,11 +16,37 @@ test("identity uses official routes, canonical UUID and successful lookup cache"
   await resolvePlayer("01234567-89ab-cdef-0123-456789abcdef", fetcher, new TtlCache());
   assert.equal(calls[1], `https://sessionserver.mojang.com/session/minecraft/profile/${fixtureUuid}`);
 });
+test("uncached usernames resolve through Minecraft Services when Mojang times out", async () => {
+  const calls: string[] = [];
+  const fetcher: typeof fetch = async input => {
+    calls.push(String(input));
+    if (calls.length === 1) throw new Error("Mojang unavailable");
+    return Response.json({ id: fixtureUuid, name: "NewPlayer" });
+  };
+  const store = new TtlCache();
+  assert.deepEqual(await resolvePlayer("NewPlayer", fetcher, store), { uuid: fixtureUuid, username: "NewPlayer" });
+  assert.deepEqual(calls, [
+    "https://api.mojang.com/users/profiles/minecraft/NewPlayer",
+    "https://api.minecraftservices.com/minecraft/profile/lookup/name/NewPlayer",
+  ]);
+  await resolvePlayer("newplayer", fetcher, store);
+  assert.equal(calls.length, 2);
+});
+test("UUID lookup and server errors use the secondary identity service", async () => {
+  const urls: string[] = [];
+  const fetcher: typeof fetch = async input => {
+    urls.push(String(input));
+    return urls.length === 1 ? new Response(null, { status: 503 }) : Response.json({ id: fixtureUuid, name: "FixturePlayer" });
+  };
+  assert.equal((await resolvePlayer(fixtureUuid, fetcher, new TtlCache())).username, "FixturePlayer");
+  assert.equal(urls[1], `https://api.minecraftservices.com/minecraft/profile/lookup/${fixtureUuid}`);
+});
 test("identity distinguishes absent players, malformed responses and upstream failures", async () => {
   for (const status of [204, 404]) await assert.rejects(resolvePlayer("Nobody", async () => new Response(null, { status }), new TtlCache()), { code: "PLAYER_NOT_FOUND" });
   await assert.rejects(resolvePlayer("Nobody", async () => new Response(""), new TtlCache()), { code: "PLAYER_NOT_FOUND" });
   await assert.rejects(resolvePlayer("Nobody", async () => Response.json({ nope: true }), new TtlCache()), { code: "INVALID_IDENTITY" });
   await assert.rejects(resolvePlayer("Nobody", async () => new Response(null, { status: 500 }), new TtlCache()), { code: "IDENTITY_UPSTREAM_ERROR" });
+  await assert.rejects(resolvePlayer("Nobody", async () => { throw new Error("both unavailable"); }, new TtlCache()), { code: "UPSTREAM_UNAVAILABLE" });
 });
 test("profile selector supports ID, case-insensitive cute name, selected and first fallbacks", () => {
   const first = { ...fixtureProfiles()[0], selected: false }, second = { ...first, profile_id: "second", cute_name: "Pear", selected: true };

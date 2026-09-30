@@ -1,0 +1,16 @@
+{
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Mutations#References",
+  "staffDisclosureDate": "2026-07-24",
+  "notes": "Weights are reference values, not probabilities. Eligibility, surrounding crop support, other eligible mutations, Bioanalysis Artifact and unreported layout affect actual chance. Zero denotes a special trigger.",
+  "weights": {
+    "Ashwreath": 30, "Choconut": 30, "Dustgrain": 30, "Gloomgourd": 30, "Lonelily": 6,
+    "Scourroot": 30, "Shadevine": 30, "Veilshroom": 30, "Witherbloom": 30,
+    "Chocoberry": 25, "Cindershade": 25, "Coalroot": 25, "Creambloom": 25, "Duskbloom": 25, "Thornshade": 25,
+    "Blastberry": 25, "Cheesebite": 25, "Chloronite": 25, "Do-not-eat-shroom": 25, "Fleshtrap": 25,
+    "Magic Jellybean": 25, "Noctilume": 25, "Snoozling": 25, "Soggybud": 25, "Turtlellini": 25,
+    "Chorus Fruit": 25, "PlantBoy Advance": 25, "Puffercloud": 25, "Shellfruit": 0,
+    "Startlevine": 25, "Stoplight Petal": 25, "Thunderling": 25, "Zombud": 25,
+    "All-in Aloe": 25, "Devourer": 20, "Glasscorn": 20, "Godseed": 5, "Jerryflower": 0,
+    "Phantomleaf": 20, "Timestalk": 20
+  }
+}

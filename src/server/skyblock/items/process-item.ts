@@ -3,6 +3,7 @@ import { parseFooter, stripFormatting } from "./parse-footer";
 import { extractStats } from "./parse-stats";
 import { extractGemstoneState } from "./gemstones";
 import { extractDrillComponentState } from "./drill-components";
+import { extractFarmingToolProgress } from "../../farming/tool-progress";
 
 export function object(value: unknown): Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
@@ -48,6 +49,7 @@ export function toProfileItem(item: ProcessedItem): ProfileItem {
     stats: item.stats, reforge: item.reforge, enchantments: item.enchantments, stars: item.stars, recombobulated: item.recombobulated,
     lore: item.lore, abilityText: item.abilityText, setBonusText: item.setBonusText, source: item.source,
     gemstones: extractGemstoneState(item.id, item.extraAttributes),
+    farmingToolProgress: extractFarmingToolProgress(item.id, item.extraAttributes),
     drillComponents: extractDrillComponentState(item.categories, item.extraAttributes),
   };
 }

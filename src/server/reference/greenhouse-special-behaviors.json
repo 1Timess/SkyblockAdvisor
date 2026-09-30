@@ -1,0 +1,16 @@
+{
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Mutations",
+  "notes": "These mechanics affect cultivation or harvesting. Current Garden observations do not expose their live stage or state.",
+  "behaviors": [
+    { "name": "Dead Plant", "rule": "Plants at -100 water become Dead Plants; most mature mutations also decay into them after a mutation-dependent timer, sometimes even when watered. They are inputs to Witherbloom and Zombud." },
+    { "name": "Snoozling", "rule": "Falls asleep at stages 5, 10 and 15; right-click to wake before growth continues." },
+    { "name": "Blastberry", "rule": "Harvest or decay explodes and destroys adjacent crops except other Blastberries; its explosion can produce Shellfruit from Turtlellini." },
+    { "name": "Magic Jellybean", "rule": "Harvestable from stage 12; drops scale at every 12 stages, up to 10x at stage 120." },
+    { "name": "PlantBoy Advance", "rule": "Harvest requires collecting eight apples in Snake; failure loses three growth stages." },
+    { "name": "Startlevine", "rule": "Harvest requires Invisibility; a neighboring Blastberry decay can destroy it." },
+    { "name": "Stoplight Petal", "rule": "Punch repeatedly while green to harvest; punching while red destroys the plant." },
+    { "name": "Chorus Fruit", "rule": "Teleports while growing and changes underlying blocks to End Stone; whether forced relocation destroys another crop needs confirmation." },
+    { "name": "Glasscorn", "rule": "Harvest at stage 7 or 8; another growth stage at 8 resets it to stage 1." },
+    { "name": "Timestalk", "rule": "Harvest spawns a Timestalk Clone; defeat the clone to obtain the mutation." }
+  ]
+}

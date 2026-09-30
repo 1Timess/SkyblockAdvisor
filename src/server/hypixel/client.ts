@@ -12,6 +12,7 @@ const playerSchema = z.object({ player: z.record(z.string(), z.unknown()).nullab
 const itemsSchema = z.object({ items: z.array(itemDefinitionSchema) });
 const collectionsSchema = z.object({ version: z.string().optional(), lastUpdated: z.number().optional(),
   collections: z.record(z.string(), z.unknown()) });
+const gardenSchema = z.object({ garden: z.record(z.string(), z.unknown()) });
 
 export class HypixelClient {
   constructor(private fetcher: Fetcher = fetch, private cache = new TtlCache(), private apiKey = () => getServerEnv().HYPIXEL_API_KEY) {}
@@ -37,6 +38,21 @@ export class HypixelClient {
   async getPlayer(uuid: string) { return (await this.request(`player?uuid=${encodeURIComponent(uuid)}`, 300, playerSchema)).player; }
   async getItems() { return (await this.request("resources/skyblock/items", 43200, itemsSchema, false)).items; }
   async getCollections() { return this.request("resources/skyblock/collections", 43200, collectionsSchema, false); }
+  async getGarden(profileId: string) {
+    const path = `skyblock/garden?profile=${encodeURIComponent(profileId)}`;
+    const cached = this.cache.get<z.infer<typeof gardenSchema>["garden"]>(path);
+    if (cached) return cached;
+    const response = await fetchUpstream(`https://api.hypixel.net/v2/${path}`, this.fetcher, { "API-Key": this.apiKey() });
+    if (response.status === 404) return null;
+    if (response.status === 429) throw new AppError("HYPIXEL_RATE_LIMITED", "Hypixel rate limit reached. Try again shortly.", 503);
+    if (response.status === 401 || response.status === 403) throw new AppError("HYPIXEL_AUTH_FAILED", "The server's Hypixel API key was rejected.", 503);
+    if (!response.ok) throw new AppError("HYPIXEL_UPSTREAM_ERROR", "Hypixel could not complete the request.", 502);
+    const raw = await readJson(response), status = envelope.safeParse(raw), parsed = gardenSchema.safeParse(raw);
+    if (!status.success || !status.data.success || !parsed.success)
+      throw new AppError("HYPIXEL_CONTRACT_MISMATCH", "Hypixel returned data outside the supplied source contract.", 502);
+    this.cache.set(path, parsed.data.garden, 300);
+    return parsed.data.garden;
+  }
 }
 
 export const hypixelClient = new HypixelClient();

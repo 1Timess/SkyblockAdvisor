@@ -7,6 +7,10 @@ import { TtlCache } from "../cache/ttl-cache";
 import { buildNormalizedProfile } from "../skyblock/profile/build-normalized-profile";
 import { buildMiningKnowledge, miningRelevantStats } from "../reference/mining-knowledge";
 import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
+import { buildObservedFarmingState } from "../farming/observed-state";
+import { mutationCatalogSummary } from "../farming/mutation-knowledge";
+import { greenhouseMechanics } from "../farming/greenhouse-knowledge";
+import { composterFocus, farmingSkillFocus } from "../farming/progression-focus";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -61,6 +65,18 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
       magicalPower: profile.accessories.magicalPower.total,
     },
     domains: {
+      FARMING: { domain: "FARMING", equipmentComparisons: { catalogDownloadedAt: null, coverage: "UNREPORTED", mechanics: [], comparisons: [] }, ...buildObservedFarmingState(profile), farmingLevel: profile.progression.skills.farming?.level ?? null,
+        farmingXp: profile.progression.skills.farming?.xp ?? null, farmingSkillFocus: farmingSkillFocus(profile),
+        gardenAvailable: false, gardenXp: null, gardenLevel: null,
+        nextGardenLevel: null, totalOffersAccepted: null, uniqueVisitorsServed: null,
+        nextOffersMilestone: null, nextUniqueVisitorsMilestone: null, resourcesCollected: {}, nextCropMilestones: [], cropUpgradeLevels: {},
+        composterUpgrades: {}, composterOptions: composterFocus({}, null),
+        unlockedPlotIds: [], plotExpansionOptions: [], greenhouseExpansionOptions: [], cropPestOptions: [],
+        nextGardenCropUnlocks: [], mutationOptions: [], nextPestUnlocks: [], greenhouseEligibility: null,
+        greenhouseSlotObservation: { status: "UNREPORTED", count: null }, greenhouseAccessStatus: "UNREPORTED", carpenterOfferCompletions: null,
+        mutationKnowledge: mutationCatalogSummary(), mutationPaths: [], mutationRecipeSteps: [], mutationSpecialBehaviors: [],
+        greenhouseMechanics: greenhouseMechanics(),
+        activeOffers: [], activeOfferCount: 0, note: "Garden state has not been loaded for this snapshot." },
       SLAYER: { domain: "SLAYER", totalLevelUnlocks: 0, totalBossDrops: 0, possibleRngOptionCount: 0,
         focusFamilies: [], families: [], unlockFocus: [], dropFocus: [], craftedSlayerMinions: [], note: "Slayer reward sources have not been joined." },
       COLLECTIONS: { domain: "COLLECTIONS", sourceVersion: null, sourceUpdatedAt: null, totalCollections: 0,
