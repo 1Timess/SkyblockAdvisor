@@ -10,6 +10,13 @@ export function object(value: unknown): Record<string, unknown> {
 }
 function text(value: unknown): string | null { return typeof value === "string" ? value : null; }
 function numeric(value: unknown): number | null { return typeof value === "number" && Number.isFinite(value) ? value : null; }
+function extractForagingItemState(extra: Record<string, unknown>) {
+  const boosterTiers = Object.fromEntries(Object.entries(object(extra.booster_tiers))
+    .filter((entry): entry is [string, number] => numeric(entry[1]) !== null));
+  const absorbLogsChopped = numeric(extra.absorb_logs_chopped), logsCut = numeric(extra.logs_cut), attributeMenuValue = numeric(extra.attributeMenuValue);
+  if (!Object.keys(boosterTiers).length && absorbLogsChopped === null && logsCut === null && attributeMenuValue === null) return undefined;
+  return { boosterTiers, absorbLogsChopped, logsCut, attributeMenuValue, source: "NBT" as const };
+}
 
 export function extractAbilityText(lore: string[]) {
   const abilityText: string[] = [], setBonusText: string[] = [];
@@ -50,6 +57,6 @@ export function toProfileItem(item: ProcessedItem): ProfileItem {
     lore: item.lore, abilityText: item.abilityText, setBonusText: item.setBonusText, source: item.source,
     gemstones: extractGemstoneState(item.id, item.extraAttributes),
     farmingToolProgress: extractFarmingToolProgress(item.id, item.extraAttributes),
-    drillComponents: extractDrillComponentState(item.categories, item.extraAttributes),
+    drillComponents: extractDrillComponentState(item.categories, item.extraAttributes),\n    foragingState: extractForagingItemState(item.extraAttributes),
   };
 }
