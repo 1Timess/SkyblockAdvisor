@@ -1,9 +1,10 @@
 export interface PotionRecipe {
-  potionId: string; basePotion: "WATER_BOTTLE" | "AWKWARD_POTION"; ingredientName: string; ingredientId: string;
+  potionId: string; basePotion: "WATER_BOTTLE" | "AWKWARD_POTION" | "DERIVED_POTION"; basePotionId?: string; basePotionLevel?: number; ingredientName: string; ingredientId: string;
   resultingLevel: number; alchemyXpPerPotion: number | null; evidence: "VERIFIED";
 }
 
 export const potionRecipes: readonly PotionRecipe[] = [
+  { potionId: "INVISIBILITY", basePotion: "DERIVED_POTION", basePotionId: "NIGHT_VISION", basePotionLevel: 1, ingredientName: "Fermented Spider Eye", ingredientId: "FERMENTED_SPIDER_EYE", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "HEALING", basePotion: "AWKWARD_POTION", ingredientName: "Glistering Melon Slice", ingredientId: "SPECKLED_MELON", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "POISON", basePotion: "AWKWARD_POTION", ingredientName: "Spider Eye", ingredientId: "SPIDER_EYE", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "REGENERATION", basePotion: "AWKWARD_POTION", ingredientName: "Ghast Tear", ingredientId: "GHAST_TEAR", resultingLevel: 1, alchemyXpPerPotion: 30, evidence: "VERIFIED" },
