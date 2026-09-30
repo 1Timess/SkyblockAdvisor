@@ -2,6 +2,8 @@ import type { AdvisorDomainContext } from "../../schemas/advisor";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import xpTables from "../reference/xp-tables.json";
 import { alchemyDurationBonusPercent, brewablePotions, brewingMechanics, godPotionDurationHours, potionFocusForQuestion } from "./reference";
+import { buildAlchemyWisdomState } from "./wisdom";
+import { alchemyLevelingMethods, effectiveAlchemyXp } from "./leveling";
 
 const ALCHEMY_CAP = 50;
 const ALCHEMY_XP_TO_50 = xpTables.skill.slice(0, ALCHEMY_CAP).reduce((sum, value) => sum + value, 0);
@@ -12,6 +14,12 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
   const level = skill?.level ?? null;
   const xpTo50 = xp === null ? null : Math.max(0, ALCHEMY_XP_TO_50 - xp);
   const focus = potionFocusForQuestion(question);
+  const wisdom = buildAlchemyWisdomState(profile);
+  const levelingMethods = alchemyLevelingMethods.map(method => {
+    const effectiveXpPerBatchFloor = effectiveAlchemyXp(method.xpPerBatch, wisdom.confirmedWisdom);
+    return { ...method, effectiveXpPerBatchFloor,
+      batchesTo50Floor: xpTo50 === null ? null : Math.ceil(xpTo50 / effectiveXpPerBatchFloor) };
+  });
   return {
     domain: "ALCHEMY",
     skill: {
@@ -38,6 +46,8 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       potionAffinityApplies: brewingMechanics.godPotion.potionAffinityApplies,
       parrotDurationBonusMaxPercent: brewingMechanics.godPotion.parrotDurationBonusMaxPercent,
     },
+    wisdom,
+    levelingMethods,
     potionCatalog: {
       brewableCount: brewablePotions.length,
       recipeCoverage: "UNRESOLVED",
@@ -48,9 +58,9 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
     },
     unavailableFacts: [
       "Exact potion ingredient sequences and ingredient-to-Alchemy-XP mappings are not yet encoded in this implementation slice.",
-      "Effective Alchemy Wisdom is not reconstructed until Booster Cookie, potion-effect, pet, accessory, Slayer, and event modifier observability are joined.",
+      "Effective Alchemy Wisdom is a lower bound: Booster Cookie, active potion effects, temporary consumables, event multipliers, and some other sources are not normalized.",
       "Potion Affinity ownership/effective tier and active God Potion/Mixin state are not yet reconstructed.",
     ],
-    note: "Alchemy context separates skill progression, brewing mechanics, potion selection, and God Potion duration. Unresolved recipe and multiplier facts remain explicit rather than inferred.",
+    note: "Alchemy context separates skill progression, brewing mechanics, potion selection, XP methods, observed Wisdom, Witch throughput, and God Potion duration. Unresolved recipe and multiplier facts remain explicit rather than inferred.",
   };
 }
