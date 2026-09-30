@@ -4,7 +4,7 @@ export interface PotionRecipe {
 }
 
 export const potionRecipes: readonly PotionRecipe[] = [
-  { potionId: "INVISIBILITY", basePotion: "DERIVED_POTION", basePotionId: "NIGHT_VISION", basePotionLevel: 1, ingredientName: "Fermented Spider Eye", ingredientId: "FERMENTED_SPIDER_EYE", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
+  { potionId: "INVISIBILITY", basePotion: "DERIVED_POTION", basePotionId: "NIGHT_VISION", basePotionLevel: 1, ingredientName: "Fermented Spider Eye", ingredientId: "FERMENTED_SPIDER_EYE", resultingLevel: 1, alchemyXpPerPotion: 0, evidence: "VERIFIED" },
   { potionId: "HEALING", basePotion: "AWKWARD_POTION", ingredientName: "Glistering Melon Slice", ingredientId: "SPECKLED_MELON", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "POISON", basePotion: "AWKWARD_POTION", ingredientName: "Spider Eye", ingredientId: "SPIDER_EYE", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "REGENERATION", basePotion: "AWKWARD_POTION", ingredientName: "Ghast Tear", ingredientId: "GHAST_TEAR", resultingLevel: 1, alchemyXpPerPotion: 30, evidence: "VERIFIED" },
@@ -22,9 +22,9 @@ export const potionRecipes: readonly PotionRecipe[] = [
   { potionId: "MANA", basePotion: "AWKWARD_POTION", ingredientName: "Raw Mutton", ingredientId: "MUTTON", resultingLevel: 1, alchemyXpPerPotion: 5, evidence: "VERIFIED" },
   { potionId: "RABBIT", basePotion: "AWKWARD_POTION", ingredientName: "Raw Rabbit", ingredientId: "RABBIT", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
   { potionId: "RESISTANCE", basePotion: "AWKWARD_POTION", ingredientName: "Cactus", ingredientId: "CACTUS", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
-  { potionId: "STUN", basePotion: "WATER_BOTTLE", ingredientName: "Obsidian", ingredientId: "OBSIDIAN", resultingLevel: 1, alchemyXpPerPotion: 15, evidence: "VERIFIED" },
-  { potionId: "VENOMOUS", basePotion: "WATER_BOTTLE", ingredientName: "Poisonous Potato", ingredientId: "POISONOUS_POTATO", resultingLevel: 1, alchemyXpPerPotion: 20, evidence: "VERIFIED" },
-  { potionId: "WOUNDED", basePotion: "WATER_BOTTLE", ingredientName: "Netherrack", ingredientId: "NETHERRACK", resultingLevel: 1, alchemyXpPerPotion: 5, evidence: "VERIFIED" },
+  { potionId: "STUN", basePotion: "AWKWARD_POTION", ingredientName: "Obsidian", ingredientId: "OBSIDIAN", resultingLevel: 1, alchemyXpPerPotion: 15, evidence: "VERIFIED" },
+  { potionId: "VENOMOUS", basePotion: "AWKWARD_POTION", ingredientName: "Poisonous Potato", ingredientId: "POISONOUS_POTATO", resultingLevel: 1, alchemyXpPerPotion: 20, evidence: "VERIFIED" },
+  { potionId: "WOUNDED", basePotion: "AWKWARD_POTION", ingredientName: "Netherrack", ingredientId: "NETHERRACK", resultingLevel: 1, alchemyXpPerPotion: 5, evidence: "VERIFIED" },
   { potionId: "CRITICAL", basePotion: "AWKWARD_POTION", ingredientName: "Flint", ingredientId: "FLINT", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "ARCHERY", basePotion: "AWKWARD_POTION", ingredientName: "Feather", ingredientId: "FEATHER", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
   { potionId: "PET_LUCK", basePotion: "AWKWARD_POTION", ingredientName: "Enchanted Rabbit Hide", ingredientId: "ENCHANTED_RABBIT_HIDE", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
