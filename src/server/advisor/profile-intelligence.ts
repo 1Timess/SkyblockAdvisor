@@ -15,6 +15,7 @@ import { indexForagingGear } from "../foraging/gear-state";
 import { buildForagingProgressionFocus } from "../foraging/progression-focus";
 import { buildForagingGearMechanics } from "../foraging/gear-mechanics";
 import { buildAlchemyAdvisorContext } from "../alchemy/advisor-context";
+import { buildCarpentryAdvisorContext } from "../carpentry/advisor-context";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -130,6 +131,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         unavailableFacts: ["Effective Sweep, effective Foraging Fortune, logs per action, hourly profit, and unobserved modifier state are not reconstructed."],
         note: "Foraging context reports observed progression and gear state. Supported candidate families are bounded to verified Foraging integrations; effective account-level Sweep and Fortune remain unavailable." },
       ALCHEMY: buildAlchemyAdvisorContext(profile, ""),
+      CARPENTRY: buildCarpentryAdvisorContext(profile),
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
         enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
         matchedRewards: [], possibleRewardCount: 0, experimentation: profile.progression.enchanting.experimentation,
