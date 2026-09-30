@@ -10,6 +10,7 @@ async function main() {
   const questions = questionParts.length ? [questionParts.join(" ").trim()] : [
     "What should I focus on next for Carpentry?",
     "How does Carpentry XP work?",
+    "What is the most cost-efficient supported way for me to level Carpentry?",
     "Why didn't this craft give Carpentry XP?",
     "When do I unlock Quick Crafting?",
     "What does Carpentry 25 unlock?",
