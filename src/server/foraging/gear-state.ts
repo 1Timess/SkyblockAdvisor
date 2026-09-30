@@ -4,7 +4,7 @@ import type { ProfileItem } from "../../schemas/items";
 const foragingIdPatterns = [
   /^(?:SERIOUSLY_DAMAGED_AXE|FIG_HEW|FIGSTONE_SPLITTER|HELIX_CHOPPER)$/,
   /^(?:FIG|HELIX)_(?:HELMET|CHESTPLATE|LEGGINGS|BOOTS)$/,
-  /^(?:DAVIDS?_CLOAK|HONEYCOMB_NECKLACE|VEILSHROOM_BRACELET|SAFARI_BELT)$/,
+  /^(?:DAVID_CLOAK|DAVIDS_CLOAK|HONEYCOMB_NECKLACE|VEILSHROOM_BRACELET|SAFARI_BELT)$/,
 ] as const;
 const foragingText = /\b(?:Foraging Fortune|Foraging Wisdom|Sweep|Galatea|Moonglade|Torrhus|Tree Gift|Axe Ability|Fig Log|Mangrove Log|Helix Log)\b/i;
 
