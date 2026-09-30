@@ -37,7 +37,7 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
 }
 
 function detectDomain(text: string): ProfileIntelligenceDomain | null {
-  if (/\\bforaging\\b|\\bhotf\\b|\\bheart of the forest\\b|\\b(?:fig|mangrove|helix) logs?\\b|\\btree gifts?\\b/.test(text)) return "FORAGING";
+  if (/\bforaging\b|\bhotf\b|\bheart of the forest\b|\b(?:fig|mangrove|helix) logs?\b|\btree gifts?\b/.test(text)) return "FORAGING";
   if (/\bslayers?\b|\b(revenant|tarantula|sven|voidgloom|inferno demonlord|riftstalker)\b|\b(warden heart|overflux capacitor|judgement core)\b/.test(text)) return "SLAYER";
   if (/\bfarming\b|\bgarden\b|\bgreenhouse\b|\bmutations?\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)
     || greenhouseMutations.mutations.some(mutation => text.includes(mutation.name.toLowerCase()))) return "FARMING";
