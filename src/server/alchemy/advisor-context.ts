@@ -33,10 +33,6 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       grossCoinsPerXpFloor: ingredientPriceCoins === null ? null : ingredientPriceCoins / effectiveXpPerBatchFloor,
       batchesTo50Floor, estimatedIngredientCostTo50Floor, budgetStatus };
   });
-  return { ...method, effectiveXpPerBatchFloor, ingredientPriceCoins,
-      grossCoinsPerXpFloor: ingredientPriceCoins === null ? null : ingredientPriceCoins / effectiveXpPerBatchFloor,
-      batchesTo50Floor: xpTo50 === null ? null : Math.ceil(xpTo50 / effectiveXpPerBatchFloor) };
-  });
   return {
     domain: "ALCHEMY",
     skill: {
