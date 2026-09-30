@@ -22,6 +22,7 @@ const available: AvailableAnalysis = {
   dungeons: { available: true, candidateCount: 4 }, fishing: { available: true, candidateCount: 0 }, mining: { available: true, candidateCount: 0 },
   enchanting: { available: true, candidateCount: 0 },
   alchemy: { available: false, candidateCount: 0 },
+  carpentry: { available: false, candidateCount: 0 },
   collections: { available: true, candidateCount: 0 },
   slayer: { available: true, candidateCount: 0 },
   farming: { available: true, candidateCount: 0 },
