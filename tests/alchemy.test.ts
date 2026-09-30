@@ -37,5 +37,5 @@ test("potion focus is semantic and named potion questions stay narrow", () => {
   assert.ok(mining.some(entry => entry.name === "Spelunker"));
   assert.ok(mining.every(entry => entry.tags.includes("MINING")));
   assert.deepEqual(potionFocusForQuestion("How do I brew Critical?").map(entry => entry.name), ["Critical"]);
-  assert.equal(godPotionDurationHours(50, 20), 28.8);
+  assert.ok(Math.abs((godPotionDurationHours(50, 20) ?? 0) - 28.8) < 1e-9);
 });
