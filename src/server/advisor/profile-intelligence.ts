@@ -17,6 +17,7 @@ import { buildForagingGearMechanics } from "../foraging/gear-mechanics";
 import { buildAlchemyAdvisorContext } from "../alchemy/advisor-context";
 import { buildCarpentryAdvisorContext } from "../carpentry/advisor-context";
 import { buildRunecraftingAdvisorContext } from "../runecrafting/advisor-context";
+import { buildTamingAdvisorContext } from "../taming/advisor-context";
 
 export interface ProfileIntelligenceSnapshot {
   snapshotId: string;
@@ -134,6 +135,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
       ALCHEMY: buildAlchemyAdvisorContext(profile, ""),
       CARPENTRY: buildCarpentryAdvisorContext(profile),
       RUNECRAFTING: buildRunecraftingAdvisorContext(profile),
+      TAMING: buildTamingAdvisorContext(profile),
       ENCHANTING: { domain: "ENCHANTING", enchantingLevel: profile.progression.skills.enchanting?.level ?? null,
         enchantingXp: profile.progression.skills.enchanting?.xp ?? null, xpActivity: false,
         matchedRewards: [], possibleRewardCount: 0, experimentation: profile.progression.enchanting.experimentation,
