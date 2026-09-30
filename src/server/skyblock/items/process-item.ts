@@ -57,6 +57,7 @@ export function toProfileItem(item: ProcessedItem): ProfileItem {
     lore: item.lore, abilityText: item.abilityText, setBonusText: item.setBonusText, source: item.source,
     gemstones: extractGemstoneState(item.id, item.extraAttributes),
     farmingToolProgress: extractFarmingToolProgress(item.id, item.extraAttributes),
-    drillComponents: extractDrillComponentState(item.categories, item.extraAttributes),\n    foragingState: extractForagingItemState(item.extraAttributes),
+    drillComponents: extractDrillComponentState(item.categories, item.extraAttributes),
+    foragingState: extractForagingItemState(item.extraAttributes),
   };
 }
