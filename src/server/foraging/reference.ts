@@ -35,7 +35,7 @@ export const torrhusRequiredHotfTier = 4;
 export const foragingTreeMechanics = {
   FIG: { toughness: 10, style: ["trunk", "branches"], giftContributionPercent: 10 },
   MANGROVE: { toughness: 50, style: ["branches", "trunk", "roots"], giftContributionPercent: 10 },
-  HELIX: { toughness: 150, style: ["light_logs", "red_logs"], giftContributionPercent: 10 },
+  HELIX: { toughness: 150, style: ["light_logs", "red_logs"], giftContributionPercent: null },
 } as const;
 
 export const throwingAxeMechanics = {
@@ -65,4 +65,29 @@ export const foragingLevelCapSources = {
   collectionTierNine: { FIG_LOG: 1, MANGROVE_LOG: 1, HELIX_LOG: 1 },
   agathaPrizeShop: 2,
   miriaPrizeShop: 2,
+} as const;
+
+
+export const currentTreeGiftXp = {
+  FIG: { foragingXp: 100, hotfXp: 10 },
+  MANGROVE: { foragingXp: 500, hotfXp: 20 },
+  HELIX: { foragingXp: 1500, hotfXp: 30 },
+} as const;
+
+export const currentGalateaNpcLogPrices = { FIG: 8, MANGROVE: 14, HELIX: 20 } as const;
+
+export const verifiedForagingGearSweep = {
+  SERIOUSLY_DAMAGED_AXE: 10,
+  FIG_HEW: 15,
+  FIGSTONE_SPLITTER: 25,
+  FIG_ARMOR_PER_PIECE: 10,
+  HELIX_ARMOR_PER_PIECE: 20,
+  HELIX_CHOPPER: 50,
+  FROG_PET_BASE: 10,
+  SLOTH_PET_BASE: 25,
+} as const;
+
+export const starlynContestPointBonuses = {
+  MOONGLADE_BELT_PERCENT: 5,
+  TORRHUS_BELT_PERCENT: 10,
 } as const;
