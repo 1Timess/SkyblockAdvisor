@@ -48,8 +48,8 @@ function detectDomain(text: string): ProfileIntelligenceDomain | null {
   if (/\bcollections?\b|\bminions?\b|\bcrafted generators?\b/.test(text)) return "COLLECTIONS";
   if (/\balchemy\b|\bpotions?\b|\bbrewing\b|\bbrew(?:ed|ing)?\b|\bgod pot(?:ion)?\b|\bpotion affinity\b/.test(text)) return "ALCHEMY";
   if (/\bcarpentry\b|\bcarpentry xp\b|\bquick craft(?:ing)?\b|\bcarpentry table\b|\bfurniture\b/.test(text)) return "CARPENTRY";
-  if (/\bcarpentry\b|\bcarpentry xp\b|\bquick craft(?:ing)?\b|\bcarpentry table\b|\bfurniture\b/.test(text)) return "CARPENTRY";
-  if (/\\brunecrafting\\b|\\brunes?\\b|\\brunic pedestal\\b|\\brune fusion\\b|\\bfuse (?:a )?runes?\\b/.test(text)) return "RUNECRAFTING";\n  if (/\\benchant(?:ing|ments?)\\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
+  if (/\brunecrafting\b|\brunes?\b|\brunic pedestal\b|\brune fusion\b|\bfuse (?:a )?runes?\b/.test(text)) return "RUNECRAFTING";
+  if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
   if (/\bfishing\b|\bfish(?:ing)? rod\b|\bsea creature\b/.test(text)) return "FISHING";
   if (/\bmining\b|\bhotm\b|\bheart of the mountain\b|\bpowder\b|\bdrill\b|\bpickaxe\b/.test(text)) return "MINING";
   if (/\bf\d+\b|\bfloor\b|\bcatacombs?\b|\bdungeons?\b|\bmage\b|\barcher\b|\bberserk\b|\bmelee\b|\bshortbow\b|\bbow\b|\barmor\b|\bhelmet\b|\bchestplate\b|\bleggings\b|\bboots\b|\bweapons?\b|\bsword\b|\bwand\b/.test(text)) return "DUNGEONS";
@@ -60,7 +60,8 @@ function detectExplicitGoal(text: string): AdvisorGoal | null {
   if (/\bfarming\b|\bgarden\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)) return "FARMING";
   if (/\bcollections?\b|\bminions?\b/.test(text)) return "COLLECTIONS";
   if (/\balchemy\b|\bpotions?\b|\bbrewing\b|\bbrew(?:ed|ing)?\b|\bgod pot(?:ion)?\b|\bpotion affinity\b/.test(text)) return "ALCHEMY";
-  if (/\\brunecrafting\\b|\\brunes?\\b|\\brunic pedestal\\b|\\brune fusion\\b/.test(text)) return "RUNECRAFTING";\n  if (/\\benchant(?:ing|ments?)\\b|\\bexperiment(?:ation)?\\b|\\bsuperpairs\\b/.test(text)) return "ENCHANTING";
+  if (/\brunecrafting\b|\brunes?\b|\brunic pedestal\b|\brune fusion\b/.test(text)) return "RUNECRAFTING";
+  if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b/.test(text)) return "ENCHANTING";
   if (/\bforaging\b/.test(text)) return "FORAGING"; if (/\bfishing\b/.test(text)) return "FISHING"; if (/\bmining\b/.test(text)) return "MINING";
   if (/\bmagical power\b|\bmp\b/.test(text)) return "MAGICAL_POWER"; if (/\bintelligence\b|\bmana\b/.test(text)) return "INTELLIGENCE";
   if (/\battack speed\b/.test(text)) return "ATTACK_SPEED"; if (/\bcrit(?:ical)? damage\b/.test(text)) return "CRIT_DAMAGE";
