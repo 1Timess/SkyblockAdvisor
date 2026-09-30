@@ -70,7 +70,7 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
         tags: [...entry.tags], unlock: entry.unlock, unlockStatus: potionUnlockStatus(profile.unlockedCollectionTiers, entry),
         recipeStatus: recipesForPotion(entry.id).length ? "VERIFIED" as const : entry.recipeStatus,
         recipes: recipesForPotion(entry.id).map(recipe => ({
-          basePotion: recipe.basePotion, ingredientName: recipe.ingredientName, ingredientId: recipe.ingredientId,
+          basePotion: recipe.basePotion, ...(recipe.basePotionId ? { basePotionId: recipe.basePotionId } : {}), ...(recipe.basePotionLevel ? { basePotionLevel: recipe.basePotionLevel } : {}), ingredientName: recipe.ingredientName, ingredientId: recipe.ingredientId,
           resultingLevel: recipe.resultingLevel, alchemyXpPerPotion: recipe.alchemyXpPerPotion, evidence: recipe.evidence,
         })),
         compatibleBrews: compatibleBrews(entry.id).map(({ name, effect, source }) => ({ name, effect, source })),
