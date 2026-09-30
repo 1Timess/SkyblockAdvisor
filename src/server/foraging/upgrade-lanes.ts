@@ -7,6 +7,11 @@ import { prepareCandidate } from "../candidates/common";
 const axeOrder = ["SERIOUSLY_DAMAGED_AXE", "FIG_HEW", "FIGSTONE_SPLITTER", "HELIX_CHOPPER"] as const;
 const armorTiers = ["FIG_ARMOR", "HELIX_ARMOR"] as const;
 const armorSlots = ["HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"] as const;
+const equipmentLanes = {
+  necklace: ["MANGROVE_LOCKET", "HONEYCOMB_NECKLACE"],
+  bracelet: ["MANGROVE_GRIPPERS", "VEILSHROOM_BRACELET"],
+  belt: ["MANGROVE_VINE", "MOONGLADE_BELT", "TORRHUS_BELT"],
+} as const;
 const stats = ["sweep", "foragingFortune", "foragingWisdom"] as const;
 
 export function buildForagingUpgradeLanes(input: {
@@ -14,7 +19,7 @@ export function buildForagingUpgradeLanes(input: {
 }): Record<string, AdvisorCandidate[]> {
   const byId = new Map(input.catalog.map(item => [item.id, item]));
   const ownedIds = new Set(input.profile.inventoryItems.flatMap(item => item.id ? [item.id] : []));
-  const lanes: Record<string, AdvisorCandidate[]> = { axe: [], helmet: [], chestplate: [], leggings: [], boots: [] };
+  const lanes: Record<string, AdvisorCandidate[]> = { axe: [], helmet: [], chestplate: [], leggings: [], boots: [], necklace: [], bracelet: [], belt: [] };
 
   const ownedAxeRank = Math.max(-1, ...input.profile.inventoryItems.map(item => item.id ? axeOrder.indexOf(item.id as typeof axeOrder[number]) : -1));
   for (let rank = ownedAxeRank + 1; rank < axeOrder.length; rank++) {
@@ -35,6 +40,16 @@ export function buildForagingUpgradeLanes(input: {
       if (candidate) lanes[lane].push(withChanges(candidate, bestOwned(input.profile, ids), rank - ownedRank));
     }
   }
+  for (const [lane, ids] of Object.entries(equipmentLanes)) {
+    const ownedRank = Math.max(-1, ...input.profile.inventoryItems.map(item => item.id ? ids.indexOf(item.id as never) : -1));
+    for (let rank = ownedRank + 1; rank < ids.length; rank++) {
+      const item = byId.get(ids[rank]); if (!item) continue;
+      const candidate = prepareCandidate("accessory", item, input.profile, input.quotes,
+        { budgetCoins: input.budgetCoins, ownedItemIds: ownedIds, eligibilityMode: "ADVISOR_DISCOVERY" });
+      if (candidate) lanes[lane].push(withChanges(candidate, bestOwned(input.profile, ids), rank - ownedRank));
+    }
+  }
+
   return lanes;
 }
 
