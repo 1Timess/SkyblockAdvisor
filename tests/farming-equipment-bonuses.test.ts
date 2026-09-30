@@ -3,12 +3,14 @@ import test from "node:test";
 import { farmingBonusMechanics } from "../src/server/farming/equipment-bonuses";
 
 test("visitor tooltip progress remains distinct from template defaults", () => {
-  const value = farmingBonusMechanics(["§6Piece Bonus: Florist", "Piece Bonus: +9", "Next Upgrade: +1.5 (42/50)"], "OBSERVED_TOOLTIP");
-  assert.deepEqual(value.visitorBonus, { name: "Florist", displayedFortune: 9, nextFortuneIncrement: 1.5,
-    displayedOffersProgress: 42, displayedOffersRequired: 50, remainingOffers: 8 });
+  const value = farmingBonusMechanics(["§6Piece Bonus: Florist", "Piece Bonus: +6", "Next Upgrade: +7 (98/100)"], "OBSERVED_TOOLTIP");
+  assert.deepEqual(value.visitorBonus, { name: "Florist", displayedFortune: 6, nextDisplayedFortune: 7, nextFortuneDelta: 1,
+    displayedOffersProgress: 98, displayedOffersRequired: 100, remainingOffers: 2 });
   const template = farmingBonusMechanics(["Piece Bonus: Salesperson", "Piece Bonus: +0", "Next Upgrade: +1 (0/1)"], "CATALOG_TEMPLATE");
   assert.equal(template.evidence, "CATALOG_TEMPLATE");
   assert.equal(template.visitorBonus?.displayedFortune, 0);
+  assert.equal(template.visitorBonus?.nextDisplayedFortune, 1);
+  assert.equal(template.visitorBonus?.nextFortuneDelta, 1);
   assert.match(template.note, /not player state/);
   assert.equal(farmingBonusMechanics(["Piece Bonus: Salesperson"], "OBSERVED_TOOLTIP").visitorBonus?.remainingOffers, null);
 });

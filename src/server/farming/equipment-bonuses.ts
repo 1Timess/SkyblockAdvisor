@@ -13,7 +13,8 @@ export function farmingBonusMechanics(rawLore: readonly string[], evidence: "OBS
   return {
     evidence,
     visitorBonus: visitor ? { name: visitor[1], displayedFortune: bonus ? Number(bonus[1]) : null,
-      nextFortuneIncrement: next ? Number(next[1]) : null,
+      nextDisplayedFortune: next ? Number(next[1]) : null,
+      nextFortuneDelta: next && bonus ? Number(next[1]) - Number(bonus[1]) : null,
       displayedOffersProgress: next ? Number(next[2].replaceAll(",", "")) : null,
       displayedOffersRequired: next ? Number(next[3].replaceAll(",", "")) : null,
       remainingOffers: next ? Math.max(0, Number(next[3].replaceAll(",", "")) - Number(next[2].replaceAll(",", ""))) : null } : null,

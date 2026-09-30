@@ -101,8 +101,8 @@ const compactCrystalHollowsSchema = z.object({ available: z.boolean(), crystals:
     missing: z.array(z.string()), ready: z.boolean(), complete: z.boolean() }), biomes: z.record(z.string(), z.unknown()) });
 const farmingBonusMechanicsSchema = z.object({
   evidence: z.enum(["OBSERVED_TOOLTIP", "CATALOG_TEMPLATE"]),
-  visitorBonus: z.object({ name: z.string(), displayedFortune: z.number().nullable(), nextFortuneIncrement: z.number().nullable(),
-    displayedOffersProgress: z.number().nullable(), displayedOffersRequired: z.number().nullable(), remainingOffers: z.number().nullable() }).nullable(),
+  visitorBonus: z.object({ name: z.string(), displayedFortune: z.number().nullable(), nextDisplayedFortune: z.number().nullable(),
+    nextFortuneDelta: z.number().nullable(), displayedOffersProgress: z.number().nullable(), displayedOffersRequired: z.number().nullable(), remainingOffers: z.number().nullable() }).nullable(),
   tieredBonus: z.object({ name: z.string(), displayedPieceCount: z.number(), displayedFortune: z.number().nullable(),
     displayedDropChancePercent: z.array(z.number()), effectText: z.string() }).nullable(),
   displayedPestChancePercent: z.number().nullable(), note: z.string(),
