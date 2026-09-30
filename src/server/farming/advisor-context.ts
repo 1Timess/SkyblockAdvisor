@@ -24,7 +24,7 @@ export function buildFarmingAdvisorContext(profile: NormalizedSkyBlockProfile, r
   return {
     domain: "FARMING", ...buildObservedFarmingState(profile), ...possibleGardenMechanics(progress.gardenLevel),
     ...(visitorFocused ? { mutationOptions: [] } : {}),
-    equipmentComparisons: buildFarmingEquipmentComparisons(profile, equipment?.catalog ?? [], equipment?.neu ?? null, equipment?.quotes),
+    equipmentComparisons: buildFarmingEquipmentComparisons(profile, equipment?.catalog ?? [], equipment?.neu ?? null, equipment?.quotes, progress.gardenLevel),
     farmingLevel: profile.progression.skills.farming?.level ?? null,
     farmingXp: profile.progression.skills.farming?.xp ?? null,
     farmingSkillFocus: farmingSkillFocus(profile),

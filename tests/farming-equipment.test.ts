@@ -56,3 +56,34 @@ test("unrelated catalog items never enter farming recipe traversal", async () =>
   assert.equal(result.comparisons.length, 1);
   assert.ok(reads <= 3, `Expected bounded relevant recipe reads, got ${reads}`);
 });
+
+test("Garden gates and historical prices are explicit on non-recipe alternatives", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.inventoryItems = [{ ...profile.inventoryItems[0], id: "FARM_SUIT_HELMET" }];
+  const current = item("FARM_SUIT_HELMET", 5), target = item("FARM_ARMOR_HELMET", 10);
+  target.requirements = [{ kind: "GARDEN_LEVEL", level: 5, sourceText: "Requires Garden Level 5" }];
+  const quotes = new Map([[target.id, { marketKey: target.id, coins: 100, observedAt: "2026-09-25T00:00:00Z", confidence: "HIGH" as const, basis: "LOWEST_BIN" as const }]]);
+  const run = (garden: number | null) => buildFarmingEquipmentComparisons(profile, [current, target], neu, quotes, garden, Date.parse("2026-09-30T00:00:00Z"));
+  const comparison = run(10).comparisons[0];
+  assert.equal(comparison.basis, "SAME_SLOT_CATALOG_ALTERNATIVE");
+  assert.equal(comparison.requirements[0].status, "MET");
+  assert.equal(run(3).comparisons[0].requirements[0].status, "NOT_MET");
+  assert.equal(run(null).comparisons[0].requirements[0].status, "UNKNOWN");
+  assert.equal(comparison.purchasePrice?.freshness, "STALE");
+  assert.equal(comparison.purchasePrice?.ageHours, 120);
+  profile.inventoryItems.push({ ...profile.inventoryItems[0], id: target.id });
+  assert.equal(run(10).comparisons.length, 0);
+});
+
+test("equipment alternatives stay in-slot and leveled tools do not use Fortune-only fallback", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const observed = profile.inventoryItems[0];
+  profile.inventoryItems = [{ ...observed, id: "LOTUS_CLOAK" }, { ...observed, id: "MELON_DICER_1" }];
+  const catalog = [item("LOTUS_CLOAK", 5), item("BLOSSOM_CLOAK", 10), item("BLOSSOM_BELT", 20),
+    item("MELON_DICER_1", 5), item("MELON_DICER_2", 10)];
+  const result = buildFarmingEquipmentComparisons(profile, catalog, neu);
+  assert.deepEqual(result.comparisons.map(value => value.targetItemId), ["BLOSSOM_CLOAK"]);
+  profile.inventoryItems.push({ ...observed, id: "BLOSSOM_CLOAK" });
+  assert.equal(buildFarmingEquipmentComparisons(profile, [...catalog, item("PEONY_CLOAK", 15)], neu).comparisons.length, 1);
+  assert.equal(buildFarmingEquipmentComparisons(profile, [...catalog, item("PEONY_CLOAK", 15)], neu).comparisons[0].currentItemId, "BLOSSOM_CLOAK");
+});
