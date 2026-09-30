@@ -132,7 +132,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     }),
     gearMechanics: z.object({ items: z.array(z.object({ itemId: z.string(), name: z.string(), source: z.string(),
       verifiedBaseSweep: z.number().nullable(), observedSweep: z.number().nullable(), observedForagingFortune: z.number().nullable(),
-      observedForagingWisdom: z.number().nullable(), stars: z.number().int().nonnegative(), gemstones: gemstoneStateSchema.nullable(),
+      observedForagingWisdom: z.number().nullable(), stars: z.number().int().nonnegative().nullable(), gemstones: gemstoneStateSchema.nullable(),
       foragingState: z.unknown().nullable(), warnings: z.array(z.string()) })), note: z.string() }),
     gear: z.object({ visible: z.array(z.unknown()), loadouts: z.object({ armor: z.record(z.string(), z.unknown()), equipment: z.record(z.string(), z.unknown()) }),
       equipped: z.object({ armor: z.unknown().nullable(), equipment: z.unknown().nullable() }), pets: z.array(z.unknown()), note: z.string() }),
