@@ -141,7 +141,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     enchanting: { available: profile.progression.skills.enchanting !== undefined, candidateCount: 0 },
     collections: { available: Object.keys(profile.collections).length > 0 || profile.craftedGenerators.length > 0, candidateCount: 0 },
     slayer: { available: Object.keys(profile.progression.slayers).length > 0, candidateCount: 0 },
-    farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },
+    farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },\n    foraging: { available: profile.progression.skills.foraging !== undefined || profile.progression.foraging.treeExperience !== null || Object.keys(profile.progression.foraging.treeGifts.counts).length > 0, candidateCount: 0 },
   };
   const frontier = selectProgressionFrontier({ route, candidates: relevantCandidates.map((candidate, stableOrder) => ({ candidate, stableOrder,
     relevance: buildCandidateRelevance(relevantLanes, candidate.id, route), feasibility: buildCandidateFeasibility(candidate, profile, effectiveBudgetCoins),
@@ -167,7 +167,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     name: candidate.item.name, sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label), reason: "Only appeared in lanes irrelevant to the active goal." }));
   const buckets: SelectionBucket[] = ["ACTIONABLE", "MONEY_GATED", "PROGRESSION_GATED", "DISTANT_OR_UNCERTAIN"];
   const exclusions: ExclusionReason[] = ["REDUNDANCY_LIMIT", "BUCKET_LIMIT", "FINAL_CAP", "LOWER_CONTEXT_PRIORITY", "NO_OP", "OTHER"];
-  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING"];
+  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"];
   return { context, route, availableAnalysis, detailedCandidates, candidateLanes, frontierCandidates: frontier.candidates,
     rawScopeCandidates: rawScopedCandidates.map(candidate => ({ candidateId: candidate.id, domain: candidate.domain, name: candidate.item.name,
       sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label) })), nextConversationState,
