@@ -43,3 +43,24 @@ test("keeps farther family members discoverable without inventing requirements",
   assert.ok(lanes.axe[3].semanticEvidence?.some(value => value.includes("4 steps")));
   assert.deepEqual(lanes.axe[3].requirements, []);
 });
+
+test("keeps direct Foraging equipment progression slot-aware and excludes Safari Belt", () => {
+  const catalog = [
+    candidate("MANGROVE_LOCKET", { sweep: 1, foragingFortune: 5 }),
+    candidate("HONEYCOMB_NECKLACE", { sweep: 5, foragingFortune: 25 }),
+    candidate("MANGROVE_GRIPPERS", { sweep: 1, foragingFortune: 5 }),
+    candidate("VEILSHROOM_BRACELET", { sweep: 5, foragingFortune: 25 }),
+    candidate("MANGROVE_VINE", { sweep: 1, foragingFortune: 5 }),
+    candidate("MOONGLADE_BELT", { foragingFortune: 5 }),
+    candidate("TORRHUS_BELT", { foragingFortune: 10 }),
+    candidate("SAFARI_BELT", { sweep: 50 }),
+  ];
+  const lanes = buildForagingUpgradeLanes({
+    profile: profile([{ id: "MANGROVE_LOCKET", stats: { sweep: 1, foragingFortune: 5 } }]),
+    catalog, quotes: new Map(),
+  });
+  assert.deepEqual(lanes.necklace.map(value => value.id), ["HONEYCOMB_NECKLACE"]);
+  assert.deepEqual(lanes.bracelet.map(value => value.id), ["MANGROVE_GRIPPERS", "VEILSHROOM_BRACELET"]);
+  assert.deepEqual(lanes.belt.map(value => value.id), ["MANGROVE_VINE", "MOONGLADE_BELT", "TORRHUS_BELT"]);
+  assert.ok(!Object.values(lanes).flat().some(value => value.id === "SAFARI_BELT"));
+});
