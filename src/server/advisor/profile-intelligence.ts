@@ -124,7 +124,7 @@ export function buildProfileIntelligence(profile: NormalizedSkyBlockProfile): Pr
         hotfLevel: foraging.hotfLevel, treeExperience: foraging.treeExperience, activePreset: foraging.activePreset,
         nodes: foraging.nodes, presets: foraging.presets, selectedAbility: foraging.selectedAbility, selectedAbilities: foraging.selectedAbilities,
         tokensSpentByPreset: foraging.tokensSpentByPreset, whispers: foraging.whispers, treeGifts: foraging.treeGifts,
-        collections: Object.fromEntries(Object.entries(profile.collections).filter(([key]) => /(?:LOG|HONEYCOMB|RUBY_VEILSHROOM|TENDER_WOOD)/.test(key))),
+        collections: Object.fromEntries(Object.entries(profile.collections).filter(([key]) => ["FIG_LOG", "MANGROVE_LOG", "HELIX_LOG", "HONEYCOMB", "RUBY_VEILSHROOM", "TENDER_WOOD"].includes(key))),
         relevantAttributes, pets: foragingGear.pets, progressionFocus: buildForagingProgressionFocus(profile), gearMechanics: buildForagingGearMechanics(profile), gear: foragingGear,
         unavailableFacts: ["Effective Sweep, effective Foraging Fortune, logs per action, hourly profit, and unobserved modifier state are not reconstructed."],
         note: "Foraging context reports observed progression and gear state. Candidate recommendations are not enabled yet." },
