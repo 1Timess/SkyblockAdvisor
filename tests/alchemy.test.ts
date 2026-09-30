@@ -18,6 +18,9 @@ test("Alchemy context preserves unknown skill evidence when Hypixel does not rep
   assert.ok(context.potionCatalog.focus.some(entry => entry.name === "Haste"));
   assert.ok(context.potionCatalog.focus.some(entry => entry.name === "Spelunker"));
   assert.equal(context.potionCatalog.recipeCoverage, "UNRESOLVED");
+  assert.equal(context.godPotion.mixinCount, 13);
+  assert.ok(context.godPotion.effects.some(effect => effect.name === "Alchemy XP Boost" && effect.level === 3));
+  assert.equal(context.potionCatalog.focus.find(entry => entry.name === "Haste")?.unlockStatus, "UNKNOWN");
 });
 
 test("Alchemy context derives level targets and God Potion duration from observed skill XP", async () => {
@@ -64,4 +67,24 @@ test("Alchemy leveling methods retain base XP and apply only confirmed Wisdom to
   assert.equal(alchemyLevelingMethods.find(method => method.marketKey === "ENCHANTED_BLAZE_ROD")?.xpPerBatch, 69_000);
   assert.equal(effectiveAlchemyXp(45_000, 30), 58_500);
   assert.equal(effectiveAlchemyXp(45_000, 30, 1.5), 87_750);
+});
+
+
+test("Alchemy method economics use supplied market evidence without inventing recovery value", async () => {
+  const member = fixtureMember();
+  member.player_data!.experience!.SKILL_ALCHEMY = 0;
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources(member));
+  const quotes = new Map([["ENCHANTED_SUGAR_CANE", {
+    marketKey: "ENCHANTED_SUGAR_CANE", coins: 90_000, observedAt: new Date(0).toISOString(),
+    basis: "BAZAAR" as const, confidence: "HIGH" as const,
+  }]]);
+  const context = buildAlchemyAdvisorContext(profile, "What is the fastest way to level Alchemy?", quotes);
+  assert.equal(context.domain, "ALCHEMY");
+  if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+  const cane = context.levelingMethods.find(method => method.marketKey === "ENCHANTED_SUGAR_CANE");
+  assert.equal(cane?.ingredientPriceCoins, 90_000);
+  assert.equal(cane?.grossCoinsPerXpFloor, 2);
+  const eye = context.levelingMethods.find(method => method.marketKey === "ENCHANTED_FERMENTED_SPIDER_EYE");
+  assert.equal(eye?.ingredientPriceCoins, null);
+  assert.equal(eye?.grossCoinsPerXpFloor, null);
 });
