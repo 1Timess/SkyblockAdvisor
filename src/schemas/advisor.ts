@@ -291,7 +291,7 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
       ingredientName: z.string(), marketKey: z.string(), xpPerPotion: z.number().positive(), xpPerBatch: z.number().positive(),
       effectiveXpPerBatchFloor: z.number().positive(), batchesTo50Floor: z.number().int().nonnegative().nullable(),
       ingredientPriceCoins: z.number().nonnegative().nullable(), grossCoinsPerXpFloor: z.number().nonnegative().nullable(),
-      basePotion: z.string(), evidence: z.enum(["WIKI_TABLE","WIKI_PLUS_CURRENT_FORUM_RECIPE"]), notes: z.array(z.string()) })).max(8),
+      estimatedIngredientCostTo50Floor: z.number().nonnegative().nullable(), budgetStatus: z.enum(["WITHIN_BUDGET","OVER_BUDGET","UNKNOWN","NO_BUDGET"]),\n      basePotion: z.string(), evidence: z.enum(["WIKI_TABLE","WIKI_PLUS_CURRENT_FORUM_RECIPE"]), notes: z.array(z.string()) })).max(8),
     potionCatalog: z.object({ brewableCount: z.number().int().nonnegative(), recipeCoverage: z.enum(["PARTIAL_VERIFIED","UNRESOLVED"]),
       focus: z.array(z.object({ id: z.string(), name: z.string(), effect: z.string(), maxLevel: z.number().int().positive(),
         tags: z.array(z.string()), unlock: z.object({ collection: z.string(), tier: z.number().int().positive() }).nullable(),
