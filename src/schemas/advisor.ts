@@ -118,6 +118,18 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
       desert: z.object({ total: z.number().nullable(), spentByPreset: statsSchema }) }),
     treeGifts: z.object({ counts: statsSchema, milestoneTierClaimed: statsSchema }),
     collections: statsSchema, relevantAttributes: statsSchema,
+    progressionFocus: z.object({
+      targets: z.array(z.discriminatedUnion("kind", [
+        z.object({ kind: z.literal("HOTF_TIER"), currentTier: z.number().int().positive(), targetTier: z.number().int().positive(),
+          currentXp: z.number().nonnegative(), requiredXp: z.number().nonnegative(), xpRemaining: z.number().nonnegative() }),
+        z.object({ kind: z.literal("TORRHUS_ACCESS"), requiredHotfTier: z.number().int().positive(), currentHotfTier: z.number().int().positive() }),
+        z.object({ kind: z.literal("TREE_GIFT_MILESTONE"), tree: z.string(), currentGifts: z.number().nonnegative(),
+          targetGifts: z.number().positive(), giftsRemaining: z.number().positive() }),
+      ])),
+      collectionCapSources: z.array(z.object({ kind: z.literal("COLLECTION_CAP_SOURCE"),
+        collection: z.enum(["FIG_LOG", "MANGROVE_LOG", "HELIX_LOG"]), status: z.literal("UNRESOLVED") })).max(3),
+      note: z.string(),
+    }),
     gear: z.object({ visible: z.array(z.unknown()), loadouts: z.object({ armor: z.record(z.string(), z.unknown()), equipment: z.record(z.string(), z.unknown()) }),
       equipped: z.object({ armor: z.unknown().nullable(), equipment: z.unknown().nullable() }), pets: z.array(z.unknown()), note: z.string() }),
     unavailableFacts: z.array(z.string()), note: z.string() }),
