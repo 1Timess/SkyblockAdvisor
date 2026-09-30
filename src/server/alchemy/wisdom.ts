@@ -26,13 +26,13 @@ const witchBrewReduction = (rarity: string, level: number | null) => {
 
 export function buildAlchemyWisdomState(profile: NormalizedSkyBlockProfile): AlchemyWisdomState {
   const spider = profile.progression.slayers.spider;
-  const spiderEight = spider?.level >= 8;
+  const spiderEight = (spider?.level ?? -1) >= 8;
   const witchPets = profile.pets.owned.filter(pet => pet.type.toUpperCase() === "WITCH");
   const activeWitch = profile.pets.activePet?.type.toUpperCase() === "WITCH" ? profile.pets.activePet : null;
   const bestWitch = activeWitch ?? [...witchPets].sort((a,b) => (b.level ?? -1) - (a.level ?? -1))[0] ?? null;
   const witchWisdom = activeWitch?.level === null || activeWitch?.level === undefined ? null : Math.min(5, activeWitch.level * 0.05);
   const reduction = activeWitch ? witchBrewReduction(activeWitch.rarity, activeWitch.level) : null;
-  const accessory = profile.accessories.owned.find(item => ["WITCH'S_ARTIFACT","WITCH'S_RING","WITCH'S_TALISMAN"]
+  const accessory = profile.accessories.owned.find(item => item.active && ["WITCH'S_ARTIFACT","WITCH'S_RING","WITCH'S_TALISMAN"]
     .some(name => item.name.toUpperCase().includes(name))) ?? null;
   const accessoryWisdom = accessory ? accessory.name.toUpperCase().includes("ARTIFACT") ? 1.5
     : accessory.name.toUpperCase().includes("RING") ? 1 : 0.5 : 0;
