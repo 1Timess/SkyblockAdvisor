@@ -51,7 +51,7 @@ export function buildExtendedPlayerState(member: RawMember) {
 function normalizeForaging(member: RawMember) {
   const tree = member.skill_tree, nodeGroups = dynamicRecord(tree?.nodes);
   const presetNames = ["foraging", "foraging_2", "foraging_3", "foraging_4", "foraging_5"] as const;
-  const presets = Object.fromEntries(presetNames.map(name => [name, { nodes: normalizeNodes(nodeGroups[name]) }]));
+  const presets = Object.fromEntries(presetNames.map(name => [name, { nodes: normalizeForagingNodes(nodeGroups[name]) }]));
   const selectedSlots = numericMap(tree?.selected_skill_tree_slot);
   const activePreset = finiteNumber(selectedSlots.foraging);
   const activeName = activePreset && activePreset > 1 ? `foraging_${activePreset}` : "foraging";
@@ -80,6 +80,16 @@ function normalizeForaging(member: RawMember) {
     hina: dynamicRecord(foraging.hina),
     starlyn: dynamicRecord(foraging.starlyn),
   };
+}
+function normalizeForagingNodes(value: unknown): Record<string, NormalizedNode> {
+  const raw = dynamicRecord(value), nodes = normalizeNodes(raw);
+  for (const [key, enabled] of Object.entries(raw)) {
+    if (!key.startsWith("toggle_") || typeof enabled !== "boolean") continue;
+    const nodeId = key.slice("toggle_".length), node = nodes[nodeId];
+    if (node) nodes[nodeId] = { ...node, enabled, state: { ...node.state, enabled } };
+    delete nodes[key];
+  }
+  return nodes;
 }
 function whisperSpent(value: Record<string, unknown>) {
   return Object.fromEntries(Object.entries(value).flatMap(([key, raw]) => {
