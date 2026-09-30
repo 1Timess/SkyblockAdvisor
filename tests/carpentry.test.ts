@@ -90,3 +90,23 @@ test("Carpentry collection gates stay UNKNOWN when collection evidence is absent
   assert.equal(context.domain, "CARPENTRY"); if (context.domain !== "CARPENTRY") throw new Error("unreachable");
   assert.ok(context.levelingMethods.every(method => method.requirementStatus === "UNKNOWN"));
 });
+
+
+test("Carpentry primary recommendation requires AVAILABLE recipe evidence", async () => {
+  const member = fixtureMember();
+  member.player_data!.experience!.SKILL_CARPENTRY = 0;
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources(member));
+  profile.unlockedCollectionTiers = ["DIAMOND_8"];
+  const quote = (marketKey: string, coins: number): MarketQuote => ({ marketKey, coins, observedAt: "2026-09-30T00:00:00.000Z", basis: "BAZAAR", confidence: "HIGH" });
+  const quotes = new Map<string, MarketQuote>([
+    ["ENCHANTED_DIAMOND", quote("ENCHANTED_DIAMOND", 1300)],
+    ["ENCHANTED_DIAMOND_BLOCK", quote("ENCHANTED_DIAMOND_BLOCK", 204800)],
+    ["ENCHANTED_RAW_SALMON", quote("ENCHANTED_RAW_SALMON", 1400)],
+    ["ENCHANTED_COOKED_SALMON", quote("ENCHANTED_COOKED_SALMON", 256000)],
+  ]);
+  const context = buildCarpentryAdvisorContext(profile, quotes, 50_000_000);
+  assert.equal(context.domain, "CARPENTRY");
+  if (context.domain !== "CARPENTRY") throw new Error("unreachable");
+  assert.equal(context.levelingMethods.find(method => method.id === "ENCHANTED_COOKED_SALMON")?.requirementStatus, "UNKNOWN");
+  assert.equal(context.progressionFocus.actions[0]?.title, "Level Carpentry with Enchanted Diamond Block");
+});
