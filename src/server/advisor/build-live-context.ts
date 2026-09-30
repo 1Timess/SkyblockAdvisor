@@ -54,8 +54,10 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   const route = routeAdvisorQuestion({ question: input.question, profile, conversationState: input.conversationState });
   const [items, neu, market, petConstants] = route.domain === "ENCHANTING"
     ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
-    : route.domain === "FARMING" || route.domain === "FORAGING"
+    : route.domain === "FARMING"
       ? [...await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]), null] as const
+    : route.domain === "FORAGING"
+      ? await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot(), loadNeuPetConstants()])
     : route.domain === "SLAYER"
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, await loadNeuRepository(), null, null] as const
     : route.domain === "COLLECTIONS"
@@ -91,6 +93,31 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   } else if (route.domain === "FORAGING") {
     const result = buildForagingUpgradeLanes({ profile, catalog, quotes, budgetCoins: effectiveBudgetCoins });
     lanes.push(...Object.entries(result).map(([lane, candidates]) => ({ domain: "FORAGING" as const, label: `foraging:${lane}`, candidates })));
+
+    const petDefinitions = buildCanonicalPetDefinitions(neu!.getAll(), petConstants!);
+    const petItems = buildCanonicalPetItemDefinitions(neu!.getAll(), petConstants!);
+    const petSetups = buildOwnedPetSetups({ pets: profile.pets.owned, definitions: petDefinitions, petItems });
+    const petResult = buildActivityPetLanes({
+      domain: "FORAGING",
+      setups: petSetups,
+      definitions: petDefinitions,
+      petItems,
+      catalog: buildPetCandidateCatalog(neu!),
+    });
+    lanes.push(...Object.entries(petResult).map(([lane, candidates]) => ({
+      domain: "FORAGING" as const,
+      label: `foraging:${lane}`,
+      candidates,
+    })));
+    activeDomainContext = enrichActivityPetDomainContext({
+      context: intelligence.domains.FORAGING,
+      profile,
+      domain: "FORAGING",
+      setups: petSetups,
+      definitions: petDefinitions,
+      petItems,
+      hasRelevantPetCandidates: Object.values(petResult).some(candidates => candidates.length > 0),
+    });
   } else if (route.domain === "FISHING" || route.domain === "MINING") {
     const activityDomain = route.domain;
     const result = buildActivityDomainLanes({ domain: activityDomain, profile, catalog, quotes, budgetCoins: effectiveBudgetCoins });
