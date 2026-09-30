@@ -4,7 +4,7 @@ import type { MarketQuote } from "../../schemas/market";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import { prepareCandidate } from "../candidates/common";
 
-const axeOrder = ["SERIOUSLY_DAMAGED_AXE", "FIG_HEW", "FIGSTONE_SPLITTER", "HELIX_CHOPPER"] as const;
+const axeOrder = ["SERIOUSLY_DAMAGED_AXE", "FIG_AXE", "FIGSTONE_AXE", "HELIX_CHOPPER"] as const;
 const armorTiers = ["FIG_ARMOR", "HELIX_ARMOR"] as const;
 const armorSlots = ["HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"] as const;
 const equipmentLanes = {
@@ -46,7 +46,11 @@ export function buildForagingUpgradeLanes(input: {
       const item = byId.get(ids[rank]); if (!item) continue;
       const candidate = prepareCandidate("accessory", item, input.profile, input.quotes,
         { budgetCoins: input.budgetCoins, ownedItemIds: ownedIds, eligibilityMode: "ADVISOR_DISCOVERY" });
-      if (candidate) lanes[lane].push(withChanges(candidate, bestOwned(input.profile, ids), rank - ownedRank));
+      if (candidate) {
+        const familyCurrent = bestOwned(input.profile, ids);
+        const slotCurrent = bestObservedEquipmentSlot(input.profile, lane) ?? familyCurrent;
+        lanes[lane].push(withChanges(candidate, slotCurrent, rank - ownedRank, equipmentSemanticEvidence(candidate.id)));
+      }
     }
   }
 
@@ -58,14 +62,30 @@ function bestOwned(profile: NormalizedSkyBlockProfile, ids: readonly string[]) {
   return rank < 0 ? null : profile.inventoryItems.find(item => item.id === ids[rank]) ?? null;
 }
 
-function withChanges(candidate: AdvisorCandidate, current: NormalizedSkyBlockProfile["inventoryItems"][number] | null, progressionSteps: number): AdvisorCandidate {
+function bestObservedEquipmentSlot(profile: NormalizedSkyBlockProfile, slot: string) {
+  const matches = profile.inventoryItems.filter(item => item.categories.includes("equipment") && item.categories.includes(slot));
+  return matches.sort((a, b) => visibleForagingScore(b) - visibleForagingScore(a))[0] ?? null;
+}
+
+function visibleForagingScore(item: NormalizedSkyBlockProfile["inventoryItems"][number]) {
+  return stats.reduce((total, stat) => total + (item.stats[stat] ?? 0), 0);
+}
+
+function equipmentSemanticEvidence(candidateId: string) {
+  if (candidateId === "MOONGLADE_BELT") return ["Verified Starlyn Contest point bonus: +5%."];
+  if (candidateId === "TORRHUS_BELT") return ["Verified Starlyn Contest point bonus: +10%."];
+  return [];
+}
+
+function withChanges(candidate: AdvisorCandidate, current: NormalizedSkyBlockProfile["inventoryItems"][number] | null, progressionSteps: number, extraEvidence: readonly string[] = []): AdvisorCandidate {
   const knownChanges: NonNullable<AdvisorCandidate["knownChanges"]> = {};
   for (const stat of stats) {
     const currentValue = current?.stats[stat] ?? null, candidateValue = candidate.item.stats[stat] ?? null;
     if (currentValue !== null || candidateValue !== null) knownChanges[stat] = { current: currentValue, candidate: candidateValue };
   }
   return { ...candidate, knownChanges, semanticEvidence: [...(candidate.semanticEvidence ?? []),
-    `Supported Foraging family progression distance from the best observed owned tier: ${progressionSteps} step${progressionSteps === 1 ? "" : "s"}.`],
+    `Supported Foraging family progression distance from the best observed owned tier: ${progressionSteps} step${progressionSteps === 1 ? "" : "s"}.`,
+    ...extraEvidence],
     warnings: [...candidate.warnings,
       "Foraging family order is progression context, not an inferred usage requirement. Only parsed item requirement evidence determines requirement feasibility.",
       "Foraging upgrade comparisons report visible item contributions only; they do not reconstruct effective account Sweep or Foraging Fortune."] };
