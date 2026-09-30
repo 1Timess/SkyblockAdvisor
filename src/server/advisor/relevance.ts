@@ -25,7 +25,7 @@ export function buildCandidateRelevance(lanes: readonly TaggedCandidateLane[], c
   const semanticEvidence = [...new Set(occurrences.flatMap(candidate => candidate.semanticEvidence ?? []))].sort();
   const petAcquisition = occurrences.some(candidate => candidate.petAcquisitionFamily);
   if (petAcquisition && (route.goal === "MINING" || route.goal === "FISHING" || route.goal === "FORAGING")) return { reason: "This pet acquisition family has canonical mechanics relevant to the active activity domain.", relevantStats: semanticEvidence };
-  if (semanticEvidence.length && (route.goal === "MINING" || route.goal === "FISHING" || route.goal === "FORAGING")) return { reason: "This pet operation preserves canonical mechanics relevant to the active activity domain.", relevantStats: semanticEvidence };
+  if (occurrences.some(candidate => candidate.domain === "pet") && semanticEvidence.length && (route.goal === "MINING" || route.goal === "FISHING" || route.goal === "FORAGING")) return { reason: "This pet operation preserves canonical mechanics relevant to the active activity domain.", relevantStats: semanticEvidence };
   if (route.goal === "MAGICAL_POWER") return { reason: "Accessory progression is directly relevant to the Magical Power goal.", relevantStats: ["magicalPower"] };
   if (route.goal === "PET") return { reason: "Pet progression is directly relevant to the requested pet scope.", relevantStats: laneNames };
   if (route.goal === "FISHING") return { reason: "The candidate has repo-supported fishing progression evidence.", relevantStats: laneNames };
