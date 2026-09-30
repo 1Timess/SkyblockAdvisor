@@ -43,13 +43,14 @@ async function main() {
     skillTree: {
       keys: keys(skillTree),
       nodeGroups: keys(nodes),
-      foragingNodes: summarize(nodes?.foraging),
+      foragingNodeGroups: Object.fromEntries(["foraging", "foraging_2", "foraging_3", "foraging_4", "foraging_5"]
+        .map(group => [group, summarize(nodes?.[group])])),
       experience: summarize(skillTree?.experience),
       tokensSpent: summarize(skillTree?.tokens_spent),
       selectedAbility: summarize(skillTree?.selected_ability),
       selectedSkillTreeSlot: summarize(skillTree?.selected_skill_tree_slot),
     },
-    foragingCore: summarize(member.foraging_core),
+    foragingCore: summarize(member.foraging_core, -2),
     foraging: summarize(member.foraging),
     foragingCollections: Object.fromEntries(Object.entries(object(member.collection) ?? {})
       .filter(([key]) => /wood|log|fig|mangrove|helix|honeycomb|veilshroom/i.test(key))
