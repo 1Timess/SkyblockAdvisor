@@ -54,3 +54,39 @@ test("NEU rune catalog preserves missing facts as null", () => {
   assert.equal(runes[1]?.runecraftingLevelRequired, null);
   assert.equal(runes[1]?.applicableTo, null);
 });
+
+
+test("NEU rune parsing handles current Requires level lore layout", () => {
+  const parsed = parseRuneReference({
+    internalname: "AXE_FADING_BLUE_RUNE;1",
+    displayname: "§9◆ Fading Blue Rune I",
+    lore: [
+      "§7Requires level 7",
+      "§7Throwing Axe",
+      "",
+      "§7Your axe fades into beautiful blue",
+      "§7particles!",
+      "",
+      "§7Apply this rune to throwing axe or",
+      "§7fuse two together at the Runic",
+      "§7Pedestal!",
+      "",
+      "§9RARE COSMETIC",
+    ],
+  });
+  assert.ok(parsed);
+  assert.equal(parsed.tier, 1);
+  assert.equal(parsed.runecraftingLevelRequired, 7);
+  assert.equal(parsed.applicableTo, "Throwing Axe");
+});
+
+test("NEU level-zero cosmetic rune requirements remain known", () => {
+  const parsed = parseRuneReference({
+    internalname: "ANTLERS_RUNE;3",
+    displayname: "§6◆ Antlers Rune III",
+    lore: ["§7Requires level 0", "§7Helmet", "", "§7Apply this rune to helmet or fuse", "§7two together at the Runic Pedestal!"],
+  });
+  assert.ok(parsed);
+  assert.equal(parsed.runecraftingLevelRequired, 0);
+  assert.equal(parsed.applicableTo, "Helmet");
+});
