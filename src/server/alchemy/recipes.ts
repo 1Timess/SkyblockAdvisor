@@ -4,6 +4,9 @@ export interface PotionRecipe {
 }
 
 export const potionRecipes: readonly PotionRecipe[] = [
+  { potionId: "CRITICAL", basePotion: "AWKWARD_POTION", ingredientName: "Flint", ingredientId: "FLINT", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
+  { potionId: "ARCHERY", basePotion: "AWKWARD_POTION", ingredientName: "Feather", ingredientId: "FEATHER", resultingLevel: 1, alchemyXpPerPotion: 10, evidence: "VERIFIED" },
+  { potionId: "PET_LUCK", basePotion: "AWKWARD_POTION", ingredientName: "Enchanted Rabbit Hide", ingredientId: "ENCHANTED_RABBIT_HIDE", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
   { potionId: "HASTE", basePotion: "AWKWARD_POTION", ingredientName: "Coal", ingredientId: "COAL", resultingLevel: 1, alchemyXpPerPotion: 5, evidence: "VERIFIED" },
   { potionId: "SPELUNKER", basePotion: "WATER_BOTTLE", ingredientName: "Mithril", ingredientId: "MITHRIL_ORE", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
   { potionId: "COLD_RESISTANCE", basePotion: "AWKWARD_POTION", ingredientName: "Enchanted Glacite", ingredientId: "ENCHANTED_GLACITE", resultingLevel: 1, alchemyXpPerPotion: null, evidence: "VERIFIED" },
