@@ -25,6 +25,7 @@ import { buildEnchantingAdvisorContext } from "../enchanting/advisor-context";
 import { buildCollectionAdvisorContext } from "../collections/advisor-context";
 import { buildSlayerAdvisorContext } from "../slayer/advisor-context";
 import { buildFarmingAdvisorContext } from "../farming/advisor-context";
+import { buildForagingUpgradeLanes } from "../foraging/upgrade-lanes";
 
 export interface AdvisorContextDiagnostics {
   profileWarningCount: number; compactWarningCount: number; petOwnedCount: number; petUniqueTypeCount: number; petDuplicateCount: number;
@@ -53,7 +54,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   const route = routeAdvisorQuestion({ question: input.question, profile, conversationState: input.conversationState });
   const [items, neu, market, petConstants] = route.domain === "ENCHANTING"
     ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
-    : route.domain === "FARMING"
+    : route.domain === "FARMING" || route.domain === "FORAGING"
       ? [...await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]), null] as const
     : route.domain === "SLAYER"
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, await loadNeuRepository(), null, null] as const
@@ -87,6 +88,9 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   } else if (route.domain === "ACCESSORIES") {
     const result = buildAccessoryLanes({ profile, catalog, references: buildAccessoryCatalog(items), quotes, budgetCoins: effectiveBudgetCoins, eligibilityMode });
     lanes.push(...Object.entries(result.lanes).map(([lane, candidates]) => ({ domain: "ACCESSORIES" as const, label: `accessory:${lane}`, candidates })));
+  } else if (route.domain === "FORAGING") {
+    const result = buildForagingUpgradeLanes({ profile, catalog, quotes, budgetCoins: effectiveBudgetCoins });
+    lanes.push(...Object.entries(result).map(([lane, candidates]) => ({ domain: "FORAGING" as const, label: `foraging:${lane}`, candidates })));
   } else if (route.domain === "FISHING" || route.domain === "MINING") {
     const activityDomain = route.domain;
     const result = buildActivityDomainLanes({ domain: activityDomain, profile, catalog, quotes, budgetCoins: effectiveBudgetCoins });
@@ -142,7 +146,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     collections: { available: Object.keys(profile.collections).length > 0 || profile.craftedGenerators.length > 0, candidateCount: 0 },
     slayer: { available: Object.keys(profile.progression.slayers).length > 0, candidateCount: 0 },
     farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },
-    foraging: { available: profile.progression.skills.foraging !== undefined || profile.progression.foraging.treeExperience !== null || Object.keys(profile.progression.foraging.treeGifts.counts).length > 0, candidateCount: 0 },
+    foraging: { available: profile.progression.skills.foraging !== undefined || profile.progression.foraging.treeExperience !== null || Object.keys(profile.progression.foraging.treeGifts.counts).length > 0, candidateCount: meaningful("FORAGING").length },
   };
   const frontier = selectProgressionFrontier({ route, candidates: relevantCandidates.map((candidate, stableOrder) => ({ candidate, stableOrder,
     relevance: buildCandidateRelevance(relevantLanes, candidate.id, route), feasibility: buildCandidateFeasibility(candidate, profile, effectiveBudgetCoins),
