@@ -191,4 +191,17 @@ test("derived potion recipes preserve their prerequisite potion instead of prete
   assert.equal(recipe?.basePotionId, "NIGHT_VISION");
   assert.equal(recipe?.basePotionLevel, 1);
   assert.equal(recipe?.ingredientId, "FERMENTED_SPIDER_EYE");
+  assert.equal(recipe?.alchemyXpPerPotion, 0);
+});
+
+
+test("audited potion recipes preserve Awkward bases for collection potions", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  for (const potionName of ["Stun", "Venomous", "Wounded"]) {
+    const context = buildAlchemyAdvisorContext(profile, `How do I brew ${potionName}?`);
+    assert.equal(context.domain, "ALCHEMY");
+    if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+    const potion = context.potionCatalog.focus.find(entry => entry.name === potionName);
+    assert.equal(potion?.recipes[0]?.basePotion, "AWKWARD_POTION");
+  }
 });
