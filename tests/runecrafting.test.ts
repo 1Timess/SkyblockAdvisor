@@ -90,3 +90,20 @@ test("NEU level-zero cosmetic rune requirements remain known", () => {
   assert.equal(parsed.runecraftingLevelRequired, 0);
   assert.equal(parsed.applicableTo, "Helmet");
 });
+
+
+test("NEU rune catalog excludes Rune Sack false positives", () => {
+  const parsed = parseRuneReference({
+    internalname: "RUNE_SACK",
+    displayname: "Rune Sack",
+    lore: [
+      "Holds most commonly dropped Runes",
+      "and their tiers! Items you pickup go",
+      "directly into your sacks",
+      "",
+      "Capacity: 64 of each rune tier",
+      "EPIC SACK",
+    ],
+  });
+  assert.equal(parsed, null);
+});
