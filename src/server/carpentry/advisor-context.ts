@@ -43,7 +43,7 @@ export function buildCarpentryAdvisorContext(profile: NormalizedSkyBlockProfile,
       collectionRequirement: { prefix: method.collectionPrefix, tier: method.collectionTier },
     };
   });
-  const ranked = levelingMethods.filter(method => method.requirementStatus !== "LOCKED" && method.effectiveCoinsPerXp !== null)
+  const ranked = levelingMethods.filter(method => method.requirementStatus === "AVAILABLE" && method.effectiveCoinsPerXp !== null)
     .sort((a, b) => (a.effectiveCoinsPerXp ?? Number.POSITIVE_INFINITY) - (b.effectiveCoinsPerXp ?? Number.POSITIVE_INFINITY));
   const best = ranked[0] ?? null;
 
@@ -54,7 +54,7 @@ export function buildCarpentryAdvisorContext(profile: NormalizedSkyBlockProfile,
       ? [{ kind: "HOLD" as const, priority: 1, title: "Carpentry skill cap reached", reason: "The observed Carpentry level is already 50." }]
       : best
         ? [{ kind: "LEVEL_CARPENTRY" as const, priority: 1, title: `Level Carpentry with ${best.name}`,
-            reason: `Lowest observed effective coins/XP among the supported, non-locked methods: ${best.effectiveCoinsPerXp!.toFixed(3)}. Recovery uses the better of the live output quote and verified NPC sell floor.` }]
+            reason: `Lowest observed effective coins/XP among the supported methods with positively verified requirements: ${best.effectiveCoinsPerXp!.toFixed(3)}. Recovery uses the better of the live output quote and verified NPC sell floor.` }]
         : [{ kind: "LEVEL_CARPENTRY" as const, priority: 1, title: "Level Carpentry with an eligible 3x3 craft",
             reason: "Current market evidence is insufficient to rank the supported methods; do not infer a globally best craft." }];
 
