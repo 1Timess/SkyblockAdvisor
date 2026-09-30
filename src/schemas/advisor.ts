@@ -4,15 +4,15 @@ import { gemstoneStateSchema, raritySchema, statsSchema } from "./items";
 import { marketConfidenceSchema } from "./market";
 import { experimentObservationSchema } from "./owned-enchanting";
 
-export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
+export const analysisScopeSchema = z.enum(["GEAR", "ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "SURVIVABILITY", "DAMAGE", "MAGE", "ARCHER", "BERSERK", "GENERAL", "CLARIFY"]);
 export type AnalysisScope = z.infer<typeof analysisScopeSchema>;
-export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
+export const analysisDomainSchema = z.enum(["ARMOR", "WEAPONS", "ACCESSORIES", "PETS", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING", "DUNGEONS"]);
 export type AnalysisDomain = z.infer<typeof analysisDomainSchema>;
-export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
+export const profileIntelligenceDomainSchema = z.enum(["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type ProfileIntelligenceDomain = z.infer<typeof profileIntelligenceDomainSchema>;
 export const advisorRoleSchema = z.enum(["mage", "archer", "berserk", "tank", "healer"]);
 export type AdvisorRole = z.infer<typeof advisorRoleSchema>;
-export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
+export const advisorGoalSchema = z.enum(["GENERAL_UPGRADE", "DAMAGE", "SURVIVABILITY", "HEALTH", "DEFENSE", "STRENGTH", "CRIT_DAMAGE", "ATTACK_SPEED", "INTELLIGENCE", "SPEED", "MAGICAL_POWER", "PET", "ARMOR", "WEAPON", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"]);
 export type AdvisorGoal = z.infer<typeof advisorGoalSchema>;
 
 export const advisorConversationStateSchema = z.object({
@@ -307,6 +307,23 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
     potionAffinity: z.object({ observed: z.object({ name: z.string(), durationBonusPercent: z.number().nonnegative() }).nullable(),
       appliesToConsumedPotions: z.boolean(), appliesToSplashPotions: z.boolean(), appliesToGodPotion: z.boolean(),
       tiers: z.array(z.object({ id: z.string(), name: z.string(), durationBonusPercent: z.number().nonnegative(), collectionTier: z.number().int().positive() })) }),
+    unavailableFacts: z.array(z.string()), note: z.string() }),
+  z.object({ domain: z.literal("CARPENTRY"),
+    skill: z.object({ level: z.number().nullable(), xp: z.number().nullable(), cap: z.literal(50),
+      xpToNext: z.number().nonnegative().nullable(), xpTo50: z.number().nonnegative().nullable() }),
+    mechanics: z.object({ unlockRequirement: z.string(), carpentryTableUnlockedByQuest: z.boolean(),
+      xpRateFromIngredientNpcSellValue: z.number().positive(), xpFormula: z.string(), requiresThreeByThreeCrafting: z.boolean(),
+      inventoryTwoByTwoAwardsXp: z.boolean(), mostVanillaRecipesAwardXp: z.boolean(), healthPerLevel: z.number().positive() }),
+    quickCrafting: z.object({ carpentryLevelRequired: z.number().int().positive(), levelStatus: z.enum(["LEVEL_MET","LEVEL_LOCKED","UNKNOWN"]),
+      accountAvailabilityStatus: z.literal("UNREPORTED"), note: z.string() }),
+    furniture: z.object({ finalRecipeUnlockLevel: z.number().int().positive(), note: z.string() }),
+    progressionFocus: z.object({ actions: z.array(z.object({
+      kind: z.enum(["LEVEL_CARPENTRY","INVESTIGATE","HOLD"]), priority: z.number().int().positive(), title: z.string(), reason: z.string(),
+    })).max(3), note: z.string() }),
+    levelingMethods: z.array(z.object({ id: z.string(), name: z.string(), carpentryXpPerCraft: z.number().positive(),
+      ingredientNpcSellValue: z.number().positive(), acquisitionCostCoins: z.number().nonnegative().nullable(),
+      recoveryValueCoins: z.number().nonnegative().nullable(), effectiveCoinsPerXp: z.number().nullable(),
+      requirementStatus: z.enum(["AVAILABLE","LOCKED","UNKNOWN"]) })).max(12),
     unavailableFacts: z.array(z.string()), note: z.string() }),
   z.object({ domain: z.literal("DUNGEONS"), catacombsLevel: z.number().nullable(), selectedClass: z.string().nullable(),
     highestFloorNormal: z.number().nullable(), highestFloorMaster: z.number().nullable(), armor: z.array(compactItemSchema),
