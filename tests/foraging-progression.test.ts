@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { buildExtendedPlayerState } from "../src/server/skyblock/domains/player-state";
 import type { RawMember } from "../src/server/hypixel/types";
-import { hotfCumulativeXp, hotfLevelFromXp, hotfTierNodes, hotfWhisperCurrencyByTier, torrhusRequiredHotfTier, treeGiftHotfXp, treeGiftMilestones, treeToughness } from "../src/server/foraging/reference";
+import { centerOfForestVerifiedEffects, currentFlatSweepChanges, currentGalateaNpcLogPrices, currentTreeGiftMilestoneSweepPerTier, currentTreeGiftXp, foragingLevelCapSources, foragingTreeMechanics, halfFullEmptyScope, hotfCumulativeXp, hotfLevelFromXp, hotfTierNodes, hotfWhisperCurrencyByTier, starlynContestPointBonuses, throwingAxeMechanics, torrhusRequiredHotfTier, treeGiftHotfXp, treeGiftMilestones, treeToughness, verifiedForagingGearSweep } from "../src/server/foraging/reference";
 
 test("normalizes Foraging presets without mixing inactive HOTF state", () => {
   const member = {
@@ -77,4 +77,32 @@ test("verified HOTF reference mechanics remain distinct from HOTM", () => {
   assert.deepEqual(treeGiftMilestones, [10, 25, 100, 250, 500, 1000, 2500]);
   assert.deepEqual(treeGiftHotfXp, { FIG: 10, MANGROVE: 20, HELIX: 30 });
   assert.deepEqual(treeToughness, { FIG: 10, MANGROVE: 50, HELIX: 150 });
+});
+
+
+test("deeper Foraging reference reflects current post-Torrhus mechanics", () => {
+  assert.deepEqual(foragingTreeMechanics.FIG.style, ["trunk", "branches"]);
+  assert.deepEqual(foragingTreeMechanics.MANGROVE.style, ["branches", "trunk", "roots"]);
+  assert.deepEqual(foragingTreeMechanics.HELIX.style, ["light_logs", "red_logs"]);
+  assert.equal(throwingAxeMechanics.normalLogBreakFraction, 0.5);
+  assert.equal(currentFlatSweepChanges.lottery, 10);
+  assert.equal(currentFlatSweepChanges.agathaPowerMaxSweep, 25);
+  assert.equal(currentFlatSweepChanges.miriaPowerMaxSweep, 25);
+  assert.deepEqual(centerOfForestVerifiedEffects, { 2: { axeAbilityLevels: 1 }, 4: { treeGiftTracking: 5 } });
+  assert.equal(currentTreeGiftMilestoneSweepPerTier, 3);
+  assert.equal(halfFullEmptyScope, "island_wide");
+  assert.deepEqual(currentTreeGiftXp, {
+    FIG: { foragingXp: 100, hotfXp: 10 },
+    MANGROVE: { foragingXp: 500, hotfXp: 20 },
+    HELIX: { foragingXp: 1500, hotfXp: 30 },
+  });
+  assert.deepEqual(currentGalateaNpcLogPrices, { FIG: 8, MANGROVE: 14, HELIX: 20 });
+  assert.equal(verifiedForagingGearSweep.HELIX_CHOPPER, 50);
+  assert.equal(verifiedForagingGearSweep.SLOTH_PET_BASE, 25);
+  assert.deepEqual(starlynContestPointBonuses, { MOONGLADE_BELT_PERCENT: 5, TORRHUS_BELT_PERCENT: 10 });
+  assert.deepEqual(foragingLevelCapSources, {
+    collectionTierNine: { FIG_LOG: 1, MANGROVE_LOG: 1, HELIX_LOG: 1 },
+    agathaPrizeShop: 2,
+    miriaPrizeShop: 2,
+  });
 });
