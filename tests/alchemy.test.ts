@@ -47,7 +47,7 @@ test("potion focus is semantic and named potion questions stay narrow", () => {
   assert.ok(mining.some(entry => entry.name === "Haste"));
   assert.ok(mining.some(entry => entry.name === "Spelunker"));
   assert.ok(mining.every(entry => entry.tags.includes("MINING")));
-  assert.equal(mining.find(entry => entry.name === "Spelunker")?.maxLevel, 4);
+  assert.equal(mining.find(entry => entry.name === "Spelunker")?.maxLevel, 5);
   assert.deepEqual(potionFocusForQuestion("How do I brew Critical?").map(entry => entry.name), ["Critical"]);
   assert.ok(Math.abs((godPotionDurationHours(50, 20) ?? 0) - 28.8) < 1e-9);
 });
@@ -112,6 +112,13 @@ test("verified potion recipes and compatible Brews are attached to focused potio
   assert.ok(speed?.recipes.some(recipe => recipe.ingredientId === "ENCHANTED_SUGAR_CANE" && recipe.resultingLevel === 5));
   assert.ok(speed?.compatibleBrews.some(brew => brew.name === "Cheap Coffee"));
   assert.ok(speed?.compatibleBrews.some(brew => brew.name === "Black Coffee"));
+  assert.ok(speed?.compatibleBrews.some(brew => brew.name === "Decent Coffee"));
+  const absorptionContext = buildAlchemyAdvisorContext(profile, "How do I brew Absorption?");
+  assert.equal(absorptionContext.domain, "ALCHEMY");
+  if (absorptionContext.domain !== "ALCHEMY") throw new Error("unreachable");
+  const absorption = absorptionContext.potionCatalog.focus.find(entry => entry.name === "Absorption");
+  assert.ok(absorption?.compatibleBrews.some(brew => brew.name === "Pulpous Orange Juice"));
+  assert.ok(!absorption?.compatibleBrews.some(brew => brew.name === "Viking's Tear"));
 });
 
 test("Potion Affinity remains separate from God Potion and splash duration", async () => {
@@ -165,10 +172,10 @@ test("2026 potion catalog keeps brewable caps distinct from special effect tiers
   const healing = potionFocusForQuestion("How do I brew Healing?")[0];
   const nightVision = potionFocusForQuestion("How do I brew Night Vision?")[0];
   const regeneration = potionFocusForQuestion("How do I brew Regeneration?")[0];
-  assert.equal(healing?.maxLevel, 8);
-  assert.match(healing?.effect ?? "", /regeneration/i);
-  assert.equal(nightVision?.maxLevel, 1);
-  assert.equal(regeneration?.maxLevel, 8);
+  assert.equal(healing?.maxLevel, 9);
+  assert.match(healing?.effect ?? "", /instant Health/i);
+  assert.equal(nightVision?.maxLevel, 2);
+  assert.equal(regeneration?.maxLevel, 9);
 });
 
 
