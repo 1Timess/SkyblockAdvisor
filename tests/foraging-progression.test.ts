@@ -32,6 +32,7 @@ test("normalizes Foraging presets without mixing inactive HOTF state", () => {
 
   const state = buildExtendedPlayerState(member).foraging;
   assert.equal(state.treeExperience, 165399.5);
+  assert.equal(state.hotfLevel, 5);
   assert.equal(state.extraLevelCap, 3);
   assert.equal(state.activePreset, 1);
   assert.equal(state.sweepLevel, 1);
