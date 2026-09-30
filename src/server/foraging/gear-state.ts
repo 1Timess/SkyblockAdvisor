@@ -2,7 +2,7 @@ import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile
 import type { ProfileItem } from "../../schemas/items";
 
 const foragingIdPatterns = [
-  /^(?:SERIOUSLY_DAMAGED_AXE|FIG_HEW|FIGSTONE_SPLITTER|HELIX_CHOPPER)$/,
+  /^(?:SERIOUSLY_DAMAGED_AXE|FIG_AXE|FIGSTONE_AXE|HELIX_CHOPPER)$/,
   /^(?:FIG|HELIX)_(?:HELMET|CHESTPLATE|LEGGINGS|BOOTS)$/,
   /^(?:DAVID_CLOAK|DAVIDS_CLOAK|HONEYCOMB_NECKLACE|VEILSHROOM_BRACELET|SAFARI_BELT)$/,
 ] as const;
