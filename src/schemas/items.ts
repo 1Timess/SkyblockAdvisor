@@ -19,6 +19,14 @@ export const gemstoneStateSchema = z.object({
 export type GemstoneQuality = z.infer<typeof gemstoneQualitySchema>;
 export type GemstoneSlot = z.infer<typeof gemstoneSlotSchema>;
 export type GemstoneState = z.infer<typeof gemstoneStateSchema>;
+export const foragingItemStateSchema = z.object({
+  boosterTiers: statsSchema,
+  absorbLogsChopped: z.number().nonnegative().nullable(),
+  logsCut: z.number().nonnegative().nullable(),
+  attributeMenuValue: z.number().nullable(),
+  source: z.literal("NBT"),
+});
+export type ForagingItemState = z.infer<typeof foragingItemStateSchema>;
 export const drillComponentStateSchema = z.object({
   engine: z.string().nullable(), fuelTank: z.string().nullable(), upgradeModule: z.string().nullable(), fuel: z.number().int().nonnegative().nullable(), source: z.literal("NBT"),
 });
@@ -32,7 +40,7 @@ export const profileItemSchema = z.object({
   source: z.string(), gemstones: gemstoneStateSchema.optional(), farmingToolProgress: z.object({
     rawLevel: z.number().nonnegative().nullable(), rawExperience: z.number().nonnegative().nullable(),
     farmingForDummiesCount: z.number().nonnegative().nullable(),
-  }).nullable().optional(), drillComponents: drillComponentStateSchema.optional(), texture: z.string().nullable().optional(),
+  }).nullable().optional(), drillComponents: drillComponentStateSchema.optional(), foragingState: foragingItemStateSchema.optional(), texture: z.string().nullable().optional(),
 });
 export type ItemRarity = z.infer<typeof raritySchema>;
 export type ProfileItem = z.infer<typeof profileItemSchema>;
