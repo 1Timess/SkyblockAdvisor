@@ -33,7 +33,7 @@ async function main() {
       if (!context || context.domain !== "ALCHEMY") throw new Error("Alchemy context disappeared during report construction.");
       return {
         question: result.context.question, route: result.route, available: result.availableAnalysis.alchemy,
-        skill: context.skill, wisdom: context.wisdom, brewing: context.brewing, potionAffinity: context.potionAffinity,
+        skill: context.skill, wisdom: context.wisdom, progressionFocus: context.progressionFocus, brewing: context.brewing, potionAffinity: context.potionAffinity,
         godPotion: context.godPotion, potionCatalog: context.potionCatalog, levelingMethods: context.levelingMethods,
         unavailableFacts: context.unavailableFacts, candidateCount: result.context.candidates.length,
         candidates: result.context.candidates,
