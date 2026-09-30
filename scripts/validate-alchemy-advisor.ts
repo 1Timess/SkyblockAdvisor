@@ -12,6 +12,8 @@ async function main() {
     "What is the most cost-efficient way for me to level Alchemy?",
     "What potion should I brew for mining?",
     "How do I brew Speed?",
+    "How do I brew Invisibility?",
+    "Which God Potion mixins can I use?",
     "How long will my God Potion last?",
   ];
   const inspections = [];
