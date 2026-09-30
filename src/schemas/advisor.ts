@@ -287,6 +287,10 @@ export const advisorDomainContextSchema = z.discriminatedUnion("domain", [
         status: z.enum(["ACTIVE","INACTIVE","OWNED_INACTIVE","UNOBSERVED","UNREPORTED"]), evidence: z.string() })),
       witch: z.object({ owned: z.boolean(), active: z.boolean(), rarity: z.string().nullable(), level: z.number().nullable(),
         wisdom: z.number().nullable(), brewTimeReductionPercent: z.number().nullable(), brewSeconds: z.number().nullable() }) }),
+    progressionFocus: z.object({ actions: z.array(z.object({
+      kind: z.enum(["LEVELING_METHOD","POTION_AFFINITY","WITCH_PET","INVESTIGATE","HOLD"]), priority: z.number().int().positive(),
+      title: z.string(), reason: z.string(), evidence: z.array(z.string()),
+    })).max(5), note: z.string() }),
     levelingMethods: z.array(z.object({ id: z.string(), potion: z.string(), resultingLevel: z.number().int().positive(),
       ingredientName: z.string(), marketKey: z.string(), xpPerPotion: z.number().positive(), xpPerBatch: z.number().positive(),
       effectiveXpPerBatchFloor: z.number().positive(), batchesTo50Floor: z.number().int().nonnegative().nullable(),
