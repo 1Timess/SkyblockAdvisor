@@ -111,7 +111,13 @@ test("Foraging activity lanes bypass combat-role filtering", () => {
   };
   const axe = candidate("FIGSTONE_SPLITTER", "sweep", 25, { domain: "tool" });
   const pet = candidate("SLOTH;LEGENDARY", "foragingFortune", 20, {
-    domain: "pet", semanticEvidence: ["FORAGING_FORTUNE"], petAcquisitionFamily: "SLOTH",
+    domain: "pet", semanticEvidence: ["FORAGING_FORTUNE"],
+    petAcquisitionFamily: {
+      kind: "PET_ACQUISITION",
+      familyId: "SLOTH",
+      petType: "SLOTH",
+      members: [{ id: "SLOTH;LEGENDARY", canonicalPetId: "SLOTH;LEGENDARY", rarity: "LEGENDARY", level: 1, maxLevel: 100 }],
+    },
   });
   const lanes: TaggedCandidateLane[] = [
     { domain: "FORAGING", label: "foraging:axe", candidates: [axe] },
