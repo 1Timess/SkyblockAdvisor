@@ -22,6 +22,9 @@ test("Alchemy context preserves unknown skill evidence when Hypixel does not rep
   assert.equal(haste?.recipeStatus, "VERIFIED");
   assert.ok(haste?.recipes.some(recipe => recipe.ingredientId === "COAL" && recipe.resultingLevel === 1));
   assert.equal(context.godPotion.mixinCount, 13);
+  assert.equal(context.godPotion.mixins.length, 13);
+  assert.ok(context.brewing.modifierRules.skillXpBoostRules.some(rule => rule.includes("Redstone Dust")));
+  assert.equal(context.brewing.modifierRules.ordinaryPotionParrotDurationBonusMaxPercent, 40);
   assert.ok(context.godPotion.effects.some(effect => effect.name === "Alchemy XP Boost" && effect.level === 3));
   assert.equal(context.potionCatalog.focus.find(entry => entry.name === "Haste")?.unlockStatus, "UNKNOWN");
 });
@@ -119,4 +122,35 @@ test("Potion Affinity remains separate from God Potion and splash duration", asy
   assert.equal(context.potionAffinity.appliesToConsumedPotions, true);
   assert.equal(context.potionAffinity.appliesToSplashPotions, false);
   assert.equal(context.potionAffinity.appliesToGodPotion, false);
+});
+
+
+test("focused combat, archery, pet, and mining questions expose verified base recipes", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  const cases = [
+    ["How do I brew Critical?", "Critical", "FLINT"],
+    ["How do I brew Archery?", "Archery", "FEATHER"],
+    ["How do I brew Pet Luck?", "Pet Luck", "ENCHANTED_RABBIT_HIDE"],
+    ["How do I brew Spelunker?", "Spelunker", "MITHRIL_ORE"],
+  ] as const;
+  for (const [question, potionName, ingredientId] of cases) {
+    const context = buildAlchemyAdvisorContext(profile, question);
+    assert.equal(context.domain, "ALCHEMY");
+    if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+    const potion = context.potionCatalog.focus.find(entry => entry.name === potionName);
+    assert.equal(potion?.recipeStatus, "VERIFIED");
+    assert.ok(potion?.recipes.some(recipe => recipe.ingredientId === ingredientId));
+  }
+});
+
+test("God Potion Mixins evaluate Slayer requirements without claiming unobserved application state", async () => {
+  const member = fixtureMember();
+  member.slayer!.slayer_bosses!.zombie = { xp: 0 };
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources(member));
+  const context = buildAlchemyAdvisorContext(profile, "Which God Potion mixins can I use?");
+  assert.equal(context.domain, "ALCHEMY");
+  if (context.domain !== "ALCHEMY") throw new Error("unreachable");
+  assert.equal(context.godPotion.mixins.find(mixin => mixin.id === "ZOMBIE_BRAIN_MIXIN")?.requirementStatus, "LOCKED");
+  assert.equal(context.godPotion.mixins.find(mixin => mixin.id === "MELON_JUICE_MIXIN")?.requirementStatus, "NO_REQUIREMENT");
+  assert.ok(context.unavailableFacts.some(fact => fact.includes("Mixin timers")));
 });
