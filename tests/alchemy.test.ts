@@ -154,3 +154,14 @@ test("God Potion Mixins evaluate Slayer requirements without claiming unobserved
   assert.equal(context.godPotion.mixins.find(mixin => mixin.id === "MELON_JUICE_MIXIN")?.requirementStatus, "NO_REQUIREMENT");
   assert.ok(context.unavailableFacts.some(fact => fact.includes("Mixin timers")));
 });
+
+
+test("2026 potion catalog keeps brewable caps distinct from special effect tiers", () => {
+  const healing = potionFocusForQuestion("How do I brew Healing?")[0];
+  const nightVision = potionFocusForQuestion("How do I brew Night Vision?")[0];
+  const regeneration = potionFocusForQuestion("How do I brew Regeneration?")[0];
+  assert.equal(healing?.maxLevel, 8);
+  assert.match(healing?.effect ?? "", /regeneration/i);
+  assert.equal(nightVision?.maxLevel, 1);
+  assert.equal(regeneration?.maxLevel, 8);
+});
