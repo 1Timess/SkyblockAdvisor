@@ -63,6 +63,8 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
     : route.domain === "RUNECRAFTING"
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, await loadNeuRepository(), null, null] as const
+    : route.domain === "TAMING"
+      ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
     : route.domain === "FARMING"
       ? [...await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]), null] as const
     : route.domain === "FORAGING"
@@ -185,6 +187,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     alchemy: { available: profile.progression.skills.alchemy !== undefined, candidateCount: 0 },
     carpentry: { available: profile.progression.skills.carpentry !== undefined, candidateCount: 0 },
     runecrafting: { available: profile.progression.skills.runecrafting !== undefined, candidateCount: 0 },
+    taming: { available: profile.progression.skills.taming !== undefined, candidateCount: 0 },
     collections: { available: Object.keys(profile.collections).length > 0 || profile.craftedGenerators.length > 0, candidateCount: 0 },
     slayer: { available: Object.keys(profile.progression.slayers).length > 0, candidateCount: 0 },
     farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },
@@ -214,7 +217,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     name: candidate.item.name, sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label), reason: "Only appeared in lanes irrelevant to the active goal." }));
   const buckets: SelectionBucket[] = ["ACTIONABLE", "MONEY_GATED", "PROGRESSION_GATED", "DISTANT_OR_UNCERTAIN"];
   const exclusions: ExclusionReason[] = ["REDUNDANCY_LIMIT", "BUCKET_LIMIT", "FINAL_CAP", "LOWER_CONTEXT_PRIORITY", "NO_OP", "OTHER"];
-  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"];
+  const allDomains: ProfileIntelligenceDomain[] = ["DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "ENCHANTING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "TAMING", "COLLECTIONS", "SLAYER", "FARMING", "FORAGING"];
   return { context, route, availableAnalysis, detailedCandidates, candidateLanes, frontierCandidates: frontier.candidates,
     rawScopeCandidates: rawScopedCandidates.map(candidate => ({ candidateId: candidate.id, domain: candidate.domain, name: candidate.item.name,
       sourceLanes: scopedLanes.filter(lane => lane.candidates.some(value => value.id === candidate.id)).map(lane => lane.label) })), nextConversationState,

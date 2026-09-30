@@ -11,8 +11,9 @@ import { fixtureSources } from "./fixtures/profile";
 test("one normalized profile derives all profile-intelligence domains", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   const intelligence = buildProfileIntelligence(profile);
-  assert.deepEqual(Object.keys(intelligence.domains), ["FARMING", "SLAYER", "COLLECTIONS", "DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "FORAGING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "ENCHANTING"]);
+  assert.deepEqual(Object.keys(intelligence.domains), ["FARMING", "SLAYER", "COLLECTIONS", "DUNGEONS", "ACCESSORIES", "FISHING", "MINING", "FORAGING", "ALCHEMY", "CARPENTRY", "RUNECRAFTING", "TAMING", "ENCHANTING"]);
   assert.equal(intelligence.domains.ENCHANTING.domain, "ENCHANTING");
+  assert.equal(intelligence.domains.TAMING.domain, "TAMING");
   assert.equal(intelligence.domains.DUNGEONS.domain, "DUNGEONS");
   assert.equal(intelligence.domains.ACCESSORIES.domain, "ACCESSORIES");
   assert.equal(intelligence.domains.FISHING.domain, "FISHING");
