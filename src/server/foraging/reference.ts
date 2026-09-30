@@ -28,5 +28,5 @@ export const hotfWhisperCurrencyByTier = {
 
 export const treeGiftMilestones = [10, 25, 100, 250, 500, 1_000, 2_500] as const;
 export const treeGiftHotfXp = { FIG: 10, MANGROVE: 20, HELIX: 30 } as const;
-export const treeToughness = { FIG: 10, HELIX: 150 } as const;
+export const treeToughness = { FIG: 10, MANGROVE: 50, HELIX: 150 } as const;
 export const torrhusRequiredHotfTier = 4;
