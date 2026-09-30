@@ -78,6 +78,12 @@ test("profile-intelligence domains route explicitly", async () => {
   assert.equal(accessories.domain, "ACCESSORIES");
   assert.equal(accessories.goal, "FORAGING");
   assert.deepEqual(accessories.mechanics, ["SWEEP"]);
+  const alchemy = routeAdvisorQuestion({ question: "What potion should I brew for mining?", profile });
+  assert.equal(alchemy.domain, "ALCHEMY");
+  assert.equal(alchemy.scope, "ALCHEMY");
+  assert.equal(alchemy.goal, "ALCHEMY");
+  assert.deepEqual(alchemy.activeDomains, ["ALCHEMY"]);
+  assert.equal(routeAdvisorQuestion({ question: "How long will my God Potion last?", profile }).domain, "ALCHEMY");
 });
 
 test("Farming and Garden questions route to the profile-wide domain", async () => {

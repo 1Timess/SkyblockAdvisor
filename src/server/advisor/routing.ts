@@ -5,7 +5,7 @@ import greenhouseMutations from "../reference/greenhouse-mutations.json";
 const roleScopes: Record<AdvisorRole, AnalysisScope> = { mage: "MAGE", archer: "ARCHER", berserk: "BERSERK", tank: "SURVIVABILITY", healer: "SURVIVABILITY" };
 const domainsByScope: Record<AnalysisScope, AnalysisDomain[]> = {
   GEAR: ["ARMOR", "WEAPONS"], ARMOR: ["ARMOR"], WEAPONS: ["WEAPONS"], ACCESSORIES: ["ACCESSORIES"], PETS: ["PETS"],
-  FISHING: ["FISHING"], MINING: ["MINING"], ENCHANTING: ["ENCHANTING"], COLLECTIONS: ["COLLECTIONS"], SLAYER: ["SLAYER"], FARMING: ["FARMING"], FORAGING: ["FORAGING"], SURVIVABILITY: ["ARMOR"], DAMAGE: ["ARMOR", "WEAPONS"], MAGE: ["ARMOR", "WEAPONS"],
+  FISHING: ["FISHING"], MINING: ["MINING"], ENCHANTING: ["ENCHANTING"], ALCHEMY: ["ALCHEMY"], COLLECTIONS: ["COLLECTIONS"], SLAYER: ["SLAYER"], FARMING: ["FARMING"], FORAGING: ["FORAGING"], SURVIVABILITY: ["ARMOR"], DAMAGE: ["ARMOR", "WEAPONS"], MAGE: ["ARMOR", "WEAPONS"],
   ARCHER: ["ARMOR", "WEAPONS"], BERSERK: ["ARMOR", "WEAPONS"], GENERAL: ["ARMOR", "WEAPONS"], CLARIFY: [],
 };
 
@@ -18,13 +18,14 @@ export function routeAdvisorQuestion(input: { question: string; profile: Pick<No
   const explicitDomain = detectDomain(text), followUpDomain = isFollowUp(text) ? input.conversationState?.currentDomain : undefined;
   const domain = explicitDomain ?? followUpDomain ?? null;
   const goal = explicitGoal ?? (followUpDomain ? input.conversationState?.goal : undefined) ?? goalFromExplicitScope(text)
-    ?? (domain === "FARMING" ? "FARMING" : domain === "FORAGING" ? "FORAGING" : "GENERAL_UPGRADE");
+    ?? (domain === "FARMING" ? "FARMING" : domain === "FORAGING" ? "FORAGING" : domain === "ALCHEMY" ? "ALCHEMY" : "GENERAL_UPGRADE");
   const mechanics = /\bsweep\b/.test(text) ? ["SWEEP"] : [];
   let scope: AnalysisScope, reason: string, routedDomain: ProfileIntelligenceDomain | null = domain;
   if (domain === "ACCESSORIES") [scope, reason] = ["ACCESSORIES", "The question explicitly asks about accessories or Magical Power."];
   else if (domain === "FISHING") [scope, reason] = ["FISHING", "The question explicitly asks about fishing progression."];
   else if (domain === "MINING") [scope, reason] = ["MINING", "The question explicitly asks about mining progression."];
   else if (domain === "ENCHANTING") [scope, reason] = ["ENCHANTING", "The question explicitly asks about Enchanting or Experimentation."];
+  else if (domain === "ALCHEMY") [scope, reason] = ["ALCHEMY", "The question asks about Alchemy, potions, or brewing."];
   else if (domain === "COLLECTIONS") [scope, reason] = ["COLLECTIONS", "The question asks about collections or crafted minions."];
   else if (domain === "FARMING") [scope, reason] = ["FARMING", "The question asks about Farming or Garden progression."];
   else if (domain === "FORAGING") [scope, reason] = ["FORAGING", "The question asks about Foraging or Heart of the Forest progression."];
@@ -43,6 +44,7 @@ function detectDomain(text: string): ProfileIntelligenceDomain | null {
   if (/\bfarming\b|\bgarden\b|\bgreenhouse\b|\bmutations?\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)
     || greenhouseMutations.mutations.some(mutation => text.includes(mutation.name.toLowerCase()))) return "FARMING";
   if (/\bcollections?\b|\bminions?\b|\bcrafted generators?\b/.test(text)) return "COLLECTIONS";
+  if (/\balchemy\b|\bpotions?\b|\bbrewing\b|\bbrew(?:ed|ing)?\b|\bgod pot(?:ion)?\b|\bpotion affinity\b/.test(text)) return "ALCHEMY";
   if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b|\bchronomatron\b|\bultrasequencer\b/.test(text)) return "ENCHANTING";
   if (/\bfishing\b|\bfish(?:ing)? rod\b|\bsea creature\b/.test(text)) return "FISHING";
   if (/\bmining\b|\bhotm\b|\bheart of the mountain\b|\bpowder\b|\bdrill\b|\bpickaxe\b/.test(text)) return "MINING";
@@ -53,6 +55,7 @@ function detectExplicitGoal(text: string): AdvisorGoal | null {
   if (/\bslayers?\b|\b(revenant|tarantula|sven|voidgloom|inferno demonlord|riftstalker)\b/.test(text)) return "SLAYER";
   if (/\bfarming\b|\bgarden\b|\bcrop milestones?\b|\bvisitor offers?\b/.test(text)) return "FARMING";
   if (/\bcollections?\b|\bminions?\b/.test(text)) return "COLLECTIONS";
+  if (/\balchemy\b|\bpotions?\b|\bbrewing\b|\bbrew(?:ed|ing)?\b|\bgod pot(?:ion)?\b|\bpotion affinity\b/.test(text)) return "ALCHEMY";
   if (/\benchant(?:ing|ments?)\b|\bexperiment(?:ation)?\b|\bsuperpairs\b/.test(text)) return "ENCHANTING";
   if (/\bforaging\b/.test(text)) return "FORAGING"; if (/\bfishing\b/.test(text)) return "FISHING"; if (/\bmining\b/.test(text)) return "MINING";
   if (/\bmagical power\b|\bmp\b/.test(text)) return "MAGICAL_POWER"; if (/\bintelligence\b|\bmana\b/.test(text)) return "INTELLIGENCE";

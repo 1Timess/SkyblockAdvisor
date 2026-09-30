@@ -46,7 +46,8 @@
     "validate:farming-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-advisor.ts",
     "validate:farming-luna": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-farming-luna.ts",
     "inspect:foraging-gear": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-foraging-gear.ts",
-    "validate:foraging-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-foraging-advisor.ts"
+    "validate:foraging-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-foraging-advisor.ts",
+    "validate:alchemy-advisor": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/validate-alchemy-advisor.ts"
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
