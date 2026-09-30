@@ -3,7 +3,7 @@ import { hotmLevelFromXp } from "../../reference/leveling";
 
 export function buildExtendedPlayerState(member: RawMember) {
   const miningNodes = normalizeNodes(member.skill_tree?.nodes?.mining);
-  const foragingNodes = normalizeNodes(member.skill_tree?.nodes?.foraging);
+  const foraging = normalizeForaging(member);
   const stats = member.player_stats;
   const miningTreeExperience = finiteNumber(member.skill_tree?.experience?.mining);
   return {
@@ -29,9 +29,7 @@ export function buildExtendedPlayerState(member: RawMember) {
       glaciteTunnels: normalizeGlaciteTunnels(member),
       crystals: dynamicRecord(member.mining_core?.crystals), biomes: dynamicRecord(member.mining_core?.biomes),
     },
-    foraging: { treeExperience: finiteNumber(member.skill_tree?.experience?.foraging), nodes: foragingNodes,
-      sweepLevel: nodeLevel(foragingNodes.sweep), foragingFortuneNodeLevel: nodeLevel(foragingNodes.foraging_fortune),
-      core: { ...dynamicRecord(member.foraging_core), ...dynamicRecord(member.foraging) } },
+    foraging,
     fishing: { itemsFished: numericMap(stats?.items_fished), seaCreatureKills: finiteNumber(stats?.sea_creature_kills),
       trophyFish: numericMap(member.trophy_fish) },
     attributes: numericMap(member.attributes?.stacks),
@@ -47,6 +45,50 @@ export function buildExtendedPlayerState(member: RawMember) {
     otherProgression: { fairySoul: member.fairy_soul ?? null, leveling: member.leveling ?? null, jacobsContest: member.jacobs_contest ?? null,
       garden: member.garden_player_data ?? null, forge: member.forge ?? null, netherIsland: member.nether_island_player_data ?? null, rift: member.rift ?? null },
   };
+}
+
+function normalizeForaging(member: RawMember) {
+  const tree = member.skill_tree, nodeGroups = dynamicRecord(tree?.nodes);
+  const presetNames = ["foraging", "foraging_2", "foraging_3", "foraging_4", "foraging_5"] as const;
+  const presets = Object.fromEntries(presetNames.map(name => [name, { nodes: normalizeNodes(nodeGroups[name]) }]));
+  const selectedSlots = numericMap(tree?.selected_skill_tree_slot);
+  const activePreset = finiteNumber(selectedSlots.foraging);
+  const activeName = activePreset && activePreset > 1 ? `foraging_${activePreset}` : "foraging";
+  const activeNodes = presets[activeName]?.nodes ?? presets.foraging.nodes;
+  const core = dynamicRecord(member.foraging_core), whispers = dynamicRecord(core.whispers);
+  const forest = dynamicRecord(whispers.forest), desert = dynamicRecord(whispers.desert);
+  const foraging = dynamicRecord(member.foraging), gifts = dynamicRecord(foraging.tree_gifts);
+  return {
+    treeExperience: finiteNumber(tree?.experience?.foraging),
+    extraLevelCap: finiteNumber(member.player_data?.experience?.SKILL_FORAGING_extra_level_cap),
+    presets,
+    activePreset,
+    nodes: activeNodes,
+    selectedAbility: stringMap(tree?.selected_ability)[activeName] ?? stringMap(tree?.selected_ability).foraging ?? null,
+    selectedAbilities: Object.fromEntries(Object.entries(stringMap(tree?.selected_ability)).filter(([key]) => key.startsWith("foraging"))),
+    tokensSpentByPreset: Object.fromEntries(Object.entries(numericMap(tree?.tokens_spent)).filter(([key]) => key.startsWith("forest"))),
+    sweepLevel: nodeLevel(activeNodes.sweep),
+    foragingFortuneNodeLevel: nodeLevel(activeNodes.foraging_fortune),
+    core,
+    whispers: {
+      forest: { total: finiteNumber(forest.total), spentByPreset: whisperSpent(forest) },
+      desert: { total: finiteNumber(desert.total), spentByPreset: whisperSpent(desert) },
+    },
+    treeGifts: { counts: numericMapWithout(gifts, "milestone_tier_claimed"), milestoneTierClaimed: numericMap(gifts.milestone_tier_claimed) },
+    hina: dynamicRecord(foraging.hina),
+    starlyn: dynamicRecord(foraging.starlyn),
+  };
+}
+function whisperSpent(value: Record<string, unknown>) {
+  return Object.fromEntries(Object.entries(value).flatMap(([key, raw]) => {
+    if (key === "total") return [];
+    const spent = finiteNumber(dynamicRecord(raw).spent);
+    return spent === null ? [] : [[key, spent]];
+  }));
+}
+function numericMapWithout(value: unknown, ...excluded: string[]) {
+  const blocked = new Set(excluded);
+  return Object.fromEntries(Object.entries(numericMap(value)).filter(([key]) => !blocked.has(key)));
 }
 
 export function buildAccessoryPlayerState(member: RawMember) {
