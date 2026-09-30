@@ -37,7 +37,9 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
     .filter(method => method.grossCoinsPerXpFloor !== null)
     .sort((a, b) => (a.grossCoinsPerXpFloor ?? Number.POSITIVE_INFINITY) - (b.grossCoinsPerXpFloor ?? Number.POSITIVE_INFINITY));
   const bestLevelingMethod = rankedLevelingMethods[0] ?? null;
-  const netherWartTier = profile.unlockedCollectionTiers["NETHER_WART"] ?? null;
+  const netherWartTiers = profile.unlockedCollectionTiers.filter(value => value.toUpperCase().startsWith("NETHER_WART_"))
+    .map(value => Number(value.slice("NETHER_WART_".length))).filter(Number.isFinite);
+  const netherWartTier = netherWartTiers.length ? Math.max(...netherWartTiers) : null;
   const affinityRank = observedAffinity ? potionAffinity.findIndex(tier => tier.id === observedAffinity.id) : -1;
   const nextAffinity = potionAffinity[affinityRank + 1] ?? null;
   const nextAffinityStatus = nextAffinity === null ? "MAXED" as const
