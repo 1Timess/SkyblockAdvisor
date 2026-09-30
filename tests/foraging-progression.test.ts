@@ -36,7 +36,9 @@ test("normalizes Foraging presets without mixing inactive HOTF state", () => {
   assert.equal(state.hotfLevel, 5);
   assert.equal(state.extraLevelCap, 3);
   assert.equal(state.activePreset, 1);
-  assert.equal(state.sweepLevel, 1);\n  assert.equal(state.nodes.sweep.enabled, true);\n  assert.equal(state.presets.foraging.nodes.toggle_sweep, undefined);
+  assert.equal(state.sweepLevel, 1);
+  assert.equal(state.nodes.sweep.enabled, true);
+  assert.equal(state.presets.foraging.nodes.toggle_sweep, undefined);
   assert.equal(state.foragingFortuneNodeLevel, null);
   assert.equal(state.presets.foraging_2.nodes.sweep.level, 41);
   assert.equal(state.presets.foraging_2.nodes.foraging_fortune.level, 31);
