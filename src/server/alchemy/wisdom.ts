@@ -2,7 +2,7 @@ import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile
 
 export interface AlchemyWisdomSource {
   id: string; name: string; wisdom: number | null;
-  status: "ACTIVE" | "OWNED_INACTIVE" | "UNOBSERVED" | "UNREPORTED";
+  status: "ACTIVE" | "INACTIVE" | "OWNED_INACTIVE" | "UNOBSERVED" | "UNREPORTED";
   evidence: string;
 }
 
@@ -42,8 +42,8 @@ export function buildAlchemyWisdomState(profile: NormalizedSkyBlockProfile): Alc
     effectiveWisdomStatus: "PARTIAL",
     effectiveXpMultiplierFloor: 1 + confirmedWisdom / 100,
     sources: [
-      { id: "SPIDER_SLAYER_8", name: "Spider Slayer VIII", wisdom: 5, status: spiderEight ? "ACTIVE" : "UNOBSERVED",
-        evidence: "Normalized Spider Slayer level." },
+      { id: "SPIDER_SLAYER_8", name: "Spider Slayer VIII", wisdom: 5, status: spiderEight ? "ACTIVE" : spider ? "INACTIVE" : "UNOBSERVED",
+        evidence: spider ? `Normalized Spider Slayer level ${spider.level}.` : "Spider Slayer level is not normalized." },
       { id: "WITCH_PET", name: "Active Witch Pet", wisdom: witchWisdom, status: activeWitch ? "ACTIVE" : witchPets.length ? "OWNED_INACTIVE" : "UNOBSERVED",
         evidence: activeWitch ? "Normalized active pet." : "No active Witch Pet is observed." },
       { id: "WITCH_ACCESSORY", name: accessory?.name ?? "Witch accessory line", wisdom: accessory ? accessoryWisdom : null,
