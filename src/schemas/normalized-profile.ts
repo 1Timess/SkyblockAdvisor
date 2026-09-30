@@ -51,6 +51,7 @@ const miningProgressionSchema = z.object({
 });
 const foragingProgressionSchema = z.object({
   treeExperience: z.number().nullable(),
+  hotfLevel: z.number().nullable(),
   extraLevelCap: z.number().nullable(),
   presets: z.record(z.string(), z.object({ nodes: z.record(z.string(), progressionNodeSchema) })),
   activePreset: z.number().nullable(),
