@@ -25,16 +25,26 @@ export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProf
   quotes: ReadonlyMap<string, MarketQuote> = new Map()) {
   const byId = new Map(catalog.map(item => [item.id, item]));
   const owned = new Set(profile.inventoryItems.flatMap(item => item.id ? [item.id] : []));
+  const familyItems = new Map<string, CandidateItem[]>();
+  for (const item of catalog) {
+    const family = farmingEquipmentFamily(item.id);
+    if (family) familyItems.set(family, [...(familyItems.get(family) ?? []), item]);
+  }
+  const successorCache = new Map<string, boolean>();
   const hasOwnedSuccessor = (target: CandidateItem): boolean => {
+    const cached = successorCache.get(target.id);
+    if (cached !== undefined) return cached;
+    const peers = familyItems.get(farmingEquipmentFamily(target.id)!) ?? [];
     const seen = new Set<string>([target.id]), pending = [target.id];
     while (pending.length) {
       const id = pending.pop()!;
-      for (const next of catalog) {
+      for (const next of peers) {
         if (seen.has(next.id) || farmingEquipmentFamily(next.id) !== farmingEquipmentFamily(target.id) || !recipeConsumes(neu?.getById(next.id)?.recipe, id)) continue;
-        if (owned.has(next.id)) return true;
+        if (owned.has(next.id)) { successorCache.set(target.id, true); return true; }
         seen.add(next.id); pending.push(next.id);
       }
     }
+    successorCache.set(target.id, false);
     return false;
   };
   const relevant = profile.inventoryItems.filter(item => item.id && (farmingEquipmentFamily(item.id) || item.id === "RANCHERS_BOOTS" || item.id === "FARMER_BOOTS"));
@@ -53,8 +63,8 @@ export function buildFarmingEquipmentComparisons(profile: NormalizedSkyBlockProf
     const family = farmingEquipmentFamily(current.id!);
     if (!family || !neu) return [];
     const baseline = byId.get(current.id!);
-    return catalog.filter(target => target.id !== current.id && !owned.has(target.id) && !hasOwnedSuccessor(target) && farmingEquipmentFamily(target.id) === family &&
-      recipeConsumes(neu.getById(target.id)?.recipe, current.id!)).map(target => {
+    return (familyItems.get(family) ?? []).filter(target => target.id !== current.id && !owned.has(target.id) &&
+      recipeConsumes(neu.getById(target.id)?.recipe, current.id!) && !hasOwnedSuccessor(target)).map(target => {
       const quote = quotes.get(target.marketKey);
       const currentFortune = baseline?.stats.farmingFortune ?? null, targetFortune = target.stats.farmingFortune ?? null;
       return { currentItemId: current.id!, currentName: current.name, targetItemId: target.id, targetName: target.name,

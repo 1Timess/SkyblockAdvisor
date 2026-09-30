@@ -44,3 +44,15 @@ test("missing catalog baseline stays unknown and Rancher boots retain utility wi
   assert.equal(recipeConsumes({ output: "MELON_HELMET:1" }, "MELON_HELMET"), false);
   assert.equal(recipeConsumes({ A1: "MELON_HELMET_EXTRA:1" }, "MELON_HELMET"), false);
 });
+
+test("unrelated catalog items never enter farming recipe traversal", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
+  profile.inventoryItems = [{ ...profile.inventoryItems[0], id: "MELON_HELMET" }];
+  let reads = 0;
+  const counted = { getById: (id: string) => { reads++; return neu.getById(id); },
+    getAll: () => neu.getAll(), getMetadata: () => neu.getMetadata(), getFailures: () => neu.getFailures() };
+  const unrelated = Array.from({ length: 6000 }, (_, index) => item(`UNRELATED_${index}`, 0));
+  const result = buildFarmingEquipmentComparisons(profile, [...unrelated, item("MELON_HELMET", 15), item("CROPIE_HELMET", 25)], counted);
+  assert.equal(result.comparisons.length, 1);
+  assert.ok(reads <= 3, `Expected bounded relevant recipe reads, got ${reads}`);
+});
