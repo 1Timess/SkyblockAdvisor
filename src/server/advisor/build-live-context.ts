@@ -27,6 +27,7 @@ import { buildSlayerAdvisorContext } from "../slayer/advisor-context";
 import { buildFarmingAdvisorContext } from "../farming/advisor-context";
 import { buildForagingUpgradeLanes } from "../foraging/upgrade-lanes";
 import { buildAlchemyAdvisorContext } from "../alchemy/advisor-context";
+import { buildCarpentryAdvisorContext } from "../carpentry/advisor-context";
 
 export interface AdvisorContextDiagnostics {
   profileWarningCount: number; compactWarningCount: number; petOwnedCount: number; petUniqueTypeCount: number; petDuplicateCount: number;
@@ -57,6 +58,8 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, null, null] as const
     : route.domain === "ALCHEMY"
       ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
+    : route.domain === "CARPENTRY"
+      ? [[] as Awaited<ReturnType<typeof hypixelClient.getItems>>, null, await loadMarketSnapshot(), null] as const
     : route.domain === "FARMING"
       ? [...await Promise.all([hypixelClient.getItems(), loadNeuRepository(), loadMarketSnapshot()]), null] as const
     : route.domain === "FORAGING"
@@ -76,6 +79,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
   if (route.domain === "FARMING") activeDomainContext = buildFarmingAdvisorContext(profile, await hypixelClient.getGarden(profile.profile.id), input.question, { catalog, neu, quotes });
   if (route.domain === "ENCHANTING") activeDomainContext = buildEnchantingAdvisorContext(profile, input.question);
   if (route.domain === "ALCHEMY") activeDomainContext = buildAlchemyAdvisorContext(profile, input.question, quotes, effectiveBudgetCoins);
+  if (route.domain === "CARPENTRY") activeDomainContext = buildCarpentryAdvisorContext(profile, quotes, effectiveBudgetCoins);
   if (route.domain === "SLAYER") activeDomainContext = buildSlayerAdvisorContext(profile, input.question, neu!);
   if (route.domain === "COLLECTIONS") {
     const resource = await hypixelClient.getCollections();
@@ -175,6 +179,7 @@ export async function buildAdvisorContextInspectionForPlayer(input: BuildAdvisor
     mining: { available: profile.progression.skills.mining !== undefined || profile.inventoryItems.some(item => item.categories.includes("pickaxe") || item.categories.includes("drill")), candidateCount: meaningful("MINING").length },
     enchanting: { available: profile.progression.skills.enchanting !== undefined, candidateCount: 0 },
     alchemy: { available: profile.progression.skills.alchemy !== undefined, candidateCount: 0 },
+    carpentry: { available: profile.progression.skills.carpentry !== undefined, candidateCount: 0 },
     collections: { available: Object.keys(profile.collections).length > 0 || profile.craftedGenerators.length > 0, candidateCount: 0 },
     slayer: { available: Object.keys(profile.progression.slayers).length > 0, candidateCount: 0 },
     farming: { available: profile.progression.skills.farming !== undefined || (activeDomainContext?.domain === "FARMING" && activeDomainContext.gardenAvailable), candidateCount: 0 },
