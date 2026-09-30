@@ -36,7 +36,7 @@ test("normalizes Foraging presets without mixing inactive HOTF state", () => {
   assert.equal(state.hotfLevel, 5);
   assert.equal(state.extraLevelCap, 3);
   assert.equal(state.activePreset, 1);
-  assert.equal(state.sweepLevel, 1);
+  assert.equal(state.sweepLevel, 1);\n  assert.equal(state.nodes.sweep.enabled, true);\n  assert.equal(state.presets.foraging.nodes.toggle_sweep, undefined);
   assert.equal(state.foragingFortuneNodeLevel, null);
   assert.equal(state.presets.foraging_2.nodes.sweep.level, 41);
   assert.equal(state.presets.foraging_2.nodes.foraging_fortune.level, 31);
@@ -105,4 +105,19 @@ test("deeper Foraging reference reflects current post-Torrhus mechanics", () => 
     agathaPrizeShop: 2,
     miriaPrizeShop: 2,
   });
+});
+
+
+test("missing Foraging evidence stays unknown rather than becoming zero", () => {
+  const state = buildExtendedPlayerState({} satisfies RawMember).foraging;
+  assert.equal(state.treeExperience, null);
+  assert.equal(state.hotfLevel, null);
+  assert.equal(state.extraLevelCap, null);
+  assert.equal(state.activePreset, null);
+  assert.equal(state.sweepLevel, null);
+  assert.equal(state.foragingFortuneNodeLevel, null);
+  assert.equal(state.whispers.forest.total, null);
+  assert.deepEqual(state.whispers.forest.spentByPreset, {});
+  assert.deepEqual(state.treeGifts.counts, {});
+  assert.deepEqual(state.treeGifts.milestoneTierClaimed, {});
 });
