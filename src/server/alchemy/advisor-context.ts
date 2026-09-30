@@ -33,6 +33,50 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       grossCoinsPerXpFloor: ingredientPriceCoins === null ? null : ingredientPriceCoins / effectiveXpPerBatchFloor,
       batchesTo50Floor, estimatedIngredientCostTo50Floor, budgetStatus };
   });
+  const rankedLevelingMethods = [...levelingMethods]
+    .filter(method => method.grossCoinsPerXpFloor !== null)
+    .sort((a, b) => (a.grossCoinsPerXpFloor ?? Number.POSITIVE_INFINITY) - (b.grossCoinsPerXpFloor ?? Number.POSITIVE_INFINITY));
+  const bestLevelingMethod = rankedLevelingMethods[0] ?? null;
+  const netherWartTier = profile.unlockedCollectionTiers["NETHER_WART"] ?? null;
+  const affinityRank = observedAffinity ? potionAffinity.findIndex(tier => tier.id === observedAffinity.id) : -1;
+  const nextAffinity = potionAffinity[affinityRank + 1] ?? null;
+  const nextAffinityStatus = nextAffinity === null ? "MAXED" as const
+    : netherWartTier === null ? "UNKNOWN" as const
+    : netherWartTier >= nextAffinity.collectionTier ? "AVAILABLE" as const : "LOCKED" as const;
+  const progressionActions = [
+    ...(level === null ? [{
+      kind: "INVESTIGATE" as const, priority: 1, title: "Resolve Alchemy skill progress",
+      reason: "Alchemy XP is not reported, so level-target economics cannot be personalized safely.",
+      evidence: ["Missing normalized Alchemy XP is preserved as UNKNOWN rather than treated as zero."],
+    }] : level < ALCHEMY_CAP && bestLevelingMethod ? [{
+      kind: "LEVELING_METHOD" as const, priority: 1,
+      title: `Level Alchemy with ${bestLevelingMethod.potion} ${bestLevelingMethod.resultingLevel}`,
+      reason: `Lowest observed gross coins/XP among the encoded leveling methods: ${bestLevelingMethod.grossCoinsPerXpFloor!.toFixed(3)}.`,
+      evidence: [
+        `${bestLevelingMethod.ingredientName}: ${bestLevelingMethod.xpPerBatch.toLocaleString()} base Alchemy XP per 3-potion batch.`,
+        bestLevelingMethod.ingredientPriceCoins === null ? "Current ingredient price is unavailable." : `Observed ingredient price: ${bestLevelingMethod.ingredientPriceCoins.toLocaleString()} coins.`,
+        bestLevelingMethod.budgetStatus === "OVER_BUDGET"
+          ? "The supplied budget does not cover the estimated ingredient cost all the way to Alchemy 50; this does not mean a partial leveling session is unaffordable."
+          : `Level-50 budget status: ${bestLevelingMethod.budgetStatus}.`,
+      ],
+    }] : [{
+      kind: "HOLD" as const, priority: 1, title: "Alchemy skill cap reached",
+      reason: "The observed Alchemy level is already 50.", evidence: ["No further base Alchemy skill levels remain."],
+    }]),
+    ...(nextAffinity ? [{
+      kind: "POTION_AFFINITY" as const, priority: 2, title: `Progress toward ${nextAffinity.name}`,
+      reason: `Raises ordinary consumed-potion duration to +${nextAffinity.durationBonusPercent}% without incorrectly applying that bonus to splash potions or God Potions.`,
+      evidence: [
+        `Nether Wart collection requirement: tier ${nextAffinity.collectionTier}; observed collection tier: ${netherWartTier ?? "UNKNOWN"}.`,
+        `Access status: ${nextAffinityStatus}.`,
+      ],
+    }] : []),
+    ...(!wisdom.witch.owned && level !== null && level < ALCHEMY_CAP ? [{
+      kind: "WITCH_PET" as const, priority: 3, title: "Evaluate a Witch Pet for Alchemy sessions",
+      reason: "Witch is a verified Alchemy-specific throughput/Wisdom source, but acquisition cost and availability are not reconstructed here.",
+      evidence: ["No owned Witch Pet is observed.", "Treat acquisition as an investigation until current cost/access evidence is available."],
+    }] : []),
+  ];
   return {
     domain: "ALCHEMY",
     skill: {
@@ -66,6 +110,7 @@ export function buildAlchemyAdvisorContext(profile: NormalizedSkyBlockProfile, q
       mixins: godPotionMixins.map(mixin => ({ ...mixin, requirement: mixin.requirement ? { ...mixin.requirement } : null, requirementStatus: mixinRequirementStatus(profile, mixin) })),
     },
     wisdom,
+    progressionFocus: { actions: progressionActions, note: "Ordered deterministic Alchemy actions. Leveling-method priority uses only encoded XP plus current market evidence; it does not claim global optimality outside covered methods." },
     levelingMethods,
     potionCatalog: {
       brewableCount: brewablePotions.length,
