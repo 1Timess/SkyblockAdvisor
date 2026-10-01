@@ -116,7 +116,13 @@ button { cursor: pointer; }
   background: rgba(9,13,16,.68); box-shadow: 0 30px 90px rgba(0,0,0,.2);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
 }
-.section-card__header { max-width: 650px; }
+.section-card__header { max-width: 650px; position: relative; z-index: 2; }
+.section-flow { position: absolute; top: clamp(54px, 6vw, 88px); right: clamp(40px, 5vw, 86px); width: min(39%, 560px); height: 150px; display: flex; align-items: center; justify-content: space-between; opacity: .68; }
+.section-card { position: relative; overflow: hidden; }
+.section-flow__line { position: absolute; left: 13%; right: 13%; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.2) 12%, rgba(255,255,255,.2) 88%, transparent); }
+.section-flow__node { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; color: rgba(255,255,255,.55); }
+.section-flow__node span { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; background: rgba(10,14,17,.72); box-shadow: 0 0 0 7px rgba(255,255,255,.018); font-size: 11px; font-weight: 700; }
+.section-flow__node b { color: rgba(255,255,255,.38); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
 .section-kicker { margin: 0 0 13px; color: rgba(255,255,255,.52); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .section-card h2 { margin: 0; color: #fff; font-size: clamp(36px, 3.2vw, 68px); font-weight: 620; letter-spacing: -.045em; line-height: 1.04; }
 .section-card__description { margin: 20px 0 0; color: var(--muted); font-size: clamp(16px, 1.05vw, 21px); line-height: 1.7; }
@@ -127,6 +133,10 @@ button { cursor: pointer; }
 .step p { margin: 0; color: rgba(255,255,255,.62); font-size: clamp(13px, 0.78vw, 17px); line-height: 1.6; }
 .trust-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 42px; }
 .trust-pill { border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 8px 12px; color: rgba(255,255,255,.56); background: rgba(255,255,255,.035); font-size: 12px; }
+
+@media (max-width: 900px) {
+  .section-flow { position: relative; top: auto; right: auto; width: 100%; margin-top: 42px; }
+}
 
 @media (max-width: 720px) {
   .nav__inner { width: calc(100% - 28px); min-height: 68px; }
