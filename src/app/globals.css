@@ -80,7 +80,7 @@ button { cursor: pointer; }
   box-shadow: 0 22px 70px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.07);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
 }
-.search-card__input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 14px 16px; color: #fff; background: transparent; font-size: 16px; }
+.search-card__input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 17px 16px; color: #fff; background: transparent; font-size: clamp(16px, 1vw, 19px); }
 .search-card__input::placeholder { color: rgba(255,255,255,.46); }
 .search-card__button {
   flex: 0 0 auto; border: 0; border-radius: 12px; padding: 14px 20px; color: #101214; background: #fff;
@@ -91,21 +91,23 @@ button { cursor: pointer; }
 
 .search-card__icon { display: inline-flex; flex: 0 0 auto; margin-left: 10px; color: rgba(255,255,255,.72); }
 .search-card__icon svg { width: 21px; height: 21px; stroke: currentColor; stroke-width: 1.8; }
-.search-card__button { display: inline-flex; align-items: center; justify-content: center; width: 58px; height: 50px; padding: 0; }
-.search-card__button svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.search-card__button { display: inline-flex; align-items: center; justify-content: center; width: clamp(58px, 4vw, 72px); height: clamp(50px, 3.3vw, 62px); padding: 0; }
+.search-card__button svg { width: clamp(22px, 1.4vw, 28px); height: clamp(22px, 1.4vw, 28px); stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 20px; width: min(68vw, 1600px); }
 .feature-card { min-width: 0; min-height: clamp(190px, 13vw, 250px); padding: clamp(24px, 1.8vw, 34px) clamp(20px, 1.5vw, 30px); border: 1px solid rgba(255,255,255,.15); border-radius: 18px; background: rgba(13,17,21,.56); box-shadow: 0 18px 50px rgba(0,0,0,.14); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .feature-card__icon { display: grid; place-items: center; width: clamp(48px, 3.5vw, 68px); height: clamp(48px, 3.5vw, 68px); margin-bottom: clamp(24px, 1.8vw, 32px); border-radius: 16px; background: rgba(255,255,255,.055); box-shadow: 0 8px 28px currentColor; }
 .feature-card__icon svg { width: clamp(28px, 1.9vw, 38px); height: clamp(28px, 1.9vw, 38px); stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .feature-card h2 { margin: 0 0 10px; color: #fff; font-size: clamp(16px, 1vw, 21px); font-weight: 650; letter-spacing: -.01em; }
-.feature-card p { margin: 0; color: rgba(255,255,255,.7); font-size: clamp(13px, 0.8vw, 17px); line-height: 1.58; text-shadow: 0 2px 12px rgba(0,0,0,.65); }
+.feature-card p { margin: 0; color: rgba(255,255,255,.74); font-size: clamp(13px, 0.8vw, 17px); line-height: 1.58; text-shadow: 0 2px 12px rgba(0,0,0,.65); }
 .feature-card--blue { color: #72a9ff; }
 .feature-card--green { color: #63d6a0; }
 .feature-card--purple { color: #b18cff; }
 .feature-card--gold { color: #f3c96b; }
-.scroll-cue { display: inline-flex; align-items: center; gap: 9px; margin-top: 54px; color: rgba(255,255,255,.58); font-size: 13px; text-decoration: none; }
-.scroll-cue::after { width: 28px; height: 1px; background: rgba(255,255,255,.4); content: ""; }
+.scroll-cue { display: inline-flex; align-items: center; gap: 9px; margin-top: 54px; color: rgba(255,255,255,.62); font-size: 13px; text-decoration: none; transition: color .18s ease, transform .18s ease; }
+.scroll-cue svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; animation: scroll-cue-bob 1.8s ease-in-out infinite; }
+.scroll-cue:hover, .scroll-cue:focus-visible { color: #fff; outline: none; transform: translateY(2px); }
+@keyframes scroll-cue-bob { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(2px); } }
 
 .info-section { min-height: 72vh; padding: clamp(90px, 9vw, 140px) clamp(24px, 5vw, 96px) 140px; }
 .info-section__inner { width: min(76vw, 1800px); margin: 0 auto; }
