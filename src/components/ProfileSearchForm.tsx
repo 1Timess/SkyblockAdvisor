@@ -52,7 +52,7 @@ export function ProfileSearchForm() {
         disabled={isPending}
       >
         {isPending ? (
-          <span className="search-card__loading-text">Searching...</span>
+          <span className="search-card__button-spinner" aria-hidden="true" />
         ) : (
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M5 12h13M13 6l6 6-6 6" />
