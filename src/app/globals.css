@@ -41,9 +41,9 @@ button { cursor: pointer; }
   background: rgba(8,11,13,.32);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
 }
-.nav__inner { display: flex; align-items: center; width: min(1240px, calc(100% - 48px)); min-height: 76px; margin: 0 auto; }
+.nav__inner { display: flex; align-items: center; width: min(1440px, calc(100% - clamp(32px, 5vw, 96px))); min-height: clamp(72px, 4.5vw, 84px); margin: 0 auto; }
 .nav__brand { display: inline-flex; align-items: center; flex: 0 0 auto; }
-.nav__logo { display: block; width: 42px; height: 42px; object-fit: contain; }
+.nav__logo { display: block; width: clamp(42px, 3vw, 50px); height: clamp(42px, 3vw, 50px); object-fit: contain; }
 .nav__links { display: flex; align-items: center; gap: 8px; margin-left: 48px; }
 .nav__link {
   border-radius: 10px; padding: 10px 13px; color: rgba(255,255,255,.76);
@@ -59,21 +59,21 @@ button { cursor: pointer; }
 }
 .nav__signup:hover, .nav__signup:focus-visible { background: #f0f2f4; outline: none; transform: translateY(-1px); }
 
-.hero { display: flex; align-items: center; min-height: calc(100vh - 76px); padding: 80px 24px 120px; }
-.hero__inner { width: min(1240px, 100%); margin: 0 auto; }
-.hero__copy { width: min(700px, 100%); padding: 44px 0; }
+.hero { display: flex; align-items: center; min-height: calc(100svh - clamp(72px, 4.5vw, 84px)); padding: clamp(64px, 8vh, 110px) clamp(24px, 5vw, 96px) clamp(100px, 12vh, 160px); }
+.hero__inner { width: min(1440px, 100%); margin: 0 auto; display: flex; justify-content: center; }
+.hero__copy { width: min(780px, 100%); padding: 44px 0; margin: 0 auto; }
 .hero__eyebrow {
   display: inline-flex; align-items: center; gap: 8px; margin: 0 0 22px;
   color: rgba(255,255,255,.72); font-size: 13px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
 }
 .hero__eyebrow::before { width: 22px; height: 1px; background: rgba(255,255,255,.58); content: ""; }
 .hero h1 {
-  max-width: 680px; margin: 0; color: #fff; font-size: clamp(48px, 6.2vw, 82px);
+  max-width: 780px; margin: 0; color: #fff; font-size: clamp(48px, 5.2vw, 88px);
   font-weight: 650; letter-spacing: -.055em; line-height: .98; text-wrap: balance;
 }
-.hero__lead { max-width: 570px; margin: 26px 0 0; color: var(--muted); font-size: clamp(17px, 1.6vw, 20px); line-height: 1.65; }
+.hero__lead { max-width: 650px; margin: 26px 0 0; color: var(--muted); font-size: clamp(17px, 1.6vw, 20px); line-height: 1.65; }
 .search-card {
-  display: flex; align-items: center; gap: 10px; width: min(620px, 100%); margin-top: 34px; padding: 8px;
+  display: flex; align-items: center; gap: 10px; width: min(680px, 100%); margin-top: 34px; padding: 8px;
   border: 1px solid var(--line-strong); border-radius: 18px; background: rgba(11,15,18,.62);
   box-shadow: 0 22px 70px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.07);
   backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
@@ -89,8 +89,8 @@ button { cursor: pointer; }
 .scroll-cue { display: inline-flex; align-items: center; gap: 9px; margin-top: 54px; color: rgba(255,255,255,.58); font-size: 13px; text-decoration: none; }
 .scroll-cue::after { width: 28px; height: 1px; background: rgba(255,255,255,.4); content: ""; }
 
-.info-section { min-height: 72vh; padding: 110px 24px 140px; }
-.info-section__inner { width: min(1050px, 100%); margin: 0 auto; }
+.info-section { min-height: 72vh; padding: clamp(90px, 9vw, 140px) clamp(24px, 5vw, 96px) 140px; }
+.info-section__inner { width: min(1180px, 100%); margin: 0 auto; }
 .section-card {
   border: 1px solid var(--line); border-radius: 28px; padding: clamp(32px,5vw,58px);
   background: rgba(9,13,16,.68); box-shadow: 0 30px 90px rgba(0,0,0,.2);
@@ -115,7 +115,7 @@ button { cursor: pointer; }
   .nav__account-link { display: none; }
   .nav__signup { padding: 9px 11px; font-size: 13px; }
   .nav__logo { width: 38px; height: 38px; }
-  .hero { min-height: calc(100vh - 68px); padding: 50px 18px 90px; }
+  .hero { min-height: calc(100svh - 68px); padding: 50px 18px 90px; }
   .hero__copy { padding: 28px 0; }
   .hero h1 { font-size: clamp(45px,14vw,64px); }
   .search-card { flex-direction: column; align-items: stretch; border-radius: 16px; }
