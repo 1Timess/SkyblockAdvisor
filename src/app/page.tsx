@@ -121,7 +121,10 @@ export default function Home() {
                   ["03", "Find your next move", "When you're ready, use what Statixel knows about your profile to plan what's next."],
                 ].map(([number, title, description]) => (
                   <article className="step" key={number}>
-                    <span className="step__number">{number}</span>
+                    <div className="step__topline">
+                      <span className="step__number">{number}</span>
+                      <span className="step__connector" aria-hidden="true"><span /></span>
+                    </div>
                     <h3>{title}</h3>
                     <p>{description}</p>
                   </article>
