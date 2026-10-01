@@ -114,6 +114,12 @@ export default function Home() {
                   information into something you can understand and use.
                 </p>
               </div>
+              <div className="section-flow" aria-hidden="true">
+                <div className="section-flow__line" />
+                <div className="section-flow__node"><span>01</span><b>Profile</b></div>
+                <div className="section-flow__node"><span>02</span><b>Progress</b></div>
+                <div className="section-flow__node"><span>03</span><b>Insight</b></div>
+              </div>
               <div className="steps">
                 {[
                   ["01", "Look up your profile", "Enter your Minecraft username and choose the SkyBlock profile you want to explore."],
