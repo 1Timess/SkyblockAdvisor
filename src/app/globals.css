@@ -211,9 +211,9 @@ button { cursor: pointer; }
 .search-card--loading .search-card__input{color:rgba(255,255,255,.55);cursor:wait}.search-card__button:disabled{cursor:wait;transform:none;opacity:.94}.search-card--loading .search-card__button{width:clamp(58px, 4vw, 72px);min-width:clamp(58px, 4vw, 72px)}.search-card__button-spinner{width:20px;height:20px;border:2px solid rgba(16,18,20,.16);border-top-color:#101214;border-radius:50%;animation:search-card-spin .75s linear infinite}.search-card__spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:currentColor;border-radius:50%;animation:search-card-spin .75s linear infinite}@keyframes search-card-spin{to{transform:rotate(360deg)}}
 
 
-.profile-page__background{position:fixed;inset:0;z-index:-3;background:url("/statixel/backgrounds/profile/profilebackdrop1.png") center/cover no-repeat;transform:scale(1.02)}
-.profile-page__veil{position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(90deg,rgba(6,9,12,.48),rgba(6,9,12,.16) 48%,rgba(6,9,12,.28)),linear-gradient(180deg,rgba(6,9,12,.38),rgba(6,9,12,.62))}
-.profile-content{width:min(90vw,2200px);padding:clamp(34px,4vw,72px) 0 100px}
+.profile-page{position:relative;isolation:isolate;min-height:100vh;overflow-x:clip;background:#080b0e;color:#fff}.profile-page__background{position:fixed;inset:0;z-index:-1;background:url("/statixel/backgrounds/profile/profilebackdrop1.png") center/cover no-repeat;transform:scale(1.02)}
+.profile-page__veil{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(6,9,12,.48),rgba(6,9,12,.16) 48%,rgba(6,9,12,.28)),linear-gradient(180deg,rgba(6,9,12,.38),rgba(6,9,12,.62))}
+.profile-content{position:relative;z-index:1;width:min(90vw,2200px);padding:clamp(34px,4vw,72px) 0 100px}
 .profile-identity{display:flex;align-items:center;gap:clamp(20px,2vw,34px);padding:clamp(24px,2.5vw,40px);border:1px solid rgba(255,255,255,.14);border-radius:26px;background:rgba(10,14,18,.56);backdrop-filter:blur(20px);box-shadow:0 24px 80px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.06)}
 .profile-identity__avatar-wrap{width:clamp(92px,8vw,144px);height:clamp(92px,8vw,144px);flex:none;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);box-shadow:0 14px 36px rgba(0,0,0,.25)}
 .profile-identity__avatar{width:100%;height:100%;object-fit:cover}
