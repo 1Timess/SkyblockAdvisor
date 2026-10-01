@@ -214,7 +214,7 @@ button { cursor: pointer; }
 .profile-page{position:relative;isolation:isolate;min-height:100vh;overflow-x:clip;background:#080b0e;color:#fff}.profile-page__background{position:fixed;inset:0;z-index:-1;background:url("/statixel/backgrounds/profile/profilebackdrop1.png") center/cover no-repeat;transform:scale(1.02)}
 .profile-page__veil{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(6,9,12,.48),rgba(6,9,12,.16) 48%,rgba(6,9,12,.28)),linear-gradient(180deg,rgba(6,9,12,.38),rgba(6,9,12,.62))}
 .profile-content{position:relative;z-index:1;width:min(90vw,2200px);padding:clamp(34px,4vw,72px) 0 100px}
-.profile-identity{display:flex;align-items:center;gap:clamp(20px,2vw,34px);padding:clamp(24px,2.5vw,40px);border:1px solid rgba(255,255,255,.14);border-radius:26px;background:rgba(10,14,18,.56);backdrop-filter:blur(20px);box-shadow:0 24px 80px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.06)}
+.profile-identity{display:flex;align-items:center;gap:clamp(20px,2vw,34px);padding:clamp(24px,2.5vw,40px);border:1px solid rgba(255,255,255,.14);border-radius:26px;background:rgba(10,14,18,.34);backdrop-filter:blur(14px);box-shadow:0 24px 80px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.06)}
 .profile-identity__avatar-wrap{width:clamp(92px,8vw,144px);height:clamp(92px,8vw,144px);flex:none;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);box-shadow:0 14px 36px rgba(0,0,0,.25)}
 .profile-identity__avatar{width:100%;height:100%;object-fit:cover}
 .profile-identity__main{min-width:0;flex:1}
@@ -235,12 +235,12 @@ button { cursor: pointer; }
 .profile-tabs__item--active{color:#fff}
 .profile-tabs__item--active::after{position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:#63d6a0;box-shadow:0 0 14px rgba(99,214,160,.45);content:""}
 .profile-overview-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
-.profile-stat-card{min-height:150px;padding:24px;border:1px solid rgba(255,255,255,.13);border-radius:19px;background:rgba(10,14,18,.58);backdrop-filter:blur(16px);box-shadow:0 18px 50px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.04)}
+.profile-stat-card{min-height:150px;padding:24px;border:1px solid rgba(255,255,255,.13);border-radius:19px;background:rgba(10,14,18,.32);backdrop-filter:blur(12px);box-shadow:0 18px 50px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.04)}
 .profile-stat-card__label{color:rgba(255,255,255,.5);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
 .profile-stat-card strong{display:block;margin-top:16px;color:#fff;font-size:clamp(27px,2.2vw,42px);font-weight:650;letter-spacing:-.04em}
 .profile-stat-card p{margin:7px 0 0;color:rgba(255,255,255,.48);font-size:13px}
 .profile-stat-card--level strong{color:#b18cff}.profile-stat-card--networth strong{color:#f3c96b}.profile-stat-card--bank strong{color:#72a9ff}.profile-stat-card--souls strong{color:#63d6a0}
-.profile-skills-card{margin-top:14px;padding:clamp(24px,2.4vw,36px);border:1px solid rgba(255,255,255,.13);border-radius:22px;background:rgba(10,14,18,.6);backdrop-filter:blur(18px);box-shadow:0 22px 70px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.04)}
+.profile-skills-card{margin-top:14px;padding:clamp(24px,2.4vw,36px);border:1px solid rgba(255,255,255,.13);border-radius:22px;background:rgba(10,14,18,.34);backdrop-filter:blur(14px);box-shadow:0 22px 70px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.04)}
 .profile-section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
 .profile-section-heading h2{margin:0;color:#fff;font-size:clamp(28px,2.4vw,44px);font-weight:620;letter-spacing:-.045em}
 .profile-section-heading>span{color:rgba(255,255,255,.45);font-size:13px}
