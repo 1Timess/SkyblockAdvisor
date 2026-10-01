@@ -75,6 +75,7 @@ const bestiarySchema = z.object({ kills: statsSchema, deaths: statsSchema, miles
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,
   profile: profileSummarySchema.extend({ availableProfiles: z.array(profileSummarySchema) }),
+  profileCreatedAt: z.number().nullable(),
   economy: z.object({ purse: z.number().nullable(), bank: z.number().nullable(), personalBank: z.number().nullable() }),
   gear: z.object({ armor: gearSection, equipment: gearSection, weapons: z.array(profileItemSchema),
     loadouts: z.object({ names: z.record(z.string(), z.string()),
