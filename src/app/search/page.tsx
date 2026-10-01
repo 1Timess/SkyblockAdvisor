@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { listProfiles } from "@/server/skyblock/profile/build-normalized-profile";
 import { AppError } from "@/server/errors";
+import { getProfileIconPath } from "@/lib/profile-icons";
 
 type SearchPageProps = { searchParams: Promise<{ username?: string }> };
 
@@ -10,7 +11,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   if (!username) {
     return (
-      <main className="search-page">
+      <main className="search-page">\n        <nav className="profile-nav">\n          <Link className="nav__brand" href="/#search" aria-label="Statixel home"><img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" /><span className="nav__wordmark">Statixel</span></Link>\n          <div className="profile-nav__links"><Link href="/#search">Search</Link><Link href="/#news">News</Link><Link href="/#about">About</Link></div>\n          <div className="profile-nav__account"><Link href="/#login">Log In</Link><Link className="profile-nav__signup" href="/#signup">Sign Up</Link></div>\n        </nav>
         <div className="search-page__background" aria-hidden="true" />
         <div className="search-page__veil" aria-hidden="true" />
         <section className="search-page__panel">
