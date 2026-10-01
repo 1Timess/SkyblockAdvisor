@@ -50,7 +50,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
               <p>{result.profile.cuteName}{result.profile.gameMode ? " · " + result.profile.gameMode : ""}</p>
             </div>
             <div className="profile-header__actions">
-              <Link className="profile-header__advisor" href="/advisor">Ask Vera</Link>
+              <Link className="profile-header__advisor" href="/#signup">Ask Vera</Link>
             </div>
           </header>
           <div className="profile-switcher">
