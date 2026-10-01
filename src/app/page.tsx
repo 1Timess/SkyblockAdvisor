@@ -98,7 +98,7 @@ export default function Home() {
               </div>
 
               <p className="hero__hint">Public profile data · Updated regularly</p>
-              <a className="scroll-cue" href="#how-it-works">Scroll to learn more</a>
+              <a className="scroll-cue" href="#how-it-works"><span>Scroll to learn more</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></a>
             </div>
           </div>
         </section>
