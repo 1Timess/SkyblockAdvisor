@@ -246,7 +246,7 @@ button { cursor: pointer; }
 .profile-section-heading>span{color:rgba(255,255,255,.45);font-size:13px}
 .profile-skills-grid{display:grid;grid-template-columns:repeat(2,1fr);column-gap:clamp(28px,4vw,70px);row-gap:20px;margin-top:30px}
 .profile-skill__heading,.profile-skill__meta{display:flex;justify-content:space-between;align-items:center;gap:16px}
-.profile-skill__heading span{color:rgba(255,255,255,.82);font-size:15px;font-weight:600}.profile-skill__heading strong{color:#fff;font-size:15px}
+.profile-skill__heading span{color:rgba(255,255,255,.82);font-size:15px;font-weight:600}.profile-skill__name{display:flex!important;align-items:center;gap:10px}.profile-skill__name img{width:28px;height:28px;object-fit:contain;flex:none;filter:drop-shadow(0 3px 8px rgba(0,0,0,.3))}.profile-skill__heading strong{color:#fff;font-size:15px}
 .profile-skill__track{height:8px;margin-top:9px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.09);box-shadow:inset 0 1px rgba(0,0,0,.2)}
 .profile-skill__track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#63d6a0,#72a9ff);box-shadow:0 0 14px rgba(99,214,160,.18)}
 .profile-skill__meta{margin-top:7px;color:rgba(255,255,255,.38);font-size:11px}
