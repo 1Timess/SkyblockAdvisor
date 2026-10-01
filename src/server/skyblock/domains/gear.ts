@@ -17,9 +17,12 @@ export function buildGear(items: ProcessedItem[], loadout?: {
     const rank = (item: ProcessedItem) => { const index = order.findIndex(slot => item.categories.includes(slot)); return index < 0 ? 4 : index; };
     return rank(a) - rank(b) || a.slotIndex - b.slotIndex;
   });
+  const weapons = items.filter(i => i.categories.includes("weapon"));
+  const equippedWeapon = weapons.find(i => i.source === "inventory" && i.slotIndex === 0) ?? null;
   return {
     armor: section(armor), equipment: section(items.filter(i => i.source === "equipment")),
-    weapons: items.filter(i => i.categories.includes("weapon")).map(toProfileItem),
+    weapons: weapons.map(toProfileItem),
+    equippedWeapon: equippedWeapon ? toProfileItem(equippedWeapon) : null,
     loadouts: buildLoadoutIndex(items, loadout),
   };
 }
