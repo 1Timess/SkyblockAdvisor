@@ -63,6 +63,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   const extended = buildExtendedPlayerState(member);
   const result = {
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
+    profileCreatedAt: member.first_join ?? null,
     economy: buildEconomy(member, selected, warnings), gear: buildGear(items, member.loadout), inventoryItems: items.map(toProfileItem),
     accessories: buildAccessories(items, member, buildAccessoryCatalog(catalogResult.items), warnings),
     pets: buildPets(member, warnings),
