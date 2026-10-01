@@ -70,13 +70,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             {result.profiles.map((profile) => {
               const icon = getProfileIconPath(profile.cuteName);
               return (
-                <Link className="profile-choice" href={{ pathname: "/profile", query: { username: result.identity.username, profile: profile.id } }} key={profile.id}>
+                <Link className={`profile-choice${profile.selected ? " profile-choice--selected" : ""}`} href={{ pathname: "/profile", query: { username: result.identity.username, profile: profile.id } }} key={profile.id}>
                   <div className="profile-choice__top">
                     <div className="profile-choice__identity">
                       {icon ? <img className="profile-choice__icon" src={icon} alt="" /> : null}
                       <span className="profile-choice__name">{profile.cuteName}</span>
                     </div>
-                    {profile.selected ? <span className="profile-choice__selected">Selected</span> : null}
+                    {profile.selected ? <span className="profile-choice__selected" aria-label="Default profile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg></span> : null}
                   </div>
                   <span className="profile-choice__mode">{profile.gameMode ?? "Standard"}</span>
                   <span className="profile-choice__action">View profile <span aria-hidden="true">→</span></span>
