@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normalized-profile";
 import { AppError } from "@/server/errors";
+import { getProfileIconPath } from "@/lib/profile-icons";
 
 type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string }> };
 
