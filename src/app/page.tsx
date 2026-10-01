@@ -1,3 +1,5 @@
+import { ProfileSearchForm } from "@/components/ProfileSearchForm";
+
 const features = [
   {
     title: "Personalized Analysis",
@@ -62,28 +64,7 @@ export default function Home() {
                 and everything you've built along the way.
               </p>
 
-              <form className="search-card" action="/search" method="get">
-                <span className="search-card__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="6.5" />
-                    <path d="m16 16 4.5 4.5" />
-                  </svg>
-                </span>
-                <input
-                  className="search-card__input"
-                  name="username"
-                  type="text"
-                  placeholder="Enter a Minecraft username..."
-                  aria-label="Minecraft username"
-                  autoComplete="off"
-                  spellCheck={false}
-                />
-                <button className="search-card__button" type="submit" aria-label="Search profile">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M5 12h13M13 6l6 6-6 6" />
-                  </svg>
-                </button>
-              </form>
+              <ProfileSearchForm />
 
               <div className="feature-grid">
                 {features.map((feature) => (
