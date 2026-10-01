@@ -130,6 +130,39 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <footer className="footer">
+          <div className="footer__inner">
+            <div className="footer__brand">
+              <a className="nav__brand" href="#search" aria-label="Statixel home">
+                <img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
+                <span className="nav__wordmark">Statixel</span>
+              </a>
+              <p>Understand your SkyBlock profile. Then decide where to go next.</p>
+            </div>
+            <div className="footer__links">
+              <div>
+                <span>Explore</span>
+                <a href="#search">Search</a>
+                <a href="#how-it-works">How it works</a>
+              </div>
+              <div>
+                <span>Statixel</span>
+                <a href="#news">News</a>
+                <a href="#about">About</a>
+              </div>
+              <div>
+                <span>Account</span>
+                <a href="#login">Log In</a>
+                <a href="#signup">Sign Up</a>
+              </div>
+            </div>
+          </div>
+          <div className="footer__bottom">
+            <span>© {new Date().getFullYear()} Statixel</span>
+            <span>Not affiliated with Hypixel Studios.</span>
+          </div>
+        </footer>
       </div>
     </main>
   );
