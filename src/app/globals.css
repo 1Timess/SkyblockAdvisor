@@ -182,3 +182,7 @@ button { cursor: pointer; }
   .footer__links { width: 100%; gap: 28px; }
   .footer__bottom { width: 100%; margin-top: 40px; flex-direction: column; gap: 8px; }
 }
+
+.step__topline { display: flex; align-items: center; width: 100%; gap: 14px; }
+.step__connector { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,.16), rgba(255,255,255,.035)); position: relative; }
+.step__connector span { position: absolute; right: 0; top: 50%; width: 7px; height: 7px; border-top: 1px solid rgba(255,255,255,.2); border-right: 1px solid rgba(255,255,255,.2); transform: translateY(-50%) rotate(45deg); }
