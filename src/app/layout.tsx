@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SkyBlock Advisor",
-  description: "SkyBlock profile data foundation",
+  title: "Statixel — Your SkyBlock profile, understood.",
+  description: "Explore your SkyBlock profile, progression, and game knowledge with Statixel.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en"><body>{children}</body></html>;
 }
