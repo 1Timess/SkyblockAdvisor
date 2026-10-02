@@ -52,7 +52,7 @@ export class HypixelClient {
     };
     const first = await this.request("skyblock/auctions?page=0", 90, auctionsSchema);
     consume(first.auctions);
-    const pages = Math.min(first.totalPages, 64);
+    const pages = first.totalPages;
     for (let start = 1; start < pages; start += 8) {
       const batch = await Promise.all(
         Array.from({ length: Math.min(8, pages - start) }, (_, offset) =>
