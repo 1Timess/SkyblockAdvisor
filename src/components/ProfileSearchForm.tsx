@@ -1,25 +1,23 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export function ProfileSearchForm() {
-  const router = useRouter();
   const [isPending, setIsPending] = useState(false);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
     const form = event.currentTarget;
     const username = new FormData(form).get("username")?.toString().trim();
     if (!username || isPending) return;
 
     setIsPending(true);
-    router.push(`/search?username=${encodeURIComponent(username)}`);
+
   }
 
   return (
     <form
+      action="/search"
+      method="get"
       className={`search-card${isPending ? " search-card--loading" : ""}`}
       onSubmit={handleSubmit}
       aria-busy={isPending}
