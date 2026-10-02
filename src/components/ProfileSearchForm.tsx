@@ -6,12 +6,19 @@ export function ProfileSearchForm() {
   const [isPending, setIsPending] = useState(false);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
     const form = event.currentTarget;
     const username = new FormData(form).get("username")?.toString().trim();
     if (!username || isPending) return;
 
     setIsPending(true);
 
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.location.assign(`/search?username=${encodeURIComponent(username)}`);
+      });
+    });
   }
 
   return (
