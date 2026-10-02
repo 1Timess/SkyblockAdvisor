@@ -39,9 +39,14 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
+  const requestedTab = input.requestedProfile === undefined ? "overview" : (input.includeAccessoryPrices ? "accessories" : "gear");
+  const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
+  const needsGear = requestedTab === "overview" || requestedTab === "gear";
   const [profiles, catalogResult] = await Promise.all([
     sources.getProfiles(identity.uuid),
-    sources.getItems().then(items => ({ items, error: false })).catch(() => ({ items: [], error: true })),
+    needsAccessories
+      ? sources.getItems().then(items => ({ items, error: false })).catch(() => ({ items: [], error: true }))
+      : Promise.resolve({ items: [], error: false }),
   ]);
   const selected = selectProfile(profiles, input.requestedProfile);
   const rawMember = selected.members[identity.uuid];
@@ -57,7 +62,12 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     ? await sources.getLowestBinPrices(accessoryCatalog.map(item => item.name)).catch(() => ({}))
     : {};
   if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: "accessories.catalog", message: "Accessory catalog unavailable; missing and upgrade lists could not be calculated." });
-  const decoded = await Promise.all(collectInventories(member, warnings).map(async ({ source, encoded }) => {
+  const inventoryOptions = needsGear && needsAccessories
+    ? { armor: true, equipment: true, inventory: true, accessories: true, storage: false, loadouts: false }
+    : needsGear
+      ? { armor: true, equipment: true, inventory: true, accessories: false, storage: false, loadouts: true }
+      : { armor: false, equipment: false, inventory: true, accessories: true, storage: false, loadouts: false };
+  const decoded = await Promise.all(collectInventories(member, warnings, inventoryOptions).map(async ({ source, encoded }) => {
     const sourceWarnings: ProfileWarning[] = [];
     const rawItems = await decodeInventory(encoded, source, sourceWarnings);
     const items = rawItems.map((raw, slot) => processItem(raw, source, slot, sourceWarnings)).filter(item => item !== null);
