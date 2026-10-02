@@ -83,6 +83,26 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
       <div className="profile-section-heading"><div><p className="section-kicker">Profile equipment</p><h2 id="equipment-title">Equipment</h2></div><span>{result.gear.equipment.items.length} items</span></div>
       <div className="gear-item-grid">{result.gear.equipment.items.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <article className="gear-item-card" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{item.rarity?.replace("_"," ")||"Equipment"}</small>{stats.length?<p>{stats.join("  //  ")}</p>:null}</div></article>})}</div>
      </section>
+    </section>) : (activeTab==="gear" ? (<section className="profile-gear-page" aria-label="Gear">
+     <div className="profile-page-heading"><div><p className="section-kicker">Loadouts & gear</p><h2>Gear</h2><p>See the armor, equipment, and weapons this profile has available, organized around how each loadout is used.</p></div></div>
+     <section className="profile-gear-section" aria-labelledby="loadouts-title">
+      <div className="profile-section-heading"><div><p className="section-kicker">Saved setups</p><h2 id="loadouts-title">Loadouts</h2></div><span>{result.gear.loadouts.ids.length} available</span></div>
+      <div className="profile-loadout-grid">
+       {result.gear.loadouts.ids.map(setId=>{const armorSet=result.gear.loadouts.armor.sets[setId]??{};const equipmentSet=result.gear.loadouts.equipment.sets[setId]??{};const name=result.gear.loadouts.names[setId]||"Loadout "+setId;const isActive=result.gear.loadouts.armor.equippedSet===Number(setId);const storedArmor=sortArmorItems(Object.values(armorSet));const storedEquipment=Object.values(equipmentSet);const effectiveArmor=isActive&&storedArmor.length===0?equippedArmor:storedArmor;const effectiveEquipment=isActive&&storedEquipment.length===0?result.gear.equipment.items:storedEquipment;const effectiveItems=[...effectiveArmor,...effectiveEquipment];return <article className={isActive?"gear-loadout-card gear-loadout-card--active":"gear-loadout-card"} key={setId}>
+        <header className="gear-loadout-card__header"><div><span className="profile-stat-card__label">Loadout {setId}</span><h3>{name}</h3></div>{isActive?<span className="gear-loadout-card__active">Equipped</span>:null}</header>
+        <div className="gear-loadout-card__items">{effectiveItems.length?effectiveItems.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <div className="gear-item" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{item.categories.includes("armor")?"Armor":"Equipment"}{stats.length?" · "+stats.join(" // "):""}</small></div></div>}):<div className="gear-loadout-card__empty">{isActive?"Uses currently equipped gear":"No armor or equipment assigned"}</div>}</div>
+       </article>})}
+       {!Object.keys(result.gear.loadouts.armor.sets).length?<div className="gear-empty">No saved armor loadouts were returned for this profile.</div>:null}
+      </div>
+     </section>
+     <section className="profile-gear-section" aria-labelledby="weapons-title">
+      <div className="profile-section-heading"><div><p className="section-kicker">Arsenal</p><h2 id="weapons-title">Weaponry</h2></div><span>{result.gear.weapons.length} items</span></div>
+      <div className="gear-item-grid">{result.gear.weapons.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <article className="gear-item-card" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{[item.rarity?.replace("_"," "),item.categories.find(category=>category!=="weapon")].filter(Boolean).join(" · ")}</small>{stats.length?<p>{stats.join("  //  ")}</p>:null}</div></article>})}</div>
+     </section>
+     <section className="profile-gear-section" aria-labelledby="equipment-title">
+      <div className="profile-section-heading"><div><p className="section-kicker">Profile equipment</p><h2 id="equipment-title">Equipment</h2></div><span>{result.gear.equipment.items.length} items</span></div>
+      <div className="gear-item-grid">{result.gear.equipment.items.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <article className="gear-item-card" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{item.rarity?.replace("_"," ")||"Equipment"}</small>{stats.length?<p>{stats.join("  //  ")}</p>:null}</div></article>})}</div>
+     </section>
     </section>) : (<>
     <section className="profile-overview-stats" aria-label="Profile summary">
      <article className="profile-stat-card profile-stat-card--level"><span className="profile-stat-card__label">SkyBlock Level</span><strong>{skyblockLevelValue??"—"}</strong><p>Overall profile progression</p></article>
@@ -96,7 +116,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <section className="profile-loadout" aria-label="Currently equipped gear">
      <div className="profile-loadout__armor"><span className="profile-stat-card__label">Equipped Armor</span><div className="profile-loadout__items">{equippedArmor.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <div className="profile-loadout__item" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><span>{item.name}</span>{stats.length?<small>{stats.join("  //  ")}</small>:null}</div></div>})}</div></div>
      <div className="profile-loadout__weapon"><span className="profile-stat-card__label">Held Weapon</span>{equippedWeapon?<div className="profile-loadout__weapon-item"><img src={getItemIconUrl(equippedWeapon.id)??""} alt="" aria-hidden="true"/><div><strong>{equippedWeapon.name}</strong>{formatItemStats(equippedWeapon.stats).length?<small>{formatItemStats(equippedWeapon.stats).join("  //  ")}</small>:null}</div></div>:<strong>—</strong>}</div>
-    </section> </>)}
+    </section> </>))}
    </section></main>;
  } catch(error){ const message=error instanceof AppError?error.message:"Unable to load this SkyBlock profile right now."; return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel search-page__panel--error"><p className="section-kicker">SkyBlock profile</p><h1>We couldn’t load this profile.</h1><p>{message}</p><Link className="search-page__button" href="/#search">Back to search</Link></section></main> }
 }
