@@ -5,6 +5,7 @@ import { TtlCache } from "../cache/ttl-cache";
 import { AppError } from "../errors";
 import { fetchUpstream, readJson, type Fetcher } from "../http";
 import { itemDefinitionSchema, rawProfileSchema } from "./types";
+import { loadMarketSnapshot } from "../market/snapshot-store";
 
 const envelope = z.object({ success: z.boolean() });
 const profilesSchema = z.object({ profiles: z.array(rawProfileSchema).nullable() });
@@ -40,6 +41,18 @@ export class HypixelClient {
   async getProfiles(uuid: string) { return (await this.request(`skyblock/profiles?uuid=${encodeURIComponent(uuid)}`, 300, profilesSchema)).profiles ?? []; }
   async getPlayer(uuid: string) { return (await this.request(`player?uuid=${encodeURIComponent(uuid)}`, 300, playerSchema)).player; }
   async getItems() { return (await this.request("resources/skyblock/items", 43200, itemsSchema, false)).items; }
+  async getMarketPrices(ids: string[]) {
+    const wanted = new Set(ids.filter(Boolean));
+    if (!wanted.size) return {};
+    const snapshot = await loadMarketSnapshot().catch(() => null);
+    if (!snapshot) return {};
+    const prices: Record<string, number> = {};
+    for (const id of wanted) {
+      const quote = snapshot.quotes[id];
+      if (quote && Number.isFinite(quote.coins)) prices[id] = quote.coins;
+    }
+    return prices;
+  }
   async getLowestBinPrices(names: string[]) {
     const normalize = (name: string) => name
       .replace(/[§&][0-9a-fk-or]/gi, "")
