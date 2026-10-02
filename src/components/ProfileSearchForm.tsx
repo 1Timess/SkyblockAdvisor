@@ -14,11 +14,9 @@ export function ProfileSearchForm() {
 
     setIsPending(true);
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        window.location.assign(`/search?username=${encodeURIComponent(username)}`);
-      });
-    });
+    window.setTimeout(() => {
+      window.location.assign(`/search?username=${encodeURIComponent(username)}`);
+    }, 200);
   }
 
   return (
