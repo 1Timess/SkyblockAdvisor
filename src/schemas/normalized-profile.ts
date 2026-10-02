@@ -14,6 +14,8 @@ export const accessoryReferenceSchema = z.object({
   allowedRarities: z.array(raritySchema).optional(), recombobulationAllowed: z.boolean().optional(), enrichmentAllowed: z.boolean().optional(),
 });
 export type AccessoryReference = z.infer<typeof accessoryReferenceSchema>;
+export const accessoryUpgradeSchema = accessoryReferenceSchema.extend({ price: z.number().nullable() });
+export type AccessoryUpgrade = z.infer<typeof accessoryUpgradeSchema>;
 export const accessorySchema = z.object({
   selectedPower: z.string().nullable(),
   highestMagicalPower: z.number().nullable(), unlockedPowers: z.array(z.string()), bagUpgradesPurchased: z.number().nullable(),
@@ -22,7 +24,7 @@ export const accessorySchema = z.object({
     byRarity: z.record(z.string(), z.object({ count: z.number(), mp: z.number() })),
   }),
   owned: z.array(profileItemSchema.extend({ active: z.boolean(), inactiveReason: z.string().nullable() })),
-  missing: z.array(accessoryReferenceSchema), upgrades: z.array(accessoryReferenceSchema),
+  missing: z.array(accessoryReferenceSchema), upgrades: z.array(accessoryUpgradeSchema),
 });
 export type AccessorySummary = z.infer<typeof accessorySchema>;
 const gearSection = z.object({ items: z.array(profileItemSchema), stats: statsSchema });
