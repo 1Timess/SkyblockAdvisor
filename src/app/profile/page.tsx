@@ -15,6 +15,7 @@ function getItemIconUrl(id:string|null){return id?"https://sky.shiiyu.moe/api/it
 const itemStatLabels: Record<string,string> = {damage:"DMG",strength:"STR",critDamage:"CD",critChance:"CC",health:"HP",defense:"DEF",intelligence:"INT",attackSpeed:"AS",ferocity:"Ferocity",speed:"SPD",magicFind:"MF",petLuck:"Pet Luck",abilityDamage:"Ability DMG",farmingFortune:"Farming Fortune",miningFortune:"Mining Fortune",miningSpeed:"Mining Speed",gemstoneFortune:"Gemstone Fortune",foragingFortune:"Foraging Fortune",foragingWisdom:"Foraging Wisdom",huntingFortune:"Hunting Fortune",huntingWisdom:"Hunting Wisdom",fishingSpeed:"Fishing Speed",seaCreatureChance:"Sea Creature Chance",coldResistance:"Cold Resistance",pristine:"Pristine"};
 function formatItemStats(stats:Record<string,number>){return Object.entries(stats).filter(([key])=>itemStatLabels[key]).slice(0,5).map(([key,value])=>itemStatLabels[key]+" "+(value>0?"+":"")+(Number.isInteger(value)?value:value.toFixed(1)));}
 const accessoryMpByRarity: Record<string,number> = {common:3,uncommon:5,rare:8,epic:12,legendary:16,mythic:22,special:3,very_special:5};
+function accessoryMp(item:{id:string|null;rarity:string|null}){return item.id==="HEGEMONY_ARTIFACT"?(accessoryMpByRarity[item.rarity??""]??0)*2:item.id==="RIFT_PRISM"?11:(accessoryMpByRarity[item.rarity??""]??0);}
 function accessoryRarityLabel(rarity:string|null){return rarity?rarity.replace("_"," "):"Unknown";}
 const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
 function sortArmorItems(items: typeof equippedArmor){return [...items].sort((a,b)=>{const slot=(item: typeof a)=>armorSlotOrder.findIndex(key=>item.categories.includes(key));return (slot(a)<0?99:slot(a))-(slot(b)<0?99:slot(b));});}
@@ -51,9 +52,9 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
       <div className="profile-section-heading"><div><p className="section-kicker">Collection</p><h2 id="owned-accessories-title">Owned Accessories</h2></div><span>{result.accessories.owned.filter(item=>item.active).length} active</span></div>
       <div className="accessory-grid">
        {[...result.accessories.owned].filter(item=>item.active).sort((a,b)=>{
-         const amp=a.rarity?accessoryMpByRarity[a.rarity]??999:999, bmp=b.rarity?accessoryMpByRarity[b.rarity]??999:999;
+         const amp=accessoryMp(a), bmp=accessoryMp(b);
          return amp-bmp || (a.rarity?Object.keys(accessoryMpByRarity).indexOf(a.rarity):99)-(b.rarity?Object.keys(accessoryMpByRarity).indexOf(b.rarity):99) || a.name.localeCompare(b.name);
-       }).map(item=>{const icon=getItemIconUrl(item.id);const mp=item.id==="HEGEMONY_ARTIFACT"?(accessoryMpByRarity[item.rarity??""]??0)*2:item.id==="RIFT_PRISM"?11:(accessoryMpByRarity[item.rarity??""]??0);return <article className="accessory-card" key={item.uuid??item.id??item.name}>
+       }).map(item=>{const icon=getItemIconUrl(item.id);const mp=accessoryMp(item);return <article className="accessory-card" key={item.uuid??item.id??item.name}>
         {icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div className="accessory-card__body"><div className="accessory-card__top"><div><strong>{item.name}</strong><small>{accessoryRarityLabel(item.rarity)}</small></div><span>{mp} MP</span></div>{formatItemStats(item.stats).length?<p>{formatItemStats(item.stats).join("  //  ")}</p>:null}</div>
        </article>})}
       </div>
