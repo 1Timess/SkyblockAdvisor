@@ -17,6 +17,9 @@ function formatItemStats(stats:Record<string,number>){return Object.entries(stat
 const accessoryMpByRarity: Record<string,number> = {common:3,uncommon:5,rare:8,epic:12,legendary:16,mythic:22,special:3,very_special:5};
 function accessoryMp(item:{id:string|null;rarity:string|null}){return item.id==="HEGEMONY_ARTIFACT"?(accessoryMpByRarity[item.rarity??""]??0)*2:item.id==="RIFT_PRISM"?11:(accessoryMpByRarity[item.rarity??""]??0);}
 function accessoryRarityLabel(rarity:string|null){return rarity?rarity.replace("_"," "):"Unknown";}
+function rarityClass(rarity:string|null){return rarity?"rarity-"+rarity:"rarity-unknown";}
+function formatPrice(value:number|null){return value===null?"Price unavailable":formatCoins(value);}
+function upgradeEfficiency(price:number|null,mp:number){return price!==null&&mp>0?price/mp:null;}
 const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
 function sortArmorItems(items: typeof equippedArmor){return [...items].sort((a,b)=>{const slot=(item: typeof a)=>armorSlotOrder.findIndex(key=>item.categories.includes(key));return (slot(a)<0?99:slot(a))-(slot(b)<0?99:slot(b));});}
 
@@ -24,7 +27,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview";
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
-  const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile});
+  const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,includeAccessoryPrices:activeTab==="accessories"});
   const profileIcon=getProfileIconPath(result.profile.cuteName);
   const avatarUrl="https://mc-heads.net/avatar/"+result.identity.uuid+"/160";
   const skyblockLevel=getNumeric(result.otherProgression.leveling,["experience","xp","level"]);
@@ -55,13 +58,13 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
          const amp=accessoryMp(a), bmp=accessoryMp(b);
          return amp-bmp || (a.rarity?Object.keys(accessoryMpByRarity).indexOf(a.rarity):99)-(b.rarity?Object.keys(accessoryMpByRarity).indexOf(b.rarity):99) || a.name.localeCompare(b.name);
        }).map(item=>{const icon=getItemIconUrl(item.id);const mp=accessoryMp(item);return <article className="accessory-card" key={item.uuid??item.id??item.name}>
-        {icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div className="accessory-card__body"><div className="accessory-card__top"><div><strong>{item.name}</strong><small>{accessoryRarityLabel(item.rarity)}</small></div><span>{mp} MP</span></div>{formatItemStats(item.stats).length?<p>{formatItemStats(item.stats).join("  //  ")}</p>:null}</div>
+        {icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div className="accessory-card__body"><div className="accessory-card__top"><div><strong>{item.name}</strong><small className={rarityClass(item.rarity)}>{accessoryRarityLabel(item.rarity)}</small></div><span className={rarityClass(item.rarity)}>{mp} MP</span></div>{formatItemStats(item.stats).length?<p className="accessory-card__stats">{formatItemStats(item.stats).join("  //  ")}</p>:null}</div>
        </article>})}
       </div>
      </section>
      <section className="profile-gear-section" aria-labelledby="accessory-upgrades-title">
       <div className="profile-section-heading"><div><p className="section-kicker">Progression</p><h2 id="accessory-upgrades-title">Next Upgrades</h2></div><span>{result.accessories.upgrades.length} known</span></div>
-      <div className="accessory-upgrade-grid">{result.accessories.upgrades.slice(0,24).map(item=><article className="accessory-upgrade" key={item.id}><strong>{item.name}</strong><span>{accessoryRarityLabel(item.rarity)}</span></article>)}</div>
+      <div className="accessory-upgrade-grid">{[...result.accessories.upgrades].sort((a,b)=>{const amp=accessoryMp(a),bmp=accessoryMp(b),ae=upgradeEfficiency(a.price,amp),be=upgradeEfficiency(b.price,bmp);if(ae===null&&be!==null)return 1;if(ae!==null&&be===null)return -1;return (ae??Number.POSITIVE_INFINITY)-(be??Number.POSITIVE_INFINITY);}).slice(0,24).map(item=>{const icon=getItemIconUrl(item.id);const mp=accessoryMp(item);const efficiency=upgradeEfficiency(item.price,mp);return <article className={`accessory-upgrade ${rarityClass(item.rarity)}`} key={item.id}><div className="accessory-upgrade__main">{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><span className={rarityClass(item.rarity)}>{accessoryRarityLabel(item.rarity)}</span></div></div><div className="accessory-upgrade__metrics"><b>{mp} MP</b><span>{formatPrice(item.price)}</span>{efficiency!==null?<small>{formatCoins(efficiency)} coins / MP</small>:<small>Market price unavailable</small>}</div></article>})}</div>
      </section>
     </section>) : (activeTab==="gear" ? (<section className="profile-gear-page" aria-label="Gear">
      <div className="profile-page-heading"><div><p className="section-kicker">Loadouts & gear</p><h2>Gear</h2><p>See the armor, equipment, and weapons this profile has available, organized around how each loadout is used.</p></div></div>
