@@ -24,6 +24,7 @@ type Sources = {
   resolvePlayer: typeof resolvePlayer;
   getProfiles: (uuid: string) => Promise<RawProfile[]>;
   getItems: () => Promise<HypixelItemDefinition[]>;
+  getLowestBinPrices?: (names: string[]) => Promise<Record<string, number>>;
 };
 const defaults: Sources = {
   resolvePlayer, getProfiles: uuid => hypixelClient.getProfiles(uuid), getItems: () => hypixelClient.getItems(),
@@ -35,7 +36,7 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
   return profilesResponseSchema.parse({ identity, profiles: profiles.map(summarizeProfile) });
 }
 
-export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string }, sources: Sources = defaults) {
+export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
   const [profiles, catalogResult] = await Promise.all([
@@ -51,6 +52,10 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     throw new AppError("MEMBER_CONTRACT_MISMATCH", `The selected member data does not match the supplied data contract: ${fields}`, 502);
   }
   const member = memberResult.data;
+  const accessoryCatalog = buildAccessoryCatalog(catalogResult.items);
+  const accessoryPrices = input.includeAccessoryPrices && sources.getLowestBinPrices
+    ? await sources.getLowestBinPrices(accessoryCatalog.map(item => item.name)).catch(() => ({}))
+    : {};
   if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: "accessories.catalog", message: "Accessory catalog unavailable; missing and upgrade lists could not be calculated." });
   const decoded = await Promise.all(collectInventories(member, warnings).map(async ({ source, encoded }) => {
     const sourceWarnings: ProfileWarning[] = [];
@@ -65,7 +70,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
     profileCreatedAt: member.first_join ?? null,
     economy: buildEconomy(member, selected, warnings), gear: buildGear(items, member.loadout), inventoryItems: items.map(toProfileItem),
-    accessories: buildAccessories(items, member, buildAccessoryCatalog(catalogResult.items), warnings),
+    accessories: buildAccessories(items, member, accessoryCatalog, warnings, accessoryPrices),
     pets: buildPets(member, warnings),
     progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings),
       mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing, enchanting: buildOwnedEnchantingState(member) },
