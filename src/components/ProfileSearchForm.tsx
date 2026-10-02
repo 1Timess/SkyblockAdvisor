@@ -1,11 +1,11 @@
 "use client";
 
-import { FormEvent, useTransition } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function ProfileSearchForm() {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -14,9 +14,8 @@ export function ProfileSearchForm() {
     const username = new FormData(form).get("username")?.toString().trim();
     if (!username || isPending) return;
 
-    startTransition(() => {
-      router.push(`/search?username=${encodeURIComponent(username)}`);
-    });
+    setIsPending(true);
+    router.push(`/search?username=${encodeURIComponent(username)}`);
   }
 
   return (
