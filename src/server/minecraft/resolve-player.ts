@@ -24,30 +24,61 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
   const key = isUuid ? valid.replaceAll("-", "").toLowerCase() : valid.toLowerCase();
   const cached = store.get<Identity>(key);
   if (cached) return cached;
-  const url = isUuid
-    ? `https://sessionserver.mojang.com/session/minecraft/profile/${key}`
-    : `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(valid)}`;
-  const fallbackUrl = isUuid
-    ? `https://api.minecraftservices.com/minecraft/profile/lookup/${key}`
-    : `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(valid)}`;
-  let response: Response;
-  try {
-    response = await fetchUpstream(url, fetcher);
-    if (response.status >= 500) response = await fetchUpstream(fallbackUrl, fetcher);
-  } catch (error) {
-    if (!(error instanceof AppError) || error.code !== "UPSTREAM_UNAVAILABLE") throw error;
-    response = await fetchUpstream(fallbackUrl, fetcher);
+
+  const urls = isUuid
+    ? [
+        `https://sessionserver.mojang.com/session/minecraft/profile/${key}`,
+        `https://api.minecraftservices.com/minecraft/profile/lookup/${key}`,
+      ]
+    : [
+        `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(valid)}`,
+        `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(valid)}`,
+      ];
+
+  let lastError: AppError | null = null;
+  for (const url of urls) {
+    try {
+      const response = await fetchUpstream(url, fetcher);
+      if (response.status === 404 || response.status === 204) {
+        lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
+        continue;
+      }
+      if (!response.ok) {
+        lastError = new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
+        continue;
+      }
+
+      const body = await response.text();
+      if (!body.trim()) {
+        lastError = new AppError("EMPTY_IDENTITY_RESPONSE", "Minecraft identity service returned an empty response.", 502);
+        continue;
+      }
+
+      let parsed: unknown;
+      try { parsed = JSON.parse(body); }
+      catch {
+        lastError = new AppError("INVALID_IDENTITY", "Minecraft identity service returned an invalid response.", 502);
+        continue;
+      }
+
+      const result = identitySchema.safeParse(parsed);
+      if (!result.success) {
+        lastError = new AppError("INVALID_IDENTITY", "Minecraft identity service returned an invalid response.", 502);
+        continue;
+      }
+
+      const identity = { uuid: result.data.id.toLowerCase(), username: result.data.name };
+      store.set(identity.uuid, identity, 86400);
+      store.set(identity.username.toLowerCase(), identity, 86400);
+      return identity;
+    } catch (error) {
+      if (error instanceof AppError) {
+        lastError = error;
+        continue;
+      }
+      throw error;
+    }
   }
-  if (response.status === 404 || response.status === 204) throw new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
-  if (!response.ok) throw new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
-  const body = await response.text();
-  if (!body.trim()) throw new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
-  let parsed: unknown;
-  try { parsed = JSON.parse(body); } catch { throw new AppError("INVALID_IDENTITY", "Invalid Minecraft identity response.", 502); }
-  const result = identitySchema.safeParse(parsed);
-  if (!result.success) throw new AppError("INVALID_IDENTITY", "Invalid Minecraft identity response.", 502);
-  const identity = { uuid: result.data.id.toLowerCase(), username: result.data.name };
-  store.set(identity.uuid, identity, 86400);
-  store.set(identity.username.toLowerCase(), identity, 86400);
-  return identity;
+
+  throw lastError ?? new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
 }
