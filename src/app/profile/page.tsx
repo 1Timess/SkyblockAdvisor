@@ -14,6 +14,8 @@ function formatDate(value:number|null){if(value===null)return "—"; return new 
 function getItemIconUrl(id:string|null){return id?"https://sky.shiiyu.moe/api/item/"+encodeURIComponent(id):null;}
 const itemStatLabels: Record<string,string> = {damage:"DMG",strength:"STR",critDamage:"CD",critChance:"CC",health:"HP",defense:"DEF",intelligence:"INT",attackSpeed:"AS",ferocity:"Ferocity",speed:"SPD",magicFind:"MF",petLuck:"Pet Luck",abilityDamage:"Ability DMG",farmingFortune:"Farming Fortune",miningFortune:"Mining Fortune",miningSpeed:"Mining Speed",gemstoneFortune:"Gemstone Fortune",foragingFortune:"Foraging Fortune",foragingWisdom:"Foraging Wisdom",huntingFortune:"Hunting Fortune",huntingWisdom:"Hunting Wisdom",fishingSpeed:"Fishing Speed",seaCreatureChance:"Sea Creature Chance",coldResistance:"Cold Resistance",pristine:"Pristine"};
 function formatItemStats(stats:Record<string,number>){return Object.entries(stats).filter(([key])=>itemStatLabels[key]).slice(0,5).map(([key,value])=>itemStatLabels[key]+" "+(value>0?"+":"")+(Number.isInteger(value)?value:value.toFixed(1)));}
+const accessoryMpByRarity: Record<string,number> = {common:3,uncommon:5,rare:8,epic:12,legendary:16,mythic:22,special:3,very_special:5};
+function accessoryRarityLabel(rarity:string|null){return rarity?rarity.replace("_"," "):"Unknown";}
 const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
 function sortArmorItems(items: typeof equippedArmor){return [...items].sort((a,b)=>{const slot=(item: typeof a)=>armorSlotOrder.findIndex(key=>item.categories.includes(key));return (slot(a)<0?99:slot(a))-(slot(b)<0?99:slot(b));});}
 
@@ -37,7 +39,30 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <div className="profile-switcher">{result.profile.availableProfiles.map(item=>{const icon=getProfileIconPath(item.cuteName);return <Link className={item.id===result.profile.id?"profile-switcher__item profile-switcher__item--active":"profile-switcher__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:item.id}}} key={item.id}>{icon?<img className="profile-switcher__icon" src={icon} alt=""/>:null}{item.cuteName}</Link>})}</div>
     <nav className="profile-tabs" aria-label="Profile sections"><Link className={activeTab==="overview"?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id}}}>Overview</Link>{["Gear","Accessories","Pets","Inventory","Skills","Dungeons","Slayer","Minions","Bestiary","Collections","Crimson Isle","Rift","Misc"].map(tab=>{const key=tab.toLowerCase().replace(/\s+/g,"-");return <Link className={activeTab===key?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:key}}} key={tab}>{tab}</Link>})}</nav>
 
-    {activeTab==="gear" ? (<section className="profile-gear-page" aria-label="Gear">
+    {activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
+     <div className="profile-page-heading"><div><p className="section-kicker">Accessory bag</p><h2>Accessories</h2><p>Owned accessories are ordered from lowest Magical Power contribution to highest, keeping the pieces most likely to be replaced at the top.</p></div></div>
+     <section className="profile-accessories-summary">
+      <article className="accessory-summary-card"><span className="profile-stat-card__label">Magical Power</span><strong>{result.accessories.magicalPower.total}</strong><p>{result.accessories.magicalPower.accessories} from accessories{result.accessories.magicalPower.riftPrism ? " · "+result.accessories.magicalPower.riftPrism+" from Rift Prism" : ""}</p></article>
+      <article className="accessory-summary-card"><span className="profile-stat-card__label">Owned</span><strong>{result.accessories.owned.filter(item=>item.active).length}</strong><p>Active accessory contributions</p></article>
+      <article className="accessory-summary-card"><span className="profile-stat-card__label">Selected Power</span><strong>{result.accessories.selectedPower ?? "—"}</strong><p>Current accessory power</p></article>
+      <article className="accessory-summary-card"><span className="profile-stat-card__label">Highest Magical Power</span><strong>{result.accessories.highestMagicalPower ?? "—"}</strong><p>Highest power reached</p></article>
+     </section>
+     <section className="profile-gear-section" aria-labelledby="owned-accessories-title">
+      <div className="profile-section-heading"><div><p className="section-kicker">Collection</p><h2 id="owned-accessories-title">Owned Accessories</h2></div><span>{result.accessories.owned.filter(item=>item.active).length} active</span></div>
+      <div className="accessory-grid">
+       {[...result.accessories.owned].filter(item=>item.active).sort((a,b)=>{
+         const amp=a.rarity?accessoryMpByRarity[a.rarity]??999:999, bmp=b.rarity?accessoryMpByRarity[b.rarity]??999:999;
+         return amp-bmp || (a.rarity?Object.keys(accessoryMpByRarity).indexOf(a.rarity):99)-(b.rarity?Object.keys(accessoryMpByRarity).indexOf(b.rarity):99) || a.name.localeCompare(b.name);
+       }).map(item=>{const icon=getItemIconUrl(item.id);const mp=item.id==="HEGEMONY_ARTIFACT"?(accessoryMpByRarity[item.rarity??""]??0)*2:item.id==="RIFT_PRISM"?11:(accessoryMpByRarity[item.rarity??""]??0);return <article className="accessory-card" key={item.uuid??item.id??item.name}>
+        {icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div className="accessory-card__body"><div className="accessory-card__top"><div><strong>{item.name}</strong><small>{accessoryRarityLabel(item.rarity)}</small></div><span>{mp} MP</span></div>{formatItemStats(item.stats).length?<p>{formatItemStats(item.stats).join("  //  ")}</p>:null}</div>
+       </article>})}
+      </div>
+     </section>
+     <section className="profile-gear-section" aria-labelledby="accessory-upgrades-title">
+      <div className="profile-section-heading"><div><p className="section-kicker">Progression</p><h2 id="accessory-upgrades-title">Next Upgrades</h2></div><span>{result.accessories.upgrades.length} known</span></div>
+      <div className="accessory-upgrade-grid">{result.accessories.upgrades.slice(0,24).map(item=><article className="accessory-upgrade" key={item.id}><strong>{item.name}</strong><span>{accessoryRarityLabel(item.rarity)}</span></article>)}</div>
+     </section>
+    </section>) :  (<section className="profile-gear-page" aria-label="Gear">
      <div className="profile-page-heading"><div><p className="section-kicker">Loadouts & gear</p><h2>Gear</h2><p>See the armor, equipment, and weapons this profile has available, organized around how each loadout is used.</p></div></div>
      <section className="profile-gear-section" aria-labelledby="loadouts-title">
       <div className="profile-section-heading"><div><p className="section-kicker">Saved setups</p><h2 id="loadouts-title">Loadouts</h2></div><span>{result.gear.loadouts.ids.length} available</span></div>
