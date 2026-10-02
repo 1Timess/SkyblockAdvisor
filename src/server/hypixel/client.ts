@@ -41,25 +41,40 @@ export class HypixelClient {
   async getPlayer(uuid: string) { return (await this.request(`player?uuid=${encodeURIComponent(uuid)}`, 300, playerSchema)).player; }
   async getItems() { return (await this.request("resources/skyblock/items", 43200, itemsSchema, false)).items; }
   async getLowestBinPrices(names: string[]) {
-    const wanted = new Set(names.map(name => name.toLowerCase()));
+    const normalize = (name: string) => name
+      .replace(/[§&][0-9a-fk-or]/gi, "")
+      .replace(/\\s+/g, " ")
+      .trim()
+      .toLowerCase();
+    const wanted = new Map(names.map(name => [normalize(name), name]));
     const prices: Record<string, number> = {};
     const consume = (auctions: z.infer<typeof auctionsSchema>["auctions"]) => {
       for (const auction of auctions) {
-        if (auction.bin !== true || !wanted.has(auction.item_name.toLowerCase())) continue;
-        const current = prices[auction.item_name];
-        if (current === undefined || auction.starting_bid < current) prices[auction.item_name] = auction.starting_bid;
+        if (auction.bin !== true) continue;
+        const canonicalName = wanted.get(normalize(auction.item_name));
+        if (!canonicalName) continue;
+        const current = prices[canonicalName];
+        if (current === undefined || auction.starting_bid < current) {
+          prices[canonicalName] = auction.starting_bid;
+        }
       }
     };
-    const first = await this.request("skyblock/auctions?page=0", 90, auctionsSchema);
+
+    // The public auctions endpoint is intentionally unauthenticated and has no API-key
+    // rate limit. Keep it separate from player/profile API traffic.
+    const first = await this.request("skyblock/auctions?page=0", 60, auctionsSchema, false);
     consume(first.auctions);
-    const pages = first.totalPages;
-    for (let start = 1; start < pages; start += 8) {
+
+    // The auction house can refresh while we're walking the pages. Treat an individual
+    // missing page as a stale snapshot rather than throwing away prices already found.
+    for (let start = 1; start < first.totalPages; start += 16) {
       const batch = await Promise.all(
-        Array.from({ length: Math.min(8, pages - start) }, (_, offset) =>
-          this.request(`skyblock/auctions?page=${start + offset}`, 90, auctionsSchema)
+        Array.from({ length: Math.min(16, first.totalPages - start) }, (_, offset) =>
+          this.request(`skyblock/auctions?page=${start + offset}`, 60, auctionsSchema, false)
+            .catch(() => null)
         )
       );
-      batch.forEach(page => consume(page.auctions));
+      batch.forEach(page => { if (page) consume(page.auctions); });
     }
     return prices;
   }
