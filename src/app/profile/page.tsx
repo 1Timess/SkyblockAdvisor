@@ -27,7 +27,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview";
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
-  const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,includeAccessoryPrices:activeTab==="accessories"});
+  const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
   const profileIcon=getProfileIconPath(result.profile.cuteName);
   const avatarUrl="https://mc-heads.net/avatar/"+result.identity.uuid+"/160";
   const skyblockLevel=getNumeric(result.otherProgression.leveling,["experience","xp","level"]);
