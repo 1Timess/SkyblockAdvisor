@@ -63,26 +63,6 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
       <div className="profile-section-heading"><div><p className="section-kicker">Progression</p><h2 id="accessory-upgrades-title">Next Upgrades</h2></div><span>{result.accessories.upgrades.length} known</span></div>
       <div className="accessory-upgrade-grid">{result.accessories.upgrades.slice(0,24).map(item=><article className="accessory-upgrade" key={item.id}><strong>{item.name}</strong><span>{accessoryRarityLabel(item.rarity)}</span></article>)}</div>
      </section>
-    </section>) :  (<section className="profile-gear-page" aria-label="Gear">
-     <div className="profile-page-heading"><div><p className="section-kicker">Loadouts & gear</p><h2>Gear</h2><p>See the armor, equipment, and weapons this profile has available, organized around how each loadout is used.</p></div></div>
-     <section className="profile-gear-section" aria-labelledby="loadouts-title">
-      <div className="profile-section-heading"><div><p className="section-kicker">Saved setups</p><h2 id="loadouts-title">Loadouts</h2></div><span>{result.gear.loadouts.ids.length} available</span></div>
-      <div className="profile-loadout-grid">
-       {result.gear.loadouts.ids.map(setId=>{const armorSet=result.gear.loadouts.armor.sets[setId]??{};const equipmentSet=result.gear.loadouts.equipment.sets[setId]??{};const name=result.gear.loadouts.names[setId]||"Loadout "+setId;const isActive=result.gear.loadouts.armor.equippedSet===Number(setId);const storedArmor=sortArmorItems(Object.values(armorSet));const storedEquipment=Object.values(equipmentSet);const effectiveArmor=isActive&&storedArmor.length===0?equippedArmor:storedArmor;const effectiveEquipment=isActive&&storedEquipment.length===0?result.gear.equipment.items:storedEquipment;const effectiveItems=[...effectiveArmor,...effectiveEquipment];return <article className={isActive?"gear-loadout-card gear-loadout-card--active":"gear-loadout-card"} key={setId}>
-        <header className="gear-loadout-card__header"><div><span className="profile-stat-card__label">Loadout {setId}</span><h3>{name}</h3></div>{isActive?<span className="gear-loadout-card__active">Equipped</span>:null}</header>
-        <div className="gear-loadout-card__items">{effectiveItems.length?effectiveItems.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <div className="gear-item" key={item.uuid??item.id??item.name}><>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}</><div><strong>{item.name}</strong><small>{item.categories.includes("armor")?"Armor":"Equipment"}{stats.length?" · "+stats.join(" // "):""}</small></div></div>}):<div className="gear-loadout-card__empty">{isActive?"Uses currently equipped gear":"No armor or equipment assigned"}</div>}</div>
-       </article>})}
-       {!Object.keys(result.gear.loadouts.armor.sets).length?<div className="gear-empty">No saved armor loadouts were returned for this profile.</div>:null}
-      </div>
-     </section>
-     <section className="profile-gear-section" aria-labelledby="weapons-title">
-      <div className="profile-section-heading"><div><p className="section-kicker">Arsenal</p><h2 id="weapons-title">Weaponry</h2></div><span>{result.gear.weapons.length} items</span></div>
-      <div className="gear-item-grid">{result.gear.weapons.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <article className="gear-item-card" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{[item.rarity?.replace("_"," "),item.categories.find(category=>category!=="weapon")].filter(Boolean).join(" · ")}</small>{stats.length?<p>{stats.join("  //  ")}</p>:null}</div></article>})}</div>
-     </section>
-     <section className="profile-gear-section" aria-labelledby="equipment-title">
-      <div className="profile-section-heading"><div><p className="section-kicker">Profile equipment</p><h2 id="equipment-title">Equipment</h2></div><span>{result.gear.equipment.items.length} items</span></div>
-      <div className="gear-item-grid">{result.gear.equipment.items.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <article className="gear-item-card" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{item.rarity?.replace("_"," ")||"Equipment"}</small>{stats.length?<p>{stats.join("  //  ")}</p>:null}</div></article>})}</div>
-     </section>
     </section>) : (activeTab==="gear" ? (<section className="profile-gear-page" aria-label="Gear">
      <div className="profile-page-heading"><div><p className="section-kicker">Loadouts & gear</p><h2>Gear</h2><p>See the armor, equipment, and weapons this profile has available, organized around how each loadout is used.</p></div></div>
      <section className="profile-gear-section" aria-labelledby="loadouts-title">
