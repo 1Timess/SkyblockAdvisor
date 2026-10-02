@@ -5,7 +5,7 @@ import { accessoryBaseId, accessoryChains, mpByRarity } from "../../reference/ac
 import { toProfileItem } from "../items/process-item";
 import { buildAccessoryPlayerState } from "./player-state";
 
-export function buildAccessories(items: ProcessedItem[], member: RawMember, catalog: AccessoryReference[], warnings: ProfileWarning[]): AccessorySummary {
+export function buildAccessories(items: ProcessedItem[], member: RawMember, catalog: AccessoryReference[], warnings: ProfileWarning[], prices: Record<string, number> = {}): AccessorySummary {
   const owned = items.filter(item => item.categories.includes("accessory") &&
     (["talisman_bag", "inventory", "enderchest"].includes(item.source) || item.source.startsWith("backpack:"))
   ).map(item => ({ ...toProfileItem(item), active: item.source === "talisman_bag", inactiveReason: item.source === "talisman_bag" ? null : "outside_accessory_bag" }));
@@ -53,14 +53,14 @@ export function buildAccessories(items: ProcessedItem[], member: RawMember, cata
       if (reference.allowedRarities && copies?.length) {
         const highestBase = Math.max(...copies.map(item => Math.max(-1, rank(item.rarity) - (item.recombobulated && reference.recombobulationAllowed !== false ? 1 : 0))));
         const nextRarity = reference.allowedRarities.find(rarity => rank(rarity) > highestBase);
-        if (nextRarity) upgrades.push({ ...reference, rarity: nextRarity });
+        if (nextRarity) upgrades.push({ ...reference, rarity: nextRarity, price: prices[reference.name] ?? null });
       }
       continue;
     }
     const chain = accessoryChains.find(chain => chain.includes(reference.id));
     const highestOwned = chain?.findLastIndex(id => ownedIds.has(id)) ?? -1;
     if (chain && highestOwned >= 0) {
-      if (chain.indexOf(reference.id) > highestOwned) upgrades.push(reference);
+      if (chain.indexOf(reference.id) > highestOwned) upgrades.push({ ...reference, price: prices[reference.name] ?? null });
     } else missing.push(reference);
   }
   const riftPrism = consumedPrism ? 11 : 0;
