@@ -24,10 +24,12 @@ type Sources = {
   resolvePlayer: typeof resolvePlayer;
   getProfiles: (uuid: string) => Promise<RawProfile[]>;
   getItems: () => Promise<HypixelItemDefinition[]>;
+  getMarketPrices?: (ids: string[]) => Promise<Record<string, number>>;
   getLowestBinPrices?: (names: string[]) => Promise<Record<string, number>>;
 };
 const defaults: Sources = {
   resolvePlayer, getProfiles: uuid => hypixelClient.getProfiles(uuid), getItems: () => hypixelClient.getItems(),
+  getMarketPrices: ids => hypixelClient.getMarketPrices(ids),
 };
 
 export async function listProfiles(input: string, sources: Sources = defaults) {
@@ -58,9 +60,14 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   }
   const member = memberResult.data;
   const accessoryCatalog = buildAccessoryCatalog(catalogResult.items);
-  const accessoryPrices = input.includeAccessoryPrices && sources.getLowestBinPrices
-    ? await sources.getLowestBinPrices(accessoryCatalog.map(item => item.name)).catch(() => ({}))
+  const accessoryPrices = input.includeAccessoryPrices
+    ? await (sources.getMarketPrices
+      ? sources.getMarketPrices(accessoryCatalog.map(item => item.id)).catch(() => ({}))
+      : sources.getLowestBinPrices
+        ? sources.getLowestBinPrices(accessoryCatalog.map(item => item.name)).catch(() => ({}))
+        : Promise.resolve({}))
     : {};
+  const normalizedAccessoryPrices = Object.fromEntries(accessoryCatalog.map(item => [item.name, accessoryPrices[item.id] ?? null]).filter(([, price]) => price !== null)) as Record<string, number>;
   if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: "accessories.catalog", message: "Accessory catalog unavailable; missing and upgrade lists could not be calculated." });
   const inventoryOptions = needsGear && needsAccessories
     ? { armor: true, equipment: true, inventory: true, accessories: true, storage: false, loadouts: false }
@@ -80,7 +87,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
     profileCreatedAt: member.first_join ?? null,
     economy: buildEconomy(member, selected, warnings), gear: buildGear(items, member.loadout), inventoryItems: items.map(toProfileItem),
-    accessories: buildAccessories(items, member, accessoryCatalog, warnings, accessoryPrices),
+    accessories: buildAccessories(items, member, accessoryCatalog, warnings, normalizedAccessoryPrices),
     pets: buildPets(member, warnings),
     progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings),
       mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing, enchanting: buildOwnedEnchantingState(member) },
