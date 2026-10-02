@@ -13,6 +13,9 @@ const itemsSchema = z.object({ items: z.array(itemDefinitionSchema) });
 const collectionsSchema = z.object({ version: z.string().optional(), lastUpdated: z.number().optional(),
   collections: z.record(z.string(), z.unknown()) });
 const gardenSchema = z.object({ garden: z.record(z.string(), z.unknown()) });
+const auctionsSchema = z.object({ page: z.number(), totalPages: z.number(), auctions: z.array(z.object({
+  item_name: z.string(), starting_bid: z.number(), bin: z.boolean().optional(),
+})) });
 
 export class HypixelClient {
   constructor(private fetcher: Fetcher = fetch, private cache = new TtlCache(), private apiKey = () => getServerEnv().HYPIXEL_API_KEY) {}
@@ -37,6 +40,29 @@ export class HypixelClient {
   async getProfiles(uuid: string) { return (await this.request(`skyblock/profiles?uuid=${encodeURIComponent(uuid)}`, 300, profilesSchema)).profiles ?? []; }
   async getPlayer(uuid: string) { return (await this.request(`player?uuid=${encodeURIComponent(uuid)}`, 300, playerSchema)).player; }
   async getItems() { return (await this.request("resources/skyblock/items", 43200, itemsSchema, false)).items; }
+  async getLowestBinPrices(names: string[]) {
+    const wanted = new Set(names.map(name => name.toLowerCase()));
+    const prices: Record<string, number> = {};
+    const consume = (auctions: z.infer<typeof auctionsSchema>["auctions"]) => {
+      for (const auction of auctions) {
+        if (auction.bin !== true || !wanted.has(auction.item_name.toLowerCase())) continue;
+        const current = prices[auction.item_name];
+        if (current === undefined || auction.starting_bid < current) prices[auction.item_name] = auction.starting_bid;
+      }
+    };
+    const first = await this.request("skyblock/auctions?page=0", 90, auctionsSchema);
+    consume(first.auctions);
+    const pages = Math.min(first.totalPages, 64);
+    for (let start = 1; start < pages; start += 8) {
+      const batch = await Promise.all(
+        Array.from({ length: Math.min(8, pages - start) }, (_, offset) =>
+          this.request(`skyblock/auctions?page=${start + offset}`, 90, auctionsSchema)
+        )
+      );
+      batch.forEach(page => consume(page.auctions));
+    }
+    return prices;
+  }
   async getCollections() { return this.request("resources/skyblock/collections", 43200, collectionsSchema, false); }
   async getGarden(profileId: string) {
     const path = `skyblock/garden?profile=${encodeURIComponent(profileId)}`;
