@@ -1,25 +1,49 @@
 import type { RawMember, EncodedItems } from "../../hypixel/types";
 import type { ProfileWarning } from "../../../schemas/items";
 
-export function collectInventories(member: RawMember, warnings: ProfileWarning[]): { source: string; encoded?: EncodedItems }[] {
+export type InventorySourceOptions = {
+  armor?: boolean;
+  equipment?: boolean;
+  inventory?: boolean;
+  accessories?: boolean;
+  storage?: boolean;
+  loadouts?: boolean;
+};
+
+export function collectInventories(member: RawMember, warnings: ProfileWarning[], options: InventorySourceOptions = {
+  armor: true, equipment: true, inventory: true, accessories: true, storage: true, loadouts: true,
+}): { source: string; encoded?: EncodedItems }[] {
   const inventory = member.inventory;
-  const sources = [
-    { source: "armor", encoded: inventory?.inv_armor },
-    { source: "equipment", encoded: inventory?.equipment_contents },
-    { source: "inventory", encoded: inventory?.inv_contents },
-    { source: "enderchest", encoded: inventory?.ender_chest_contents },
-    { source: "wardrobe", encoded: inventory?.wardrobe_contents },
-    { source: "personal_vault", encoded: inventory?.personal_vault_contents },
-    { source: "talisman_bag", encoded: inventory?.bag_contents?.talisman_bag },
-    ...Object.entries(inventory?.backpack_contents ?? {}).map(([key, encoded]) => ({ source: `backpack:${key}`, encoded })),
-    ...loadoutSources(member.loadout?.armor, "armor"),
-    ...loadoutSources(member.loadout?.equipment, "equipment"),
-  ];
+  const sources: { source: string; encoded?: EncodedItems }[] = [];
+
+  if (options.armor) sources.push({ source: "armor", encoded: inventory?.inv_armor });
+  if (options.equipment) sources.push({ source: "equipment", encoded: inventory?.equipment_contents });
+  if (options.inventory) sources.push({ source: "inventory", encoded: inventory?.inv_contents });
+
+  if (options.accessories) {
+    sources.push({ source: "talisman_bag", encoded: inventory?.bag_contents?.talisman_bag });
+    sources.push({ source: "enderchest", encoded: inventory?.ender_chest_contents });
+    sources.push(...Object.entries(inventory?.backpack_contents ?? {}).map(([key, encoded]) => ({ source: `backpack:${key}`, encoded })));
+  }
+
+  if (options.storage) {
+    sources.push({ source: "enderchest", encoded: inventory?.ender_chest_contents });
+    sources.push({ source: "personal_vault", encoded: inventory?.personal_vault_contents });
+    sources.push({ source: "wardrobe", encoded: inventory?.wardrobe_contents });
+  }
+
+  if (options.loadouts) {
+    sources.push(...loadoutSources(member.loadout?.armor, "armor"));
+    sources.push(...loadoutSources(member.loadout?.equipment, "equipment"));
+  }
+
   for (const source of sources) {
     if (!source.encoded) warnings.push({ code: "API_DATA_DISABLED", scope: source.source, message: `${source.source} was not supplied; inventory access may be disabled.` });
   }
-  if (!member.loadout?.armor) warnings.push({ code: "API_DATA_DISABLED", scope: "loadout.armor", message: "Armor loadouts were not supplied; stored armor baselines may be incomplete." });
-  if (!member.loadout?.equipment) warnings.push({ code: "API_DATA_DISABLED", scope: "loadout.equipment", message: "Equipment loadouts were not supplied; stored equipment baselines may be incomplete." });
+  if (options.loadouts) {
+    if (!member.loadout?.armor) warnings.push({ code: "API_DATA_DISABLED", scope: "loadout.armor", message: "Armor loadouts were not supplied; stored armor baselines may be incomplete." });
+    if (!member.loadout?.equipment) warnings.push({ code: "API_DATA_DISABLED", scope: "loadout.equipment", message: "Equipment loadouts were not supplied; stored equipment baselines may be incomplete." });
+  }
   return sources;
 }
 
