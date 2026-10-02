@@ -34,9 +34,10 @@ function buildLoadoutIndex(items: ProcessedItem[], loadout?: {
 }) {
   const armorSets = loadoutSets(items, "armor");
   const equipmentSets = loadoutSets(items, "equipment");
+  const names = loadoutNames(loadout?.loadouts);
   return {
-    names: loadoutNames(loadout?.loadouts),
-    ids: Array.from(new Set([...Object.keys(armorSets), ...Object.keys(equipmentSets), ...Object.keys(loadout?.loadouts ?? {})])).sort((a,b)=>Number(a)-Number(b)),
+    names,
+    ids: Object.keys(names).sort((a,b)=>Number(a)-Number(b)),
     armor: { equippedSet: setNumber(loadout?.armor?.equipped_set), sets: armorSets },
     equipment: { equippedSet: setNumber(loadout?.equipment?.equipped_set), sets: equipmentSets },
   };
