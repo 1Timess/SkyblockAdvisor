@@ -14,6 +14,8 @@ function formatDate(value:number|null){if(value===null)return "—"; return new 
 function getItemIconUrl(id:string|null){return id?"https://sky.shiiyu.moe/api/item/"+encodeURIComponent(id):null;}
 const itemStatLabels: Record<string,string> = {damage:"DMG",strength:"STR",critDamage:"CD",critChance:"CC",health:"HP",defense:"DEF",intelligence:"INT",attackSpeed:"AS",ferocity:"Ferocity",speed:"SPD",magicFind:"MF",petLuck:"Pet Luck",abilityDamage:"Ability DMG",farmingFortune:"Farming Fortune",miningFortune:"Mining Fortune",miningSpeed:"Mining Speed",gemstoneFortune:"Gemstone Fortune",foragingFortune:"Foraging Fortune",foragingWisdom:"Foraging Wisdom",huntingFortune:"Hunting Fortune",huntingWisdom:"Hunting Wisdom",fishingSpeed:"Fishing Speed",seaCreatureChance:"Sea Creature Chance",coldResistance:"Cold Resistance",pristine:"Pristine"};
 function formatItemStats(stats:Record<string,number>){return Object.entries(stats).filter(([key])=>itemStatLabels[key]).slice(0,5).map(([key,value])=>itemStatLabels[key]+" "+(value>0?"+":"")+(Number.isInteger(value)?value:value.toFixed(1)));}
+const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
+function sortArmorItems(items: typeof equippedArmor){return [...items].sort((a,b)=>{const slot=(item: typeof a)=>armorSlotOrder.findIndex(key=>item.categories.includes(key));return (slot(a)<0?99:slot(a))-(slot(b)<0?99:slot(b));});}
 
 export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview";
@@ -26,7 +28,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
   const skyblockLevelValue=skyblockLevel!==null&&skyblockLevel>100?Math.floor(skyblockLevel/100):skyblockLevel;
   const fairySouls=fairySoulCount(result.otherProgression.fairySoul); const skills=Object.entries(result.progression.skills);
   const averageSkillLevel=skills.length?skills.reduce((sum,[,skill])=>sum+skill.level,0)/skills.length:null;
-  const equippedArmor=result.gear.armor.items;
+  const equippedArmor=sortArmorItems(result.gear.armor.items);
   const equippedWeapon=result.gear.equippedWeapon;
   return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/>
    <nav className="profile-nav" aria-label="Profile navigation"><Link className="nav__brand" href="/#search" aria-label="Statixel home"><img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt=""/><span className="nav__wordmark">Statixel</span></Link><Link className="profile-nav__search" href="/#search">Search another profile</Link></nav>
@@ -38,11 +40,11 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     {activeTab==="gear" ? (<section className="profile-gear-page" aria-label="Gear">
      <div className="profile-page-heading"><div><p className="section-kicker">Loadouts & gear</p><h2>Gear</h2><p>See the armor, equipment, and weapons this profile has available, organized around how each loadout is used.</p></div></div>
      <section className="profile-gear-section" aria-labelledby="loadouts-title">
-      <div className="profile-section-heading"><div><p className="section-kicker">Saved setups</p><h2 id="loadouts-title">Loadouts</h2></div><span>{Object.keys(result.gear.loadouts.names).length || Object.keys(result.gear.loadouts.armor.sets).length} available</span></div>
+      <div className="profile-section-heading"><div><p className="section-kicker">Saved setups</p><h2 id="loadouts-title">Loadouts</h2></div><span>{result.gear.loadouts.ids.length} available</span></div>
       <div className="profile-loadout-grid">
-       {Object.entries(result.gear.loadouts.armor.sets).map(([setId,armorSet])=>{const name=result.gear.loadouts.names[setId]||"Loadout "+(Number(setId)+1);const equipmentSet=result.gear.loadouts.equipment.sets[setId]??{};const isActive=result.gear.loadouts.armor.equippedSet===Number(setId);const items=[...Object.values(armorSet),...Object.values(equipmentSet)];return <article className={isActive?"gear-loadout-card gear-loadout-card--active":"gear-loadout-card"} key={setId}>
-        <header className="gear-loadout-card__header"><div><span className="profile-stat-card__label">Loadout {Number(setId)+1}</span><h3>{name}</h3></div>{isActive?<span className="gear-loadout-card__active">Equipped</span>:null}</header>
-        <div className="gear-loadout-card__items">{items.map(item=>{const icon=getItemIconUrl(item.id);return <div className="gear-item" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{item.categories.includes("armor")?"Armor":"Equipment"}</small></div></div>})}</div>
+       {result.gear.loadouts.ids.map(setId=>{const armorSet=result.gear.loadouts.armor.sets[setId]??{};const equipmentSet=result.gear.loadouts.equipment.sets[setId]??{};const name=result.gear.loadouts.names[setId]||"Loadout "+(Number(setId)+1);const isArmorActive=result.gear.loadouts.armor.equippedSet===Number(setId);const isEquipmentActive=result.gear.loadouts.equipment.equippedSet===Number(setId);const armorItems=sortArmorItems(Object.values(armorSet));const equipmentItems=Object.values(equipmentSet);const items=[...armorItems,...equipmentItems];return <article className={isArmorActive||isEquipmentActive?"gear-loadout-card gear-loadout-card--active":"gear-loadout-card"} key={setId}>
+        <header className="gear-loadout-card__header"><div><span className="profile-stat-card__label">Loadout {Number(setId)+1}</span><h3>{name}</h3></div>{isArmorActive||isEquipmentActive?<span className="gear-loadout-card__active">Equipped</span>:null}</header>
+        <div className="gear-loadout-card__items">{items.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <div className="gear-item" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><strong>{item.name}</strong><small>{item.categories.includes("armor")?"Armor":"Equipment"}{stats.length?" · "+stats.join(" // "):""}</small></div></div>})}</div>
        </article>})}
        {!Object.keys(result.gear.loadouts.armor.sets).length?<div className="gear-empty">No saved armor loadouts were returned for this profile.</div>:null}
       </div>
