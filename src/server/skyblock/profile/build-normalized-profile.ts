@@ -60,14 +60,23 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   }
   const member = memberResult.data;
   const accessoryCatalog = buildAccessoryCatalog(catalogResult.items);
-  const accessoryPrices = input.includeAccessoryPrices
-    ? await (sources.getMarketPrices
-      ? sources.getMarketPrices(accessoryCatalog.map(item => item.id)).catch(() => ({}))
-      : sources.getLowestBinPrices
-        ? sources.getLowestBinPrices(accessoryCatalog.map(item => item.name)).catch(() => ({}))
-        : Promise.resolve({}))
-    : {};
-  const normalizedAccessoryPrices = Object.fromEntries(accessoryCatalog.map(item => [item.name, accessoryPrices[item.id] ?? null]).filter(([, price]) => price !== null)) as Record<string, number>;
+  let accessoryPricesById: Record<string, number> = {};
+  if (input.includeAccessoryPrices) {
+    accessoryPricesById = sources.getMarketPrices
+      ? await sources.getMarketPrices(accessoryCatalog.map(item => item.id)).catch(() => ({}))
+      : {};
+    const missingNames = accessoryCatalog.filter(item => accessoryPricesById[item.id] === undefined).map(item => item.name);
+    if (missingNames.length && sources.getLowestBinPrices) {
+      const livePrices = await sources.getLowestBinPrices(missingNames).catch(() => ({}));
+      for (const item of accessoryCatalog) {
+        const price = livePrices[item.name];
+        if (price !== undefined && accessoryPricesById[item.id] === undefined) accessoryPricesById[item.id] = price;
+      }
+    }
+  }
+  const normalizedAccessoryPrices = Object.fromEntries(accessoryCatalog
+    .map(item => [item.name, accessoryPricesById[item.id]])
+    .filter(([, price]) => typeof price === "number")) as Record<string, number>;
   if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: "accessories.catalog", message: "Accessory catalog unavailable; missing and upgrade lists could not be calculated." });
   const inventoryOptions = needsGear && needsAccessories
     ? { armor: true, equipment: true, inventory: true, accessories: true, storage: false, loadouts: false }
