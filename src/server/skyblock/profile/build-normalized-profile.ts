@@ -27,7 +27,7 @@ type Sources = {
   getLowestBinPrices?: (names: string[]) => Promise<Record<string, number>>;
 };
 const defaults: Sources = {
-  resolvePlayer, getProfiles: uuid => hypixelClient.getProfiles(uuid), getItems: () => hypixelClient.getItems(),
+  resolvePlayer, getProfiles: uuid => hypixelClient.getProfiles(uuid), getItems: () => hypixelClient.getItems(), getLowestBinPrices: names => hypixelClient.getLowestBinPrices(names),
 };
 
 export async function listProfiles(input: string, sources: Sources = defaults) {
