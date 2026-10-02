@@ -40,7 +40,7 @@ export function ProfileSearchForm() {
         aria-label="Minecraft username"
         autoComplete="off"
         spellCheck={false}
-        disabled={isPending}
+        readOnly={isPending}
       />
       <button
         className="search-card__button"
