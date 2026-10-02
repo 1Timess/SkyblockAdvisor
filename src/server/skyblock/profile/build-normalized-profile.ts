@@ -39,7 +39,7 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; requestedTab?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
-  const requestedTab = input.requestedTab ?? "overview";
+  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" ? input.requestedTab : "overview";
   const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
   const needsGear = requestedTab === "overview" || requestedTab === "gear";
   const [profiles, catalogResult] = await Promise.all([
