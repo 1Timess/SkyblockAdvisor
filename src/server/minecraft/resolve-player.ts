@@ -137,11 +137,15 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
       return identity;
     } catch (error) {
       sawProviderFailure = true;
-      lastError = new AppError(
-        "IDENTITY_UPSTREAM_ERROR",
-        error instanceof AppError ? error.message : `Minecraft identity provider (${provider.name}) could not be reached.`,
-        502,
-      );
+      if (error instanceof AppError) {
+        lastError = error;
+      } else {
+        lastError = new AppError(
+          "IDENTITY_UPSTREAM_ERROR",
+          `Minecraft identity provider (${provider.name}) could not be reached.`,
+          502,
+        );
+      }
       continue;
     }
   }
