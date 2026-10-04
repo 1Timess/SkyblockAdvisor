@@ -55,7 +55,6 @@ test("identity resolution falls through when Mojang reports player-not-found", a
 test("identity resolution does not turn an upstream failure into PLAYER_NOT_FOUND", async () => {
   const fetcher = async (input: string | URL | Request) => {
     const url = String(input);
-    if (url.includes("mowojang.matdoes.dev")) return response(404, "");
     if (url.includes("api.mojang.com")) return response(503, "");
     if (url.includes("api.minecraftservices.com")) return response(503, "");
     throw new Error(`Unexpected provider: ${url}`);
@@ -92,7 +91,7 @@ test("concurrent identity requests are singleflighted", async () => {
   const fetcher = async (input: string | URL | Request) => {
     calls += 1;
     const url = String(input);
-    assert.ok(url.includes("mowojang.matdoes.dev"));
+    assert.ok(url.includes("api.mojang.com"));
     await gate;
     return response(200, { id: UUID, name: "FixturePlayer" });
   };
