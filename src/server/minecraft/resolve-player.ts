@@ -52,7 +52,8 @@ export function validatePlayerInput(input: string): string {
 export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, store = cache): Promise<Identity> {
   const valid = validatePlayerInput(input);
   const isUuid = UUID.test(valid) || HYPHENATED_UUID.test(valid);
-  const key = isUuid ? valid.replaceAll("-", "").toLowerCase() : valid.toLowerCase();
+  const canonicalUuid = isUuid ? valid.replaceAll("-", "").toLowerCase() : valid;
+  const key = isUuid ? canonicalUuid : valid.toLowerCase();
 
   const cached = store.get<Identity>(key);
   if (cached) return cached;
@@ -76,7 +77,7 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
 
   for (const provider of providers) {
     try {
-      const response = await fetchUpstream(provider.url(valid, isUuid), fetcher, undefined, { retryServerErrors: false });
+      const response = await fetchUpstream(provider.url(canonicalUuid, isUuid), fetcher, undefined, { retryServerErrors: false });
 
       if (response.status === 404 || response.status === 204) {
         lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
