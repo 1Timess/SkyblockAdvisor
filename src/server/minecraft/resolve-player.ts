@@ -72,6 +72,7 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
 
 async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetcher, store: TtlCache): Promise<Identity> {
   let lastError: AppError | null = null;
+  let sawProviderFailure = false;
 
   for (const provider of providers) {
     try {
@@ -83,6 +84,7 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
       }
 
       if (!response.ok) {
+        sawProviderFailure = true;
         lastError = new AppError(
           "IDENTITY_UPSTREAM_ERROR",
           `Minecraft identity provider (${provider.name}) returned HTTP ${response.status}.`,
@@ -133,6 +135,7 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
       store.set(identity.username.toLowerCase(), identity, IDENTITY_CACHE_TTL_SECONDS);
       return identity;
     } catch (error) {
+      sawProviderFailure = true;
       if (error instanceof AppError) {
         lastError = error;
         continue;
@@ -141,6 +144,7 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
     }
   }
 
+  if (lastError?.code === "PLAYER_NOT_FOUND" && !sawProviderFailure) throw lastError;
   throw lastError ?? new AppError(
     "IDENTITY_UPSTREAM_ERROR",
     "Minecraft identity lookup failed.",
