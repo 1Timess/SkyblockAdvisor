@@ -35,7 +35,8 @@ function isRetryableTransportError(error: unknown) {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export async function fetchUpstream(url: string, fetcher: Fetcher, headers?: HeadersInit) {
+export async function fetchUpstream(url: string, fetcher: Fetcher, headers?: HeadersInit, options?: { retryServerErrors?: boolean }) {
+  const retryServerErrors = options?.retryServerErrors ?? true;
   let lastError: unknown;
 
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
@@ -47,7 +48,7 @@ export async function fetchUpstream(url: string, fetcher: Fetcher, headers?: Hea
       });
 
       // GET-only upstream calls are safe to retry when the service reports a transient failure.
-      if (response.status >= 500 && attempt < MAX_ATTEMPTS - 1) {
+      if (retryServerErrors && response.status >= 500 && attempt < MAX_ATTEMPTS - 1) {
         await sleep(RETRY_DELAYS_MS[attempt]);
         continue;
       }
