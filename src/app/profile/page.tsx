@@ -168,7 +168,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <section className="profile-loadout" aria-label="Currently equipped gear">
      <div className="profile-loadout__armor"><span className="profile-stat-card__label">Equipped Armor</span><div className="profile-loadout__items">{equippedArmor.map(item=>{const icon=getItemIconUrl(item.id);const stats=formatItemStats(item.stats);return <div className="profile-loadout__item" key={item.uuid??item.id??item.name}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<div><span>{item.name}</span>{stats.length?<small>{stats.join("  //  ")}</small>:null}</div></div>})}</div></div>
      <div className="profile-loadout__weapon"><span className="profile-stat-card__label">Held Weapon</span>{equippedWeapon?<div className="profile-loadout__weapon-item"><img src={getItemIconUrl(equippedWeapon.id)??""} alt="" aria-hidden="true"/><div><strong>{equippedWeapon.name}</strong>{formatItemStats(equippedWeapon.stats).length?<small>{formatItemStats(equippedWeapon.stats).join("  //  ")}</small>:null}</div></div>:<strong>—</strong>}</div>
-    </section> </>)}
+    </section>)}
    </section></main>;
  } catch(error){ const message=error instanceof AppError?error.message:"Unable to load this SkyBlock profile right now."; return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel search-page__panel--error"><p className="section-kicker">SkyBlock profile</p><h1>We couldn’t load this profile.</h1><p>{message}</p><Link className="search-page__button" href="/#search">Back to search</Link></section></main> }
 }
