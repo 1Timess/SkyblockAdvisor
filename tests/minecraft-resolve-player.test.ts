@@ -13,7 +13,7 @@ function response(status: number, body: unknown) {
   });
 }
 
-test("identity resolution falls through Mowojang transport failure to Mojang", async () => {
+test("identity resolution falls through to Mojang when the fallback provider is unavailable", async () => {
   const calls: string[] = [];
   const fetcher = async (input: string | URL | Request) => {
     const url = String(input);
@@ -36,7 +36,7 @@ test("identity resolution falls through Mowojang transport failure to Mojang", a
   assert.equal(calls.filter(url => url.includes("mowojang.matdoes.dev")).length, 0);
 });
 
-test("identity resolution treats Mowojang's player-not-found response as non-authoritative and falls through", async () => {
+test("identity resolution falls through when Mojang reports player-not-found", async () => {
   const calls: string[] = [];
   const fetcher = async (input: string | URL | Request) => {
     const url = String(input);
@@ -62,7 +62,7 @@ test("identity resolution does not turn an upstream failure into PLAYER_NOT_FOUN
   };
 
   await assert.rejects(
-    resolvePlayer("MissingOrUnavailable", fetcher, new TtlCache()),
+    resolvePlayer("MissingUnavailable", fetcher, new TtlCache()),
     (error) => error instanceof AppError && error.code === "IDENTITY_UPSTREAM_ERROR" && error.status === 502,
   );
 });
@@ -72,7 +72,7 @@ test("successful identity resolution caches both username and UUID for 24 hours"
   const fetcher = async (input: string | URL | Request) => {
     calls += 1;
     const url = String(input);
-    assert.ok(url.includes("mowojang.matdoes.dev"));
+    assert.ok(url.includes("api.mojang.com"));
     return response(200, { id: UUID, name: "FixturePlayer" });
   };
 
