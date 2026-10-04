@@ -3,6 +3,7 @@ import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normaliz
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
+import type { ProfileItem } from "@/schemas/items";
 
 type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
