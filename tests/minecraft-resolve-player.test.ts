@@ -61,7 +61,7 @@ test("identity resolution does not turn an upstream failure into PLAYER_NOT_FOUN
   };
 
   await assert.rejects(
-    resolvePlayer("MissingUnavailable", fetcher, new TtlCache()),
+    resolvePlayer("MissingUpstream", fetcher, new TtlCache()),
     (error) => error instanceof AppError && error.code === "IDENTITY_UPSTREAM_ERROR" && error.status === 502,
   );
 });
