@@ -77,7 +77,7 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
 
   for (const provider of providers) {
     try {
-      const response = await fetchUpstream(provider.url(canonicalUuid, isUuid), fetcher, undefined, { retryServerErrors: false });
+      const response = await fetchUpstream(provider.url(valid, isUuid), fetcher, undefined, { retryServerErrors: false });
 
       if (response.status === 404 || response.status === 204) {
         lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
