@@ -37,14 +37,16 @@ export function collectInventories(member: RawMember, warnings: ProfileWarning[]
     sources.push(...loadoutSources(member.loadout?.equipment, "equipment"));
   }
 
-  for (const source of sources) {
+  const uniqueSources = [...new Map(sources.map(source => [source.source, source])).values()];
+
+  for (const source of uniqueSources) {
     if (!source.encoded) warnings.push({ code: "API_DATA_DISABLED", scope: source.source, message: `${source.source} was not supplied; inventory access may be disabled.` });
   }
   if (options.loadouts) {
     if (!member.loadout?.armor) warnings.push({ code: "API_DATA_DISABLED", scope: "loadout.armor", message: "Armor loadouts were not supplied; stored armor baselines may be incomplete." });
     if (!member.loadout?.equipment) warnings.push({ code: "API_DATA_DISABLED", scope: "loadout.equipment", message: "Equipment loadouts were not supplied; stored equipment baselines may be incomplete." });
   }
-  return sources;
+  return uniqueSources;
 }
 
 function loadoutSources(section: Record<string, unknown> | undefined, kind: "armor" | "equipment") {
