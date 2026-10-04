@@ -67,7 +67,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
       : {};
     const missingNames = accessoryCatalog.filter(item => accessoryPricesById[item.id] === undefined).map(item => item.name);
     if (missingNames.length && sources.getLowestBinPrices) {
-      const livePrices = await sources.getLowestBinPrices(missingNames).catch(() => ({}));
+      const livePrices: Record<string, number> = await sources.getLowestBinPrices(missingNames).catch(() => ({} as Record<string, number>));
       for (const item of accessoryCatalog) {
         const price = livePrices[item.name];
         if (price !== undefined && accessoryPricesById[item.id] === undefined) accessoryPricesById[item.id] = price;
@@ -79,9 +79,9 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     .filter(([, price]) => typeof price === "number")) as Record<string, number>;
   if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: "accessories.catalog", message: "Accessory catalog unavailable; missing and upgrade lists could not be calculated." });
   const inventoryOptions = needsGear && needsAccessories
-    ? { armor: true, equipment: true, inventory: true, accessories: true, storage: false, loadouts: false }
+    ? { armor: true, equipment: true, inventory: true, accessories: true, storage: true, loadouts: true }
     : needsGear
-      ? { armor: true, equipment: true, inventory: true, accessories: false, storage: false, loadouts: true }
+      ? { armor: true, equipment: true, inventory: true, accessories: false, storage: true, loadouts: true }
       : { armor: false, equipment: false, inventory: true, accessories: true, storage: false, loadouts: false };
   const decoded = await Promise.all(collectInventories(member, warnings, inventoryOptions).map(async ({ source, encoded }) => {
     const sourceWarnings: ProfileWarning[] = [];

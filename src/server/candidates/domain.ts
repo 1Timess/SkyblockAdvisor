@@ -56,7 +56,13 @@ function withinBoundary(domain: "FISHING" | "MINING", item: CandidateItem) {
   const stats = domain === "MINING" ? ["miningSpeed", "miningFortune", "gemstoneFortune", "pristine", "coldResistance"] : fishingStats;
   if (domain === "FISHING" && item.categories.includes("fishing_rod")) return true;
   if (domain === "MINING" && item.categories.some(category => category === "pickaxe" || category === "drill")) return true;
-  return item.categories.some(category => ["armor", "helmet", "chestplate", "leggings", "boots", "equipment", "tool"].includes(category))
+  if (domain === "MINING" && item.categories.some(category => ["armor", "helmet", "chestplate", "leggings", "boots"].includes(category))) {
+    // A raw Mining Fortune stat alone is not enough to classify arbitrary armor as mining gear.
+    // Verified mining armor families expose another mining-specific mechanic alongside Fortune.
+    const miningArmorSignals = ["miningSpeed", "gemstoneFortune", "pristine", "coldResistance"];
+    return miningArmorSignals.some(stat => item.stats[stat] !== undefined);
+  }
+  return item.categories.some(category => ["equipment", "tool"].includes(category))
     && stats.some(stat => item.stats[stat] !== undefined);
 }
 

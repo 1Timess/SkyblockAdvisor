@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type { CandidateItem } from "../src/schemas/catalog";
 import type { MarketQuote } from "../src/schemas/market";
-import type { AccessoryReference } from "../src/schemas/normalized-profile";
+import type { AccessoryReference, AccessoryUpgrade } from "../src/schemas/normalized-profile";
 import { buildAccessoryLanes } from "../src/server/candidates/accessory";
 import { buildNormalizedProfile } from "../src/server/skyblock/profile/build-normalized-profile";
 import { fixtureSources } from "./fixtures/profile";
@@ -21,7 +21,7 @@ test("accessory lanes use profile missing/upgrades and rank quoted coins per gai
     { id: "CHEAP_COMMON", name: "Cheap", rarity: "common" },
     { id: "VALUABLE_RARE", name: "Valuable", rarity: "rare" },
   ];
-  const upgrades: AccessoryReference[] = [{ id: "WOLF_RING", name: "Wolf Ring", rarity: "epic" }];
+  const upgrades: AccessoryUpgrade[] = [{ id: "WOLF_RING", name: "Wolf Ring", rarity: "epic", price: null }];
   profile.accessories.missing = missing; profile.accessories.upgrades = upgrades;
   const catalog = [item("CHEAP_COMMON", "common"), item("VALUABLE_RARE", "rare"), item("WOLF_RING", "epic")];
   const quoteValues = [quote("CHEAP_COMMON", 300), quote("VALUABLE_RARE", 400), quote("WOLF_RING", 700)];
