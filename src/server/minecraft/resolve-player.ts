@@ -49,6 +49,11 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
       }
 
       const body = await response.text();
+      if (body.trim().toLowerCase() === "player not found") {
+        lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
+        allProvidersNotFound = true;
+        continue;
+      }
       if (!body.trim()) {
         lastError = new AppError("EMPTY_IDENTITY_RESPONSE", "Minecraft identity service returned an empty response.", 502);
         continue;
