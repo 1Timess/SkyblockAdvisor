@@ -4,7 +4,7 @@ import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
 
-type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string }> };
+type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
 function formatCoins(value:number|null){return value===null?"—":new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(value)}
 function getNumeric(value:unknown,keys:string[]){if(!value||typeof value!=="object"||Array.isArray(value))return null;for(const key of keys){const n=(value as Record<string,unknown>)[key];if(typeof n==="number"&&Number.isFinite(n))return n}return null}
@@ -20,7 +20,7 @@ function accessoryMp(item:{id:string|null;rarity:string|null}){return item.id===
 function accessoryRarityLabel(rarity:string|null){return rarity?rarity.replace("_"," "):"Unknown";}
 function rarityClass(rarity:string|null){return rarity?"rarity-"+rarity:"rarity-unknown";}
 function formatPrice(value:number|null){return value===null?"Price unavailable":formatCoins(value);}
-function upgradeEfficiency(price:number|null,mp:number){return price!==null&&mp>0?price/mp:null;}
+function upgradeEfficiency(price:number|null,mp:number){return price!==null&&mp>0?price/mp:null;}function petRarityLabel(rarity:string|null){return rarity?rarity.replace(/_/g," "):"Unknown";}\nfunction petRarityRank(rarity:string|null){const ranks:Record<string,number>={common:0,uncommon:1,rare:2,epic:3,legendary:4,mythic:5,special:6,very_special:7};return rarity?(ranks[rarity]??-1):-1;}\nfunction petIconUrl(type:string){return getItemIconUrl("PET_"+type);}\nfunction formatPetHeldItem(value:string|null){if(!value)return null;return value.replace(/^PET_ITEM_/,"").replace(/_/g," ").replace(/\\b\\w/g,char=>char.toUpperCase());}\nfunction petSortRank(pet:{active:boolean;level:number|null;effectiveRarity:string|null}){return (pet.active?1000000:0)+(pet.level??0)*1000+petRarityRank(pet.effectiveRarity);}\n
 const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
 function sortArmorItems<T extends Pick<ProfileItem, "categories">>(items: readonly T[]): T[] {
  return [...items].sort((a,b)=>{
@@ -30,7 +30,7 @@ function sortArmorItems<T extends Pick<ProfileItem, "categories">>(items: readon
 }
 
 export default async function ProfilePage({ searchParams }: ProfilePageProps) {
- const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview";
+ const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview"; const selectedPetParam=params.pet?.trim()||undefined;
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
   const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
@@ -49,7 +49,65 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <div className="profile-switcher">{result.profile.availableProfiles.map(item=>{const icon=getProfileIconPath(item.cuteName);return <Link className={item.id===result.profile.id?"profile-switcher__item profile-switcher__item--active":"profile-switcher__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:item.id}}} key={item.id}>{icon?<img className="profile-switcher__icon" src={icon} alt=""/>:null}{item.cuteName}</Link>})}</div>
     <nav className="profile-tabs" aria-label="Profile sections"><Link className={activeTab==="overview"?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id}}}>Overview</Link>{["Gear","Accessories","Pets","Inventory","Skills","Dungeons","Slayer","Minions","Bestiary","Collections","Crimson Isle","Rift","Misc"].map(tab=>{const key=tab.toLowerCase().replace(/\s+/g,"-");return <Link className={activeTab===key?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:key}}} key={tab}>{tab}</Link>})}</nav>
 
-    {activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
+    {activeTab==="pets" ? (<section className="profile-pets-page" aria-label="Pets">
+     {(() => {
+       const pets=[...result.pets.owned].sort((a,b)=>petSortRank(b)-petSortRank(a));
+       const highestLevel=pets.reduce((best,pet)=>Math.max(best,pet.level??0),0);
+       const highestRarity=pets.reduce((best,pet)=>petRarityRank(pet.effectiveRarity)>petRarityRank(best)?pet.effectiveRarity:best,null as string|null);
+       const totalLevels=pets.reduce((sum,pet)=>sum+(pet.level??0),0);
+       const selectedIndex=selectedPetParam?pets.findIndex((pet,index)=>(pet.uuid&&pet.uuid===selectedPetParam)||String(index)===selectedPetParam):-1;
+       const selected=selectedIndex>=0?pets[selectedIndex]:(result.pets.activePet??pets[0]??null);
+       const selectedKey=selected?.uuid??(selected?String(pets.indexOf(selected)):"");
+       const baseQuery={pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:"pets"}};
+       return <>
+        <div className="profile-page-heading"><div><p className="section-kicker">Pet collection</p><h2>Pets</h2><p>View the pets this profile owns, their progression, held items, and calculated effects.</p></div></div>
+        <section className="profile-pets-summary" aria-label="Pet summary">
+         <article className="pet-summary-card pet-summary-card--blue"><span className="profile-stat-card__label">Pets Owned</span><strong>{pets.length}</strong><p>Collected on this profile</p></article>
+         <article className="pet-summary-card pet-summary-card--purple"><span className="profile-stat-card__label">Highest Level</span><strong>{highestLevel||"—"}</strong><p>{pets.find(pet=>pet.level===highestLevel)?.name??"No leveled pets"}</p></article>
+         <article className="pet-summary-card pet-summary-card--gold"><span className="profile-stat-card__label">Highest Rarity</span><strong className={rarityClass(highestRarity)}>{highestRarity?petRarityLabel(highestRarity):"—"}</strong><p>Highest effective pet rarity</p></article>
+         <article className="pet-summary-card pet-summary-card--green"><span className="profile-stat-card__label">Total Pet Levels</span><strong>{totalLevels||"—"}</strong><p>Combined levels across owned pets</p></article>
+        </section>
+        <section className="profile-pets-workspace" aria-labelledby="owned-pets-title">
+         <div className="profile-pets-list">
+          <div className="profile-section-heading"><div><p className="section-kicker">Collection</p><h2 id="owned-pets-title">Owned Pets</h2></div><span>{pets.length} total</span></div>
+          <div className="pet-card-grid">
+           {pets.length ? pets.map((pet,index)=>{
+             const icon=petIconUrl(pet.type); const heldIcon=getItemIconUrl(pet.heldItem); const key=pet.uuid??String(index); const active=(selected?.uuid===pet.uuid && pet.uuid!==null)||selectedKey===key;
+             const progress=pet.progress===null?0:Math.max(0,Math.min(1,pet.progress));
+             return <Link className={active?"pet-card pet-card--selected":"pet-card"} href={{...baseQuery,query:{...baseQuery.query,pet:key}}} key={key}>
+              <div className="pet-card__icon-wrap">{icon?<img className="pet-card__icon" src={icon} alt="" aria-hidden="true"/>:<span className="pet-card__icon-fallback">✦</span>}</div>
+              <div className="pet-card__body">
+               <div className="pet-card__heading"><div><strong>{pet.name}</strong><span className={rarityClass(pet.effectiveRarity)}>{petRarityLabel(pet.effectiveRarity)}</span></div>{pet.active?<span className="pet-card__active">Active</span>:null}</div>
+               <div className="pet-card__level"><span>Lv. {pet.level??"—"}{pet.maxLevel?" / "+pet.maxLevel:""}</span><span>{pet.level!==null&&pet.maxLevel&&pet.level>=pet.maxLevel?"MAX":Math.round(progress*100)+"%"}</span></div>
+               <div className="pet-card__track"><span style={{width:(pet.level!==null&&pet.maxLevel&&pet.level>=pet.maxLevel?100:progress*100)+"%"}}/></div>
+               <div className="pet-card__meta">{heldIcon?<img src={heldIcon} alt="" aria-hidden="true"/>:null}<span>{formatPetHeldItem(pet.heldItem)??"No held item"}</span></div>
+              </div>
+             </Link>;
+           }) : <div className="pet-empty">No pets were returned for this profile.</div>}
+          </div>
+         </div>
+         {selected ? <aside className="pet-detail-panel" aria-label={"Selected pet: "+selected.name}>
+          <div className="pet-detail-panel__hero">
+           <div className="pet-detail-panel__icon-wrap">{petIconUrl(selected.type)?<img src={petIconUrl(selected.type)!} alt="" aria-hidden="true"/>:<span>✦</span>}</div>
+           <div><span className={rarityClass(selected.effectiveRarity)}>{petRarityLabel(selected.effectiveRarity)}</span><h3>{selected.name}</h3><p>{selected.active?"Currently active pet":"Owned pet"}</p></div>
+          </div>
+          <div className="pet-detail-panel__level"><div><strong>Lvl {selected.level??"—"}</strong><span>{selected.maxLevel&&selected.level!==null&&selected.level>=selected.maxLevel?"MAX LEVEL":selected.maxLevel?selected.maxLevel+" max level":"Level unavailable"}</span></div><b>{selected.level!==null&&selected.maxLevel?Math.round(Math.max(0,Math.min(1,selected.progress??0))*100)+"%":"—"}</b></div>
+          <div className="pet-detail-panel__track"><span style={{width:(selected.level!==null&&selected.maxLevel&&selected.level>=selected.maxLevel?100:Math.max(0,Math.min(1,selected.progress??0))*100)+"%"}}/></div>
+          <div className="pet-detail-panel__section"><p className="section-kicker">Pet Item</p>
+           {selected.heldItem ? <div className="pet-detail-panel__held">{getItemIconUrl(selected.heldItem)?<img src={getItemIconUrl(selected.heldItem)!} alt="" aria-hidden="true"/>:null}<div><strong>{formatPetHeldItem(selected.heldItem)}</strong><span>Held item</span></div></div> : <p className="pet-detail-panel__muted">No pet item equipped.</p>}
+          </div>
+          <div className="pet-detail-panel__section"><p className="section-kicker">Derived Stats</p>
+           {Object.keys(selected.stats).length ? <div className="pet-detail-panel__stats">{Object.entries(selected.stats).map(([key,value])=><div key={key}><span>{itemStatLabels[key]??key}</span><strong>{value>0?"+":""}{Number.isInteger(value)?value:value.toFixed(1)}</strong></div>)}</div> : <p className="pet-detail-panel__muted">No derived pet stats are available from the current profile data.</p>}
+          </div>
+          <div className="pet-detail-panel__section"><p className="section-kicker">Pet Progression</p>
+           <div className="pet-detail-panel__facts"><div><span>Experience</span><strong>{formatCoins(selected.xp)}</strong></div><div><span>XP to next level</span><strong>{selected.xpForNext===null?"—":formatCoins(selected.xpForNext)}</strong></div><div><span>Candy Used</span><strong>{selected.candyUsed}</strong></div><div><span>Skin</span><strong>{selected.skin??"Default"}</strong></div></div>
+          </div>
+          {selected.abilityLore.length ? <div className="pet-detail-panel__section"><p className="section-kicker">Abilities</p><div className="pet-detail-panel__lore">{selected.abilityLore.map((line,index)=><p key={index}>{line}</p>)}</div></div>:null}
+         </aside> : <aside className="pet-detail-panel pet-detail-panel--empty"><p className="section-kicker">Pet collection</p><h3>No pet selected</h3><p>This profile does not currently have any pets to display.</p></aside>}
+        </section>
+       </>;
+     })()}
+    </section>) : (activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
      <div className="profile-page-heading"><div><p className="section-kicker">Accessory bag</p><h2>Accessories</h2><p>Owned accessories are ordered from lowest Magical Power contribution to highest, keeping the pieces most likely to be replaced at the top.</p></div></div>
      <section className="profile-accessories-summary">
       <article className="accessory-summary-card"><span className="profile-stat-card__label">Magical Power</span><strong>{result.accessories.magicalPower.total}</strong><p>{result.accessories.magicalPower.accessories} from accessories{result.accessories.magicalPower.riftPrism ? " · "+result.accessories.magicalPower.riftPrism+" from Rift Prism" : ""}</p></article>
