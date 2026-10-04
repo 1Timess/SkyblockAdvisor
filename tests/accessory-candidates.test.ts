@@ -21,7 +21,7 @@ test("accessory lanes use profile missing/upgrades and rank quoted coins per gai
     { id: "CHEAP_COMMON", name: "Cheap", rarity: "common" },
     { id: "VALUABLE_RARE", name: "Valuable", rarity: "rare" },
   ];
-  const upgrades: AccessoryReference[] = [{ id: "WOLF_RING", name: "Wolf Ring", rarity: "epic" }];
+  const upgrades: AccessoryReference[] = [{ id: "WOLF_RING", name: "Wolf Ring", rarity: "epic", price: null }];
   profile.accessories.missing = missing; profile.accessories.upgrades = upgrades;
   const catalog = [item("CHEAP_COMMON", "common"), item("VALUABLE_RARE", "rare"), item("WOLF_RING", "epic")];
   const quoteValues = [quote("CHEAP_COMMON", 300), quote("VALUABLE_RARE", 400), quote("WOLF_RING", 700)];
@@ -38,8 +38,8 @@ test("accessory lanes enforce hard budget and only emit explicit owned-item oppo
   profile.accessories.missing = missing; profile.accessories.upgrades = [];
   const references: AccessoryReference[] = [
     ...missing,
-    { id: "HEGEMONY_ARTIFACT", name: "Hegemony", rarity: "legendary", recombobulationAllowed: true, enrichmentAllowed: true },
-    { id: "WOLF_RING", name: "Wolf Ring", rarity: "rare" },
+    { id: "HEGEMONY_ARTIFACT", name: "Hegemony", rarity: "legendary", price: null, recombobulationAllowed: true, enrichmentAllowed: true },
+    { id: "WOLF_RING", name: "Wolf Ring", rarity: "rare", price: null },
   ];
   const catalog = [item("EXPENSIVE", "legendary"), item("HEGEMONY_ARTIFACT", "legendary"), item("WOLF_RING", "rare")];
   const expensive = quote("EXPENSIVE", 10_000);
