@@ -61,7 +61,7 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
   const existing = inflight.get(key);
   if (existing) return existing;
 
-  const request = resolvePlayerFresh(valid, isUuid, fetcher, store);
+  const request = resolvePlayerFresh(isUuid ? canonicalUuid : valid, isUuid, fetcher, store);
   inflight.set(key, request);
 
   try {
