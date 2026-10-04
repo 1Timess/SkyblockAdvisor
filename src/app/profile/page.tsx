@@ -3,7 +3,6 @@ import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normaliz
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
-import type { ProfileItem } from "@/schemas/items";
 
 type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
@@ -23,7 +22,12 @@ function rarityClass(rarity:string|null){return rarity?"rarity-"+rarity:"rarity-
 function formatPrice(value:number|null){return value===null?"Price unavailable":formatCoins(value);}
 function upgradeEfficiency(price:number|null,mp:number){return price!==null&&mp>0?price/mp:null;}
 const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
-function sortArmorItems(items: typeof equippedArmor){return [...items].sort((a,b)=>{const slot=(item: typeof a)=>armorSlotOrder.findIndex(key=>item.categories.includes(key));return (slot(a)<0?99:slot(a))-(slot(b)<0?99:slot(b));});}
+function sortArmorItems<T extends Pick<ProfileItem, "categories">>(items: readonly T[]): T[] {
+ return [...items].sort((a,b)=>{
+  const slot=(item:T)=>armorSlotOrder.findIndex(key=>item.categories.includes(key));
+  return (slot(a)<0?99:slot(a))-(slot(b)<0?99:slot(b));
+ });
+}
 
 export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview";
