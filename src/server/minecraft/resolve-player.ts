@@ -20,10 +20,6 @@ type IdentityProvider = {
 
 const providers: IdentityProvider[] = [
   {
-    name: "Mowojang",
-    url: input => `https://mowojang.matdoes.dev/${encodeURIComponent(input)}`,
-  },
-  {
     name: "Mojang",
     url: (input, isUuid) => isUuid
       ? `https://sessionserver.mojang.com/session/minecraft/profile/${encodeURIComponent(input)}`
@@ -34,6 +30,10 @@ const providers: IdentityProvider[] = [
     url: (input, isUuid) => isUuid
       ? `https://api.minecraftservices.com/minecraft/profile/lookup/${encodeURIComponent(input)}`
       : `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(input)}`,
+  },
+  {
+    name: "Mowojang",
+    url: input => `https://mowojang.matdoes.dev/${encodeURIComponent(input)}`,
   },
 ];
 
@@ -72,7 +72,6 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
 
 async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetcher, store: TtlCache): Promise<Identity> {
   let lastError: AppError | null = null;
-  let allProvidersNotFound = true;
 
   for (const provider of providers) {
     try {
@@ -83,11 +82,9 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
         continue;
       }
 
-      allProvidersNotFound = false;
-
       if (!response.ok) {
         lastError = new AppError(
-          "IDENTITY_PROVIDER_ERROR",
+          "IDENTITY_UPSTREAM_ERROR",
           `Minecraft identity provider (${provider.name}) returned HTTP ${response.status}.`,
           502,
         );
@@ -95,17 +92,13 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
       }
 
       const body = await response.text();
-      if (body.trim().toLowerCase() === "player not found") {
+      if (!body.trim()) {
         lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
         continue;
       }
 
-      if (!body.trim()) {
-        lastError = new AppError(
-          "EMPTY_IDENTITY_RESPONSE",
-          `Minecraft identity provider (${provider.name}) returned an empty response.`,
-          502,
-        );
+      if (body.trim().toLowerCase() === "player not found") {
+        lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
         continue;
       }
 
@@ -140,9 +133,6 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
       store.set(identity.username.toLowerCase(), identity, IDENTITY_CACHE_TTL_SECONDS);
       return identity;
     } catch (error) {
-      allProvidersNotFound = false;
-      // A transport failure means the provider was unavailable; it is not evidence
-      // that the player does not exist. fetchUpstream retries transient failures first.
       if (error instanceof AppError) {
         lastError = error;
         continue;
@@ -151,13 +141,9 @@ async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetch
     }
   }
 
-  if (allProvidersNotFound && lastError?.code === "PLAYER_NOT_FOUND") {
-    throw lastError;
-  }
-
-  throw new AppError(
+  throw lastError ?? new AppError(
     "IDENTITY_UPSTREAM_ERROR",
-    "Minecraft identity lookup could not reach a working identity provider. Try again shortly.",
+    "Minecraft identity lookup failed.",
     502,
   );
 }
