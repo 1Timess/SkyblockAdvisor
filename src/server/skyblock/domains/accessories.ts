@@ -1,5 +1,5 @@
 import { rarities, type ProcessedItem, type ProfileWarning } from "../../../schemas/items";
-import type { AccessoryReference, AccessorySummary } from "../../../schemas/normalized-profile";
+import type { AccessoryReference, AccessorySummary, AccessoryUpgrade } from "../../../schemas/normalized-profile";
 import type { RawMember } from "../../hypixel/types";
 import { accessoryBaseId, accessoryChains, mpByRarity } from "../../reference/accessory-data";
 import { toProfileItem } from "../items/process-item";
@@ -46,7 +46,7 @@ export function buildAccessories(items: ProcessedItem[], member: RawMember, cata
     const key = item.rarity ?? "unknown", bucket = byRarity[key] ?? { count: 0, mp: 0 };
     bucket.count++; bucket.mp += mp; byRarity[key] = bucket;
   }
-  const missing: AccessoryReference[] = [], upgrades: AccessoryReference[] = [];
+  const missing: AccessoryReference[] = [], upgrades: AccessoryUpgrade[] = [];
   for (const reference of catalog) {
     const copies = groups.get(reference.id);
     if (ownedIds.has(reference.id)) {
