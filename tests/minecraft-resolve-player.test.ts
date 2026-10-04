@@ -32,8 +32,8 @@ test("identity resolution falls through Mowojang transport failure to Mojang", a
   const identity = await resolvePlayer("FixturePlayer", fetcher, new TtlCache());
 
   assert.deepEqual(identity, { uuid: UUID, username: "FixturePlayer" });
-  assert.equal(calls.filter(url => url.includes("mowojang.matdoes.dev")).length, 3);
   assert.equal(calls.filter(url => url.includes("api.mojang.com")).length, 1);
+  assert.equal(calls.filter(url => url.includes("mowojang.matdoes.dev")).length, 0);
 });
 
 test("identity resolution treats Mowojang's player-not-found response as non-authoritative and falls through", async () => {
@@ -41,8 +41,8 @@ test("identity resolution treats Mowojang's player-not-found response as non-aut
   const fetcher = async (input: string | URL | Request) => {
     const url = String(input);
     calls.push(url);
-    if (url.includes("mowojang.matdoes.dev")) return response(200, "player not found");
-    if (url.includes("api.mojang.com")) return response(200, { id: UUID, name: "FixturePlayer" });
+    if (url.includes("api.mojang.com")) return response(200, "player not found");
+    if (url.includes("api.minecraftservices.com")) return response(200, { id: UUID, name: "FixturePlayer" });
     throw new Error(`Unexpected provider: ${url}`);
   };
 
