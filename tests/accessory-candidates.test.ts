@@ -38,8 +38,8 @@ test("accessory lanes enforce hard budget and only emit explicit owned-item oppo
   profile.accessories.missing = missing; profile.accessories.upgrades = [];
   const references: AccessoryReference[] = [
     ...missing,
-    { id: "HEGEMONY_ARTIFACT", name: "Hegemony", rarity: "legendary", price: null, recombobulationAllowed: true, enrichmentAllowed: true },
-    { id: "WOLF_RING", name: "Wolf Ring", rarity: "rare", price: null },
+    { id: "HEGEMONY_ARTIFACT", name: "Hegemony", rarity: "legendary", recombobulationAllowed: true, enrichmentAllowed: true },
+    { id: "WOLF_RING", name: "Wolf Ring", rarity: "rare" },
   ];
   const catalog = [item("EXPENSIVE", "legendary"), item("HEGEMONY_ARTIFACT", "legendary"), item("WOLF_RING", "rare")];
   const expensive = quote("EXPENSIVE", 10_000);
