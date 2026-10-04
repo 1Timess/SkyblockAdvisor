@@ -7,8 +7,39 @@ import { fetchUpstream, type Fetcher } from "../http";
 export const UUID = /^[a-f0-9]{32}$/i;
 const HYPHENATED_UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 const identitySchema = z.object({ id: z.string().regex(UUID), name: z.string().min(1) });
+
 const cache = new TtlCache();
+const IDENTITY_CACHE_TTL_SECONDS = 24 * 60 * 60;
+
 export type Identity = { uuid: string; username: string };
+
+type IdentityProvider = {
+  name: string;
+  url: (input: string, isUuid: boolean) => string;
+};
+
+const providers: IdentityProvider[] = [
+  {
+    name: "Mowojang",
+    url: input => `https://mowojang.matdoes.dev/${encodeURIComponent(input)}`,
+  },
+  {
+    name: "Mojang",
+    url: (input, isUuid) => isUuid
+      ? `https://sessionserver.mojang.com/session/minecraft/profile/${encodeURIComponent(input)}`
+      : `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(input)}`,
+  },
+  {
+    name: "Minecraft Services",
+    url: (input, isUuid) => isUuid
+      ? `https://api.minecraftservices.com/minecraft/profile/lookup/${encodeURIComponent(input)}`
+      : `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(input)}`,
+  },
+];
+
+// Search and profile requests can resolve the same player concurrently. Singleflight
+// keeps a transient identity-provider failure from multiplying into duplicate calls.
+const inflight = new Map<string, Promise<Identity>>();
 
 export function validatePlayerInput(input: string): string {
   const trimmed = input.trim();
@@ -22,61 +53,96 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
   const valid = validatePlayerInput(input);
   const isUuid = UUID.test(valid) || HYPHENATED_UUID.test(valid);
   const key = isUuid ? valid.replaceAll("-", "").toLowerCase() : valid.toLowerCase();
+
   const cached = store.get<Identity>(key);
   if (cached) return cached;
 
-  const urls = isUuid
-    ? [
-        `https://sessionserver.mojang.com/session/minecraft/profile/${key}`,
-        `https://api.minecraftservices.com/minecraft/profile/lookup/${key}`,
-      ]
-    : [
-        `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(valid)}`,
-        `https://api.minecraftservices.com/minecraft/profile/lookup/name/${encodeURIComponent(valid)}`,
-      ];
+  const existing = inflight.get(key);
+  if (existing) return existing;
 
+  const request = resolvePlayerFresh(valid, isUuid, fetcher, store);
+  inflight.set(key, request);
+
+  try {
+    return await request;
+  } finally {
+    inflight.delete(key);
+  }
+}
+
+async function resolvePlayerFresh(valid: string, isUuid: boolean, fetcher: Fetcher, store: TtlCache): Promise<Identity> {
   let lastError: AppError | null = null;
-  for (const url of urls) {
+  let allProvidersNotFound = true;
+
+  for (const provider of providers) {
     try {
-      const response = await fetchUpstream(url, fetcher);
+      const response = await fetchUpstream(provider.url(valid, isUuid), fetcher);
+
       if (response.status === 404 || response.status === 204) {
         lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
         continue;
       }
+
+      allProvidersNotFound = false;
+
       if (!response.ok) {
-        lastError = new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
+        lastError = new AppError(
+          "IDENTITY_PROVIDER_ERROR",
+          `Minecraft identity provider (${provider.name}) returned HTTP ${response.status}.`,
+          502,
+        );
         continue;
       }
 
       const body = await response.text();
       if (body.trim().toLowerCase() === "player not found") {
         lastError = new AppError("PLAYER_NOT_FOUND", "Minecraft player not found.", 404);
-        allProvidersNotFound = true;
         continue;
       }
+
       if (!body.trim()) {
-        lastError = new AppError("EMPTY_IDENTITY_RESPONSE", "Minecraft identity service returned an empty response.", 502);
+        lastError = new AppError(
+          "EMPTY_IDENTITY_RESPONSE",
+          `Minecraft identity provider (${provider.name}) returned an empty response.`,
+          502,
+        );
         continue;
       }
 
       let parsed: unknown;
-      try { parsed = JSON.parse(body); }
-      catch {
-        lastError = new AppError("INVALID_IDENTITY", "Minecraft identity service returned an invalid response.", 502);
+      try {
+        parsed = JSON.parse(body);
+      } catch {
+        lastError = new AppError(
+          "INVALID_IDENTITY",
+          `Minecraft identity provider (${provider.name}) returned an invalid response.`,
+          502,
+        );
         continue;
       }
 
       const result = identitySchema.safeParse(parsed);
       if (!result.success) {
-        lastError = new AppError("INVALID_IDENTITY", "Minecraft identity service returned an invalid response.", 502);
+        lastError = new AppError(
+          "INVALID_IDENTITY",
+          `Minecraft identity provider (${provider.name}) returned an invalid response.`,
+          502,
+        );
         continue;
       }
 
-      const identity = { uuid: result.data.id.toLowerCase(), username: result.data.name };
-      store.set(identity.uuid, identity, 86400);
-      store.set(identity.username.toLowerCase(), identity, 86400);
+      const identity = {
+        uuid: result.data.id.toLowerCase(),
+        username: result.data.name,
+      };
+
+      store.set(identity.uuid, identity, IDENTITY_CACHE_TTL_SECONDS);
+      store.set(identity.username.toLowerCase(), identity, IDENTITY_CACHE_TTL_SECONDS);
       return identity;
     } catch (error) {
+      allProvidersNotFound = false;
+      // A transport failure means the provider was unavailable; it is not evidence
+      // that the player does not exist. fetchUpstream retries transient failures first.
       if (error instanceof AppError) {
         lastError = error;
         continue;
@@ -85,5 +151,13 @@ export async function resolvePlayer(input: string, fetcher: Fetcher = fetch, sto
     }
   }
 
-  throw lastError ?? new AppError("IDENTITY_UPSTREAM_ERROR", "Minecraft identity lookup failed.", 502);
+  if (allProvidersNotFound && lastError?.code === "PLAYER_NOT_FOUND") {
+    throw lastError;
+  }
+
+  throw new AppError(
+    "IDENTITY_UPSTREAM_ERROR",
+    "Minecraft identity lookup could not reach a working identity provider. Try again shortly.",
+    502,
+  );
 }
