@@ -150,7 +150,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
         </section>
        </>;
      })()}
-    </section>)) : (activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
+    </section>) : (activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
      <div className="profile-page-heading"><div><p className="section-kicker">Accessory bag</p><h2>Accessories</h2><p>Owned accessories are ordered from lowest Magical Power contribution to highest, keeping the pieces most likely to be replaced at the top.</p></div></div>
      <section className="profile-accessories-summary">
       <article className="accessory-summary-card"><span className="profile-stat-card__label">Magical Power</span><strong>{result.accessories.magicalPower.total}</strong><p>{result.accessories.magicalPower.accessories} from accessories{result.accessories.magicalPower.riftPrism ? " · "+result.accessories.magicalPower.riftPrism+" from Rift Prism" : ""}</p></article>
