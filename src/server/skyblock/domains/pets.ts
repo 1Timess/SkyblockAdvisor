@@ -154,10 +154,24 @@ function getPetTexture(type: string, rarity: string, skin: string | null) {
   const renderedBase = base ? skyCryptHeadUrl(base) : null;
   if (renderedBase) return renderedBase;
 
-  // Some pets do not have a canonical head entry in our table, but their
-  // rarity-specific SkyBlock pet item does have a proper SkyCrypt render.
-  const itemId = getCanonicalPetItemId(type, rarity);
-  return itemId ? skyCryptItemUrl(itemId) : null;
+  // Match current SkyCrypt behavior for pets missing from the canonical table:
+  // resolve the NEU pet item, extract its SkullOwner texture, and render that
+  // texture through /api/head. If the exact rarity is absent, walk downward
+  // through the pet rarities until NEU has a usable texture.
+  const rarityIndex = PET_ITEM_RARITY_INDEX[rarity.toLowerCase()];
+  if (rarityIndex === undefined) return null;
+
+  for (let index = rarityIndex; index >= 0; index--) {
+    const itemId = `${type.toUpperCase()};${index}`;
+    const texture = getNeuPetTexture(itemId);
+    const match = texture?.match(/\/texture\/([a-f0-9]+)$/i);
+    if (!match) continue;
+
+    const rendered = skyCryptHeadUrl(match[1]);
+    if (rendered) return rendered;
+  }
+
+  return null;
 }
 function getHeldItemTexture(itemId: string | null) {
   return itemId ? skyCryptItemUrl(itemId) : null;
