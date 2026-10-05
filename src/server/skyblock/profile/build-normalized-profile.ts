@@ -97,7 +97,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     profileCreatedAt: member.first_join ?? null,
     economy: buildEconomy(member, selected, warnings), gear: buildGear(items, member.loadout), inventoryItems: items.map(toProfileItem),
     accessories: buildAccessories(items, member, accessoryCatalog, warnings, normalizedAccessoryPrices),
-    pets: buildPets(member, warnings),
+    pets: await buildPets(member, warnings),
     progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings),
       mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing, enchanting: buildOwnedEnchantingState(member) },
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
