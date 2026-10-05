@@ -61,3 +61,22 @@ test("skill summaries accept canonical domain pet relevance instead of stat heur
   assert.equal(summaries.combat.relevantOwnedPets.length, 1);
   assert.equal(summaries.mining.relevantOwnedPets.length, 0);
 });
+
+
+test("skill summaries preserve deterministic candidate lane evidence without selecting a global winner", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer", requestedTab: "skills" }, fixtureSources());
+  const candidate = {
+    id: "fixture-upgrade", domain: "tool" as const,
+    item: { id: "FIXTURE_DRILL", name: "Fixture Drill", rarity: "rare" as const, categories: ["tool", "drill"],
+      stats: { miningSpeed: 500 }, requirements: [], unparsedRequirementText: [], lore: [], abilityText: [], setBonusText: [],
+      sources: { hypixel: true, neu: true }, marketKey: "FIXTURE_DRILL" },
+    requirements: [], abilityText: [], setBonusText: [], warnings: [],
+  };
+  const summaries = buildSkillProgressionSummaries(profile, undefined, {
+    mining: [{ lane: "mining:miningSpeed", candidate }],
+  });
+  assert.equal(summaries.mining.candidateEvidence.length, 1);
+  assert.equal(summaries.mining.candidateEvidence[0].lane, "mining:miningSpeed");
+  assert.equal(summaries.mining.candidateEvidence[0].candidate.id, "fixture-upgrade");
+  assert.notEqual(summaries.mining.progressionFocus?.label, "Fixture Drill");
+});
