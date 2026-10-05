@@ -1,11 +1,15 @@
 import type { ProfileItem } from "../../schemas/items";
 import type { NormalizedPet } from "../../schemas/pets";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
+import type { CanonicalPetDefinition, CanonicalPetItemDefinition } from "../../schemas/pet-mechanics";
+import type { OwnedPetSetup } from "../../schemas/owned-pet-setup";
+import type { PetProgressionDomain } from "../../schemas/pet-domain-relevance";
 import { buildMiningKnowledge } from "../reference/mining-knowledge";
 import { indexForagingGear } from "../foraging/gear-state";
 import { buildForagingProgressionFocus } from "../foraging/progression-focus";
 import { buildObservedFarmingState } from "../farming/observed-state";
 import { farmingSkillFocus } from "../farming/progression-focus";
+import { evaluatePetDomainRelevance } from "../pets/domain-relevance";
 
 export type SkillSummarySupport = "DOMAIN_NATIVE" | "COMPOSED" | "OBSERVED_ONLY";
 export type SkillProgressionFocus = {
@@ -40,7 +44,16 @@ export interface SkillProgressionSummary {
  * stable, small contract. Candidate ranking and advisor prioritization remain
  * in their existing domain/advisor pipelines.
  */
-export function buildSkillProgressionSummaries(profile: NormalizedSkyBlockProfile): Record<string, SkillProgressionSummary> {
+export interface SkillProgressionPetKnowledge {
+  setups: readonly OwnedPetSetup[];
+  definitions: readonly CanonicalPetDefinition[];
+  petItems: readonly CanonicalPetItemDefinition[];
+}
+
+export function buildSkillProgressionSummaries(
+  profile: NormalizedSkyBlockProfile,
+  petKnowledge?: SkillProgressionPetKnowledge,
+): Record<string, SkillProgressionSummary> {
   return Object.fromEntries(Object.entries(profile.progression.skills).map(([skill, level]) => {
     const base: SkillProgressionSummary = {
       skill,
@@ -56,11 +69,11 @@ export function buildSkillProgressionSummaries(profile: NormalizedSkyBlockProfil
       progressionFocus: nextSkillLevelFocus(skill, level.level, level.maxLevel),
       limitations: ["No dedicated deterministic progression domain is composed for this skill yet."],
     };
-    if (skill === "mining") return [skill, miningSummary(profile, base)];
-    if (skill === "fishing") return [skill, fishingSummary(profile, base)];
-    if (skill === "foraging") return [skill, foragingSummary(profile, base)];
-    if (skill === "farming") return [skill, farmingSummary(profile, base)];
-    if (skill === "combat") return [skill, combatSummary(profile, base)];
+    if (skill === "mining") return [skill, withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge)];
+    if (skill === "fishing") return [skill, withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge)];
+    if (skill === "foraging") return [skill, withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge)];
+    if (skill === "farming") return [skill, withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge)];
+    if (skill === "combat") return [skill, withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge)];
     return [skill, base];
   }));
 }
@@ -121,7 +134,7 @@ function farmingSummary(profile: NormalizedSkyBlockProfile, base: SkillProgressi
       target: typeof focus.targetLevel === "number" ? focus.targetLevel : null, remaining: null,
       basis: "Existing Farming skill progression focus.",
     } : base.progressionFocus,
-    limitations: ["Garden state and Farming pet relevance require the richer live Farming composition before they can be represented here."] };
+    limitations: ["Garden state requires the richer live Farming composition before it can be represented here."] };
 }
 
 function combatSummary(profile: NormalizedSkyBlockProfile, base: SkillProgressionSummary): SkillProgressionSummary {
@@ -131,6 +144,26 @@ function combatSummary(profile: NormalizedSkyBlockProfile, base: SkillProgressio
     relevantItems: weapons, primaryItem: profile.gear.equippedWeapon,
     progressionFocus: base.progressionFocus,
     limitations: ["Combat does not yet have a standalone progression domain; this summary composes Combat skill state with observed equipped gear and Dungeons context."] };
+}
+
+function withDomainPets(
+  profile: NormalizedSkyBlockProfile,
+  summary: SkillProgressionSummary,
+  domain: PetProgressionDomain,
+  knowledge?: SkillProgressionPetKnowledge,
+): SkillProgressionSummary {
+  if (!knowledge) return { ...summary, limitations: [...summary.limitations, "Canonical pet knowledge was not supplied to the Skills summary."] };
+  const definitions = new Map(knowledge.definitions.map(definition => [definition.id, definition]));
+  const petItems = new Map(knowledge.petItems.map(item => [item.itemId, item]));
+  const relevantOwnedPets = profile.pets.owned.filter((_, index) => {
+    const setup = knowledge.setups[index];
+    if (!setup?.canonicalPetId) return false;
+    const definition = definitions.get(setup.canonicalPetId);
+    if (!definition) return false;
+    const heldItem = setup.canonicalPetItemId ? petItems.get(setup.canonicalPetItemId) ?? null : null;
+    return evaluatePetDomainRelevance(definition, domain, heldItem).relevant;
+  });
+  return { ...summary, relevantOwnedPets };
 }
 
 function nextSkillLevelFocus(skill: string, level: number, maxLevel: number): SkillProgressionFocus | null {
