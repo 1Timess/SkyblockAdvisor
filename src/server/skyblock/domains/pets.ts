@@ -6,9 +6,12 @@ import type { NormalizedPet } from "../../../schemas/pets";
 import { effectivePetRarity, getPetLevel } from "../../reference/pet-leveling";
 import { neuPetNumsPath } from "../../reference/neu/paths";
 
+type PetStatLevel = { statNums?: Record<string, number>; otherNums?: number[] };
 type PetStatTier = {
-  level1?: { statNums?: Record<string, number>; otherNums?: number[] };
-  level100?: { statNums?: Record<string, number>; otherNums?: number[] };
+  "1"?: PetStatLevel;
+  "100"?: PetStatLevel;
+  level1?: PetStatLevel;
+  level100?: PetStatLevel;
   stats_levelling_curve?: string;
   statsLevelingCurve?: string;
 };
@@ -50,7 +53,8 @@ function getTierData(petNums: PetNums, type: string, rarity: string) {
 function calculatePetStats(petNums: PetNums, type: string, rarity: string, level: number | null) {
   if (level === null) return {};
   const tier = getTierData(petNums, type, rarity);
-  const min = tier?.level1, max = tier?.level100;
+  const min = tier?.["1"] ?? tier?.level1;
+  const max = tier?.["100"] ?? tier?.level100;
   if (!tier || !min?.statNums || !max?.statNums) return {};
 
   let minStatsLevel = 0, maxStatsLevel = 100, statsLevelingType = -1, statsLevel = level;
