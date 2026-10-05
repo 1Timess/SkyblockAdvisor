@@ -8,7 +8,7 @@ function pet(overrides: Partial<NormalizedPet> = {}): NormalizedPet {
   return {
     uuid: null, type: "SCATHA", name: "Scatha", rarity: "epic", effectiveRarity: "epic",
     level: 80, maxLevel: 100, xp: 12345, xpCurrent: 345, xpForNext: 1000, progress: 0.345,
-    active: false, heldItem: null, candyUsed: 0, skin: null, stats: {}, abilityLore: [], ...overrides,
+    active: false, heldItem: null, candyUsed: 0, skin: null, texture: null, stats: {}, abilityLore: [], ...overrides,
   };
 }
 function definition(id: string): CanonicalPetDefinition {
