@@ -22,12 +22,11 @@ export function collectInventories(member: RawMember, warnings: ProfileWarning[]
 
   if (options.accessories) {
     sources.push({ source: "talisman_bag", encoded: inventory?.bag_contents?.talisman_bag });
-    sources.push({ source: "enderchest", encoded: inventory?.ender_chest_contents });
-    sources.push(...Object.entries(inventory?.backpack_contents ?? {}).map(([key, encoded]) => ({ source: `backpack:${key}`, encoded })));
   }
 
   if (options.storage) {
     sources.push({ source: "enderchest", encoded: inventory?.ender_chest_contents });
+    sources.push(...Object.entries(inventory?.backpack_contents ?? {}).map(([key, encoded]) => ({ source: `backpack:${key}`, encoded })));
     sources.push({ source: "personal_vault", encoded: inventory?.personal_vault_contents });
     sources.push({ source: "wardrobe", encoded: inventory?.wardrobe_contents });
   }
