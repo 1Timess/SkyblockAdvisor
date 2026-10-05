@@ -44,7 +44,7 @@ test("pet lanes include owned leveling, next rarity, and caller-supplied role ta
 test("pet rarity and role candidates honor a hard budget when prices are known", async () => {
   const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer" }, fixtureSources());
   profile.pets.owned = [{ uuid: null, type: "SHEEP", name: "Sheep", rarity: "epic", effectiveRarity: "epic", level: 100, maxLevel: 100,
-    xp: 0, xpCurrent: 0, xpForNext: 0, progress: 0, active: true, heldItem: null, candyUsed: 0, skin: null, stats: {}, abilityLore: [] }];
+    xp: 0, xpCurrent: 0, xpForNext: 0, progress: 0, active: true, heldItem: null, candyUsed: 0, skin: null, texture: null, stats: {}, abilityLore: [] }];
   const catalog = buildPetCandidateCatalog(new InMemoryNeuRepository([neuPet("SHEEP", 3, "EPIC"), neuPet("SHEEP", 4, "LEGENDARY"), neuPet("TIGER", 2, "RARE")], metadata));
   const values = [quote("PET:SHEEP:LEGENDARY", 2_000), quote("PET:TIGER:RARE", 500)];
   const result = buildPetLanes({ profile, catalog, quotes: new Map(values.map(value => [value.marketKey, value])), budgetCoins: 1_000, rolePetTypes: ["TIGER"] });
