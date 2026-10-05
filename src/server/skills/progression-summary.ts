@@ -96,12 +96,27 @@ export function buildSkillProgressionSummaries(
       displayPet: null,
       limitations: ["No dedicated deterministic progression domain is composed for this skill yet."],
     };
-    if (skill === "mining") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge), candidateEvidence.mining), domainEvidence.mining))];
-    if (skill === "fishing") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge), candidateEvidence.fishing), domainEvidence.fishing))];
-    if (skill === "foraging") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge), candidateEvidence.foraging), domainEvidence.foraging))];
-    if (skill === "farming") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge), candidateEvidence.farming), domainEvidence.farming))];
-    if (skill === "combat") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge), candidateEvidence.combat), domainEvidence.combat))];
-    return [skill, finalizePresentation(withDomainEvidence(base, domainEvidence[skill]))];
+    const compose = () => {
+      if (skill === "mining") return withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge);
+      if (skill === "fishing") return withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge);
+      if (skill === "foraging") return withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge);
+      if (skill === "farming") return withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge);
+      if (skill === "combat") return withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge);
+      return base;
+    };
+    let summary: SkillProgressionSummary;
+    try {
+      summary = compose();
+    } catch (error) {
+      summary = {
+        ...base,
+        limitations: [
+          ...base.limitations,
+          `Domain summary unavailable: ${error instanceof Error ? error.message : String(error)}`,
+        ],
+      };
+    }
+    return [skill, finalizePresentation(withDomainEvidence(withEvidence(summary, candidateEvidence[skill]), domainEvidence[skill]))];
   }));
 }
 
