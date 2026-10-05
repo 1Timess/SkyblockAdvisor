@@ -111,7 +111,7 @@ function foragingSummary(profile: NormalizedSkyBlockProfile, base: SkillProgress
 function farmingSummary(profile: NormalizedSkyBlockProfile, base: SkillProgressionSummary): SkillProgressionSummary {
   const observed = buildObservedFarmingState(profile);
   const focus = farmingSkillFocus(profile);
-  const visible = new Set(observed.visibleGear?.items?.flatMap(item => item.id ? [item.id] : []) ?? []);
+  const visible = new Set(observed.visibleEquipment.flatMap(item => item.id ? [item.id] : []));
   const items = uniqueItems(profile.inventoryItems.filter(item => item.id && visible.has(item.id)));
   return { ...base, support: "DOMAIN_NATIVE",
     facts: [],
