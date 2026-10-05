@@ -74,6 +74,8 @@ export interface SkillProgressionPetKnowledge {
 export function buildSkillProgressionSummaries(
   profile: NormalizedSkyBlockProfile,
   petKnowledge?: SkillProgressionPetKnowledge,
+  candidateEvidence: Partial<Record<string, readonly SkillCandidateEvidence[]>> = {},
+  domainEvidence: Partial<Record<string, SkillDomainEvidence>> = {},
 ): Record<string, SkillProgressionSummary> {
   return Object.fromEntries(Object.entries(profile.progression.skills).map(([skill, level]) => {
     const base: SkillProgressionSummary = {
