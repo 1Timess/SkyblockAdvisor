@@ -126,22 +126,39 @@ function getNeuPetTexture(itemId: string) {
   return texture;
 }
 
+const PET_ITEM_RARITY_INDEX: Record<string, number> = {
+  common: 0,
+  uncommon: 1,
+  rare: 2,
+  epic: 3,
+  legendary: 4,
+  mythic: 5,
+};
+
+function getCanonicalPetItemId(type: string, rarity: string) {
+  const index = PET_ITEM_RARITY_INDEX[rarity.toLowerCase()];
+  return index === undefined ? null : `${type.toUpperCase()};${index}`;
+}
+
 function getPetTexture(type: string, rarity: string, skin: string | null) {
   if (skin) {
     const skinTexture = getNeuPetTexture("PET_SKIN_" + skin);
     const match = skinTexture?.match(/\/texture\/([a-f0-9]+)$/i);
     if (match) {
-      return skyCryptHeadUrl(match[1]);
+      const renderedSkin = skyCryptHeadUrl(match[1]);
+      if (renderedSkin) return renderedSkin;
     }
   }
 
-  // SkyCrypt's PET_DATA head entries are the canonical 2D pet renders.
-  // We consume SkyCrypt's renderer rather than trying to render Minecraft
-  // textures ourselves.
   const base = PET_HEAD_TEXTURES[type.toUpperCase()];
-  return base ? skyCryptHeadUrl(base) : null;
-}
+  const renderedBase = base ? skyCryptHeadUrl(base) : null;
+  if (renderedBase) return renderedBase;
 
+  // Some pets do not have a canonical head entry in our table, but their
+  // rarity-specific SkyBlock pet item does have a proper SkyCrypt render.
+  const itemId = getCanonicalPetItemId(type, rarity);
+  return itemId ? skyCryptItemUrl(itemId) : null;
+}
 function getHeldItemTexture(itemId: string | null) {
   return itemId ? skyCryptItemUrl(itemId) : null;
 }
