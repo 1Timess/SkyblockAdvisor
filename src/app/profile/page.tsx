@@ -68,7 +68,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
        const selectedSkill=result.progression.skills[selectedKey];
        const relevantItem=bestSkillItem(selectedKey,result.inventoryItems);
        const relevantPet=bestSkillPet(selectedKey,result.pets.owned);
-       const domainFacts:selectedSkill extends never?never:Array<{label:string;value:string}> = [];
+       const domainFacts:Array<{label:string;value:string}> = [];
        if(selectedKey==="mining")domainFacts.push({label:"HOTM",value:result.progression.mining.hotmLevel===null?"—":"Level "+result.progression.mining.hotmLevel});
        if(selectedKey==="foraging")domainFacts.push({label:"HOTF",value:result.progression.foraging.hotfLevel===null?"—":"Level "+result.progression.foraging.hotfLevel});
        if(selectedKey==="fishing")domainFacts.push({label:"Sea Creatures",value:result.progression.fishing.seaCreatureKills===null?"—":new Intl.NumberFormat("en-US").format(result.progression.fishing.seaCreatureKills)});
@@ -92,7 +92,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
         </div>
        </>;
      })()}
-    </section>) : ({activeTab==="pets" ? (<section className="profile-pets-page" aria-label="Pets">
+    </section>) : (activeTab==="pets" ? (<section className="profile-pets-page" aria-label="Pets">
      {(() => {
        const pets=[...result.pets.owned].sort((a,b)=>petSortRank(b)-petSortRank(a));
        const highestLevel=pets.reduce((best,pet)=>Math.max(best,pet.level??0),0);
