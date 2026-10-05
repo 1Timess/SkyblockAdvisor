@@ -80,3 +80,37 @@ test("skill summaries preserve deterministic candidate lane evidence without sel
   assert.equal(summaries.mining.candidateEvidence[0].candidate.id, "fixture-upgrade");
   assert.notEqual(summaries.mining.progressionFocus?.label, "Fixture Drill");
 });
+
+
+test("skill presentation only selects a pet when canonical relevance is unambiguous", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer", requestedTab: "skills" }, fixtureSources());
+  const pet = profile.pets.owned[0];
+  assert.ok(pet);
+  const setup = {
+    setupId: "pet:fixture", uuid: pet.uuid, type: pet.type, name: pet.name,
+    baseRarity: pet.rarity, effectiveRarity: pet.effectiveRarity, xp: pet.xp, level: pet.level, maxLevel: pet.maxLevel,
+    xpCurrent: pet.xpCurrent, xpForNext: pet.xpForNext, progress: pet.progress, heldItem: pet.heldItem,
+    candyUsed: pet.candyUsed, skin: pet.skin, active: pet.active, canonicalPetId: "SHEEP;0", canonicalPetItemId: null,
+    resolution: { petDefinition: "RESOLVED" as const, petItemDefinition: "NONE" as const },
+  };
+  const definition = {
+    id: "SHEEP;0", type: "SHEEP", rarity: "common" as const, petSkillType: "COMBAT", maxLevel: 100, rarityOffset: 0,
+    xpCurve: Array(99).fill(100), xpMultiplier: 1, customLevelingType: null, baseStatTemplates: { COMBAT_WISDOM: "{COMBAT_WISDOM}" },
+    abilities: [], upgradePaths: [], source: "NEU" as const,
+  };
+  const combat = buildSkillProgressionSummaries(profile, { setups: [setup], definitions: [definition], petItems: [] }).combat;
+  assert.equal(combat.displayPet?.uuid, pet.uuid);
+});
+
+test("farming summary preserves native Garden evidence without converting it into advisor candidates", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer", requestedTab: "skills" }, fixtureSources());
+  const farming = buildSkillProgressionSummaries(profile, undefined, {}, { farming: { farming: {
+    gardenAvailable: true, gardenLevel: 8, gardenXp: 12345,
+    nextGardenLevel: { level: 9, xpRequired: 20000, xpRemaining: 7655 },
+    nextCropMilestones: [{ crop: "WHEAT", resourceId: "WHEAT", collected: 900, tier: 4, threshold: 1000, remaining: 100 }],
+    equipmentComparisons: [{ targetItemId: "FERMENTO_BOOTS" }],
+  } } }).farming;
+  assert.equal(farming.domainEvidence.farming?.gardenLevel, 8);
+  assert.equal(farming.domainEvidence.farming?.nextCropMilestones[0]?.remaining, 100);
+  assert.equal(farming.candidateEvidence.length, 0);
+});
