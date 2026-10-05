@@ -1,10 +1,12 @@
 import "server-only";
 import { readFileSync } from "node:fs";
+import path from "node:path";
+import { neuItemSchema } from "../../../schemas/neu";
 import type { RawMember } from "../../hypixel/types";
 import type { ProfileWarning } from "../../../schemas/items";
 import type { NormalizedPet } from "../../../schemas/pets";
 import { effectivePetRarity, getPetLevel } from "../../reference/pet-leveling";
-import { neuPetNumsPath } from "../../reference/neu/paths";
+import { neuItemsDirectory, neuPetNumsPath } from "../../reference/neu/paths";
 
 type PetStatLevel = { statNums?: Record<string, number>; otherNums?: number[] };
 type PetStatTier = {
@@ -18,7 +20,37 @@ type PetStatTier = {
 
 type PetNums = Record<string, Record<string, PetStatTier>>;
 
+
 let petNumsCache: PetNums | null = null;
+const petTextureCache = new Map<string, string | null>();
+
+function getNeuPetTexture(itemId: string) {
+  if (petTextureCache.has(itemId)) return petTextureCache.get(itemId)!;
+  let texture: string | null = null;
+  try {
+    const file = path.join(neuItemsDirectory(), itemId + ".json");
+    const item = neuItemSchema.parse(JSON.parse(readFileSync(file, "utf8")));
+    const encoded = item.nbttag?.match(/Value:"([^"]+)"/)?.[1];
+    if (encoded) {
+      const decoded = Buffer.from(encoded, "base64").toString("utf8");
+      const match = decoded.match(/"url":"(https?:\/\/textures\.minecraft\.net\/texture\/[a-f0-9]+)"/i);
+      if (match) texture = match[1];
+    }
+  } catch {
+    // Missing or malformed NEU item data; caller may use a fallback.
+  }
+  petTextureCache.set(itemId, texture);
+  return texture;
+}
+
+function getPetTexture(type: string, rarity: string, skin: string | null) {
+  if (skin) {
+    const skinTexture = getNeuPetTexture("PET_SKIN_" + skin);
+    if (skinTexture) return skinTexture;
+  }
+  const tier = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4, mythic: 5 }[rarity.toLowerCase()];
+  return tier === undefined ? null : getNeuPetTexture(type.toUpperCase() + ";" + tier);
+}
 function loadPetNums(): PetNums {
   if (petNumsCache) return petNumsCache;
   try {
@@ -45,7 +77,7 @@ function normalizePetStatKey(key: string) {
 }
 
 function getTierData(petNums: PetNums, type: string, rarity: string) {
-  const byType = petNums[type];
+  const byType = petNums[type.toUpperCase()] ?? petNums[type];
   if (!byType) return null;
   return byType[rarity.toUpperCase()] ?? byType[rarity.toLowerCase()] ?? null;
 }
@@ -110,6 +142,7 @@ export function buildPets(member: RawMember, warnings: ProfileWarning[], include
       level: level?.level ?? null, maxLevel: level?.maxLevel ?? null, xp, xpCurrent: level?.xpCurrent ?? null,
       xpForNext: level?.xpForNext ?? null, progress: level?.progress ?? null, active: pet.active ?? false,
       heldItem: pet.heldItem ?? null, candyUsed: pet.candyUsed ?? 0, skin: pet.skin ?? null,
+      texture: getPetTexture(type, effectiveRarity, pet.skin ?? null),
       stats: calculatePetStats(petNums, type, effectiveRarity, level?.level ?? null), abilityLore: [],
     };
   });
