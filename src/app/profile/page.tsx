@@ -24,7 +24,10 @@ function upgradeEfficiency(price:number|null,mp:number){return price!==null&&mp>
 function petRarityLabel(rarity:string|null){return rarity?rarity.replace(/_/g," "):"Unknown";}
 function petRarityRank(rarity:string|null){const ranks:Record<string,number>={common:0,uncommon:1,rare:2,epic:3,legendary:4,mythic:5,special:6,very_special:7};return rarity?(ranks[rarity]??-1):-1;}
 function petRarityIndex(rarity:string|null){return rarity?({common:0,uncommon:1,rare:2,epic:3,legendary:4,mythic:5}[rarity]??null):null;}
-function petIconUrl(type:string,rarity:string|null){const tier=petRarityIndex(rarity);return tier===null?null:"https://sky.shiiyu.moe/api/item/"+encodeURIComponent(type+";"+tier);}
+function petIconUrl(type:string,rarity:string|null){
+ const tier=petRarityIndex(rarity);
+ return tier===null?null:"https://sky.shiiyu.moe/api/item/"+type+";"+tier;
+}
 function formatPetHeldItem(value:string|null){if(!value)return null;return value.replace(/^PET_ITEM_/,"").replace(/_/g," ").replace(/\b\w/g,char=>char.toUpperCase());}
 function petSortRank(pet:{active:boolean;level:number|null;effectiveRarity:string|null}){return petRarityRank(pet.effectiveRarity)*1000000+(pet.level??-1)*1000;}
 const armorSlotOrder = ["helmet","chestplate","leggings","boots"];
