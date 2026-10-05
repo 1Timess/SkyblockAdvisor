@@ -39,3 +39,19 @@ test("normalized pets use SkyCrypt renders for pet heads and held items", () => 
   assert.equal(result.owned[0]?.texture, "https://sky.shiiyu.moe/api/head/38ff473bd52b4db2c06f1ac87fe1367bce7574fac330ffac7956229f82efba1");
   assert.equal(result.owned[0]?.heldItemTexture, "https://sky.shiiyu.moe/api/item/PET_ITEM_CROCHET_TIGER_PLUSHIE");
 });
+
+
+test("pets without a canonical head fall back to their rarity-specific SkyCrypt item render", () => {
+  const member = {
+    pets_data: {
+      pets: [
+        { uuid: "crab-1", type: "HERMIT_CRAB", tier: "LEGENDARY", exp: 0, active: false, heldItem: null, candyUsed: 0, skin: null },
+        { uuid: "frog-1", type: "FROG", tier: "EPIC", exp: 0, active: false, heldItem: null, candyUsed: 0, skin: null },
+      ],
+    },
+  } as RawMember;
+
+  const result = buildPets(member, [], false);
+  assert.equal(result.owned[0]?.texture, "https://sky.shiiyu.moe/api/item/HERMIT_CRAB%3B4");
+  assert.equal(result.owned[1]?.texture, "https://sky.shiiyu.moe/api/item/FROG%3B3");
+});
