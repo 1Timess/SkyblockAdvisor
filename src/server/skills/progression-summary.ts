@@ -1,4 +1,5 @@
 import type { ProfileItem } from "../../schemas/items";
+import type { AdvisorCandidate } from "../../schemas/candidates";
 import type { NormalizedPet } from "../../schemas/pets";
 import type { NormalizedSkyBlockProfile } from "../../schemas/normalized-profile";
 import type { CanonicalPetDefinition, CanonicalPetItemDefinition } from "../../schemas/pet-mechanics";
@@ -21,6 +22,11 @@ export type SkillProgressionFocus = {
   basis: string;
 };
 
+export interface SkillCandidateEvidence {
+  lane: string;
+  candidate: AdvisorCandidate;
+}
+
 export interface SkillProgressionSummary {
   skill: string;
   level: number;
@@ -33,6 +39,7 @@ export interface SkillProgressionSummary {
   primaryItem: ProfileItem | null;
   relevantOwnedPets: NormalizedPet[];
   progressionFocus: SkillProgressionFocus | null;
+  candidateEvidence: SkillCandidateEvidence[];
   limitations: string[];
 }
 
@@ -67,13 +74,14 @@ export function buildSkillProgressionSummaries(
       primaryItem: null,
       relevantOwnedPets: [],
       progressionFocus: nextSkillLevelFocus(skill, level.level, level.maxLevel),
+      candidateEvidence: [],
       limitations: ["No dedicated deterministic progression domain is composed for this skill yet."],
     };
-    if (skill === "mining") return [skill, withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge)];
-    if (skill === "fishing") return [skill, withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge)];
-    if (skill === "foraging") return [skill, withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge)];
-    if (skill === "farming") return [skill, withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge)];
-    if (skill === "combat") return [skill, withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge)];
+    if (skill === "mining") return [skill, withEvidence(withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge), candidateEvidence.mining)];
+    if (skill === "fishing") return [skill, withEvidence(withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge), candidateEvidence.fishing)];
+    if (skill === "foraging") return [skill, withEvidence(withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge), candidateEvidence.foraging)];
+    if (skill === "farming") return [skill, withEvidence(withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge), candidateEvidence.farming)];
+    if (skill === "combat") return [skill, withEvidence(withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge), candidateEvidence.combat)];
     return [skill, base];
   }));
 }
@@ -144,6 +152,10 @@ function combatSummary(profile: NormalizedSkyBlockProfile, base: SkillProgressio
     relevantItems: weapons, primaryItem: profile.gear.equippedWeapon,
     progressionFocus: base.progressionFocus,
     limitations: ["Combat does not yet have a standalone progression domain; this summary composes Combat skill state with observed equipped gear and Dungeons context."] };
+}
+
+function withEvidence(summary: SkillProgressionSummary, evidence?: readonly SkillCandidateEvidence[]): SkillProgressionSummary {
+  return evidence?.length ? { ...summary, candidateEvidence: [...evidence] } : summary;
 }
 
 function withDomainPets(
