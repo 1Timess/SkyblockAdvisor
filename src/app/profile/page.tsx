@@ -3,7 +3,7 @@ import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normaliz
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
-import { buildSkillProgressionSummaries } from "@/server/skills/progression-summary";
+import { buildSkillProgressionSummaries } from "@/server/skills/progression-summary";\nimport { loadSkillPetKnowledge } from "@/server/skills/load-pet-knowledge";
 
 type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string; skill?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
@@ -42,7 +42,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
   const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
-  const skillSummaries=activeTab==="skills"?buildSkillProgressionSummaries(result):null;
+  const skillPetKnowledge=activeTab==="skills"?await loadSkillPetKnowledge(result):undefined;\n  const skillSummaries=activeTab==="skills"?buildSkillProgressionSummaries(result,skillPetKnowledge):null;
   const profileIcon=getProfileIconPath(result.profile.cuteName);
   const avatarUrl="https://mc-heads.net/avatar/"+result.identity.uuid+"/160";
   const skyblockLevel=getNumeric(result.otherProgression.leveling,["experience","xp","level"]);
@@ -75,7 +75,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           <div className="skill-detail__track"><span style={{width:(selectedSkill.maxed?100:selectedSkill.progress*100)+"%"}}/></div>
           <div className="skill-detail__facts">
            {presentation?.facts.map(fact=><div key={fact.label}><span>{fact.label}</span><strong>{fact.value??"—"}</strong></div>)}
-           <div><span>{selectedKey==="mining"?"Drill / Tool":selectedKey==="fishing"?"Rod":selectedKey==="combat"?"Weapon":"Primary Tool"}</span><strong>{presentation?.displayItem?.name??(presentation?.relevantItems.length?"Multiple relevant items":"No domain tool detected")}</strong></div>
+           <div><span>{selectedKey==="mining"?"Drill / Tool":selectedKey==="fishing"?"Rod":selectedKey==="combat"?"Weapon":"Relevant Items"}</span>{presentation?.relevantItems.length?<div className="skill-detail__relevant-items">{presentation.relevantItems.slice(0,5).map((item,index)=>{const icon=getItemIconUrl(item.id);return <span className="skill-detail__relevant-item" key={item.uuid??`${item.source}:${item.id??item.name}:${index}`}>{icon?<img src={icon} alt="" aria-hidden="true"/>:null}<strong>{item.name}</strong></span>})}{presentation.relevantItems.length>5?<small>+{presentation.relevantItems.length-5} more</small>:null}</div>:<strong>No domain item detected</strong>}</div>
            <div><span>Relevant Owned Pet</span><strong>{presentation?.displayPet?.name??(presentation?.relevantOwnedPets.length?`${presentation.relevantOwnedPets.length} relevant pets`:"No domain pet detected")}</strong></div>
           </div>
           <div className="skill-detail__focus"><p className="section-kicker">Progression Focus</p><strong>{presentation?.progressionFocus?.label??"Ask Vira for the next prioritized upgrade"}</strong><p>A high-level next milestone based on your current profile. Vira can turn this into a prioritized, budget-aware plan.</p></div>
