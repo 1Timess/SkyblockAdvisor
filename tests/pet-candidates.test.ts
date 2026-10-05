@@ -32,7 +32,7 @@ test("pet lanes include owned leveling, next rarity, and caller-supplied role ta
   ], metadata);
   const catalog = buildPetCandidateCatalog(repository);
   profile.pets.owned = [{ uuid: null, type: "SHEEP", name: "Sheep", rarity: "epic", effectiveRarity: "epic", level: 50, maxLevel: 100,
-    xp: 0, xpCurrent: 0, xpForNext: 1, progress: 0, active: true, heldItem: null, candyUsed: 0, skin: null, stats: {}, abilityLore: [] }];
+    xp: 0, xpCurrent: 0, xpForNext: 1, progress: 0, active: true, heldItem: null, candyUsed: 0, skin: null, texture: null, stats: {}, abilityLore: [] }];
   const prices = [quote("PET:SHEEP:LEGENDARY", 2_000), quote("PET:TIGER:RARE", 500)];
   const result = buildPetLanes({ profile, catalog, quotes: new Map(prices.map(value => [value.marketKey, value])), rolePetTypes: ["TIGER"] });
   assert.deepEqual(result.lanes.owned.map(value => value.id), ["SHEEP;3"]);
@@ -55,7 +55,7 @@ test("pet rarity and role candidates honor a hard budget when prices are known",
 function ownedRabbit(rarity: string, level: number) {
   return { uuid: null, type: "RABBIT", name: "Rabbit", rarity, effectiveRarity: rarity, level, maxLevel: 100,
     xp: 0, xpCurrent: 0, xpForNext: level < 100 ? 1 : 0, progress: 0, active: false, heldItem: null,
-    candyUsed: 0, skin: null, stats: {}, abilityLore: [] };
+    candyUsed: 0, skin: null, texture: null, stats: {}, abilityLore: [] };
 }
 
 test("lower-level duplicate pets do not create account progression targets", async () => {
