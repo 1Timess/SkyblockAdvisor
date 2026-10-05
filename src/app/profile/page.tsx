@@ -46,7 +46,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
   const skyblockLevelValue=skyblockLevel!==null&&skyblockLevel>100?Math.floor(skyblockLevel/100):skyblockLevel;
   const fairySouls=fairySoulCount(result.otherProgression.fairySoul); const skills=Object.entries(result.progression.skills);
   const averageSkillLevel=skills.length?skills.reduce((sum,[,skill])=>sum+skill.level,0)/skills.length:null;
-  const equippedArmor=sortArmorItems(result.gear.armor.items);
+  const equippedArmor=(activeTab==="overview"||activeTab==="gear")?sortArmorItems(result.gear.armor.items):[];
   const equippedWeapon=result.gear.equippedWeapon;
   return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/>
    <nav className="profile-nav" aria-label="Profile navigation"><Link className="nav__brand" href="/#search" aria-label="Statixel home"><img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt=""/><span className="nav__wordmark">Statixel</span></Link><Link className="profile-nav__search" href="/#search">Search another profile</Link></nav>
