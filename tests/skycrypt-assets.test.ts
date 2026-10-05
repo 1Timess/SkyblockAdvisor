@@ -41,7 +41,7 @@ test("normalized pets use SkyCrypt renders for pet heads and held items", () => 
 });
 
 
-test("pets without a canonical head fall back to their rarity-specific SkyCrypt item render", () => {
+test("pets without a canonical head resolve their NEU SkullOwner texture through SkyCrypt", () => {
   const member = {
     pets_data: {
       pets: [
@@ -52,6 +52,8 @@ test("pets without a canonical head fall back to their rarity-specific SkyCrypt 
   } as RawMember;
 
   const result = buildPets(member, [], false);
-  assert.equal(result.owned[0]?.texture, "https://sky.shiiyu.moe/api/item/HERMIT_CRAB%3B4");
-  assert.equal(result.owned[1]?.texture, "https://sky.shiiyu.moe/api/item/FROG%3B3");
+  for (const pet of result.owned) {
+    assert.match(pet.texture ?? "", /^https:\/\/sky\.shiiyu\.moe\/api\/head\/[a-f0-9]+$/);
+    assert.doesNotMatch(pet.texture ?? "", /\/api\/item\//);
+  }
 });
