@@ -89,10 +89,10 @@ function calculatePetStats(petNums: PetNums, type: string, rarity: string, level
   return output;
 }
 
-export async function buildPets(member: RawMember, warnings: ProfileWarning[]) {
+export async function buildPets(member: RawMember, warnings: ProfileWarning[], includeReferenceStats = true) {
   const rawPets = member.pets_data?.pets;
   if (!rawPets) warnings.push({ code: "PARTIAL_PROFILE", scope: "pets", message: "Owned pets were not supplied." });
-  const petNums = await loadPetNums();
+  const petNums = includeReferenceStats ? await loadPetNums() : {};
   const owned: NormalizedPet[] = (rawPets ?? []).map(pet => {
     const rarity = pet.tier?.toLowerCase() ?? "unknown", type = pet.type ?? "UNKNOWN";
     const xp = pet.exp ?? 0;
