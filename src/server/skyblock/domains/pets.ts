@@ -2,6 +2,7 @@ import "server-only";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { neuItemSchema } from "../../../schemas/neu";
+import { skyCryptHeadUrl, skyCryptItemUrl } from "../../reference/skycrypt-assets";
 import type { RawMember } from "../../hypixel/types";
 import type { ProfileWarning } from "../../../schemas/items";
 import type { NormalizedPet } from "../../../schemas/pets";
@@ -126,20 +127,23 @@ function getNeuPetTexture(itemId: string) {
 }
 
 function getPetTexture(type: string, rarity: string, skin: string | null) {
-  // Prefer the canonical pet head over NEU's 3D PET_* model texture.
-  // Keep skin lookup as a fallback for future custom-skin support.
-  const base = PET_HEAD_TEXTURES[type.toUpperCase()];
-  if (base) return base;
   if (skin) {
     const skinTexture = getNeuPetTexture("PET_SKIN_" + skin);
-    if (skinTexture) return skinTexture;
+    const match = skinTexture?.match(/\/texture\/([a-f0-9]+)$/i);
+    if (match) {
+      return skyCryptHeadUrl(match[1]);
+    }
   }
-  return null;
+
+  // SkyCrypt's PET_DATA head entries are the canonical 2D pet renders.
+  // We consume SkyCrypt's renderer rather than trying to render Minecraft
+  // textures ourselves.
+  const base = PET_HEAD_TEXTURES[type.toUpperCase()];
+  return base ? skyCryptHeadUrl(base) : null;
 }
 
 function getHeldItemTexture(itemId: string | null) {
-  if (!itemId) return null;
-  return getNeuPetTexture(itemId) ?? getNeuPetTexture(itemId.startsWith("PET_ITEM_") ? itemId : "PET_ITEM_" + itemId);
+  return itemId ? skyCryptItemUrl(itemId) : null;
 }
 function loadPetNums(): PetNums {
   if (petNumsCache) return petNumsCache;
