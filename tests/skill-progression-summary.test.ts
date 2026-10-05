@@ -39,3 +39,25 @@ test("combat summary prefers the observed equipped weapon rather than inventory 
   assert.equal(combat.support, "COMPOSED");
   assert.equal(combat.primaryItem?.id, "EQUIPPED_FIXTURE");
 });
+
+
+test("skill summaries accept canonical domain pet relevance instead of stat heuristics", async () => {
+  const profile = await buildNormalizedProfile({ usernameOrUuid: "FixturePlayer", requestedTab: "skills" }, fixtureSources());
+  const pet = profile.pets.owned[0];
+  assert.ok(pet);
+  const setup = {
+    setupId: "pet:fixture", uuid: pet.uuid, type: pet.type, name: pet.name,
+    baseRarity: pet.rarity, effectiveRarity: pet.effectiveRarity, xp: pet.xp, level: pet.level, maxLevel: pet.maxLevel,
+    xpCurrent: pet.xpCurrent, xpForNext: pet.xpForNext, progress: pet.progress, heldItem: pet.heldItem,
+    candyUsed: pet.candyUsed, skin: pet.skin, active: pet.active, canonicalPetId: "SHEEP;0", canonicalPetItemId: null,
+    resolution: { petDefinition: "RESOLVED" as const, petItemDefinition: "NONE" as const },
+  };
+  const definition = {
+    id: "SHEEP;0", type: "SHEEP", rarity: "common" as const, petSkillType: "COMBAT", maxLevel: 100, rarityOffset: 0,
+    xpCurve: Array(99).fill(100), xpMultiplier: 1, customLevelingType: null, baseStatTemplates: { COMBAT_WISDOM: "{COMBAT_WISDOM}" },
+    abilities: [], upgradePaths: [], source: "NEU" as const,
+  };
+  const summaries = buildSkillProgressionSummaries(profile, { setups: [setup], definitions: [definition], petItems: [] });
+  assert.equal(summaries.combat.relevantOwnedPets.length, 1);
+  assert.equal(summaries.mining.relevantOwnedPets.length, 0);
+});
