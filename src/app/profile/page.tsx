@@ -81,7 +81,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           <div className="profile-section-heading"><div><p className="section-kicker">Collection</p><h2 id="owned-pets-title">Owned Pets</h2></div><span>{pets.length} total</span></div>
           <div className="pet-card-grid">
            {pets.length ? pets.map((pet,index)=>{
-             const icon=petIconUrl(pet.type,pet.effectiveRarity); const heldIcon=getItemIconUrl(pet.heldItem); const key=pet.uuid??String(index); const active=(selected?.uuid===pet.uuid && pet.uuid!==null)||selectedKey===key;
+             const icon=petIconUrl(pet); const heldIcon=getItemIconUrl(pet.heldItem); const key=pet.uuid??String(index); const active=(selected?.uuid===pet.uuid && pet.uuid!==null)||selectedKey===key;
              const progress=pet.progress===null?0:Math.max(0,Math.min(1,pet.progress));
              return <Link className={active?"pet-card pet-card--selected":"pet-card"} href={{...baseQuery,query:{...baseQuery.query,pet:key}}} key={key}>
               <div className="pet-card__icon-wrap">{icon?<img className="pet-card__icon" src={icon} alt="" aria-hidden="true"/>:<span className="pet-card__icon-fallback">✦</span>}</div>
@@ -97,7 +97,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
          </div>
          {selected ? <aside className="pet-detail-panel" aria-label={"Selected pet: "+selected.name}>
           <div className="pet-detail-panel__hero">
-           <div className="pet-detail-panel__icon-wrap">{petIconUrl(selected.type,selected.effectiveRarity)?<img src={petIconUrl(selected.type,selected.effectiveRarity)!} alt="" aria-hidden="true"/>:<span>✦</span>}</div>
+           <div className="pet-detail-panel__icon-wrap">{selected.texture?<img src={selected.texture} alt="" aria-hidden="true"/>:<span>✦</span>}</div>
            <div><span className={rarityClass(selected.effectiveRarity)}>{petRarityLabel(selected.effectiveRarity)}</span><h3>{selected.name}</h3><p>{selected.active?"Currently active pet":"Owned pet"}</p></div>
           </div>
           <div className="pet-detail-panel__level"><div><strong>Lvl {selected.level??"—"}</strong><span>{selected.maxLevel&&selected.level!==null&&selected.level>=selected.maxLevel?"MAX LEVEL":selected.maxLevel?selected.maxLevel+" max level":"Level unavailable"}</span></div><b>{selected.level!==null&&selected.maxLevel?Math.round(Math.max(0,Math.min(1,selected.progress??0))*100)+"%":"—"}</b></div>
