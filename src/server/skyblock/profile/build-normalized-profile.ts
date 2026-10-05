@@ -83,7 +83,9 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     ? { armor: true, equipment: true, inventory: true, accessories: true, storage: true, loadouts: true }
     : needsGear
       ? { armor: true, equipment: true, inventory: true, accessories: false, storage: true, loadouts: true }
-      : { armor: false, equipment: false, inventory: true, accessories: true, storage: false, loadouts: false };
+      : needsAccessories
+        ? { armor: false, equipment: false, inventory: true, accessories: true, storage: false, loadouts: false }
+        : { armor: false, equipment: false, inventory: false, accessories: false, storage: false, loadouts: false };
   const decoded = await Promise.all(collectInventories(member, warnings, inventoryOptions).map(async ({ source, encoded }) => {
     const sourceWarnings: ProfileWarning[] = [];
     const rawItems = await decodeInventory(encoded, source, sourceWarnings);
