@@ -27,6 +27,17 @@ export interface SkillCandidateEvidence {
   candidate: AdvisorCandidate;
 }
 
+export interface SkillDomainEvidence {
+  farming?: {
+    gardenAvailable: boolean;
+    gardenLevel: number | null;
+    gardenXp: number | null;
+    nextGardenLevel: { level: number; xpRequired: number; xpRemaining: number } | null;
+    nextCropMilestones: Array<{ crop: string; resourceId: string; collected: number; tier: number; threshold: number; remaining: number }>;
+    equipmentComparisons: unknown[];
+  };
+}
+
 export interface SkillProgressionSummary {
   skill: string;
   level: number;
@@ -40,6 +51,9 @@ export interface SkillProgressionSummary {
   relevantOwnedPets: NormalizedPet[];
   progressionFocus: SkillProgressionFocus | null;
   candidateEvidence: SkillCandidateEvidence[];
+  domainEvidence: SkillDomainEvidence;
+  displayItem: ProfileItem | null;
+  displayPet: NormalizedPet | null;
   limitations: string[];
 }
 
@@ -75,14 +89,17 @@ export function buildSkillProgressionSummaries(
       relevantOwnedPets: [],
       progressionFocus: nextSkillLevelFocus(skill, level.level, level.maxLevel),
       candidateEvidence: [],
+      domainEvidence: {},
+      displayItem: null,
+      displayPet: null,
       limitations: ["No dedicated deterministic progression domain is composed for this skill yet."],
     };
-    if (skill === "mining") return [skill, withEvidence(withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge), candidateEvidence.mining)];
-    if (skill === "fishing") return [skill, withEvidence(withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge), candidateEvidence.fishing)];
-    if (skill === "foraging") return [skill, withEvidence(withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge), candidateEvidence.foraging)];
-    if (skill === "farming") return [skill, withEvidence(withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge), candidateEvidence.farming)];
-    if (skill === "combat") return [skill, withEvidence(withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge), candidateEvidence.combat)];
-    return [skill, base];
+    if (skill === "mining") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, miningSummary(profile, base), "MINING", petKnowledge), candidateEvidence.mining), domainEvidence.mining))];
+    if (skill === "fishing") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, fishingSummary(profile, base), "FISHING", petKnowledge), candidateEvidence.fishing), domainEvidence.fishing))];
+    if (skill === "foraging") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, foragingSummary(profile, base), "FORAGING", petKnowledge), candidateEvidence.foraging), domainEvidence.foraging))];
+    if (skill === "farming") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, farmingSummary(profile, base), "FARMING", petKnowledge), candidateEvidence.farming), domainEvidence.farming))];
+    if (skill === "combat") return [skill, finalizePresentation(withDomainEvidence(withEvidence(withDomainPets(profile, combatSummary(profile, base), "COMBAT", petKnowledge), candidateEvidence.combat), domainEvidence.combat))];
+    return [skill, finalizePresentation(withDomainEvidence(base, domainEvidence[skill]))];
   }));
 }
 
@@ -152,6 +169,16 @@ function combatSummary(profile: NormalizedSkyBlockProfile, base: SkillProgressio
     relevantItems: weapons, primaryItem: profile.gear.equippedWeapon,
     progressionFocus: base.progressionFocus,
     limitations: ["Combat does not yet have a standalone progression domain; this summary composes Combat skill state with observed equipped gear and Dungeons context."] };
+}
+
+function withDomainEvidence(summary: SkillProgressionSummary, evidence?: SkillDomainEvidence): SkillProgressionSummary {
+  return evidence ? { ...summary, domainEvidence: evidence } : summary;
+}
+
+function finalizePresentation(summary: SkillProgressionSummary): SkillProgressionSummary {
+  const displayItem = summary.primaryItem ?? (summary.relevantItems.length === 1 ? summary.relevantItems[0] : null);
+  const displayPet = summary.relevantOwnedPets.length === 1 ? summary.relevantOwnedPets[0] : null;
+  return { ...summary, displayItem, displayPet };
 }
 
 function withEvidence(summary: SkillProgressionSummary, evidence?: readonly SkillCandidateEvidence[]): SkillProgressionSummary {
