@@ -13,6 +13,8 @@ import { buildOwnedPetSetups } from "../pets/owned-setups";
 import { buildActivityDomainLanes } from "../candidates/domain";
 import { buildActivityPetLanes } from "../candidates/activity-pets";
 import { buildForagingUpgradeLanes } from "../foraging/upgrade-lanes";
+import { buildGardenProgress } from "../farming/garden-progress";
+import { buildFarmingEquipmentComparisons } from "../farming/equipment-comparisons";
 import { buildSkillProgressionSummaries, type SkillProgressionSummary } from "./progression-summary";
 
 export async function loadSkillProgressionSummaries(
@@ -30,6 +32,7 @@ export async function loadSkillProgressionSummaries(
   const petCatalog = buildPetCandidateCatalog(neu);
 
   const evidence: Partial<Record<string, SkillCandidateEvidence[]>> = {};
+  const domainEvidence: Parameters<typeof buildSkillProgressionSummaries>[3] = {};
   for (const domain of ["MINING", "FISHING"] as const) {
     const itemLanes = buildActivityDomainLanes({ domain, profile, catalog, quotes, budgetCoins });
     const petLanes = buildActivityPetLanes({ domain, setups, definitions, petItems, catalog: petCatalog });
@@ -40,12 +43,21 @@ export async function loadSkillProgressionSummaries(
   const foragingPets = buildActivityPetLanes({ domain: "FORAGING", setups, definitions, petItems, catalog: petCatalog });
   evidence.foraging = [...laneEvidence("foraging", foragingItems), ...laneEvidence("foraging", foragingPets)];
 
+  const rawGarden = await hypixelClient.getGarden(profile.profile.id).catch(() => null);
+  const garden = buildGardenProgress(rawGarden);
+  const farmingEquipment = buildFarmingEquipmentComparisons(profile, catalog, neu, quotes, garden.gardenLevel);
+  domainEvidence.farming = { farming: {
+    gardenAvailable: garden.available, gardenLevel: garden.gardenLevel, gardenXp: garden.gardenXp,
+    nextGardenLevel: garden.nextGardenLevel, nextCropMilestones: garden.nextCropMilestones,
+    equipmentComparisons: farmingEquipment.comparisons,
+  } };
+
   for (const domain of ["FARMING", "COMBAT"] as const) {
     const petLanes = buildActivityPetLanes({ domain, setups, definitions, petItems, catalog: petCatalog });
     evidence[domain.toLowerCase()] = laneEvidence(domain.toLowerCase(), petLanes);
   }
 
-  return buildSkillProgressionSummaries(profile, { setups, definitions, petItems }, evidence);
+  return buildSkillProgressionSummaries(profile, { setups, definitions, petItems }, evidence, domainEvidence);
 }
 
 function laneEvidence(prefix: string, lanes: Record<string, import("../../schemas/candidates").AdvisorCandidate[]>): SkillCandidateEvidence[] {
