@@ -78,7 +78,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           <div className="profile-section-heading"><div><p className="section-kicker">Collection</p><h2 id="owned-pets-title">Owned Pets</h2></div><span>{pets.length} total</span></div>
           <div className="pet-card-grid">
            {pets.length ? pets.map((pet,index)=>{
-             const icon=petIconUrl(pet); const heldIcon=getItemIconUrl(pet.heldItem); const key=pet.uuid??String(index); const active=(selected?.uuid===pet.uuid && pet.uuid!==null)||selectedKey===key;
+             const icon=petIconUrl(pet); const heldIcon=pet.heldItemTexture ?? getItemIconUrl(pet.heldItem); const key=pet.uuid??String(index); const active=(selected?.uuid===pet.uuid && pet.uuid!==null)||selectedKey===key;
              const progress=pet.progress===null?0:Math.max(0,Math.min(1,pet.progress));
              return <Link className={active?"pet-card pet-card--selected":"pet-card"} href={{...baseQuery,query:{...baseQuery.query,pet:key}}} key={key}>
               <div className="pet-card__icon-wrap">{icon?<img className="pet-card__icon" src={icon} alt="" aria-hidden="true"/>:<span className="pet-card__icon-fallback">✦</span>}</div>
@@ -100,7 +100,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           <div className="pet-detail-panel__level"><div><strong>Lvl {selected.level??"—"}</strong><span>{selected.maxLevel&&selected.level!==null&&selected.level>=selected.maxLevel?"MAX LEVEL":selected.maxLevel?selected.maxLevel+" max level":"Level unavailable"}</span></div><b>{selected.level!==null&&selected.maxLevel?Math.round(Math.max(0,Math.min(1,selected.progress??0))*100)+"%":"—"}</b></div>
           <div className="pet-detail-panel__track"><span style={{width:(selected.level!==null&&selected.maxLevel&&selected.level>=selected.maxLevel?100:Math.max(0,Math.min(1,selected.progress??0))*100)+"%"}}/></div>
           <div className="pet-detail-panel__section"><p className="section-kicker">Pet Item</p>
-           {selected.heldItem ? <div className="pet-detail-panel__held">{getItemIconUrl(selected.heldItem)?<img src={getItemIconUrl(selected.heldItem)!} alt="" aria-hidden="true"/>:null}<div><strong>{formatPetHeldItem(selected.heldItem)}</strong><span>Held item</span></div></div> : <p className="pet-detail-panel__muted">No pet item equipped.</p>}
+           {selected.heldItem ? <div className="pet-detail-panel__held">{selected.heldItemTexture?<img src={selected.heldItemTexture} alt="" aria-hidden="true"/>:null}<div><strong>{formatPetHeldItem(selected.heldItem)}</strong><span>Held item</span></div></div> : <p className="pet-detail-panel__muted">No pet item equipped.</p>}
           </div>
           <div className="pet-detail-panel__section"><p className="section-kicker">Derived Stats</p>
            {Object.keys(selected.stats).length ? <div className="pet-detail-panel__stats">{Object.entries(selected.stats).map(([key,value])=><div key={key}><span>{itemStatLabels[key]??key}</span><strong>{value>0?"+":""}{Number.isInteger(value)?value:value.toFixed(1)}</strong></div>)}</div> : <p className="pet-detail-panel__muted">No derived pet stats are available from the current profile data.</p>}
