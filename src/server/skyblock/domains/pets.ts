@@ -1,5 +1,5 @@
 import "server-only";
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import type { RawMember } from "../../hypixel/types";
 import type { ProfileWarning } from "../../../schemas/items";
 import type { NormalizedPet } from "../../../schemas/pets";
@@ -15,14 +15,15 @@ type PetStatTier = {
 
 type PetNums = Record<string, Record<string, PetStatTier>>;
 
-let petNumsPromise: Promise<PetNums> | null = null;
-function loadPetNums() {
-  if (!petNumsPromise) {
-    petNumsPromise = fs.readFile(neuPetNumsPath(), "utf8")
-      .then(raw => JSON.parse(raw) as PetNums)
-      .catch(() => ({}));
+let petNumsCache: PetNums | null = null;
+function loadPetNums(): PetNums {
+  if (petNumsCache) return petNumsCache;
+  try {
+    petNumsCache = JSON.parse(readFileSync(neuPetNumsPath(), "utf8")) as PetNums;
+  } catch {
+    petNumsCache = {};
   }
-  return petNumsPromise;
+  return petNumsCache;
 }
 
 const statKeyMap: Record<string, string> = {
@@ -50,7 +51,7 @@ function calculatePetStats(petNums: PetNums, type: string, rarity: string, level
   if (level === null) return {};
   const tier = getTierData(petNums, type, rarity);
   const min = tier?.level1, max = tier?.level100;
-  if (!min?.statNums || !max?.statNums) return {};
+  if (!tier || !min?.statNums || !max?.statNums) return {};
 
   let minStatsLevel = 0, maxStatsLevel = 100, statsLevelingType = -1, statsLevel = level;
   const curve = tier.stats_levelling_curve ?? tier.statsLevelingCurve;
@@ -89,10 +90,10 @@ function calculatePetStats(petNums: PetNums, type: string, rarity: string, level
   return output;
 }
 
-export async function buildPets(member: RawMember, warnings: ProfileWarning[], includeReferenceStats = true) {
+export function buildPets(member: RawMember, warnings: ProfileWarning[], includeReferenceStats = true) {
   const rawPets = member.pets_data?.pets;
   if (!rawPets) warnings.push({ code: "PARTIAL_PROFILE", scope: "pets", message: "Owned pets were not supplied." });
-  const petNums = includeReferenceStats ? await loadPetNums() : {};
+  const petNums = includeReferenceStats ? loadPetNums() : {};
   const owned: NormalizedPet[] = (rawPets ?? []).map(pet => {
     const rarity = pet.tier?.toLowerCase() ?? "unknown", type = pet.type ?? "UNKNOWN";
     const xp = pet.exp ?? 0;
