@@ -3,7 +3,8 @@ import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normaliz
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
-import { buildSkillProgressionSummaries } from "@/server/skills/progression-summary";\nimport { loadSkillPetKnowledge } from "@/server/skills/load-pet-knowledge";
+import { buildSkillProgressionSummaries } from "@/server/skills/progression-summary";
+import { loadSkillPetKnowledge } from "@/server/skills/load-pet-knowledge";
 
 type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string; skill?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
@@ -42,7 +43,8 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
   const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
-  const skillPetKnowledge=activeTab==="skills"?await loadSkillPetKnowledge(result):undefined;\n  const skillSummaries=activeTab==="skills"?buildSkillProgressionSummaries(result,skillPetKnowledge):null;
+  const skillPetKnowledge=activeTab==="skills"?await loadSkillPetKnowledge(result):undefined;
+  const skillSummaries=activeTab==="skills"?buildSkillProgressionSummaries(result,skillPetKnowledge):null;
   const profileIcon=getProfileIconPath(result.profile.cuteName);
   const avatarUrl="https://mc-heads.net/avatar/"+result.identity.uuid+"/160";
   const skyblockLevel=getNumeric(result.otherProgression.leveling,["experience","xp","level"]);
