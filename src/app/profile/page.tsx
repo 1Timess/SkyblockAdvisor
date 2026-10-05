@@ -3,7 +3,7 @@ import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normaliz
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
-import { buildProfileIntelligence } from "@/server/advisor/profile-intelligence";
+import { loadSkillProgressionSummaries } from "@/server/skills/load-progression-summary";
 
 type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string; skill?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
@@ -12,18 +12,6 @@ function getNumeric(value:unknown,keys:string[]){if(!value||typeof value!=="obje
 function fairySoulCount(value:unknown){return getNumeric(value,["total_collected","souls_collected","fairy_souls","count","unlocked"])}
 function getSkillIconPath(key:string){return `/statixel/icons/skillicons/${key}icon.png`}
 function titleCase(value:string){return value.replace(/_/g," ").replace(/\b\w/g,char=>char.toUpperCase());}
-type SkillPresentation = { facts:Array<{label:string;value:string}>; tool:string|null; pet:string|null; focus:string|null };
-function skillPresentation(skill:string,intelligence:ReturnType<typeof buildProfileIntelligence>):SkillPresentation{
- const domain=intelligence.domains[skill.toUpperCase() as keyof typeof intelligence.domains];
- if(!domain)return {facts:[],tool:null,pet:null,focus:null};
- if(domain.domain==="MINING")return {facts:[{label:"HOTM",value:domain.hotmLevel===null?"—":"Level "+domain.hotmLevel}],tool:domain.tools[0]?.name??null,pet:domain.pets[0]?.name??null,focus:null};
- if(domain.domain==="FISHING")return {facts:[{label:"Sea Creatures",value:domain.seaCreatureKills===null?"—":new Intl.NumberFormat("en-US").format(domain.seaCreatureKills)}],tool:domain.tools[0]?.name??null,pet:domain.pets[0]?.name??null,focus:null};
- if(domain.domain==="FORAGING"){const first=domain.progressionFocus.targets[0];return {facts:[{label:"HOTF",value:domain.hotfLevel===null?"—":"Level "+domain.hotfLevel}],tool:(domain.gear.visible[0] as {name?:string}|undefined)?.name??null,pet:domain.pets[0]?.name??null,focus:first?.kind==="HOTF_TIER"?`Reach Heart of the Forest ${first.targetTier}`:first?.kind==="TORRHUS_ACCESS"?"Unlock Torrhus access":first?.kind==="TREE_GIFT_MILESTONE"?`Reach ${first.tree} Tree Gift milestone`:null};}
- if(domain.domain==="FARMING")return {facts:[],tool:null,pet:null,focus:domain.farmingSkillFocus.nextLevel?`Reach Farming ${domain.farmingSkillFocus.nextLevel.level}`:null};
- if(domain.domain==="ALCHEMY")return {facts:[],tool:null,pet:domain.wisdom.witch.owned?`Witch · Lv. ${domain.wisdom.witch.level??"—"}`:null,focus:domain.progressionFocus.actions[0]?.title??null};
- if(domain.domain==="CARPENTRY"||domain.domain==="RUNECRAFTING"||domain.domain==="TAMING")return {facts:[],tool:null,pet:null,focus:domain.progressionFocus.actions[0]?.title??null};
- return {facts:[],tool:null,pet:null,focus:null};
-}
 const FAIRY_SOUL_MAX = 267;
 function formatDate(value:number|null){if(value===null)return "—"; return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",year:"numeric"}).format(new Date(value));}
 function getItemIconUrl(id:string|null){return id?"https://sky.shiiyu.moe/api/item/"+encodeURIComponent(id):null;}
@@ -54,7 +42,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
   const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
-  const intelligence=activeTab==="skills"?buildProfileIntelligence(result):null;
+  const skillSummaries=activeTab==="skills"?await loadSkillProgressionSummaries(result):null;
   const profileIcon=getProfileIconPath(result.profile.cuteName);
   const avatarUrl="https://mc-heads.net/avatar/"+result.identity.uuid+"/160";
   const skyblockLevel=getNumeric(result.otherProgression.leveling,["experience","xp","level"]);
@@ -75,7 +63,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
        const skillEntries=Object.entries(result.progression.skills);
        const selectedKey=selectedSkillParam&&result.progression.skills[selectedSkillParam]?selectedSkillParam:(skillEntries[0]?.[0]??"mining");
        const selectedSkill=result.progression.skills[selectedKey];
-       const presentation=intelligence?skillPresentation(selectedKey,intelligence):{facts:[],tool:null,pet:null,focus:null};
+       const presentation=skillSummaries?.[selectedKey]??null;
        return <>
         <div className="profile-page-heading"><div><p className="section-kicker">Skill progression</p><h2>Skills</h2><p>Explore the progression, gear, pets, and next major milestone behind each skill.</p></div></div>
         <div className="skills-workspace">
@@ -86,11 +74,11 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           <header className="skill-detail__hero"><img src={getSkillIconPath(selectedKey)} alt="" aria-hidden="true"/><div><p className="section-kicker">{skillLabels[selectedKey]??titleCase(selectedKey)}</p><h3>Level {selectedSkill.level}</h3><span>{selectedSkill.maxed?"Maximum level reached":Math.round(selectedSkill.progress*100)+"% to Level "+Math.min(selectedSkill.maxLevel,selectedSkill.level+1)}</span></div></header>
           <div className="skill-detail__track"><span style={{width:(selectedSkill.maxed?100:selectedSkill.progress*100)+"%"}}/></div>
           <div className="skill-detail__facts">
-           {presentation.facts.map(fact=><div key={fact.label}><span>{fact.label}</span><strong>{fact.value}</strong></div>)}
-           <div><span>{selectedKey==="mining"?"Drill / Tool":selectedKey==="fishing"?"Rod":selectedKey==="combat"?"Weapon":"Primary Tool"}</span><strong>{presentation.tool??"No domain tool detected"}</strong></div>
-           <div><span>Best Owned Pet</span><strong>{presentation.pet??"No domain pet detected"}</strong></div>
+           {presentation?.facts.map(fact=><div key={fact.label}><span>{fact.label}</span><strong>{fact.value??"—"}</strong></div>)}
+           <div><span>{selectedKey==="mining"?"Drill / Tool":selectedKey==="fishing"?"Rod":selectedKey==="combat"?"Weapon":"Primary Tool"}</span><strong>{presentation?.displayItem?.name??(presentation?.relevantItems.length?"Multiple relevant items":"No domain tool detected")}</strong></div>
+           <div><span>Relevant Owned Pet</span><strong>{presentation?.displayPet?.name??(presentation?.relevantOwnedPets.length?`${presentation.relevantOwnedPets.length} relevant pets`:"No domain pet detected")}</strong></div>
           </div>
-          <div className="skill-detail__focus"><p className="section-kicker">Progression Focus</p><strong>{presentation.focus??"Ask Vira for the next prioritized upgrade"}</strong><p>A high-level next milestone based on your current profile. Vira can turn this into a prioritized, budget-aware plan.</p></div>
+          <div className="skill-detail__focus"><p className="section-kicker">Progression Focus</p><strong>{presentation?.progressionFocus?.label??"Ask Vira for the next prioritized upgrade"}</strong><p>A high-level next milestone based on your current profile. Vira can turn this into a prioritized, budget-aware plan.</p></div>
           <Link className="skill-detail__vira" href={{pathname:"/advisor",query:{username:result.identity.username,profile:result.profile.id,domain:selectedKey}}}>Ask Vira about {skillLabels[selectedKey]??titleCase(selectedKey)} <span>→</span></Link>
          </section>:null}
         </div>
