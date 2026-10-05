@@ -4,12 +4,18 @@ import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
 import type { ProfileItem } from "@/schemas/items";
 
-type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string }> };
+type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string; skill?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
 function formatCoins(value:number|null){return value===null?"—":new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(value)}
 function getNumeric(value:unknown,keys:string[]){if(!value||typeof value!=="object"||Array.isArray(value))return null;for(const key of keys){const n=(value as Record<string,unknown>)[key];if(typeof n==="number"&&Number.isFinite(n))return n}return null}
 function fairySoulCount(value:unknown){return getNumeric(value,["total_collected","souls_collected","fairy_souls","count","unlocked"])}
 function getSkillIconPath(key:string){return `/statixel/icons/skillicons/${key}icon.png`}
+function titleCase(value:string){return value.replace(/_/g," ").replace(/\b\w/g,char=>char.toUpperCase());}
+const skillItemCategories: Record<string,string[]>={mining:["drill","pickaxe"],farming:["farming_tool","hoe"],combat:["weapon"],foraging:["axe"],fishing:["fishing_rod"]};
+const skillPetStats: Record<string,string[]>={mining:["miningSpeed","miningFortune","gemstoneFortune","pristine"],farming:["farmingFortune"],foraging:["foragingFortune","foragingWisdom"],fishing:["fishingSpeed","seaCreatureChance"],combat:["strength","critDamage","ferocity","attackSpeed"]};
+function bestSkillItem(skill:string,items:ProfileItem[]){const categories=skillItemCategories[skill]??[];return items.find(item=>categories.some(category=>item.categories.includes(category)))??null;}
+function bestSkillPet(skill:string,pets:Array<{name:string;level:number|null;stats:Record<string,number>}>){const stats=skillPetStats[skill]??[];return [...pets].filter(pet=>stats.some(stat=>(pet.stats[stat]??0)>0)).sort((a,b)=>(b.level??0)-(a.level??0))[0]??null;}
+function skillMilestone(skill:string,level:number,miningHotm:number|null,foragingHotf:number|null){if(skill==="mining"&&miningHotm!==null)return `Reach Heart of the Mountain ${Math.min(10,miningHotm+1)}`;if(skill==="foraging"&&foragingHotf!==null)return `Reach Heart of the Forest ${Math.min(10,foragingHotf+1)}`;return `Reach ${titleCase(skill)} ${Math.min(60,level+1)}`;}
 const FAIRY_SOUL_MAX = 267;
 function formatDate(value:number|null){if(value===null)return "—"; return new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",year:"numeric"}).format(new Date(value));}
 function getItemIconUrl(id:string|null){return id?"https://sky.shiiyu.moe/api/item/"+encodeURIComponent(id):null;}
@@ -36,7 +42,7 @@ function sortArmorItems<T extends Pick<ProfileItem, "categories">>(items: readon
 }
 
 export default async function ProfilePage({ searchParams }: ProfilePageProps) {
- const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview"; const selectedPetParam=params.pet?.trim()||undefined;
+ const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview"; const selectedPetParam=params.pet?.trim()||undefined; const selectedSkillParam=params.skill?.trim().toLowerCase()||undefined;
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
  try {
   const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
@@ -55,7 +61,38 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <div className="profile-switcher">{result.profile.availableProfiles.map(item=>{const icon=getProfileIconPath(item.cuteName);return <Link className={item.id===result.profile.id?"profile-switcher__item profile-switcher__item--active":"profile-switcher__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:item.id}}} key={item.id}>{icon?<img className="profile-switcher__icon" src={icon} alt=""/>:null}{item.cuteName}</Link>})}</div>
     <nav className="profile-tabs" aria-label="Profile sections"><Link className={activeTab==="overview"?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id}}}>Overview</Link>{["Gear","Accessories","Pets","Skills","Dungeons","Slayer","Minions","Bestiary","Collections","Crimson Isle","Rift","Misc"].map(tab=>{const key=tab.toLowerCase().replace(/\s+/g,"-");return <Link className={activeTab===key?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:key}}} key={tab}>{tab}</Link>})}</nav>
 
-    {activeTab==="pets" ? (<section className="profile-pets-page" aria-label="Pets">
+    {activeTab==="skills" ? (<section className="profile-skills-page" aria-label="Skills">
+     {(() => {
+       const skillEntries=Object.entries(result.progression.skills);
+       const selectedKey=selectedSkillParam&&result.progression.skills[selectedSkillParam]?selectedSkillParam:(skillEntries[0]?.[0]??"mining");
+       const selectedSkill=result.progression.skills[selectedKey];
+       const relevantItem=bestSkillItem(selectedKey,result.inventoryItems);
+       const relevantPet=bestSkillPet(selectedKey,result.pets.owned);
+       const domainFacts:selectedSkill extends never?never:Array<{label:string;value:string}> = [];
+       if(selectedKey==="mining")domainFacts.push({label:"HOTM",value:result.progression.mining.hotmLevel===null?"—":"Level "+result.progression.mining.hotmLevel});
+       if(selectedKey==="foraging")domainFacts.push({label:"HOTF",value:result.progression.foraging.hotfLevel===null?"—":"Level "+result.progression.foraging.hotfLevel});
+       if(selectedKey==="fishing")domainFacts.push({label:"Sea Creatures",value:result.progression.fishing.seaCreatureKills===null?"—":new Intl.NumberFormat("en-US").format(result.progression.fishing.seaCreatureKills)});
+       return <>
+        <div className="profile-page-heading"><div><p className="section-kicker">Skill progression</p><h2>Skills</h2><p>Explore the progression, gear, pets, and next major milestone behind each skill.</p></div></div>
+        <div className="skills-workspace">
+         <section className="skills-selector" aria-label="Select a skill">
+          {skillEntries.map(([key,skill])=><Link className={key===selectedKey?"skill-selector-card skill-selector-card--active":"skill-selector-card"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:"skills",skill:key}}} key={key}><img src={getSkillIconPath(key)} alt="" aria-hidden="true"/><div><strong>{skillLabels[key]??titleCase(key)}</strong><span>Level {skill.level}</span></div><b>{Math.round(skill.progress*100)}%</b></Link>)}
+         </section>
+         {selectedSkill?<section className="skill-detail">
+          <header className="skill-detail__hero"><img src={getSkillIconPath(selectedKey)} alt="" aria-hidden="true"/><div><p className="section-kicker">{skillLabels[selectedKey]??titleCase(selectedKey)}</p><h3>Level {selectedSkill.level}</h3><span>{selectedSkill.maxed?"Maximum level reached":Math.round(selectedSkill.progress*100)+"% to Level "+Math.min(selectedSkill.maxLevel,selectedSkill.level+1)}</span></div></header>
+          <div className="skill-detail__track"><span style={{width:(selectedSkill.maxed?100:selectedSkill.progress*100)+"%"}}/></div>
+          <div className="skill-detail__facts">
+           {domainFacts.map(fact=><div key={fact.label}><span>{fact.label}</span><strong>{fact.value}</strong></div>)}
+           <div><span>{selectedKey==="mining"?"Drill / Tool":selectedKey==="fishing"?"Rod":selectedKey==="combat"?"Weapon":"Primary Tool"}</span><strong>{relevantItem?.name??"No relevant item detected"}</strong></div>
+           <div><span>Best Owned Pet</span><strong>{relevantPet?relevantPet.name+(relevantPet.level!==null?" · Lv. "+relevantPet.level:""):"No relevant pet detected"}</strong></div>
+          </div>
+          <div className="skill-detail__focus"><p className="section-kicker">Progression Focus</p><strong>{skillMilestone(selectedKey,selectedSkill.level,result.progression.mining.hotmLevel,result.progression.foraging.hotfLevel)}</strong><p>A high-level next milestone based on your current profile. Vira can turn this into a prioritized, budget-aware plan.</p></div>
+          <Link className="skill-detail__vira" href={{pathname:"/advisor",query:{username:result.identity.username,profile:result.profile.id,domain:selectedKey}}}>Ask Vira about {skillLabels[selectedKey]??titleCase(selectedKey)} <span>→</span></Link>
+         </section>:null}
+        </div>
+       </>;
+     })()}
+    </section>) : ({activeTab==="pets" ? (<section className="profile-pets-page" aria-label="Pets">
      {(() => {
        const pets=[...result.pets.owned].sort((a,b)=>petSortRank(b)-petSortRank(a));
        const highestLevel=pets.reduce((best,pet)=>Math.max(best,pet.level??0),0);
@@ -113,7 +150,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
         </section>
        </>;
      })()}
-    </section>) : (activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
+    </section>)) : (activeTab==="accessories" ? (<section className="profile-accessories-page" aria-label="Accessories">
      <div className="profile-page-heading"><div><p className="section-kicker">Accessory bag</p><h2>Accessories</h2><p>Owned accessories are ordered from lowest Magical Power contribution to highest, keeping the pieces most likely to be replaced at the top.</p></div></div>
      <section className="profile-accessories-summary">
       <article className="accessory-summary-card"><span className="profile-stat-card__label">Magical Power</span><strong>{result.accessories.magicalPower.total}</strong><p>{result.accessories.magicalPower.accessories} from accessories{result.accessories.magicalPower.riftPrism ? " · "+result.accessories.magicalPower.riftPrism+" from Rift Prism" : ""}</p></article>
