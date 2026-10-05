@@ -34,7 +34,7 @@ function getNeuPetTexture(itemId: string) {
     if (encoded) {
       const decoded = Buffer.from(encoded, "base64").toString("utf8");
       const match = decoded.match(/"url":"(https?:\/\/textures\.minecraft\.net\/texture\/[a-f0-9]+)"/i);
-      if (match) texture = match[1];
+      if (match) texture = match[1].replace(/^http:/, "https:");
     }
   } catch {
     // Missing or malformed NEU item data; caller may use a fallback.
