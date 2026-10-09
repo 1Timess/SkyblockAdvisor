@@ -281,3 +281,20 @@ button { cursor: pointer; }
 .accessory-card__stats{overflow-wrap:anywhere}
 .gear-loadout-card__items{grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
 @media(max-width:1200px){.profile-loadout-grid{grid-template-columns:1fr}}
+
+/* Responsive secondary metadata: pet cards, detail panels, skills and upgrades. */
+.pet-card__heading>div,.pet-card__meta span,.pet-detail-panel__held>div,.skill-detail__relevant-item strong,.accessory-upgrade__main>div{min-width:0}
+.pet-card__heading strong,.pet-card__meta span,.pet-detail-panel__held strong,.skill-detail__relevant-item strong,.accessory-upgrade__main strong{overflow-wrap:anywhere;white-space:normal}
+.pet-card__meta{white-space:normal;overflow:visible;text-overflow:clip;align-items:flex-start;line-height:1.4}
+.pet-card__meta span{flex:1 1 0}
+.pet-card__level,.profile-skill__meta{flex-wrap:wrap;gap:4px 8px;line-height:1.5}
+.pet-detail-panel__stats{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+.pet-detail-panel__stats div,.pet-detail-panel__facts div{min-width:0;flex-wrap:wrap;gap:4px 8px}
+.pet-detail-panel__stats span,.pet-detail-panel__facts span{overflow-wrap:anywhere}
+.skill-detail__relevant-item{min-width:0;align-items:flex-start}
+.skill-detail__relevant-item strong{flex:1 1 0;line-height:1.4}
+.accessory-upgrade__main{flex:1 1 0}
+.accessory-upgrade__main strong{line-height:1.4}
+.accessory-upgrade__metrics{min-width:0;max-width:48%}
+.accessory-upgrade__metrics small,.accessory-upgrade__metrics span{overflow-wrap:anywhere}
+@media(max-width:700px){.accessory-upgrade{flex-wrap:wrap}.accessory-upgrade__metrics{max-width:100%;align-items:flex-start;text-align:left;margin-left:0}}
