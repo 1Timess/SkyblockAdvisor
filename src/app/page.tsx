@@ -61,7 +61,7 @@ export default function Home() {
               <h1 id="hero-title">Your SkyBlock profile, understood.</h1>
               <p className="hero__lead">
                 Enter your Minecraft username to explore your profile, your progression,
-                and everything you've built along the way.
+                and everything you&apos;ve built along the way.
               </p>
 
               <ProfileSearchForm />
