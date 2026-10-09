@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import type { RawMember } from "../src/server/hypixel/types";
 import { buildPets } from "../src/server/skyblock/domains/pets";
 import { skyCryptHeadUrl, skyCryptItemUrl } from "../src/server/reference/skycrypt-assets";
@@ -51,9 +54,35 @@ test("pets without a canonical head resolve their NEU SkullOwner texture through
     },
   } as RawMember;
 
-  const result = buildPets(member, [], false);
-  for (const pet of result.owned) {
-    assert.match(pet.texture ?? "", /^https:\/\/sky\.shiiyu\.moe\/api\/head\/[a-f0-9]+$/);
-    assert.doesNotMatch(pet.texture ?? "", /\/api\/item\//);
+  // The NEU repository is intentionally gitignored. Use controlled reference
+  // items instead of requiring a developer-specific NEU download.
+  const directory = mkdtempSync(path.join(tmpdir(), "statixel-neu-pet-test-"));
+  const previousDirectory = process.env.NEU_DATA_DIRECTORY;
+  const itemsDirectory = path.join(directory, "repository", "items");
+  mkdirSync(itemsDirectory, { recursive: true });
+  const textures = [
+    { itemId: "HERMIT_CRAB;4", hash: "a".repeat(64) },
+    { itemId: "FROG;3", hash: "b".repeat(64) },
+  ];
+
+  try {
+    for (const { itemId, hash } of textures) {
+      const payload = Buffer.from(JSON.stringify({
+        textures: { SKIN: { url: `https://textures.minecraft.net/texture/${hash}` } },
+      })).toString("base64");
+      const nbttag = `SkullOwner:{Properties:{textures:[{Value:"${payload}"}]}}`;
+      writeFileSync(path.join(itemsDirectory, `${itemId}.json`), JSON.stringify({ internalname: itemId, nbttag }));
+    }
+    process.env.NEU_DATA_DIRECTORY = directory;
+    const result = buildPets(member, [], false);
+    assert.equal(result.owned.length, textures.length);
+    for (const [index, pet] of result.owned.entries()) {
+      assert.equal(pet.texture, `https://sky.shiiyu.moe/api/head/${textures[index].hash}`);
+      assert.doesNotMatch(pet.texture ?? "", /\\/api\\/item\\//);
+    }
+  } finally {
+    if (previousDirectory === undefined) delete process.env.NEU_DATA_DIRECTORY;
+    else process.env.NEU_DATA_DIRECTORY = previousDirectory;
+    rmSync(directory, { recursive: true, force: true });
   }
 });
