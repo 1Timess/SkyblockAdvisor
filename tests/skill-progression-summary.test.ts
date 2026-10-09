@@ -69,7 +69,7 @@ test("skill summaries preserve deterministic candidate lane evidence without sel
     id: "fixture-upgrade", domain: "tool" as const,
     item: { id: "FIXTURE_DRILL", name: "Fixture Drill", rarity: "rare" as const, categories: ["tool", "drill"],
       stats: { miningSpeed: 500 }, requirements: [], unparsedRequirementText: [], lore: [], abilityText: [], setBonusText: [],
-      sources: { hypixel: true, neu: true }, marketKey: "FIXTURE_DRILL" },
+      sources: { hypixel: true, neu: true }, wiki: null, marketKey: "FIXTURE_DRILL" },
     requirements: [], abilityText: [], setBonusText: [], warnings: [],
   };
   const summaries = buildSkillProgressionSummaries(profile, undefined, {
