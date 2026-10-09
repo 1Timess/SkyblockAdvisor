@@ -26,7 +26,6 @@ function formatPrice(value:number|null){return value===null?"Price unavailable":
 function upgradeEfficiency(price:number|null,mp:number){return price!==null&&mp>0?price/mp:null;}
 function petRarityLabel(rarity:string|null){return rarity?rarity.replace(/_/g," "):"Unknown";}
 function petRarityRank(rarity:string|null){const ranks:Record<string,number>={common:0,uncommon:1,rare:2,epic:3,legendary:4,mythic:5,special:6,very_special:7};return rarity?(ranks[rarity]??-1):-1;}
-function petRarityIndex(rarity:string|null){return rarity?({common:0,uncommon:1,rare:2,epic:3,legendary:4,mythic:5}[rarity]??null):null;}
 function petIconUrl(pet:{texture:string|null}){return pet.texture;}
 function formatPetHeldItem(value:string|null){if(!value)return null;return value.replace(/^PET_ITEM_/,"").replace(/_/g," ").replace(/\b\w/g,char=>char.toUpperCase());}
 function petSortRank(pet:{active:boolean;level:number|null;effectiveRarity:string|null}){return petRarityRank(pet.effectiveRarity)*1000000+(pet.level??-1)*1000;}
@@ -41,7 +40,8 @@ function sortArmorItems<T extends Pick<ProfileItem, "categories">>(items: readon
 export default async function ProfilePage({ searchParams }: ProfilePageProps) {
  const params=await searchParams; const username=params.username?.trim()??""; const profile=params.profile?.trim()||undefined; const activeTab=params.tab?.trim().toLowerCase()||"overview"; const selectedPetParam=params.pet?.trim()||undefined; const selectedSkillParam=params.skill?.trim().toLowerCase()||undefined;
  if(!username)return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel"><p className="section-kicker">SkyBlock profile</p><h1>No profile selected.</h1><p>Search for a Minecraft username first.</p><Link className="search-page__button" href="/#search">Search a profile</Link></section></main>;
- try {
+ const loaded = await (async () => {
+  try {
   const result=await buildNormalizedProfile({usernameOrUuid:username,requestedProfile:profile,requestedTab:activeTab,includeAccessoryPrices:activeTab==="accessories"});
   const skillPetKnowledge=activeTab==="skills"?await loadSkillPetKnowledge(result):undefined;
   const skillSummaries=activeTab==="skills"?buildSkillProgressionSummaries(result,skillPetKnowledge):null;
@@ -53,7 +53,17 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
   const averageSkillLevel=skills.length?skills.reduce((sum,[,skill])=>sum+skill.level,0)/skills.length:null;
   const equippedArmor=(activeTab==="overview"||activeTab==="gear")?sortArmorItems(result.gear.armor.items):[];
   const equippedWeapon=result.gear.equippedWeapon;
-  return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/>
+  return {ok:true as const,result,skillSummaries,profileIcon,avatarUrl,skyblockLevelValue,fairySouls,skills,averageSkillLevel,equippedArmor,equippedWeapon};
+  } catch(error) {
+   return {ok:false as const,message:error instanceof AppError?error.message:"Unable to load this SkyBlock profile right now."};
+  }
+ })();
+ if(!loaded.ok) {
+  const message=loaded.message;
+  return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel search-page__panel--error"><p className="section-kicker">SkyBlock profile</p><h1>We couldn’t load this profile.</h1><p>{message}</p><Link className="search-page__button" href="/#search">Back to search</Link></section></main>;
+ }
+ const {result,skillSummaries,profileIcon,avatarUrl,skyblockLevelValue,fairySouls,skills,averageSkillLevel,equippedArmor,equippedWeapon}=loaded;
+ return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/>
    <nav className="profile-nav" aria-label="Profile navigation"><Link className="nav__brand" href="/#search" aria-label="Statixel home"><img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt=""/><span className="nav__wordmark">Statixel</span></Link><Link className="profile-nav__search" href="/#search">Search another profile</Link></nav>
    <section className="profile-content">
     <header className="profile-identity"><div className="profile-identity__avatar-wrap"><img className="profile-identity__avatar" src={avatarUrl} alt=""/></div><div className="profile-identity__main"><p className="section-kicker">SkyBlock profile</p><div className="profile-identity__name-row"><h1>{result.identity.username}</h1></div><div className="profile-identity__profile">{profileIcon?<img src={profileIcon} alt=""/>:null}<span>{result.profile.cuteName}</span>{result.profile.gameMode?<span className="profile-identity__mode">{result.profile.gameMode}</span>:null}</div><div className="profile-identity__joined">Joined SkyBlock {formatDate(result.profileCreatedAt)}</div></div><div className="profile-identity__actions"><Link className="profile-header__advisor" href="/advisor">Ask Vera</Link></div></header>
@@ -202,5 +212,4 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
      <div className="profile-loadout__weapon"><span className="profile-stat-card__label">Held Weapon</span>{equippedWeapon?<div className="profile-loadout__weapon-item"><img src={getItemIconUrl(equippedWeapon.id)??""} alt="" aria-hidden="true"/><div><strong>{equippedWeapon.name}</strong>{formatItemStats(equippedWeapon.stats).length?<small>{formatItemStats(equippedWeapon.stats).join("  //  ")}</small>:null}</div></div>:<strong>—</strong>}</div>
      </section></>))))}
    </section></main>;
- } catch(error){ const message=error instanceof AppError?error.message:"Unable to load this SkyBlock profile right now."; return <main className="profile-page"><div className="profile-page__background" aria-hidden="true"/><div className="profile-page__veil" aria-hidden="true"/><section className="search-page__panel search-page__panel--error"><p className="section-kicker">SkyBlock profile</p><h1>We couldn’t load this profile.</h1><p>{message}</p><Link className="search-page__button" href="/#search">Back to search</Link></section></main> }
 }
