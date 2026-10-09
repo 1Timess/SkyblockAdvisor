@@ -145,7 +145,7 @@ function getPetTexture(type: string, rarity: string, skin: string | null) {
     const skinTexture = getNeuPetTexture("PET_SKIN_" + skin);
     const match = skinTexture?.match(/\/texture\/([a-f0-9]+)$/i);
     if (match) {
-      const renderedSkin = skyCryptHeadUrl(match[1]);
+      const renderedSkin = skyCryptHeadUrl(`/head/${match[1]}`);
       if (renderedSkin) return renderedSkin;
     }
   }
@@ -167,7 +167,7 @@ function getPetTexture(type: string, rarity: string, skin: string | null) {
     const match = texture?.match(/\/texture\/([a-f0-9]+)$/i);
     if (!match) continue;
 
-    const rendered = skyCryptHeadUrl(match[1]);
+    const rendered = skyCryptHeadUrl(`/head/${match[1]}`);
     if (rendered) return rendered;
   }
 
