@@ -78,7 +78,7 @@ test("pets without a canonical head resolve their NEU SkullOwner texture through
     assert.equal(result.owned.length, textures.length);
     for (const [index, pet] of result.owned.entries()) {
       assert.equal(pet.texture, `https://sky.shiiyu.moe/api/head/${textures[index].hash}`);
-      assert.doesNotMatch(pet.texture ?? "", /\\/api\\/item\\//);
+      assert.equal(pet.texture?.includes("/api/item/"), false);
     }
   } finally {
     if (previousDirectory === undefined) delete process.env.NEU_DATA_DIRECTORY;
