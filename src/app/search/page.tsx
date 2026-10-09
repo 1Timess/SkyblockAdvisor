@@ -53,9 +53,27 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     );
   }
 
-  try {
-    const result = await listProfiles(username);
+  const lookup = await listProfiles(username).then(
+    result => ({ ok: true as const, result }),
+    error => ({ ok: false as const, error }),
+  );
+
+  if (!lookup.ok) {
+    const message = lookup.error instanceof AppError ? lookup.error.message : "Unable to look up that Minecraft profile right now.";
     return (
+      <SearchShell>
+        <section className="search-page__panel search-page__panel--error">
+          <p className="section-kicker">Profile search</p>
+          <h1>We couldn&apos;t find that profile.</h1>
+          <p>{message}</p>
+          <Link className="search-page__button" href="/#search">Try another username</Link>
+        </section>
+      </SearchShell>
+    );
+  }
+
+  const result = lookup.result;
+  return (
       <SearchShell>
         <section className="search-page__content">
           <div className="search-page__heading">
@@ -87,17 +105,4 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </section>
       </SearchShell>
     );
-  } catch (error) {
-    const message = error instanceof AppError ? error.message : "Unable to look up that Minecraft profile right now.";
-    return (
-      <SearchShell>
-        <section className="search-page__panel search-page__panel--error">
-          <p className="section-kicker">Profile search</p>
-          <h1>We couldn't find that profile.</h1>
-          <p>{message}</p>
-          <Link className="search-page__button" href="/#search">Try another username</Link>
-        </section>
-      </SearchShell>
-    );
-  }
 }
