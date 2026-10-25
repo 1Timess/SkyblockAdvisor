@@ -23,6 +23,7 @@ export const dungeonSchema = z.object({
     normal: z.number().nullable(), master: z.number().nullable(),
     tier: z.number().nullable(), maxTier: z.number(), nextMilestone: z.number().nullable(),
     progress: z.number().min(0).max(1).nullable(),
+    claimedFlags: z.array(z.string()),
   })),
   floorRecords: z.object({ normal: z.record(z.string(), z.object({
   completions: z.number().nullable(), runsPlayed: z.number().nullable(), bestScore: z.number().nullable(),

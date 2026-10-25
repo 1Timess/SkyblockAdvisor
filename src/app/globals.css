@@ -337,3 +337,17 @@ button { cursor: pointer; }
 .dungeon-rng-floor--selected{border-color:rgba(99,214,160,.4);background:rgba(99,214,160,.08)}
 @media(max-width:1100px){.dungeon-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.dungeon-collection-grid,.dungeon-rng-grid{grid-template-columns:1fr}}
+
+/* Dungeon claims and static RNG reward requirements */
+.dungeon-collection-claims{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:12px}
+.dungeon-collection-claims>span{width:100%;color:rgba(255,255,255,.5);font-size:10px}
+.dungeon-collection-claims strong{font-size:10px;text-transform:capitalize;color:#63d6a0;background:rgba(99,214,160,.09);border:1px solid rgba(99,214,160,.2);border-radius:7px;padding:4px 7px}
+.dungeon-rng-rewards{margin-top:16px;padding:20px;border:1px solid rgba(255,255,255,.1);border-radius:15px;background:rgba(255,255,255,.025)}
+.dungeon-rng-rewards-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.dungeon-rng-rewards-heading strong{font-size:17px;color:#fff}.dungeon-rng-rewards-heading span{font-size:11px;color:rgba(255,255,255,.5)}
+.dungeon-rng-reward-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.dungeon-rng-reward{display:flex;min-width:0;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035)}
+.dungeon-rng-reward span{font-size:11px;color:rgba(255,255,255,.83);overflow-wrap:anywhere;text-transform:capitalize}
+.dungeon-rng-reward strong{font-size:11px;color:#f3c96b;white-space:nowrap}
+@media(max-width:1100px){.dungeon-rng-reward-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.dungeon-rng-reward-list{grid-template-columns:1fr}.dungeon-rng-reward{flex-wrap:wrap}}

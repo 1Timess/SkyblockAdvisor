@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { NormalizedSkyBlockProfile } from "@/schemas/normalized-profile";
+import { dungeonRngRewards } from "@/server/skyblock/domains/dungeons";
 
 type Dungeons = NormalizedSkyBlockProfile["progression"]["dungeons"];
 const classes = ["healer","mage","berserk","archer","tank"];
@@ -13,6 +14,7 @@ export function DungeonsPanel({dungeons,username,profileId,mode,floor}:{dungeons
  const selectedFloor = floor && floors.includes(floor) && !(selectedMode === "master" && floor === "entrance") ? floor : "7";
  const records = dungeons.floorRecords[selectedMode];
  const selected = records[selectedFloor];
+ const rewards = selectedFloor === "entrance" ? [] : dungeonRngRewards(selectedMode, selectedFloor);
  const href = (m:string,f:string) => ({pathname:"/profile",query:{username,profile:profileId,tab:"dungeons",mode:m,floor:f}});
  return <section className="profile-dungeons-page" aria-label="Dungeons">
   <div className="profile-page-heading"><div><p className="section-kicker">Dungeon progression</p><h2>Dungeons</h2><p>Catacombs levels, class experience, floor clears and personal records.</p></div></div>
@@ -36,26 +38,31 @@ export function DungeonsPanel({dungeons,username,profileId,mode,floor}:{dungeons
    </div>
   </section>
   <section className="profile-gear-section" aria-label="Dungeon boss collections">
-    <div className="profile-section-heading"><div><p className="section-kicker">Boss collections</p><h2>Collection Milestones</h2></div><span>Normal + Master Mode clears</span></div>
+    <div className="profile-section-heading"><div><p className="section-kicker">Boss collections</p><h2>Collection Milestones</h2></div><span>Normal + 2× Master Mode clears</span></div>
     <div className="dungeon-collection-grid">
       {dungeons.bossCollections.map(boss => <article className="dungeon-collection" key={boss.floor}>
         <div className="dungeon-collection-head"><div><span>Floor {boss.floor}</span><h3>{boss.name}</h3></div><strong>{boss.tier === null ? "—" : `${boss.tier}/${boss.maxTier}`}</strong></div>
         <p>{boss.total === null ? "No completion count reported" : `${fmt(boss.total)} combined clears`}</p>
         <div className="dungeon-progress"><span style={{width:`${(boss.progress ?? 0)*100}%`}}/></div>
         <div className="dungeon-collection-meta"><span>{boss.nextMilestone !== null ? `Next: ${fmt(boss.nextMilestone)} clears` : boss.tier === boss.maxTier ? "All milestones reached" : "Milestone unavailable"}</span><span>{boss.nextMilestone !== null && boss.total !== null ? `${fmt(Math.max(0,boss.nextMilestone-boss.total))} remaining` : ""}</span></div>
-        <small>Normal: {fmt(boss.normal)} · Master: {fmt(boss.master)}</small>
+        <small>Normal: {fmt(boss.normal)} · Master: {fmt(boss.master)} (counts twice)</small>
+        {boss.claimedFlags.length ? <div className="dungeon-collection-claims"><span>Confirmed claimed rewards</span>{boss.claimedFlags.map(flag => <strong key={flag}>{flag.replace(/^boss_collection_claimed_/, "").replace(/_/g, " ")}</strong>)}</div> : <small>Reward claim status not confirmed</small>}
       </article>)}
     </div>
-    <p className="dungeon-records-note">Milestones are calculated from observed floor clears. Claimed rewards are not exposed by the current profile contract, so reaching a milestone does not imply its reward was claimed.</p>
+    <p className="dungeon-records-note">Milestones are calculated from weighted floor clears. Reward flags are shown only when explicitly reported by the API; no matching flag does not prove a reward is unclaimed.</p>
   </section>
   <section className="profile-gear-section" aria-label="Dungeon RNG meters">
     <div className="profile-section-heading"><div><p className="section-kicker">Dungeon drops</p><h2>RNG Meters</h2></div><span>14 independent meters</span></div>
-    <div className="dungeon-meter-explainer"><strong>{selectedMode==="master"?"Master Mode":"Catacombs"} — {selectedFloor==="entrance"?"Select Floor 1–7":`Floor ${selectedFloor}`}</strong><p>Each floor from 1–7 has its own Catacombs and Master Mode RNG Meter. Qualifying S and S+ clears contribute Dungeon Score. The selected reward and stored score are not included in the verified profile contract, so this view cannot calculate a truthful meter percentage yet.</p></div>
+    <div className="dungeon-meter-explainer"><strong>{selectedMode==="master"?"Master Mode":"Catacombs"} — {selectedFloor==="entrance"?"Select Floor 1–7":`Floor ${selectedFloor}`}</strong><p>Each floor from 1–7 has its own Catacombs and Master Mode RNG Meter. Qualifying S and S+ clears contribute Dungeon Score. The reward requirements below come from NotEnoughUpdates reference data. Selected reward and stored score are not available in our verified player contract, so individual meter percentages remain unknown.</p></div>
+    <div className="dungeon-rng-rewards">
+      <div className="dungeon-rng-rewards-heading"><strong>{selectedMode === "master" ? "Master" : "Normal"} {selectedFloor === "entrance" ? "" : `Floor ${selectedFloor}`} reward requirements</strong><span>{rewards.length} known rewards</span></div>
+      {rewards.length ? <div className="dungeon-rng-reward-list">{rewards.map(reward => <div key={reward.itemId} className="dungeon-rng-reward"><span>{reward.itemId.replace(/_/g," ").replace(/;(\d+)$/, " Lv. $1")}</span><strong>{fmt(reward.requiredScore)} score</strong></div>)}</div> : <p>Choose a floor from 1–7 to view its reward requirements.</p>}
+    </div>
     <div className="dungeon-rng-grid">{(["normal","master"] as const).map(m=><div className="dungeon-rng-group" key={m}>
       <h3>{m==="normal"?"Catacombs":"Master Mode"}</h3>
       <div>{floors.filter(f=>f!=="entrance").map(f=><Link scroll={false} key={f} href={href(m,f)} className={selectedMode===m && selectedFloor===f?"dungeon-rng-floor dungeon-rng-floor--selected":"dungeon-rng-floor"}><strong>{m==="normal"?"F":"M"}{f}</strong><span>Score unavailable</span></Link>)}</div>
     </div>)}</div>
-    <p className="dungeon-records-note">Dungeon RNG Meter progress cannot be derived from lifetime floor completions or personal-best scores. In-game, use /rngmeter to inspect the current selected drop and stored score.</p>
+    <p className="dungeon-records-note">Required scores are sourced from a bundled NEU reference snapshot and may change with game updates. Dungeon RNG Meter progress cannot be derived from lifetime clears. Use /rngmeter in-game to inspect your selected drop and stored score.</p>
   </section>
  </section>;
 }

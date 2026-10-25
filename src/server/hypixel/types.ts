@@ -45,6 +45,9 @@ export const memberSchema = z.object({
     boss_kills_tier_2: number.optional(), boss_kills_tier_3: number.optional(), boss_kills_tier_4: number.optional(),
     claimed_levels: z.record(z.string(), z.unknown()).optional(),
   })) }).optional(),
+  objectives: z.object({
+    tutorial: z.array(z.string()).optional().catch(undefined),
+  }).passthrough().optional(),
   dungeons: z.object({
     dungeon_types: z.object({ catacombs: dungeonRun.optional(), master_catacombs: dungeonRun.optional() }).optional(),
     player_classes: z.record(z.string(), z.object({ experience: number.optional() })).optional(),

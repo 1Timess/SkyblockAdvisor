@@ -5,7 +5,7 @@ import { hotmLevelFromXp, levelFromXp } from "../src/server/reference/leveling";
 import { getPetLevel, effectivePetRarity } from "../src/server/reference/pet-leveling";
 import { slayerLevel, slayerThresholds, buildSlayers } from "../src/server/skyblock/domains/slayers";
 import { buildSkills } from "../src/server/skyblock/domains/skills";
-import { buildDungeons, buildDungeonBossCollections } from "../src/server/skyblock/domains/dungeons";
+import { buildDungeons, buildDungeonBossCollections, dungeonRngRewards } from "../src/server/skyblock/domains/dungeons";
 import { buildPets } from "../src/server/skyblock/domains/pets";
 import { fixtureMember } from "./fixtures/profile";
 import { memberSchema } from "../src/server/hypixel/types";
@@ -77,10 +77,10 @@ test("boss collections combine observed normal and master completions and preser
     { "1": 20, "4": 48, "7": 50 }, { "1": 5, "4": 2, "7": 0 },
   );
   assert.equal(result[0].name, "Bonzo");
-  assert.equal(result[0].total, 25);
+  assert.equal(result[0].total, 30);
   assert.equal(result[0].tier, 1);
   assert.equal(result[0].nextMilestone, 50);
-  assert.equal(result[0].progress, .5);
+  assert.equal(result[0].progress, .6);
   assert.equal(result[3].name, "Thorn");
   assert.equal(result[3].tier, 1);
   assert.equal(result[6].tier, 1);
@@ -100,6 +100,27 @@ test("dungeon boss milestones survive member normalization", () => {
   }});
   const result = buildDungeons(member, []);
   assert.equal(result.bossCollections[4].name, "Livid");
-  assert.equal(result.bossCollections[4].total, 50);
+  assert.equal(result.bossCollections[4].total, 52);
   assert.equal(result.bossCollections[4].tier, 1);
+});
+
+test("boss collection claims come from observed objectives tutorial flags only", () => {
+  const member = memberSchema.parse({
+    objectives: { tutorial: ["boss_collection_claimed_bonzo_gold", "boss_collection_claimed_necron_diamond"] },
+    dungeons: { dungeon_types: { catacombs: { tier_completions: { "1": 100, "7": 1000 } } } },
+  });
+  const normalized = buildDungeons(member, []);
+  assert.deepEqual(normalized.bossCollections[0].claimedFlags, ["boss_collection_claimed_bonzo_gold"]);
+  assert.deepEqual(normalized.bossCollections[6].claimedFlags, ["boss_collection_claimed_necron_diamond"]);
+  assert.deepEqual(normalized.bossCollections[1].claimedFlags, []);
+});
+
+test("NEU Dungeon RNG reference includes reward thresholds for normal and master floors", () => {
+  for (const mode of ["normal","master"] as const) for (let floor=1;floor<=7;floor++) {
+    const rewards = dungeonRngRewards(mode, String(floor));
+    assert.ok(rewards.length > 0, `${mode} ${floor}`);
+    assert.ok(rewards.every(reward => reward.requiredScore > 0));
+  }
+  assert.ok(dungeonRngRewards("normal","7").some(reward => reward.itemId === "NECRON_HANDLE"));
+  assert.deepEqual(dungeonRngRewards("normal", "entrance"), []);
 });
