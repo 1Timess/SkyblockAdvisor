@@ -19,6 +19,7 @@ import { buildDungeons } from "../domains/dungeons";
 import { buildMinionProgress } from "../../minions/progression";
 import { buildBestiaryProgress } from "../../bestiary/progression";
 import { buildCrimsonIsleProgress } from "../../crimson-isle/progression";
+import { buildKuudraArmorProgress } from "../../crimson-isle/equipment";
 import { buildCollectionsProgress, type CollectionResource } from "../../collections/profile-progress";
 import { buildEconomy } from "./economy";
 import { buildExtendedPlayerState } from "../domains/player-state";
@@ -47,9 +48,9 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; requestedTab?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
-  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" ? input.requestedTab : "overview";
+  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" || input.requestedTab === "crimson-isle" ? input.requestedTab : "overview";
   const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
-  const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills";
+  const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills" || requestedTab === "crimson-isle";
   const needsPets = requestedTab === "pets" || requestedTab === "skills";
   const [profiles, catalogResult, collectionsResource] = await Promise.all([
     sources.getProfiles(identity.uuid),
@@ -120,7 +121,11 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
     collectionsProgress: buildCollectionsProgress(selected, identity.uuid, collectionsResource),
-    crimsonIsle:buildCrimsonIsleProgress(member),
+    crimsonIsle:{...buildCrimsonIsleProgress(member),
+      equipment:buildKuudraArmorProgress(items,
+        buildSkills(member, warnings).combat?.level ?? null,
+        Object.fromEntries(Object.entries((member.nether_island_player_data?.kuudra_completed_tiers ?? {}) as Record<string,unknown>)
+          .map(([key,value])=>[key,typeof value==="number"&&Number.isFinite(value)?value:null])))},
     minions: buildMinionProgress(selected, catalogResult.items, !catalogResult.error && requestedTab === "minions"),
     playerStats: extended.playerStats, bestiary: { ...extended.bestiary, progression: buildBestiaryProgress(member) }, otherProgression: extended.otherProgression,
     warnings, meta: { fetchedAt: new Date().toISOString() },

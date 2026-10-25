@@ -151,6 +151,20 @@ const crimsonQuestSchema=z.object({
    status:z.string().nullable(),progress:z.number().nullable(),completedAt:z.number().nullable()})),
   extraKeys:z.array(z.string()),questRewardsClaimed:z.array(z.string())}),
 });
+const crimsonArmorRequirementsSchema=z.object({
+ combatLevelRequired:z.number().int().positive(),kuudraTierRequired:z.string(),
+ combatMet:z.boolean().nullable(),kuudraClearMet:z.boolean().nullable(),
+});
+const crimsonEquipmentSchema=z.object({available:z.boolean(),trackedPieces:z.number().int().nonnegative(),
+ pieces:z.array(z.object({
+ id:z.string(),uuid:z.string().nullable(),name:z.string(),source:z.string(),
+ slot:z.string(),family:z.string(),tier:z.string(),stars:z.number().int().nonnegative().nullable(),
+ maxStars:z.number().int().positive(),nextAction:z.enum(["UNKNOWN","STAR","PRESTIGE","MAXED"]),
+ starsUntilNext:z.number().int().nonnegative().nullable(),nextTier:z.string().nullable(),
+ prestigeStarRequirement:z.number().int().positive().nullable(),prestigeStarMet:z.boolean(),
+ currentRequirements:crimsonArmorRequirementsSchema,nextTierRequirements:crimsonArmorRequirementsSchema.nullable(),
+ upgradeCostKnown:z.boolean(),
+ }))});
 const crimsonProgressSchema=z.object({
  available:z.boolean(),
  faction:z.object({
@@ -169,10 +183,13 @@ const crimsonProgressSchema=z.object({
  trophyFishing:z.object({available:z.boolean(),totalCaught:z.number().nullable(),fishTypes:z.number(),
   claimedOdgerRank:z.string().nullable(),rewards:z.array(z.number()).nullable(),
   grades:z.array(z.object({quality:z.string(),unique:z.number()})),
-  fish:z.array(z.object({id:z.string(),bronze:z.number().nullable(),silver:z.number().nullable(),
+  missingByQuality:z.array(z.object({quality:z.string(),missing:z.array(z.string()),observed:z.number().int().nonnegative()})),
+  pityReference:z.object({gold:z.number(),diamond:z.number(),scope:z.literal("PER_FISH"),countsAvailable:z.boolean()}),
+  fish:z.array(z.object({id:z.string(),name:z.string(),catchRequirement:z.string().nullable(),catchRequirementType:z.string().nullable(),bronze:z.number().nullable(),silver:z.number().nullable(),
    gold:z.number().nullable(),diamond:z.number().nullable(),highestQuality:z.string().nullable(),total:z.number().nullable()}))}),
  matriarch:z.object({available:z.boolean(),pearlsCollected:z.number().nullable(),lastAttempt:z.number().nullable(),
   recentRefreshes:z.array(z.number()).nullable()}),
+ equipment:crimsonEquipmentSchema,
  questDataAvailable:z.boolean(),
  quests:crimsonQuestSchema,
  unlocks:z.object({

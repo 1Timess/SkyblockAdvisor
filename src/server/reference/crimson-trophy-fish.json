@@ -1,0 +1,114 @@
+{
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Trophy_Fish/List",
+  "checked": "2026-10-25",
+  "fish": [
+    {
+      "id": "blobfish",
+      "name": "Blobfish",
+      "requirement": "Anywhere in Crimson Isle lava",
+      "type": "NONE"
+    },
+    {
+      "id": "gusher",
+      "name": "Gusher",
+      "requirement": "Blazing Volcano, 10–15 minutes after an eruption",
+      "type": "VOLCANO_TIMER"
+    },
+    {
+      "id": "obfuscated_fish_1",
+      "name": "Obfuscated-1",
+      "requirement": "Use Corrupted Bait, or obtain from corrupted sea creatures",
+      "type": "SPECIAL_BAIT"
+    },
+    {
+      "id": "steaming_hot_flounder",
+      "name": "Steaming-Hot Flounder",
+      "requirement": "Blazing Volcano: bobber within two blocks of a geyser",
+      "type": "LOCATION"
+    },
+    {
+      "id": "sulphur_skitter",
+      "name": "Sulphur Skitter",
+      "requirement": "Stand within four blocks of Sulphur Ore",
+      "type": "LOCATION"
+    },
+    {
+      "id": "flyfish",
+      "name": "Flyfish",
+      "requirement": "Blazing Volcano: bobber at least eight blocks below the player",
+      "type": "POSITION"
+    },
+    {
+      "id": "obfuscated_fish_2",
+      "name": "Obfuscated-2",
+      "requirement": "Use Obfuscated-1 as fishing bait",
+      "type": "SPECIAL_BAIT"
+    },
+    {
+      "id": "slugfish",
+      "name": "Slugfish",
+      "requirement": "Keep the bobber active for 20 seconds (shortened by Slug Pet)",
+      "type": "BOBBER_TIME"
+    },
+    {
+      "id": "lava_horse",
+      "name": "Lavahorse",
+      "requirement": "Anywhere in Crimson Isle lava",
+      "type": "NONE"
+    },
+    {
+      "id": "mana_ray",
+      "name": "Mana Ray",
+      "requirement": "Have at least 1,200 Mana",
+      "type": "STAT"
+    },
+    {
+      "id": "obfuscated_fish_3",
+      "name": "Obfuscated-3",
+      "requirement": "Use Obfuscated-2 as fishing bait",
+      "type": "SPECIAL_BAIT"
+    },
+    {
+      "id": "vanille",
+      "name": "Vanille",
+      "requirement": "Use an unenchanted Starter Lava Rod",
+      "type": "GEAR"
+    },
+    {
+      "id": "volcanic_stonefish",
+      "name": "Volcanic Stonefish",
+      "requirement": "Fish in the Blazing Volcano",
+      "type": "LOCATION"
+    },
+    {
+      "id": "karate_fish",
+      "name": "Karate Fish",
+      "requirement": "Fish at the Dojo",
+      "type": "LOCATION"
+    },
+    {
+      "id": "moldfin",
+      "name": "Moldfin",
+      "requirement": "Fish in Mystic Marsh or Scarleton",
+      "type": "LOCATION"
+    },
+    {
+      "id": "skeleton_fish",
+      "name": "Skeleton Fish",
+      "requirement": "Fish in Burning Desert or Dragontail",
+      "type": "LOCATION"
+    },
+    {
+      "id": "soul_fish",
+      "name": "Soul Fish",
+      "requirement": "Fish in the Stronghold",
+      "type": "LOCATION"
+    },
+    {
+      "id": "golden_fish",
+      "name": "Golden Fish",
+      "requirement": "Can surface after eight minutes of continuous fishing; hook repeatedly to catch",
+      "type": "SPECIAL_EVENT"
+    }
+  ]
+}

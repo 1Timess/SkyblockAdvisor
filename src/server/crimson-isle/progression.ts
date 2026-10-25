@@ -1,5 +1,6 @@
 import type { RawMember } from "../hypixel/types";
 import { buildCrimsonQuests } from "./quests";
+import trophyReference from "../reference/crimson-trophy-fish.json";
 
 // Data-only Crimson Isle domain. These are reported facts or explicitly labelled
 // eligibility estimates, never proof of ownership, claim state, or combat readiness.
@@ -77,7 +78,9 @@ export function buildCrimsonIsleProgress(member:RawMember){
  const fish=FISH.map(id=>{
   const counts=QUALITIES.map(quality=>int(trophyRecord[`${id}_${quality}`]));
   const highestQuality=[...QUALITIES].reverse().find(quality=>(int(trophyRecord[`${id}_${quality}`])??0)>0)??null;
-  return {id,bronze:counts[0],silver:counts[1],gold:counts[2],diamond:counts[3],
+  const reference=trophyReference.fish.find(f=>f.id===id);
+  return {id,name:reference?.name??id,catchRequirement:reference?.requirement??null,
+   catchRequirementType:reference?.type??null,bronze:counts[0],silver:counts[1],gold:counts[2],diamond:counts[3],
    highestQuality,total:counts.every(n=>n!==null)?counts.reduce<number>((sum,n)=>sum+n!,0):null};
  });
  const rawRewards=trophyRecord.rewards;
@@ -85,6 +88,10 @@ export function buildCrimsonIsleProgress(member:RawMember){
  const highestReward=rewards?.length?Math.max(...rewards):null;
  const claimedOdgerRank=highestReward===null?null:({1:"Bronze",2:"Silver",3:"Gold",4:"Diamond"} as Record<number,string>)[highestReward]??null;
  const grades=QUALITIES.map((quality,index)=>({quality,unique:fish.filter(f=>QUALITIES.slice(index).some(q=>(f[q]??0)>0)).length}));
+ const missingByQuality=QUALITIES.map((quality,index)=>({
+  quality,missing:fish.filter(f=>!QUALITIES.slice(index).some(q=>(f[q]??0)>0)).map(f=>f.id),
+  observed:fish.filter(f=>QUALITIES.slice(index).some(q=>(f[q]??0)>0)).length,
+ }));
  const matriarchRecord=object(nether.matriarch);
  const matriarchAvailable=nether.matriarch!==undefined&&nether.matriarch!==null;
  return {available,
@@ -93,7 +100,8 @@ export function buildCrimsonIsleProgress(member:RawMember){
    nextBelt:nextBelt?.[0]??null,pointsToNext:dojoTotal===null?null:nextBelt?nextBelt[1]-dojoTotal:0},
   kuudra:{available:kuudraAvailable,tiers,totalCompletions,collectionPoints:kuudraCollection},
   trophyFishing:{available:trophyAvailable,fish,totalCaught:int(trophyRecord.total_caught),
-   rewards,claimedOdgerRank,grades,fishTypes:FISH.length},
+   rewards,claimedOdgerRank,grades,fishTypes:FISH.length,
+   missingByQuality,pityReference:{gold:100,diamond:600,scope:"PER_FISH",countsAvailable:false}},
   matriarch:{available:matriarchAvailable,pearlsCollected:int(matriarchRecord.pearls_collected),
    lastAttempt:number(matriarchRecord.last_attempt),
    recentRefreshes:Array.isArray(matriarchRecord.recent_refreshes)?matriarchRecord.recent_refreshes.filter((x):x is number=>number(x)!==null):null},
