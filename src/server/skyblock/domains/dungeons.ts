@@ -18,6 +18,35 @@ function getFloorRecords(run: DungeonRun) {
     mobsKilled:get("mobs_killed",floor), mostMobsKilled:get("most_mobs_killed",floor),
   }]));
 }
+export const dungeonBossCollections = [
+  { floor: "1", name: "Bonzo", milestones: [25, 50, 100, 150, 250, 1000] },
+  { floor: "2", name: "Scarf", milestones: [25, 50, 100, 150, 250, 1000] },
+  { floor: "3", name: "The Professor", milestones: [25, 50, 100, 150, 250, 1000] },
+  { floor: "4", name: "Thorn", milestones: [50, 100, 150, 250, 400, 1000] },
+  { floor: "5", name: "Livid", milestones: [50, 100, 150, 250, 500, 750, 1000] },
+  { floor: "6", name: "Sadan", milestones: [50, 100, 150, 250, 500, 750, 1000] },
+  { floor: "7", name: "Necron", milestones: [50, 100, 150, 250, 500, 750, 1000] },
+] as const;
+
+// Boss Collection thresholds: SkyCrypt-Backend src/constants/collections.go.
+// Claims are not inferred from completed runs.
+export function buildDungeonBossCollections(
+  normal?: Record<string, number>, master?: Record<string, number>,
+) {
+  return dungeonBossCollections.map(boss => {
+    const normalCount = normal?.[boss.floor] ?? normal?.[`tier_${boss.floor}`] ?? null;
+    const masterCount = master?.[boss.floor] ?? master?.[`tier_${boss.floor}`] ?? null;
+    const total = normalCount === null && masterCount === null ? null : (normalCount ?? 0) + (masterCount ?? 0);
+    const tier = total === null ? null : boss.milestones.filter(value => total >= value).length;
+    const next = tier === null ? null : (boss.milestones[tier] ?? null);
+    return {
+      floor: boss.floor, name: boss.name, total, normal: normalCount, master: masterCount,
+      tier, maxTier: boss.milestones.length, nextMilestone: next,
+      progress: total === null || next === null ? null : Math.min(total / next, 1),
+    };
+  });
+}
+
 export function buildDungeons(member: RawMember, warnings: ProfileWarning[]) {
   const dungeon = member.dungeons;
   const normal = dungeon?.dungeon_types?.catacombs, master = dungeon?.dungeon_types?.master_catacombs;
@@ -33,6 +62,7 @@ export function buildDungeons(member: RawMember, warnings: ProfileWarning[]) {
     classAverage: levels.length ? levels.reduce((sum, value) => sum + value.level, 0) / levels.length : null,
     floorCompletions: { normal: normal?.tier_completions ?? {}, master: master?.tier_completions ?? {} },
     floorRecords: { normal: getFloorRecords(normal), master: getFloorRecords(master) },
+    bossCollections: buildDungeonBossCollections(normal?.tier_completions, master?.tier_completions),
     highestFloorNormal: normal?.highest_tier_completed ?? null, highestFloorMaster: master?.highest_tier_completed ?? null,
     ...(dungeon?.secrets !== undefined ? { secretsFound: dungeon.secrets } : {}),
   };

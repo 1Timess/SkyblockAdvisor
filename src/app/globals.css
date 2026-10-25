@@ -314,3 +314,26 @@ button { cursor: pointer; }
 @media(max-width:1100px){.dungeon-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.dungeon-classes{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.dungeon-summary,.dungeon-pending{grid-template-columns:1fr}.dungeon-classes,.dungeon-record-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.dungeon-floors{grid-template-columns:repeat(4,minmax(0,1fr))}.dungeon-records{padding:16px}}
 @media(max-width:420px){.dungeon-classes,.dungeon-record-grid{grid-template-columns:1fr}}
+
+/* Dungeon boss collections and RNG meter navigator */
+.dungeon-collection-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.dungeon-collection{min-width:0;padding:18px;border:1px solid rgba(255,255,255,.1);border-radius:15px;background:rgba(255,255,255,.03)}
+.dungeon-collection-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.dungeon-collection-head span{color:rgba(255,255,255,.45);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.dungeon-collection-head h3{margin:5px 0 0;color:#fff;font-size:20px}
+.dungeon-collection-head>strong{color:#f3c96b;font-size:18px;white-space:nowrap}
+.dungeon-collection>p{margin:14px 0 0;color:rgba(255,255,255,.72);font-size:12px}
+.dungeon-collection-meta{display:flex;justify-content:space-between;gap:10px;margin-top:10px;font-size:11px;color:#63d6a0}
+.dungeon-collection>small{display:block;margin-top:12px;color:rgba(255,255,255,.45);font-size:10px}
+.dungeon-meter-explainer{margin-top:22px;padding:20px;border:1px solid rgba(114,169,255,.2);border-radius:15px;background:rgba(114,169,255,.05)}
+.dungeon-meter-explainer strong{color:#fff;font-size:16px}
+.dungeon-meter-explainer p{color:rgba(255,255,255,.62);font-size:12px;line-height:1.6;margin:9px 0 0}
+.dungeon-rng-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.dungeon-rng-group{min-width:0;padding:16px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:rgba(255,255,255,.025)}
+.dungeon-rng-group h3{margin:0 0 14px;color:#fff;font-size:16px}
+.dungeon-rng-group>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.dungeon-rng-floor{display:flex;align-items:center;justify-content:space-between;gap:9px;min-width:0;padding:11px;border:1px solid rgba(255,255,255,.09);border-radius:10px;color:#fff;text-decoration:none;background:rgba(255,255,255,.025)}
+.dungeon-rng-floor span{font-size:10px;color:rgba(255,255,255,.48);text-align:right}
+.dungeon-rng-floor--selected{border-color:rgba(99,214,160,.4);background:rgba(99,214,160,.08)}
+@media(max-width:1100px){.dungeon-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.dungeon-collection-grid,.dungeon-rng-grid{grid-template-columns:1fr}}

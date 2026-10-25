@@ -5,7 +5,7 @@ import { hotmLevelFromXp, levelFromXp } from "../src/server/reference/leveling";
 import { getPetLevel, effectivePetRarity } from "../src/server/reference/pet-leveling";
 import { slayerLevel, slayerThresholds, buildSlayers } from "../src/server/skyblock/domains/slayers";
 import { buildSkills } from "../src/server/skyblock/domains/skills";
-import { buildDungeons } from "../src/server/skyblock/domains/dungeons";
+import { buildDungeons, buildDungeonBossCollections } from "../src/server/skyblock/domains/dungeons";
 import { buildPets } from "../src/server/skyblock/domains/pets";
 import { fixtureMember } from "./fixtures/profile";
 import { memberSchema } from "../src/server/hypixel/types";
@@ -70,4 +70,36 @@ test("an absent pet identifier may be null without discarding owned pet data", (
   const member = memberSchema.parse({ pets_data: { pets: [{ uuid: null, type: "SHEEP", tier: "COMMON", exp: 100 }] } });
   const pet = buildPets(member, []).owned[0];
   assert.equal(pet.uuid, null); assert.equal(pet.level, 2);
+});
+
+test("boss collections combine observed normal and master completions and preserve unknown claims", () => {
+  const result = buildDungeonBossCollections(
+    { "1": 20, "4": 48, "7": 50 }, { "1": 5, "4": 2, "7": 0 },
+  );
+  assert.equal(result[0].name, "Bonzo");
+  assert.equal(result[0].total, 25);
+  assert.equal(result[0].tier, 1);
+  assert.equal(result[0].nextMilestone, 50);
+  assert.equal(result[0].progress, .5);
+  assert.equal(result[3].name, "Thorn");
+  assert.equal(result[3].tier, 1);
+  assert.equal(result[6].tier, 1);
+  assert.equal(result[1].total, null);
+  assert.equal(result[1].tier, null);
+  const maxed = buildDungeonBossCollections({ "1": 1000 })[0];
+  assert.equal(maxed.tier, 6);
+  assert.equal(maxed.nextMilestone, null);
+});
+
+test("dungeon boss milestones survive member normalization", () => {
+  const member = memberSchema.parse({dungeons: {
+    dungeon_types: {
+      catacombs: { tier_completions: { "5": 48 } },
+      master_catacombs: { tier_completions: { "5": 2 } },
+    },
+  }});
+  const result = buildDungeons(member, []);
+  assert.equal(result.bossCollections[4].name, "Livid");
+  assert.equal(result.bossCollections[4].total, 50);
+  assert.equal(result.bossCollections[4].tier, 1);
 });

@@ -28,13 +28,34 @@ export function DungeonsPanel({dungeons,username,profileId,mode,floor}:{dungeons
   </section>
   <section className="profile-gear-section" aria-label="Dungeon floor records">
    <div className="profile-section-heading"><div><p className="section-kicker">Personal bests</p><h2>Floor Records</h2></div></div>
-   <nav className="dungeon-modes" aria-label="Dungeon mode"><Link className={selectedMode==="normal"?"dungeon-mode active":"dungeon-mode"} href={href("normal",selectedFloor)}>Catacombs</Link><Link className={selectedMode==="master"?"dungeon-mode active":"dungeon-mode"} href={href("master",selectedFloor==="entrance"?"1":selectedFloor)}>Master Mode</Link></nav>
-   <nav className="dungeon-floors" aria-label="Dungeon floor">{floors.filter(f=>selectedMode==="normal"||f!=="entrance").map(f=><Link key={f} className={selectedFloor===f?"dungeon-floor active":"dungeon-floor"} aria-current={selectedFloor===f?"page":undefined} href={href(selectedMode,f)}><strong>{f==="entrance"?"E":`${selectedMode==="master"?"M":"F"}${f}`}</strong><small>{records[f]?.completions == null?"—":`${fmt(records[f].completions)} clears`}</small></Link>)}</nav>
+   <nav className="dungeon-modes" aria-label="Dungeon mode"><Link scroll={false} className={selectedMode==="normal"?"dungeon-mode active":"dungeon-mode"} href={href("normal",selectedFloor)}>Catacombs</Link><Link scroll={false} className={selectedMode==="master"?"dungeon-mode active":"dungeon-mode"} href={href("master",selectedFloor==="entrance"?"1":selectedFloor)}>Master Mode</Link></nav>
+   <nav className="dungeon-floors" aria-label="Dungeon floor">{floors.filter(f=>selectedMode==="normal"||f!=="entrance").map(f=><Link scroll={false} key={f} className={selectedFloor===f?"dungeon-floor active":"dungeon-floor"} aria-current={selectedFloor===f?"page":undefined} href={href(selectedMode,f)}><strong>{f==="entrance"?"E":`${selectedMode==="master"?"M":"F"}${f}`}</strong><small>{records[f]?.completions == null?"—":`${fmt(records[f].completions)} clears`}</small></Link>)}</nav>
    <div className="dungeon-records"><div className="dungeon-records-heading"><div><p className="section-kicker">{selectedMode==="master"?"Master Mode":"Catacombs"}</p><h3>{selectedFloor==="entrance"?"Entrance":`Floor ${selectedFloor}`}</h3></div><div><span>Best grade</span><strong>{grade(selected?.bestScore)}</strong></div></div>
     <div className="dungeon-record-grid"><Metric label="Completions" value={fmt(selected?.completions)}/><Metric label="Runs Played" value={fmt(selected?.runsPlayed)}/><Metric label="Best Score" value={fmt(selected?.bestScore)}/><Metric label="Fastest Clear" value={time(selected?.fastestTimeMs)}/><Metric label="Fastest S" value={time(selected?.fastestSTimeMs)}/><Metric label="Fastest S+" value={time(selected?.fastestSPlusTimeMs)}/><Metric label="Mobs Killed" value={fmt(selected?.mobsKilled)}/><Metric label="Most Kills / Run" value={fmt(selected?.mostMobsKilled)}/></div>
     <p className="dungeon-records-note">— indicates no reported record. Times are personal bests, not run averages.</p>
    </div>
   </section>
-  <section className="dungeon-pending"><article><p className="section-kicker">Boss collections</p><h3>Collection milestones</h3><p>Reward thresholds and claims are not yet in the verified data contract. Floor clears are shown above, without inventing collection claims.</p></article><article><p className="section-kicker">RNG Meters</p><h3>Selected dungeon drops</h3><p>Selected rewards, stored score and required score are not yet normalized. Meter progress is withheld until these fields are verified.</p></article></section>
+  <section className="profile-gear-section" aria-label="Dungeon boss collections">
+    <div className="profile-section-heading"><div><p className="section-kicker">Boss collections</p><h2>Collection Milestones</h2></div><span>Normal + Master Mode clears</span></div>
+    <div className="dungeon-collection-grid">
+      {dungeons.bossCollections.map(boss => <article className="dungeon-collection" key={boss.floor}>
+        <div className="dungeon-collection-head"><div><span>Floor {boss.floor}</span><h3>{boss.name}</h3></div><strong>{boss.tier === null ? "—" : `${boss.tier}/${boss.maxTier}`}</strong></div>
+        <p>{boss.total === null ? "No completion count reported" : `${fmt(boss.total)} combined clears`}</p>
+        <div className="dungeon-progress"><span style={{width:`${(boss.progress ?? 0)*100}%`}}/></div>
+        <div className="dungeon-collection-meta"><span>{boss.nextMilestone !== null ? `Next: ${fmt(boss.nextMilestone)} clears` : boss.tier === boss.maxTier ? "All milestones reached" : "Milestone unavailable"}</span><span>{boss.nextMilestone !== null && boss.total !== null ? `${fmt(Math.max(0,boss.nextMilestone-boss.total))} remaining` : ""}</span></div>
+        <small>Normal: {fmt(boss.normal)} · Master: {fmt(boss.master)}</small>
+      </article>)}
+    </div>
+    <p className="dungeon-records-note">Milestones are calculated from observed floor clears. Claimed rewards are not exposed by the current profile contract, so reaching a milestone does not imply its reward was claimed.</p>
+  </section>
+  <section className="profile-gear-section" aria-label="Dungeon RNG meters">
+    <div className="profile-section-heading"><div><p className="section-kicker">Dungeon drops</p><h2>RNG Meters</h2></div><span>14 independent meters</span></div>
+    <div className="dungeon-meter-explainer"><strong>{selectedMode==="master"?"Master Mode":"Catacombs"} — {selectedFloor==="entrance"?"Select Floor 1–7":`Floor ${selectedFloor}`}</strong><p>Each floor from 1–7 has its own Catacombs and Master Mode RNG Meter. Qualifying S and S+ clears contribute Dungeon Score. The selected reward and stored score are not included in the verified profile contract, so this view cannot calculate a truthful meter percentage yet.</p></div>
+    <div className="dungeon-rng-grid">{(["normal","master"] as const).map(m=><div className="dungeon-rng-group" key={m}>
+      <h3>{m==="normal"?"Catacombs":"Master Mode"}</h3>
+      <div>{floors.filter(f=>f!=="entrance").map(f=><Link scroll={false} key={f} href={href(m,f)} className={selectedMode===m && selectedFloor===f?"dungeon-rng-floor dungeon-rng-floor--selected":"dungeon-rng-floor"}><strong>{m==="normal"?"F":"M"}{f}</strong><span>Score unavailable</span></Link>)}</div>
+    </div>)}</div>
+    <p className="dungeon-records-note">Dungeon RNG Meter progress cannot be derived from lifetime floor completions or personal-best scores. In-game, use /rngmeter to inspect the current selected drop and stored score.</p>
+  </section>
  </section>;
 }
