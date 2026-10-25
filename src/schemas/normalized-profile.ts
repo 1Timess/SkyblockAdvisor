@@ -136,6 +136,21 @@ const collectionsTabSchema=z.object({
   progress:z.number().min(0).max(1).nullable(),tiers:z.array(collectionTabTierSchema),
  })),
 });
+const crimsonQuestSchema=z.object({
+ questApiAvailable:z.boolean(),netherQuestApiAvailable:z.boolean(),
+ storyline:z.array(z.object({
+  id:z.string(),label:z.string(),branch:z.string(),status:z.enum(["COMPLETE","ACTIVE","UNKNOWN"]),
+  available:z.boolean(),activatedAt:z.number().nullable(),completedAt:z.number().nullable(),
+ })),
+ branches:z.array(z.object({id:z.string(),reported:z.boolean(),allKnownStepsComplete:z.boolean(),
+  observedComplete:z.number().int().nonnegative(),totalMappedSteps:z.number().int().nonnegative(),
+  completionVerified:z.boolean()})),
+ unknownStorylineKeys:z.array(z.string()),objectiveSignals:z.array(z.string()),
+ daily:z.object({available:z.boolean(),assignments:z.array(z.string()),
+  entries:z.array(z.object({id:z.string(),label:z.string(),available:z.boolean(),
+   status:z.string().nullable(),progress:z.number().nullable(),completedAt:z.number().nullable()})),
+  extraKeys:z.array(z.string()),questRewardsClaimed:z.array(z.string())}),
+});
 const crimsonProgressSchema=z.object({
  available:z.boolean(),
  faction:z.object({
@@ -159,6 +174,7 @@ const crimsonProgressSchema=z.object({
  matriarch:z.object({available:z.boolean(),pearlsCollected:z.number().nullable(),lastAttempt:z.number().nullable(),
   recentRefreshes:z.array(z.number()).nullable()}),
  questDataAvailable:z.boolean(),
+ quests:crimsonQuestSchema,
 });
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,

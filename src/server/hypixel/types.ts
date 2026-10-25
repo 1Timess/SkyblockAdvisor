@@ -45,6 +45,7 @@ export const memberSchema = z.object({
     boss_kills_tier_2: number.optional(), boss_kills_tier_3: number.optional(), boss_kills_tier_4: number.optional(),
     claimed_levels: z.record(z.string(), z.unknown()).optional(),
   })) }).optional(),
+  quests: dynamicObject.optional(),
   objectives: z.object({
     tutorial: z.array(z.string()).optional().catch(undefined),
   }).passthrough().optional(),

@@ -1,4 +1,5 @@
 import type { RawMember } from "../hypixel/types";
+import { buildCrimsonQuests } from "./quests";
 
 // Data-only Crimson Isle domain. These are reported facts or explicitly labelled
 // eligibility estimates, never proof of ownership, claim state, or combat readiness.
@@ -96,5 +97,6 @@ export function buildCrimsonIsleProgress(member:RawMember){
    lastAttempt:number(matriarchRecord.last_attempt),
    recentRefreshes:Array.isArray(matriarchRecord.recent_refreshes)?matriarchRecord.recent_refreshes.filter((x):x is number=>number(x)!==null):null},
   questDataAvailable:nether.quests!==undefined&&nether.quests!==null,
+  quests:buildCrimsonQuests(member),
  };
 }

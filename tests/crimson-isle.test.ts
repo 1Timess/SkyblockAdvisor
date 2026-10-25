@@ -60,3 +60,43 @@ test("Matriarch history does not imply current daily availability",()=>{
  assert.equal(result.matriarch.lastAttempt,123);
  assert.deepEqual(result.matriarch.recentRefreshes,[4,5]);
 });
+
+test("Crimson storyline reads explicit top-level quest status and does not infer branch completion",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({
+  quests:{
+   select_mage_faction:{status:"COMPLETE",completed_at:123},
+   meet_dean_at_academy:{status:"ACTIVE",activated_at:456},
+   talk_to_elle_9:{status:"COMPLETE",completed_at:789},
+  },
+  objectives:{tutorial:["OBJECTIVE_HELP_ELLE","KILL_KUUDRA_NONE"]},
+  nether_island_player_data:{selected_faction:"mages",mages_reputation:12000},
+ }));
+ assert.equal(result.quests.questApiAvailable,true);
+ assert.equal(result.quests.storyline.find(x=>x.id==="select_mage_faction")?.status,"COMPLETE");
+ assert.equal(result.quests.storyline.find(x=>x.id==="meet_dean_at_academy")?.status,"ACTIVE");
+ assert.equal(result.quests.branches.find(x=>x.id==="mages")?.completionVerified,false);
+ assert.ok(result.quests.unknownStorylineKeys.includes("talk_to_elle_9"));
+ assert.ok(result.quests.objectiveSignals.includes("OBJECTIVE_HELP_ELLE"));
+ assert.equal(result.kuudra.tiers[1].storyVerified,false);
+});
+test("daily faction quests retain only reported assignments and statuses",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({
+  nether_island_player_data:{quests:{quest_data:{
+    quest_list:["fetch","dojo"],fetch:{status:"ACTIVE",progress:2},
+    dojo:{status:"COMPLETE",completed_at:9000},unknown_future:{status:"ACTIVE"},
+   },quest_rewards:{fetch:true,dojo:false}}},
+ }));
+ assert.deepEqual(result.quests.daily.assignments,["fetch","dojo"]);
+ assert.equal(result.quests.daily.entries.find(x=>x.id==="fetch")?.progress,2);
+ assert.equal(result.quests.daily.entries.find(x=>x.id==="dojo")?.status,"COMPLETE");
+ assert.deepEqual(result.quests.daily.questRewardsClaimed,["fetch"]);
+ assert.ok(result.quests.daily.extraKeys.includes("unknown_future"));
+});
+test("unknown and absent story quest payloads do not become completed",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({quests:{
+  select_barbarian_faction:{status:"IN_PROGRESS"},give_heavy_pearl_to_gris:true,
+ }}));
+ assert.equal(result.quests.storyline.find(x=>x.id==="select_barbarian_faction")?.status,"UNKNOWN");
+ assert.equal(result.quests.storyline.find(x=>x.id==="give_heavy_pearl_to_gris")?.status,"UNKNOWN");
+ assert.equal(result.quests.branches.find(x=>x.id==="barbarians")?.completionVerified,false);
+});
