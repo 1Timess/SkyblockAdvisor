@@ -18,6 +18,7 @@ import { buildSlayers } from "../domains/slayers";
 import { buildDungeons } from "../domains/dungeons";
 import { buildMinionProgress } from "../../minions/progression";
 import { buildBestiaryProgress } from "../../bestiary/progression";
+import { buildCrimsonIsleProgress } from "../../crimson-isle/progression";
 import { buildCollectionsProgress, type CollectionResource } from "../../collections/profile-progress";
 import { buildEconomy } from "./economy";
 import { buildExtendedPlayerState } from "../domains/player-state";
@@ -119,6 +120,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
     collectionsProgress: buildCollectionsProgress(selected, identity.uuid, collectionsResource),
+    crimsonIsle:buildCrimsonIsleProgress(member),
     minions: buildMinionProgress(selected, catalogResult.items, !catalogResult.error && requestedTab === "minions"),
     playerStats: extended.playerStats, bestiary: { ...extended.bestiary, progression: buildBestiaryProgress(member) }, otherProgression: extended.otherProgression,
     warnings, meta: { fetchedAt: new Date().toISOString() },

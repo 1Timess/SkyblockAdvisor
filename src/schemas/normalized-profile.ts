@@ -136,6 +136,30 @@ const collectionsTabSchema=z.object({
   progress:z.number().min(0).max(1).nullable(),tiers:z.array(collectionTabTierSchema),
  })),
 });
+const crimsonProgressSchema=z.object({
+ available:z.boolean(),
+ faction:z.object({
+  selected:z.string().nullable(),currentReputation:z.number().nullable(),
+  reputation:z.object({mages:z.number().nullable(),barbarians:z.number().nullable(),magesHighest:z.number().nullable()}),
+  factions:z.array(z.object({id:z.string(),reputation:z.number().nullable(),rank:z.string().nullable()})),
+ }),
+ dojo:z.object({available:z.boolean(),totalPoints:z.number().nullable(),eligibleBelt:z.string().nullable(),
+  nextBelt:z.string().nullable(),pointsToNext:z.number().nullable(),
+  tests:z.array(z.object({id:z.string(),name:z.string(),points:z.number().nullable(),time:z.number().nullable(),rank:z.string().nullable()}))}),
+ kuudra:z.object({available:z.boolean(),totalCompletions:z.number().nullable(),collectionPoints:z.number().nullable(),
+  tiers:z.array(z.object({id:z.string(),name:z.string(),reputation:z.number(),points:z.number(),
+   completions:z.number().nullable(),highestWave:z.number().nullable(),
+   reputationMet:z.boolean().nullable(),previousCleared:z.boolean().nullable(),
+   storyRequired:z.boolean(),storyVerified:z.boolean()}))}),
+ trophyFishing:z.object({available:z.boolean(),totalCaught:z.number().nullable(),fishTypes:z.number(),
+  claimedOdgerRank:z.string().nullable(),rewards:z.array(z.number()).nullable(),
+  grades:z.array(z.object({quality:z.string(),unique:z.number()})),
+  fish:z.array(z.object({id:z.string(),bronze:z.number().nullable(),silver:z.number().nullable(),
+   gold:z.number().nullable(),diamond:z.number().nullable(),highestQuality:z.string().nullable(),total:z.number().nullable()}))}),
+ matriarch:z.object({available:z.boolean(),pearlsCollected:z.number().nullable(),lastAttempt:z.number().nullable(),
+  recentRefreshes:z.array(z.number()).nullable()}),
+ questDataAvailable:z.boolean(),
+});
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,
   profile: profileSummarySchema.extend({ availableProfiles: z.array(profileSummarySchema) }),
@@ -155,6 +179,7 @@ export const normalizedProfileSchema = z.object({
   shards: z.object({ owned: z.unknown().nullable(), fused: z.unknown().nullable(), traps: z.unknown().nullable() }),
   collections: statsSchema, unlockedCollectionTiers: z.array(z.string()), craftedGenerators: z.array(z.string()),
   collectionsProgress:collectionsTabSchema,
+  crimsonIsle:crimsonProgressSchema,
   minions: minionProgressSchema,
   playerStats: z.object({ highestDamage: z.number().nullable(), highestCriticalDamage: z.number().nullable(), kills: statsSchema,
     deaths: statsSchema, itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), pets: statsSchema,

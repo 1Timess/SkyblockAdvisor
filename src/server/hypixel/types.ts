@@ -85,7 +85,15 @@ export const memberSchema = z.object({
     milestone: z.unknown().optional(), miscellaneous: dynamicObject.optional(),
     migrated_stats: z.boolean().optional(), migration: z.boolean().optional() }).passthrough().optional(),
   fairy_soul: z.unknown().optional(), leveling: z.unknown().optional(), garden_player_data: z.unknown().optional(), forge: z.unknown().optional(),
-  nether_island_player_data: z.unknown().optional(),
+  nether_island_player_data: z.object({
+    selected_faction:z.string().optional(), mages_reputation:tolerantNumber,
+    barbarians_reputation:tolerantNumber, mages_reputation_highest:tolerantNumber,
+    dojo:dynamicObject.optional(), kuudra_completed_tiers:dynamicObject.optional(),
+    matriarch:z.object({pearls_collected:tolerantNumber,last_attempt:tolerantNumber,
+      recent_refreshes:z.array(z.number()).optional()}).passthrough().optional(),
+    quests:dynamicObject.optional(),abiphone:dynamicObject.optional(),
+    kuudra_party_finder:dynamicObject.optional(),
+  }).passthrough().optional(),
   rift: z.object({ access: z.object({ consumed_prism: z.boolean().optional() }).passthrough().optional() }).passthrough().optional(),
 });
 export const rawProfileSchema = z.object({
