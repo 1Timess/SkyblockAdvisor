@@ -113,6 +113,29 @@ const minionProgressSchema = z.object({
   })),
   catalogAvailable: z.boolean(),
 });
+const collectionTabTierSchema=z.object({
+ tier:z.number().int().positive(),required:z.number().nonnegative(),unlocks:z.array(z.string()),
+ confirmed:z.boolean(),thresholdObserved:z.boolean(),
+});
+const collectionsTabSchema=z.object({
+ referenceAvailable:z.boolean(),referenceVersion:z.string().nullable(),
+ contributionsComplete:z.boolean(),unlocksComplete:z.boolean(),observedMembers:z.number().int().nonnegative(),
+ totalMembers:z.number().int().nonnegative(),totalCollections:z.number().int().nonnegative(),
+ discovered:z.number().int().nonnegative(),maxed:z.number().int().nonnegative(),
+ earnedTiers:z.number().int().nonnegative(),maxTiers:z.number().int().nonnegative(),
+ categories:z.array(z.object({
+  name:z.string(),count:z.number().int().nonnegative(),discovered:z.number().int().nonnegative(),
+  maxed:z.number().int().nonnegative(),earnedTiers:z.number().int().nonnegative(),maxTiers:z.number().int().nonnegative(),
+ })),
+ collections:z.array(z.object({
+  id:z.string(),name:z.string(),category:z.string(),personal:z.number().nonnegative().nullable(),
+  observed:z.number().nonnegative().nullable(),confirmedTier:z.number().int().nonnegative(),
+  inferredTier:z.number().int().nonnegative().nullable(),earnedTier:z.number().int().nonnegative(),
+  maxTier:z.number().int().nonnegative(),maxed:z.boolean(),nextTier:z.number().int().positive().nullable(),
+  nextRequired:z.number().nonnegative().nullable(),remaining:z.number().nonnegative().nullable(),
+  progress:z.number().min(0).max(1).nullable(),tiers:z.array(collectionTabTierSchema),
+ })),
+});
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,
   profile: profileSummarySchema.extend({ availableProfiles: z.array(profileSummarySchema) }),
@@ -131,6 +154,7 @@ export const normalizedProfileSchema = z.object({
   attributes: statsSchema,
   shards: z.object({ owned: z.unknown().nullable(), fused: z.unknown().nullable(), traps: z.unknown().nullable() }),
   collections: statsSchema, unlockedCollectionTiers: z.array(z.string()), craftedGenerators: z.array(z.string()),
+  collectionsProgress:collectionsTabSchema,
   minions: minionProgressSchema,
   playerStats: z.object({ highestDamage: z.number().nullable(), highestCriticalDamage: z.number().nullable(), kills: statsSchema,
     deaths: statsSchema, itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), pets: statsSchema,
