@@ -351,3 +351,23 @@ button { cursor: pointer; }
 .dungeon-rng-reward strong{font-size:11px;color:#f3c96b;white-space:nowrap}
 @media(max-width:1100px){.dungeon-rng-reward-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.dungeon-rng-reward-list{grid-template-columns:1fr}.dungeon-rng-reward{flex-wrap:wrap}}
+
+/* Minion progression tab */
+.minion-summary{display:grid;grid-template-columns:1.5fr repeat(3,minmax(0,1fr));gap:14px}
+.minion-summary-primary,.minion-summary-card{min-width:0;padding:22px;border:1px solid rgba(255,255,255,.13);border-radius:18px;background:rgba(10,14,18,.32);backdrop-filter:blur(12px)}
+.minion-summary-primary>strong{display:block;margin-top:14px;color:#63d6a0;font-size:40px}.minion-summary-primary>p,.minion-summary-card>small{display:block;margin:10px 0 0;color:rgba(255,255,255,.48);font-size:12px}
+.minion-summary-card>span{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase}.minion-summary-card>strong{display:block;margin-top:14px;font-size:30px;color:#fff}
+.minion-next-slot{margin-top:20px}.minion-next-slot strong{color:#fff;font-size:23px}.minion-next-slot p{color:rgba(255,255,255,.55);font-size:12px}
+.minion-filters{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 16px}
+.minion-filters input{min-width:0;flex:1 1 210px;max-width:310px;padding:11px 14px;border:1px solid rgba(255,255,255,.15);border-radius:11px;background:rgba(0,0,0,.22);color:#fff}
+.minion-filters>div{display:flex;flex-wrap:wrap;gap:7px}.minion-filter{padding:10px 13px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(255,255,255,.035);color:rgba(255,255,255,.7);cursor:pointer}.minion-filter.active{color:#63d6a0;border-color:rgba(99,214,160,.4);background:rgba(99,214,160,.1)}
+.minion-workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,1fr);gap:15px;align-items:start}
+.minion-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:690px;overflow:auto;align-content:start}
+.minion-family{display:flex;align-items:center;gap:10px;min-width:0;padding:13px;text-align:left;cursor:pointer;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:rgba(255,255,255,.03);color:#fff}
+.minion-family.active{border-color:rgba(99,214,160,.45);background:rgba(99,214,160,.08)}.minion-family-icon{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;color:#72a9ff;background:rgba(114,169,255,.09);border-radius:8px}
+.minion-family-copy{flex:1;min-width:0}.minion-family-copy strong,.minion-family-copy small{display:block;overflow-wrap:anywhere}.minion-family-copy strong{font-size:12px}.minion-family-copy small{color:rgba(255,255,255,.5);font-size:10px;margin-top:4px}
+.minion-family-tier{flex:0 0 auto;color:#f3c96b;font-size:11px}.minion-detail{position:sticky;top:96px;min-width:0;padding:22px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(10,14,18,.38)}.minion-detail h3{margin:0 0 14px;color:#fff;font-size:26px}.minion-detail>strong{color:#63d6a0;font-size:20px}.minion-detail p:not(.section-kicker),.minion-detail small{color:rgba(255,255,255,.52);font-size:12px;line-height:1.6}
+.minion-tier-list{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0}.minion-tier{display:grid;place-items:center;width:32px;height:32px;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.35);font-size:12px}.minion-tier.observed{border-color:rgba(99,214,160,.4);background:rgba(99,214,160,.08);color:#63d6a0}
+.minion-next-upgrade{display:flex;justify-content:space-between;gap:10px;padding:14px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}.minion-next-upgrade span{color:rgba(255,255,255,.56);font-size:12px}.minion-next-upgrade strong{color:#fff;font-size:12px}.minion-hint{margin:16px 0;color:rgba(255,255,255,.5);font-size:12px;line-height:1.6}.minion-empty{color:rgba(255,255,255,.5);font-size:13px}
+@media(max-width:1100px){.minion-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.minion-workspace{grid-template-columns:1fr}.minion-detail{position:static}}
+@media(max-width:700px){.minion-summary{grid-template-columns:1fr}.minion-grid{grid-template-columns:1fr;max-height:none}}

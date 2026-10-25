@@ -90,6 +90,9 @@ export const memberSchema = z.object({
 export const rawProfileSchema = z.object({
   profile_id: z.string(), cute_name: z.string(), selected: z.boolean().optional(), game_mode: z.string().optional(),
   members: z.record(z.string(), z.unknown()),
+  community_upgrades: z.object({ upgrade_states: z.array(z.object({
+    upgrade: z.string(), tier: number.optional(), started_ms: number.optional(), claimed_ms: number.optional(),
+  }).passthrough()).optional() }).passthrough().optional(),
   banking: z.object({ balance: number.optional() }).nullable().optional(),
 });
 export const itemDefinitionSchema = z.object({

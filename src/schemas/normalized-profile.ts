@@ -74,6 +74,25 @@ const foragingProgressionSchema = z.object({
 });
 const fishingProgressionSchema = z.object({ itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), trophyFish: statsSchema });
 const bestiarySchema = z.object({ kills: statsSchema, deaths: statsSchema, milestone: statsSchema, miscellaneous: statsSchema });
+const minionProgressSchema = z.object({
+  available: z.boolean(),
+  historyComplete: z.boolean(),
+  uniqueCrafts: z.number().int().nonnegative(),
+  craftedSlots: z.number().int().nonnegative().nullable(),
+  bonusSlots: z.number().int().nonnegative().nullable(),
+  totalSlots: z.number().int().nonnegative().nullable(),
+  nextSlotAt: z.number().int().positive().nullable(),
+  craftsToNextSlot: z.number().int().nonnegative().nullable(),
+  families: z.array(z.object({
+    id: z.string(), name: z.string(), itemId: z.string().nullable(),
+    craftedTiers: z.array(z.number().int().positive()),
+    maxCraftedTier: z.number().int().nonnegative(),
+    maxCatalogTier: z.number().int().positive().nullable(),
+    nextTier: z.number().int().positive().nullable(),
+    nextItemId: z.string().nullable(),
+  })),
+  catalogAvailable: z.boolean(),
+});
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,
   profile: profileSummarySchema.extend({ availableProfiles: z.array(profileSummarySchema) }),
@@ -92,6 +111,7 @@ export const normalizedProfileSchema = z.object({
   attributes: statsSchema,
   shards: z.object({ owned: z.unknown().nullable(), fused: z.unknown().nullable(), traps: z.unknown().nullable() }),
   collections: statsSchema, unlockedCollectionTiers: z.array(z.string()), craftedGenerators: z.array(z.string()),
+  minions: minionProgressSchema,
   playerStats: z.object({ highestDamage: z.number().nullable(), highestCriticalDamage: z.number().nullable(), kills: statsSchema,
     deaths: statsSchema, itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), pets: statsSchema,
     auctions: statsSchema, races: statsSchema, rift: statsSchema }),

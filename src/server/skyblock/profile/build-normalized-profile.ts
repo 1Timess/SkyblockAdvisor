@@ -16,6 +16,7 @@ import { buildPets } from "../domains/pets";
 import { buildSkills } from "../domains/skills";
 import { buildSlayers } from "../domains/slayers";
 import { buildDungeons } from "../domains/dungeons";
+import { buildMinionProgress } from "../../minions/progression";
 import { buildEconomy } from "./economy";
 import { buildExtendedPlayerState } from "../domains/player-state";
 import { buildOwnedEnchantingState } from "../../enchanting/owned-state";
@@ -41,13 +42,13 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; requestedTab?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
-  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" ? input.requestedTab : "overview";
+  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" ? input.requestedTab : "overview";
   const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
   const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills";
   const needsPets = requestedTab === "pets" || requestedTab === "skills";
   const [profiles, catalogResult] = await Promise.all([
     sources.getProfiles(identity.uuid),
-    needsAccessories
+    needsAccessories || requestedTab === "minions"
       ? sources.getItems().then(items => ({ items, error: false })).catch(() => ({ items: [], error: true }))
       : Promise.resolve({ items: [], error: false }),
   ]);
@@ -78,7 +79,8 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   const normalizedAccessoryPrices = Object.fromEntries(accessoryCatalog
     .map(item => [item.name, accessoryPricesById[item.id]])
     .filter(([, price]) => typeof price === "number")) as Record<string, number>;
-  if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: "accessories.catalog", message: "Accessory catalog unavailable; missing and upgrade lists could not be calculated." });
+  if (catalogResult.error) warnings.push({ code: "REFERENCE_DATA_MISSING", scope: needsAccessories ? "accessories.catalog" : "minions.catalog",
+    message: needsAccessories ? "Accessory catalog unavailable; missing and upgrade lists could not be calculated." : "Minion item catalog unavailable; missing tiers could not be calculated." });
   const inventoryOptions = needsGear && needsAccessories
     ? { armor: true, equipment: true, inventory: true, accessories: true, storage: true, loadouts: true }
     : needsGear
@@ -105,6 +107,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
       mining: extended.mining, foraging: extended.foraging, fishing: extended.fishing, enchanting: buildOwnedEnchantingState(member) },
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
+    minions: buildMinionProgress(selected, catalogResult.items, !catalogResult.error && requestedTab === "minions"),
     playerStats: extended.playerStats, bestiary: extended.bestiary, otherProgression: extended.otherProgression,
     warnings, meta: { fetchedAt: new Date().toISOString() },
   };
