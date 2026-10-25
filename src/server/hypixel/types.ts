@@ -7,6 +7,13 @@ const encoded = z.object({ data: z.string().optional() });
 const dungeonRun = z.object({
   experience: number.optional(), highest_tier_completed: number.optional(),
   tier_completions: z.record(z.string(), number).optional(),
+  times_played: z.record(z.string(), number).optional(),
+  best_score: z.record(z.string(), number).optional(),
+  fastest_time: z.record(z.string(), number).optional(),
+  fastest_time_s: z.record(z.string(), number).optional(),
+  fastest_time_s_plus: z.record(z.string(), number).optional(),
+  mobs_killed: z.record(z.string(), number).optional(),
+  most_mobs_killed: z.record(z.string(), number).optional(),
 });
 export const rawPetSchema = z.object({
   uuid: z.string().nullish(), uniqueId: z.string().nullish(), type: z.string().optional(),

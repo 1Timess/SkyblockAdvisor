@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DungeonsPanel } from "@/components/DungeonsPanel";
 import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normalized-profile";
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
@@ -6,7 +7,7 @@ import type { ProfileItem } from "@/schemas/items";
 import { buildSkillProgressionSummaries } from "@/server/skills/progression-summary";
 import { loadSkillPetKnowledge } from "@/server/skills/load-pet-knowledge";
 
-type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string; skill?: string }> };
+type ProfilePageProps = { searchParams: Promise<{ username?: string; profile?: string; tab?: string; pet?: string; skill?: string; mode?: string; floor?: string }> };
 const skillLabels: Record<string, string> = { combat:"Combat", mining:"Mining", farming:"Farming", foraging:"Foraging", fishing:"Fishing", enchanting:"Enchanting", alchemy:"Alchemy", taming:"Taming", carpentry:"Carpentry", runecrafting:"Runecrafting", social:"Social", hunting:"Hunting" };
 function formatCoins(value:number|null){return value===null?"—":new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:2}).format(value)}
 function getNumeric(value:unknown,keys:string[]){if(!value||typeof value!=="object"||Array.isArray(value))return null;for(const key of keys){const n=(value as Record<string,unknown>)[key];if(typeof n==="number"&&Number.isFinite(n))return n}return null}
@@ -70,7 +71,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <div className="profile-switcher">{result.profile.availableProfiles.map(item=>{const icon=getProfileIconPath(item.cuteName);return <Link className={item.id===result.profile.id?"profile-switcher__item profile-switcher__item--active":"profile-switcher__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:item.id}}} key={item.id}>{icon?<img className="profile-switcher__icon" src={icon} alt=""/>:null}{item.cuteName}</Link>})}</div>
     <nav className="profile-tabs" aria-label="Profile sections"><Link className={activeTab==="overview"?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id}}}>Overview</Link>{["Gear","Accessories","Pets","Skills","Dungeons","Slayer","Minions","Bestiary","Collections","Crimson Isle","Rift","Misc"].map(tab=>{const key=tab.toLowerCase().replace(/\s+/g,"-");return <Link className={activeTab===key?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:key}}} key={tab}>{tab}</Link>})}</nav>
 
-    {activeTab==="skills" ? (<section className="profile-skills-page" aria-label="Skills">
+    {activeTab==="dungeons" ? (<DungeonsPanel dungeons={result.progression.dungeons} username={result.identity.username} profileId={result.profile.id} mode={params.mode} floor={params.floor}/>) : activeTab==="skills" ? (<section className="profile-skills-page" aria-label="Skills">
      {(() => {
        const skillEntries=Object.entries(result.progression.skills);
        const selectedKey=selectedSkillParam&&result.progression.skills[selectedSkillParam]?selectedSkillParam:(skillEntries[0]?.[0]??"mining");

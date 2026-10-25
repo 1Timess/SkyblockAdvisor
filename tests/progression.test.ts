@@ -62,6 +62,8 @@ test("dungeons preserve classes and normal/master completions", () => {
   assert.equal(result.catacombs?.level, 2); assert.equal(result.classes.archer.level, 1);
   assert.equal(result.highestFloorNormal, 5); assert.equal(result.highestFloorMaster, 1);
   assert.equal(result.floorCompletions.normal["5"], 2); assert.equal(result.secretsFound, 12);
+  assert.equal(result.floorRecords.normal["5"].completions, 2);
+  assert.equal(result.floorRecords.master["1"].completions, 1);
 });
 
 test("an absent pet identifier may be null without discarding owned pet data", () => {
