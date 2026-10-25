@@ -46,9 +46,12 @@ export function buildMinionProgress(profile: RawProfile, catalog: readonly Hypix
   const current = [...MINION_SLOT_THRESHOLDS].reverse().find(([required])=>uniqueCrafts>=required)!;
   const next = MINION_SLOT_THRESHOLDS.find(([required])=>required>uniqueCrafts);
   const upgrades = profile.community_upgrades?.upgrade_states;
-  // The maximum completed upgrade tier, not the number of history entries.
+  // Hypixel no longer reliably includes claimed_ms in Community Shop records.
+  // Use the highest reported minion_slots tier rather than requiring a timestamp.
   const bonusSlots = upgrades
-    ? Math.min(5,Math.max(0,...upgrades.filter(entry=>entry.upgrade==="minion_slots" && entry.claimed_ms != null).map(entry=>entry.tier??0)))
+    ? Math.min(5, Math.max(0, ...upgrades
+      .filter(entry => entry.upgrade === "minion_slots" && Number.isInteger(entry.tier) && entry.tier! >= 0)
+      .map(entry => entry.tier!)))
     : null;
   const craftedSlots = current[1];
   return {
