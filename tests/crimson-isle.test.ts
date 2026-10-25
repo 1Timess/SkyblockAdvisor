@@ -100,3 +100,27 @@ test("unknown and absent story quest payloads do not become completed",()=>{
  assert.equal(result.quests.storyline.find(x=>x.id==="give_heavy_pearl_to_gris")?.status,"UNKNOWN");
  assert.equal(result.quests.branches.find(x=>x.id==="barbarians")?.completionVerified,false);
 });
+
+test("Kuudra prerequisite gates distinguish documented completions, missing storyline evidence and locked tiers",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({nether_island_player_data:{
+  selected_faction:"mages",mages_reputation:3500,
+  kuudra_completed_tiers:{none:3,hot:0,burning:0,fiery:0,infernal:0},
+ }}));
+ const basic=result.unlocks.kuudraTiers[0];
+ const hot=result.unlocks.kuudraTiers[1];
+ const burning=result.unlocks.kuudraTiers[2];
+ assert.equal(basic.overall,"HISTORICALLY_CLEARED");
+ assert.equal(hot.reputation,"MET");
+ assert.equal(hot.previousTier,"MET");
+ assert.equal(hot.storyline,"UNKNOWN");
+ assert.equal(hot.overall,"NOT_VERIFIED");
+ assert.equal(burning.previousTier,"NOT_MET");
+ assert.equal(burning.overall,"KNOWN_GATE_UNMET");
+ assert.equal(result.unlocks.factionRanks[0].thresholds.find(t=>t.name==="Trusted")?.status,"MET");
+});
+test("missing faction and clear history cannot be translated into definite unlock failures",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({}));
+ assert.equal(result.unlocks.kuudraTiers[1].overall,"NOT_VERIFIED");
+ assert.equal(result.unlocks.kuudraTiers[1].reputation,"UNKNOWN");
+ assert.equal(result.unlocks.kuudraTiers[1].previousTier,"UNKNOWN");
+});

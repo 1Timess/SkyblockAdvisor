@@ -175,6 +175,16 @@ const crimsonProgressSchema=z.object({
   recentRefreshes:z.array(z.number()).nullable()}),
  questDataAvailable:z.boolean(),
  quests:crimsonQuestSchema,
+ unlocks:z.object({
+  factionRanks:z.array(z.object({faction:z.string(),rank:z.string().nullable(),
+   thresholds:z.array(z.object({name:z.string(),required:z.number(),
+    status:z.enum(["MET","NOT_MET","UNKNOWN"])}))})),
+  kuudraTiers:z.array(z.object({id:z.string(),name:z.string(),historicalAccess:z.boolean(),
+   reputation:z.enum(["MET","NOT_MET","UNKNOWN"]),
+   previousTier:z.enum(["MET","NOT_MET","UNKNOWN","NOT_APPLICABLE"]),
+   storyline:z.enum(["MET","NOT_MET","UNKNOWN"]),
+   overall:z.enum(["HISTORICALLY_CLEARED","KNOWN_GATE_UNMET","NOT_VERIFIED"])})),
+ }),
 });
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,

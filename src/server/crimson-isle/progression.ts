@@ -30,6 +30,7 @@ const FISH=[
 const QUALITIES=["bronze","silver","gold","diamond"] as const;
 function rank(points:number){return points>=1000?"S":points>=800?"A":points>=600?"B":points>=400?"C":points>=200?"D":"F"}
 function reputationRank(value:number|null){return value===null?null:REPUTATION.find(([,required])=>value>=required)?.[0]??null}
+type tGateStatus="MET"|"NOT_MET"|"UNKNOWN";
 export function buildCrimsonIsleProgress(member:RawMember){
  const raw=member.nether_island_player_data;
  const available=raw!==undefined&&raw!==null;
@@ -98,5 +99,31 @@ export function buildCrimsonIsleProgress(member:RawMember){
    recentRefreshes:Array.isArray(matriarchRecord.recent_refreshes)?matriarchRecord.recent_refreshes.filter((x):x is number=>number(x)!==null):null},
   questDataAvailable:nether.quests!==undefined&&nether.quests!==null,
   quests:buildCrimsonQuests(member),
+  unlocks:{
+   // Faction reputation rank gates only: do not imply shop ownership or items obtained.
+   factionRanks:factions.map(f=>({
+    faction:f.id,rank:f.rank,
+    thresholds:REPUTATION.filter(([,required])=>required>0).map(([name,required])=>({
+     name,required,status:f.reputation===null?"UNKNOWN":f.reputation>=required?"MET":"NOT_MET",
+    })),
+   })),
+   // A completed run is conclusive evidence of historical access to that tier.
+   // An absent main-quest completion marker is NOT proof the storyline was unfinished.
+   kuudraTiers:tiers.map((t,i)=>{
+    const previous=i===0?null:tiers[i-1];
+    const historicalAccess=t.completions!==null&&t.completions>0;
+    const reputationStatus:tGateStatus=t.reputationMet===null?"UNKNOWN":t.reputationMet?"MET":"NOT_MET";
+    const previousStatus:tGateStatus=previous===null?"UNKNOWN":
+     previous.completions===null?"UNKNOWN":previous.completions>0?"MET":"NOT_MET";
+    const storylineStatus:tGateStatus=historicalAccess?"MET":"UNKNOWN";
+    return {id:t.id,name:t.name,historicalAccess,
+     reputation:reputationStatus,previousTier:i===0?"NOT_APPLICABLE":previousStatus,
+     storyline:storylineStatus,
+     // An observed clear verifies past access, but not today's reputation or party readiness.
+     overall:historicalAccess?"HISTORICALLY_CLEARED" as const:
+      i>0&&(reputationStatus==="NOT_MET"||previousStatus==="NOT_MET")?"KNOWN_GATE_UNMET" as const:"NOT_VERIFIED" as const,
+    };
+   }),
+  },
  };
 }
