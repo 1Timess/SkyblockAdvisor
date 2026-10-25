@@ -19,7 +19,8 @@ export function buildBestiaryProgress(member:RawMember) {
       for(const key of family.keys)seenKeys.add(key);
       const kills=family.keys.reduce((sum,key)=>sum+(count(rawKills[key])??0),0);
       const deaths=family.keys.reduce((sum,key)=>sum+(count(rawDeaths[key])??0),0);
-      const base=family.set ? sets[family.set]?.[family.bracket] : brackets[family.bracket];
+      const bracketSet = "set" in family ? family.set : undefined;
+      const base=bracketSet ? sets[bracketSet]?.[family.bracket] : brackets[family.bracket];
       const thresholds=(base??[]).filter(n=>n<=family.cap);
       // The explicit family cap is authoritative, even if the reference bracket is incomplete.
       if(!thresholds.includes(family.cap))thresholds.push(family.cap);
@@ -27,7 +28,7 @@ export function buildBestiaryProgress(member:RawMember) {
       const nextThreshold=thresholds.find(n=>kills<n)??null;
       const previousThreshold=tier===0?0:thresholds[tier-1];
       const progress=nextThreshold===null?1:Math.max(0,Math.min(1,(kills-previousThreshold)/(nextThreshold-previousThreshold)));
-      return {name:family.name,keys:family.keys,imageUrl:family.image??null,itemId:family.item??null,
+      return {name:family.name,keys:family.keys,imageUrl:family.image??null,itemId:("item" in family ? family.item : null)??null,
         kills,deaths,tier,maxTier:thresholds.length,nextThreshold,remaining:nextThreshold===null?0:nextThreshold-kills,progress};
     });
     return {id:category.id,name:category.name,group:category.group,
