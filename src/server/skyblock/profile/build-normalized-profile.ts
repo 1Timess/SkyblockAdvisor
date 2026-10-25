@@ -17,6 +17,7 @@ import { buildSkills } from "../domains/skills";
 import { buildSlayers } from "../domains/slayers";
 import { buildDungeons } from "../domains/dungeons";
 import { buildMinionProgress } from "../../minions/progression";
+import { buildBestiaryProgress } from "../../bestiary/progression";
 import { buildEconomy } from "./economy";
 import { buildExtendedPlayerState } from "../domains/player-state";
 import { buildOwnedEnchantingState } from "../../enchanting/owned-state";
@@ -42,7 +43,7 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; requestedTab?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
-  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" ? input.requestedTab : "overview";
+  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" ? input.requestedTab : "overview";
   const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
   const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills";
   const needsPets = requestedTab === "pets" || requestedTab === "skills";
@@ -108,7 +109,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
     minions: buildMinionProgress(selected, catalogResult.items, !catalogResult.error && requestedTab === "minions"),
-    playerStats: extended.playerStats, bestiary: extended.bestiary, otherProgression: extended.otherProgression,
+    playerStats: extended.playerStats, bestiary: { ...extended.bestiary, progression: buildBestiaryProgress(member) }, otherProgression: extended.otherProgression,
     warnings, meta: { fetchedAt: new Date().toISOString() },
   };
   return normalizedProfileSchema.parse(result);

@@ -73,7 +73,27 @@ const foragingProgressionSchema = z.object({
   starlyn: dynamicStateSchema,
 });
 const fishingProgressionSchema = z.object({ itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), trophyFish: statsSchema });
-const bestiarySchema = z.object({ kills: statsSchema, deaths: statsSchema, milestone: statsSchema, miscellaneous: statsSchema });
+const bestiaryFamilyProgressSchema=z.object({
+  name:z.string(),keys:z.array(z.string()),imageUrl:z.string().nullable(),itemId:z.string().nullable(),
+  kills:z.number().nonnegative(),deaths:z.number().nonnegative(),tier:z.number().int().nonnegative(),
+  maxTier:z.number().int().nonnegative(),nextThreshold:z.number().nonnegative().nullable(),
+  remaining:z.number().nonnegative(),progress:z.number().min(0).max(1),
+});
+const bestiaryProgressSchema=z.object({
+  apiAvailable:z.boolean(),categories:z.array(z.object({
+    id:z.string(),name:z.string(),group:z.string(),discovered:z.number().int().nonnegative(),
+    maxed:z.number().int().nonnegative(),familyTiers:z.number().int().nonnegative(),
+    maxFamilyTiers:z.number().int().nonnegative(),families:z.array(bestiaryFamilyProgressSchema),
+  })),
+  familyTiers:z.number().int().nonnegative(),maxFamilyTiers:z.number().int().nonnegative(),
+  bestiaryLevel:z.number().int().nonnegative(),levelProgress:z.number().min(0).max(1),
+  nextMilestonePoints:z.number().int().positive(),pointsToNextMilestone:z.number().int().positive(),
+  claimedMilestone:z.number().nonnegative().nullable(),discovered:z.number().int().nonnegative(),
+  maxed:z.number().int().nonnegative(),totalFamilies:z.number().int().nonnegative(),
+  unmappedKillKeys:z.array(z.string()),
+});
+const bestiarySchema = z.object({ kills: statsSchema, deaths: statsSchema, milestone: statsSchema, miscellaneous: statsSchema,
+  progression:bestiaryProgressSchema });
 const minionProgressSchema = z.object({
   available: z.boolean(),
   historyComplete: z.boolean(),
