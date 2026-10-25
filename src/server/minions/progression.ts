@@ -41,7 +41,7 @@ export function buildMinionProgress(profile: RawProfile, catalog: readonly Hypix
     return {id,name,itemId:representative?.id ?? null,craftedTiers:known?.tiers ?? [],
       maxCraftedTier,maxCatalogTier,nextTier:next?.generator_tier ?? null,nextItemId:next?.id ?? null};
   }).sort((a,b)=> (a.maxCraftedTier===0?1:0)-(b.maxCraftedTier===0?1:0) || a.name.localeCompare(b.name));
-  // Unknown co-op history must not silently become a confident slot count.
+  // Report the minimum established by observed crafts; unavailable co-op histories can only increase it.
   const uniqueCrafts = observed.size;
   const current = [...MINION_SLOT_THRESHOLDS].reverse().find(([required])=>uniqueCrafts>=required)!;
   const next = MINION_SLOT_THRESHOLDS.find(([required])=>required>uniqueCrafts);
@@ -50,12 +50,14 @@ export function buildMinionProgress(profile: RawProfile, catalog: readonly Hypix
   const bonusSlots = upgrades
     ? Math.min(5,Math.max(0,...upgrades.filter(entry=>entry.upgrade==="minion_slots" && entry.claimed_ms != null).map(entry=>entry.tier??0)))
     : null;
-  const craftedSlots = historyComplete ? current[1] : null;
+  const craftedSlots = current[1];
   return {
     available,historyComplete,uniqueCrafts,craftedSlots,bonusSlots,
-    totalSlots: craftedSlots!==null && bonusSlots!==null ? craftedSlots+bonusSlots : null,
-    nextSlotAt: historyComplete ? next?.[0] ?? null : null,
-    craftsToNextSlot: historyComplete && next ? next[0]-uniqueCrafts : null,
+    // A missing Community Shop payload means its bonus is unknown, not zero.
+    // This total is a lower bound whenever member history or Community Shop data is incomplete.
+    totalSlots: craftedSlots + (bonusSlots ?? 0),
+    nextSlotAt: next?.[0] ?? null,
+    craftsToNextSlot: next ? next[0]-uniqueCrafts : null,
     families,catalogAvailable,
   };
 }

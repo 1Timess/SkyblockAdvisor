@@ -22,10 +22,10 @@ test("co-op minion tiers are deduplicated and community upgrades use max claimed
  assert.equal(result.bonusSlots,3);assert.equal(result.totalSlots,8);assert.equal(result.craftsToNextSlot,2);
  assert.deepEqual(result.families.find(x=>x.id==="CLAY")?.craftedTiers,[1,2]);
 });
-test("incomplete co-op craft histories do not invent slots",()=>{
+test("incomplete co-op craft histories retain observed lower-bound slot progression",()=>{
  const result=buildMinionProgress(profile({alice:member(["CLAY_1"]),bob:member()}),catalog);
- assert.equal(result.historyComplete,false);assert.equal(result.craftedSlots,null);
- assert.equal(result.totalSlots,null);assert.equal(result.craftsToNextSlot,null);
+ assert.equal(result.historyComplete,false);assert.equal(result.craftedSlots,5);
+ assert.equal(result.totalSlots,5);assert.equal(result.nextSlotAt,5);assert.equal(result.craftsToNextSlot,4);
  assert.equal(result.uniqueCrafts,1);
 });
 test("catalogue includes never-crafted families and max known tiers",()=>{
@@ -38,4 +38,17 @@ test("slot threshold at five unique tiers unlocks sixth crafted slot",()=>{
  const result=buildMinionProgress(profile({alice:member(["A_1","B_1","C_1","D_1","E_1"])},0),[]);
  assert.equal(result.craftedSlots,6);assert.equal(result.totalSlots,6);
  assert.equal(result.nextSlotAt,15);assert.equal(result.craftsToNextSlot,10);
+});
+
+test("incomplete history still surfaces earned craft slots and known Community Shop bonuses",()=>{
+ const result=buildMinionProgress(profile({
+  alice:member(["A_1","B_1","C_1","D_1","E_1"]),bob:member(),
+ },2),catalog);
+ assert.equal(result.historyComplete,false);
+ assert.equal(result.uniqueCrafts,5);
+ assert.equal(result.craftedSlots,6);
+ assert.equal(result.bonusSlots,2);
+ assert.equal(result.totalSlots,8);
+ assert.equal(result.nextSlotAt,15);
+ assert.equal(result.craftsToNextSlot,10);
 });
