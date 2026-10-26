@@ -49,7 +49,7 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; requestedTab?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
-  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" || input.requestedTab === "crimson-isle" ? input.requestedTab : "overview";
+  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" || input.requestedTab === "crimson-isle" || input.requestedTab === "slayer" ? input.requestedTab : "overview";
   const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
   const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills" || requestedTab === "crimson-isle";
   const needsPets = requestedTab === "pets" || requestedTab === "skills";

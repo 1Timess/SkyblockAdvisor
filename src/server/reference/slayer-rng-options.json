@@ -109,5 +109,7 @@
       "ENCHANTED_BOOK_BUNDLE_THE_ONE": 12525,
       "DYE_SANGRIA": 750000
     }
-  }
+  },
+  "verifiedAt": "2026-10-26",
+  "verificationNote": "Compared with current NotEnoughUpdates-REPO constants/rngscore.json; still six bosses and 92 option scores. Scores are reference constants, NOT current player meter XP."
 }

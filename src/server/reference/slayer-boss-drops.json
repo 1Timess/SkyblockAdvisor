@@ -1,5 +1,5 @@
 {
-  "sourceNote": "Community wiki boss drop tables inspected 2026-09-28; conditions mean drop eligibility by boss tier and Slayer level, never guaranteed acquisition. New drops may not appear in pinned NEU RNG options.",
+  "sourceNote": "Community SkyBlock Wiki boss drop tables refreshed 2026-10-26. Includes Paragon Shard separate-pool eligibility: Tier IV for zombie/spider/wolf/enderman/blaze, Tier V for zombie/spider; Slayer level V. This is a drop-eligibility catalogue, not live player RNG state, probability-adjusted odds, or item ownership. Source: https://hypixelskyblock.minecraft.wiki/w/Slayer_Boss",
   "families": {
     "zombie": {
       "source": "https://hypixelskyblock.minecraft.wiki/w/Revenant_Horror",
