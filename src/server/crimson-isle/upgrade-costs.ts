@@ -72,7 +72,11 @@ export function priceUpgradeSteps(steps:readonly UpgradeStep[],quotes:MarketQuot
 /** Build the next action and all remaining actions up to Infernal 15★.
  * This estimates gross replacement cost; already owned materials are not subtracted.
  */
-export function armorUpgradePath(id:string,stars:number|null,quotes:MarketQuotes={}) {
+export interface ArmorUpgradePath {
+ known:boolean;nextStep:UpgradeStep|null;nextCost:UpgradeCostSummary|null;
+ remainingSteps:UpgradeStep[];toMax:UpgradeCostSummary|null;
+}
+export function armorUpgradePath(id:string,stars:number|null,quotes:MarketQuotes={}):ArmorUpgradePath {
  const index=PREFIXES.findIndex((prefix,i)=>id.startsWith(prefix)&&
   (i!==0||!PREFIXES.slice(1).some(other=>id.startsWith(other))));
  const valid=index>=0&&stars!==null&&Number.isInteger(stars)&&stars>=0&&stars<=(index===4?15:10);
