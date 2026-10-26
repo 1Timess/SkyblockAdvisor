@@ -95,7 +95,24 @@ export const memberSchema = z.object({
     quests:dynamicObject.optional(),abiphone:dynamicObject.optional(),
     kuudra_party_finder:dynamicObject.optional(),
   }).passthrough().optional(),
-  rift: z.object({ access: z.object({ consumed_prism: z.boolean().optional() }).passthrough().optional() }).passthrough().optional(),
+  rift: z.object({
+    access:z.object({consumed_prism:z.boolean().optional(),last_free:tolerantNumber,
+      charge_track_timestamp:tolerantNumber}).passthrough().optional(),
+    gallery:z.object({elise_step:tolerantNumber,secured_trophies:z.array(z.object({
+      type:z.string(),timestamp:tolerantNumber,visits:tolerantNumber}).passthrough()).optional(),
+      sent_trophy_dialogues:z.array(z.string()).optional()}).passthrough().optional(),
+    enigma:z.object({bought_cloak:z.boolean().optional(),found_souls:z.array(z.string()).optional(),
+      claimed_bonus_index:tolerantNumber}).passthrough().optional(),
+    lifetime_purchased_boundaries:z.array(z.string()).optional(),
+    inventory:z.object({inv_contents:encoded.optional(),inv_armor:encoded.optional(),
+      equipment_contents:encoded.optional(),ender_chest_contents:encoded.optional()}).passthrough().optional(),
+    wyld_woods:dynamicObject.optional(),black_lagoon:dynamicObject.optional(),
+    west_village:dynamicObject.optional(),village_plaza:dynamicObject.optional(),
+    dead_cats:dynamicObject.optional(),wither_cage:dynamicObject.optional(),
+    wizard_tower:dynamicObject.optional(),castle:dynamicObject.optional(),
+    dreadfarm:dynamicObject.optional(),mountaintop:dynamicObject.optional(),
+    slayer_quest:dynamicObject.optional(),
+  }).passthrough().optional(),
 });
 export const rawProfileSchema = z.object({
   profile_id: z.string(), cute_name: z.string(), selected: z.boolean().optional(), game_mode: z.string().optional(),

@@ -19,6 +19,7 @@ import { buildDungeons } from "../domains/dungeons";
 import { buildMinionProgress } from "../../minions/progression";
 import { buildBestiaryProgress } from "../../bestiary/progression";
 import { buildCrimsonIsleProgress } from "../../crimson-isle/progression";
+import { buildRiftProgress } from "../../rift/progression";
 import { buildKuudraArmorProgress } from "../../crimson-isle/equipment";
 import { loadMarketSnapshot } from "../../market/snapshot-store";
 import { buildCollectionsProgress, type CollectionResource } from "../../collections/profile-progress";
@@ -124,6 +125,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
     collectionsProgress: buildCollectionsProgress(selected, identity.uuid, collectionsResource),
+    riftProgress:buildRiftProgress(member),
     crimsonIsle:{...buildCrimsonIsleProgress(member),
       equipment:buildKuudraArmorProgress(items,
         buildSkills(member, warnings).combat?.level ?? null,

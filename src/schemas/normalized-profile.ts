@@ -238,6 +238,27 @@ const crimsonProgressSchema=z.object({
    overall:z.enum(["HISTORICALLY_CLEARED","KNOWN_GATE_UNMET","NOT_VERIFIED"])})),
  }),
 });
+const riftEvidenceSchema=z.object({id:z.string(),reported:z.boolean(),boolean:z.boolean().nullable(),
+ count:z.number().int().nonnegative().nullable(),entries:z.array(z.string()).nullable()});
+const riftProgressSchema=z.object({
+ available:z.boolean(),
+ gallery:z.object({reported:z.boolean(),eliseStep:z.number().int().nonnegative().nullable(),
+  securedTrophies:z.array(z.object({type:z.string(),timestamp:z.number().int().nonnegative().nullable(),
+   visits:z.number().int().nonnegative().nullable()})).nullable(),
+  uniqueSecuredTypes:z.array(z.string()).nullable(),securedCount:z.number().int().nonnegative().nullable(),
+  sentTrophyDialogues:z.array(z.string()).nullable()}),
+ enigma:z.object({reported:z.boolean(),boughtCloak:z.boolean().nullable(),
+  soulsFound:z.array(z.string()).nullable(),soulCount:z.number().int().nonnegative().nullable(),
+  claimedBonusIndex:z.number().int().nonnegative().nullable()}),
+ access:z.object({reported:z.boolean(),consumedPrism:z.boolean().nullable(),
+  lastFree:z.number().int().nonnegative().nullable(),chargeTrackTimestamp:z.number().int().nonnegative().nullable()}),
+ boundaries:z.object({reported:z.boolean(),ids:z.array(z.string()).nullable(),count:z.number().int().nonnegative().nullable()}),
+ regions:z.array(z.object({id:z.string(),label:z.string(),dataReported:z.boolean(),accessConfirmed:z.boolean()})),
+ activities:z.array(riftEvidenceSchema),
+ inventory:z.object({reported:z.boolean(),availableSources:z.array(z.string())}),
+ vampireSlayer:z.object({reported:z.boolean(),xp:z.number().int().nonnegative().nullable()}),
+ unmodeledKeys:z.array(z.string()),
+});
 export const normalizedProfileSchema = z.object({
   identity: profilesResponseSchema.shape.identity,
   profile: profileSummarySchema.extend({ availableProfiles: z.array(profileSummarySchema) }),
@@ -258,6 +279,7 @@ export const normalizedProfileSchema = z.object({
   collections: statsSchema, unlockedCollectionTiers: z.array(z.string()), craftedGenerators: z.array(z.string()),
   collectionsProgress:collectionsTabSchema,
   crimsonIsle:crimsonProgressSchema,
+  riftProgress:riftProgressSchema,
   minions: minionProgressSchema,
   playerStats: z.object({ highestDamage: z.number().nullable(), highestCriticalDamage: z.number().nullable(), kills: statsSchema,
     deaths: statsSchema, itemsFished: statsSchema, seaCreatureKills: z.number().nullable(), pets: statsSchema,
