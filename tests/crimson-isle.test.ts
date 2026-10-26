@@ -168,8 +168,7 @@ test("same recorded faction and Basic Kuudra clear infer mandatory earlier chapt
  assert.ok(b.chapters.slice(0,-1).every(x=>x.state==="COMPLETE"));
  assert.equal(b.chapters.at(-1)?.state,"IN_PROGRESS");
  assert.equal(b.completionBasis,"BASIC_KUUDRA_CLEAR");
- assert.equal(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters[0].state,"COMPLETE");
- assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters.slice(1).every(x=>x.state==="UNKNOWN"));
+ assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters.every(x=>x.state==="UNKNOWN"));
 });
 test("a historical clear cannot be attributed to a different selected faction",()=>{
  const result=buildCrimsonIsleProgress(memberSchema.parse({
@@ -184,5 +183,6 @@ test("no faction provenance means no invented chapter completion from a Kuudra c
  const result=buildCrimsonIsleProgress(memberSchema.parse({
   nether_island_player_data:{selected_faction:"mages",kuudra_completed_tiers:{none:3}},
  }));
- assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters.every(x=>x.state==="UNKNOWN"));
+ assert.equal(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters[0].state,"COMPLETE");
+ assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters.slice(1).every(x=>x.state==="UNKNOWN"));
 });
