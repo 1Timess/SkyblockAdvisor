@@ -3,6 +3,7 @@ import { DungeonsPanel } from "@/components/DungeonsPanel";
 import { MinionsPanel } from "@/components/MinionsPanel";
 import { BestiaryPanel } from "@/components/BestiaryPanel";
 import { CollectionsPanel } from "@/components/CollectionsPanel";
+import { CrimsonIslePanel } from "@/components/CrimsonIslePanel";
 import { buildNormalizedProfile } from "@/server/skyblock/profile/build-normalized-profile";
 import { AppError } from "@/server/errors";
 import { getProfileIconPath } from "@/lib/profile-icons";
@@ -74,7 +75,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     <div className="profile-switcher">{result.profile.availableProfiles.map(item=>{const icon=getProfileIconPath(item.cuteName);return <Link className={item.id===result.profile.id?"profile-switcher__item profile-switcher__item--active":"profile-switcher__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:item.id}}} key={item.id}>{icon?<img className="profile-switcher__icon" src={icon} alt=""/>:null}{item.cuteName}</Link>})}</div>
     <nav className="profile-tabs" aria-label="Profile sections"><Link className={activeTab==="overview"?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id}}}>Overview</Link>{["Gear","Accessories","Pets","Skills","Dungeons","Slayer","Minions","Bestiary","Collections","Crimson Isle","Rift","Misc"].map(tab=>{const key=tab.toLowerCase().replace(/\s+/g,"-");return <Link className={activeTab===key?"profile-tabs__item profile-tabs__item--active":"profile-tabs__item"} href={{pathname:"/profile",query:{username:result.identity.username,profile:result.profile.id,tab:key}}} key={tab}>{tab}</Link>})}</nav>
 
-    {activeTab==="collections" ? (<CollectionsPanel progress={result.collectionsProgress}/>) : activeTab==="bestiary" ? (<BestiaryPanel progress={result.bestiary.progression}/>) : activeTab==="minions" ? (<MinionsPanel minions={result.minions}/>) : activeTab==="dungeons" ? (<DungeonsPanel dungeons={result.progression.dungeons} username={result.identity.username} profileId={result.profile.id} mode={params.mode} floor={params.floor}/>) : activeTab==="skills" ? (<section className="profile-skills-page" aria-label="Skills">
+    {activeTab==="crimson-isle" ? (<CrimsonIslePanel progress={result.crimsonIsle}/>) : activeTab==="collections" ? (<CollectionsPanel progress={result.collectionsProgress}/>) : activeTab==="bestiary" ? (<BestiaryPanel progress={result.bestiary.progression}/>) : activeTab==="minions" ? (<MinionsPanel minions={result.minions}/>) : activeTab==="dungeons" ? (<DungeonsPanel dungeons={result.progression.dungeons} username={result.identity.username} profileId={result.profile.id} mode={params.mode} floor={params.floor}/>) : activeTab==="skills" ? (<section className="profile-skills-page" aria-label="Skills">
      {(() => {
        const skillEntries=Object.entries(result.progression.skills);
        const selectedKey=selectedSkillParam&&result.progression.skills[selectedSkillParam]?selectedSkillParam:(skillEntries[0]?.[0]??"mining");
