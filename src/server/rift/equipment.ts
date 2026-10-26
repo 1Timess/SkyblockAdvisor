@@ -25,7 +25,7 @@ export async function decodeRiftItems(member:RawMember,warnings:ProfileWarning[]
 }
 export function buildRiftEquipment(items:readonly ProcessedItem[],known:{
  soulCount:number|null;charmCount:number|null;cloakPurchased:boolean|null;
-}){
+},availableSourceIds:readonly string[]=[]){
  const observed=items.map(item=>({
   id:item.id,name:item.name,count:item.count,source:item.source,slotIndex:item.slotIndex,
   equipped:EQUIPPED_SOURCES.has(item.source),rarity:item.rarity,
@@ -52,7 +52,7 @@ export function buildRiftEquipment(items:readonly ProcessedItem[],known:{
    tradeable:c.tradeable,costStatus:c.requires.status,
    materials:c.requires.cost.map(m=>({currency:m.currency,quantity:m.quantity}))};
  });
- return {sources:SOURCES.map(([id,source])=>({id,source,reported:items.some(i=>i.source===source)})),
+ return {sources:SOURCES.map(([id,source])=>({id,source,reported:availableSourceIds.includes(id)})),
   items:observed,observedItemCount:observed.length,
   time:{baseSeconds:480,contributions,knownEquippedSubtotalSeconds:subtotal,
    totalRiftTimeSeconds:null as number|null,

@@ -121,7 +121,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     soulCount:riftBase.enigma.soulCount,
     charmCount:riftBase.unlocks.recognizedSecuredCount,
     cloakPurchased:riftBase.enigma.boughtCloak,
-  });
+  },riftBase.inventory.availableSources);
   // Reuse the shared Bazaar + AH snapshot; only load prices on the Crimson Isle tab.
   const crimsonMarket = requestedTab === "crimson-isle" ? await loadMarketSnapshot().catch(() => null) : null;
   const result = {

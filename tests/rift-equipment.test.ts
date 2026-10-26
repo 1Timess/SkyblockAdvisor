@@ -44,3 +44,9 @@ test("Mote costs remain in Motes, nontradable items do not get fabricated market
  assert.equal(p.costs.find(x=>x.id==="rift_necklace")?.materials.length,0);
  assert.ok(p.unpricedUpgrades.length>0);
 });
+
+test("empty but supplied Rift inventory source is still reported as accessible",()=>{
+ const p=buildRiftEquipment([],{soulCount:null,charmCount:null,cloakPurchased:null},["equipment_contents"]);
+ assert.equal(p.sources.find(x=>x.id==="equipment_contents")?.reported,true);
+ assert.equal(p.sources.find(x=>x.id==="inv_contents")?.reported,false);
+});
