@@ -83,7 +83,7 @@ test("real API objective IDs produce reported storyline milestones, not invented
  assert.equal(q.storyline.find(x=>x.id==="talk_to_elle_2")?.status,"ACTIVE");
  assert.ok(q.unknownStorylineKeys.includes("talk_to_dean_4"));
  assert.equal(q.branches.find(x=>x.id==="mages")?.completionVerified,false);
- assert.ok(!q.storyline.some(x=>x.id==="select_mage_faction"));
+ assert.ok(!q.storyline.map(x=>String(x.id)).includes("select_mage_faction"));
 });
 test("captured faction daily API fields are decoded without mislabeling rewards as claims",()=>{
  const result=buildCrimsonIsleProgress(memberSchema.parse({
