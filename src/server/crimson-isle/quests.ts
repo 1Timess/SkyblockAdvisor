@@ -50,7 +50,7 @@ function chapterProgress(member:RawMember,objectives:RawMap,kuudra:RawMap){
  const clear=numeric(kuudra.none);
  const basicCleared=clear!==null&&clear>0;
  const sameFaction=affiliation!==null&&affiliation===selected;
- const statusOf=(key:string):ChapterState=>questStatus(objectives[key])==="COMPLETE"?"COMPLETE":questStatus(objectives[key])==="ACTIVE"?"IN_PROGRESS":"UNKNOWN";
+
  const branches=(["mages","barbarians"] as const).map(faction=>{
   const factionEvidence=faction===selected&&sameFaction&&basicCleared;
   const mentioned=faction===selected||faction===affiliation;
@@ -64,12 +64,6 @@ function chapterProgress(member:RawMember,objectives:RawMap,kuudra:RawMap){
    // player joined; reputation alone would not establish that.
    if(chapter.id==="joining"&&mentioned){
      state="COMPLETE";evidence="DIRECT";
-   }
-   // Standalone quest objective captures can corroborate chapter activity,
-   // without attributing ambiguous numbered Elle conversations.
-   if(chapter.id==="research"&&faction==="mages"&&mentioned&&
-      statusOf("talk_to_dean_4")==="COMPLETE"&&state==="UNKNOWN"){
-      state="IN_PROGRESS";evidence="PREREQUISITE";
    }
    return {...chapter,state,evidence};
   });
