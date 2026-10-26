@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import type { NormalizedSkyBlockProfile } from "@/schemas/normalized-profile";
-import { CRIMSON_STORY_CHAPTERS } from "@/server/crimson-isle/quests";
 
 type Progress = NormalizedSkyBlockProfile["crimsonIsle"];
 type Armor = Progress["equipment"]["pieces"][number];
@@ -61,10 +60,14 @@ function Factions({progress}:{progress:Progress}){
   {progress.quests.storyEvidence.historicallyAccessedKuudra?<p className="crimson-story-milestone"><span className="crimson-status crimson-status--good">Reached</span> Kuudra access milestone</p>:null}
   <div className="crimson-story-later">
    <div className="crimson-card-top"><div><p className="section-kicker">Beyond the introduction</p><h3>Faction Questlines</h3></div></div>
-   <p className="crimson-muted">Each faction has a substantial storyline ending at Kuudra. These are the documented chapters; their individual completion cannot yet be verified from the API mappings.</p>
+   <p className="crimson-muted">Chapter states combine recorded objectives and mandatory quest prerequisites. Inferred completions are distinguished from directly reported ones; faction switching can limit certainty.</p>
    <div className="crimson-two-grid">{(["mages","barbarians"] as const).map(faction=><div className="crimson-story-branch" key={faction}>
     <div className="crimson-card-top"><h4>{faction==="mages"?"Mage Storyline":"Barbarian Storyline"}</h4>{progress.faction.selected?.toLowerCase().includes(faction==="mages"?"mage":"barbarian")?<span className="crimson-pill">Current faction</span>:null}</div>
-    <p className="crimson-muted">Chapter-by-chapter completion is not available from the verified objective mapping.</p><ol>{CRIMSON_STORY_CHAPTERS[faction].map(chapter=><li key={chapter.id}><strong>{chapter.label}</strong><small>{chapter.detail}</small></li>)}</ol>
+    <ol>{(progress.quests.chapterProgress.branches.find(b=>b.faction===faction)?.chapters??[]).map(chapter=><li key={chapter.id}>
+      <div className="crimson-story-chapter-head"><strong>{chapter.label}</strong>{chapter.state!=="UNKNOWN"?<span className={"crimson-status "+(chapter.state==="COMPLETE"?"crimson-status--good":"")}>{chapter.state==="IN_PROGRESS"?"In progress":"Complete"}</span>:<span className="crimson-subtle">Unverified</span>}</div>
+      <small>{chapter.detail}</small>
+      {chapter.evidence==="PREREQUISITE"?<small>Inferred from storyline prerequisites</small>:null}
+    </li>)}</ol>
    </div>)}</div>
    {progress.quests.laterObjectives.length?<div className="crimson-story-records">
     <div className="crimson-card-top"><h4>Additional Storyline Milestones</h4><span className="crimson-subtle">{progress.quests.laterObjectives.filter(step=>step.status==="COMPLETE").length} recorded complete</span></div>

@@ -158,3 +158,29 @@ test("later dialogue entries preserve API completion with readable NPC labels",(
  assert.deepEqual(result.quests.laterObjectives.map(o=>o.label),["Dean conversation 4","Elle conversation 10"]);
  assert.deepEqual(result.quests.laterObjectives.map(o=>o.status),["ACTIVE","COMPLETE"]);
 });
+
+test("same recorded faction and Basic Kuudra clear infer mandatory earlier chapters",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({
+  objectives:{faction_villagers:{status:"COMPLETE"},explore_nether_island:{status:"COMPLETE",faction:"barbarians"}},
+  nether_island_player_data:{selected_faction:"barbarians",kuudra_completed_tiers:{none:2}},
+ }));
+ const b=result.quests.chapterProgress.branches.find(x=>x.faction==="barbarians")!;
+ assert.ok(b.chapters.slice(0,-1).every(x=>x.state==="COMPLETE"));
+ assert.equal(b.chapters.at(-1)?.state,"IN_PROGRESS");
+ assert.equal(b.completionBasis,"BASIC_KUUDRA_CLEAR");
+ assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters.every(x=>x.state==="UNKNOWN"));
+});
+test("a historical clear cannot be attributed to a different selected faction",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({
+  objectives:{explore_nether_island:{status:"COMPLETE",faction:"mages"}},
+  nether_island_player_data:{selected_faction:"barbarians",kuudra_completed_tiers:{none:10}},
+ }));
+ assert.equal(result.quests.chapterProgress.branches.find(x=>x.faction==="barbarians")?.completionBasis,"NONE");
+ assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="barbarians")!.chapters.every(x=>x.state==="UNKNOWN"));
+});
+test("no faction provenance means no invented chapter completion from a Kuudra clear",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({
+  nether_island_player_data:{selected_faction:"mages",kuudra_completed_tiers:{none:3}},
+ }));
+ assert.ok(result.quests.chapterProgress.branches.find(x=>x.faction==="mages")!.chapters.every(x=>x.state==="UNKNOWN"));
+});

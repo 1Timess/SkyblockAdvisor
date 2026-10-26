@@ -33,6 +33,54 @@ const STEP_CATALOG=[
  {id:"explore_nether_island",label:"Explore Crimson Isle",branch:"opening"},
  {id:"faction_villagers",label:"Speak to faction representatives",branch:"opening"},
 ] as const;
+// Hypixel identifies the faction on explore_nether_island; a Basic Kuudra clear
+// proves that SOME faction's mandatory pre-Kuudra sequence was finished.
+// We attribute it only if the quest's recorded faction matches the selected one.
+// Returning to a faction after swapping cannot be ruled out, so mark inferred.
+type ChapterState="COMPLETE"|"IN_PROGRESS"|"NOT_STARTED"|"UNKNOWN";
+type Evidence="DIRECT"|"PREREQUISITE"|"NONE";
+function normalizedFaction(value:unknown):"mages"|"barbarians"|null {
+ const s=string(value)?.toLowerCase();
+ return s?.includes("mage")?"mages":s?.includes("barbarian")?"barbarians":null;
+}
+function chapterProgress(member:RawMember,objectives:RawMap,kuudra:RawMap){
+ const nether=record(member.nether_island_player_data);
+ const affiliation=normalizedFaction(record(objectives.explore_nether_island).faction);
+ const selected=normalizedFaction(nether.selected_faction);
+ const clear=numeric(kuudra.none);
+ const basicCleared=clear!==null&&clear>0;
+ const sameFaction=affiliation!==null&&affiliation===selected;
+ const clearlyReachedBranch=string(record(objectives.faction_villagers).status)==="COMPLETE";
+ const statusOf=(key:string):ChapterState=>questStatus(objectives[key])==="COMPLETE"?"COMPLETE":questStatus(objectives[key])==="ACTIVE"?"IN_PROGRESS":"UNKNOWN";
+ const branches=(["mages","barbarians"] as const).map(faction=>{
+  const factionEvidence=faction===selected&&sameFaction&&basicCleared;
+  const mentioned=faction===selected||faction===affiliation;
+  const chapters=CRIMSON_STORY_CHAPTERS[faction].map(chapter=>{
+   const final=chapter.id==="kuudra";
+   let state:ChapterState="UNKNOWN",evidence:Evidence="NONE";
+   if(factionEvidence&&!final){state="COMPLETE";evidence="PREREQUISITE";}
+   // Kuudra clear confirms boss defeated, but not the final NPC hand-in.
+   if(factionEvidence&&final){state="IN_PROGRESS";evidence="PREREQUISITE";}
+   // Explicit faction choice is a strong direct milestone for joining, but
+   // never establish entry from reputation alone.
+   if(chapter.id==="joining"&&mentioned&&clearlyReachedBranch){
+     state="COMPLETE";evidence="DIRECT";
+   }
+   // Standalone quest objective captures can corroborate chapter activity,
+   // without attributing ambiguous numbered Elle conversations.
+   if(chapter.id==="research"&&faction==="mages"&&mentioned&&
+      statusOf("talk_to_dean_4")==="COMPLETE"&&state==="UNKNOWN"){
+      state="IN_PROGRESS";evidence="PREREQUISITE";
+   }
+   return {...chapter,state,evidence};
+  });
+  return {faction,selected:faction===selected,affiliationRecorded:affiliation===faction,
+   completionBasis:factionEvidence?"BASIC_KUUDRA_CLEAR" as const:"NONE" as const,
+   chapters};
+ });
+ return {recordedFaction:affiliation,selectedFaction:selected,basicCleared,branches,
+  ruleVersion:"2026-10-26-wiki-quest-dependencies"};
+}
 const DAILY_CATEGORIES=[
  ["fetch","Fetch"],["fishing","Fishing"],["rescue","Rescue"],
  ["dojo","Dojo"],["boss","Boss"],
@@ -57,6 +105,7 @@ export function buildCrimsonQuests(member:RawMember) {
  // storyline entry prerequisite, not evidence of completing both branches.
  const kuudra=record(nether.kuudra_completed_tiers);
  const firstClear=numeric(kuudra.none);
+ const mappedChapters=chapterProgress(member,objectives,kuudra);
  const historicStorylineAccess=firstClear!==null&&firstClear>0;
  const reported=storyline.filter(step=>step.available);
  const additionalObjectiveKeys=Object.keys(objectives).filter(key=>
@@ -93,6 +142,7 @@ export function buildCrimsonQuests(member:RawMember) {
   questApiAvailable:member.objectives!==undefined,
   netherQuestApiAvailable:nether.quests!==undefined,
   storyline,branches,unknownStorylineKeys:additionalObjectiveKeys,laterObjectives,
+  chapterProgress:mappedChapters,
   objectiveSignals:[...tutorial].filter(key=>/elle|faction|kuudra|nether/i.test(key)).sort(),
   storyEvidence:{reportedSteps:reported.length,completedSteps:reported.filter(step=>step.status==="COMPLETE").length,
    activeSteps:reported.filter(step=>step.status==="ACTIVE").length,
