@@ -5,7 +5,6 @@ import type { NormalizedSkyBlockProfile } from "@/schemas/normalized-profile";
 
 type Progress = NormalizedSkyBlockProfile["crimsonIsle"];
 type Armor = Progress["equipment"]["pieces"][number];
-type Fish = Progress["trophyFishing"]["fish"][number];
 type Section = "factions" | "kuudra" | "dojo" | "trophies" | "equipment" | "activities";
 const sections: { id: Section; label: string; subtitle: string }[] = [
  {id:"factions",label:"Factions & Quests",subtitle:"Reputation and story"},
@@ -140,7 +139,7 @@ function Activities({progress}:{progress:Progress}){
  const q=progress.quests.daily,m=progress.matriarch;
  return <div className="crimson-section">
   <SectionHeader kicker="Repeatable island content" heading="Matriarch & Daily Quests" description="History and assignments are reported separately from today's availability."/>
-  <div className="crimson-two-grid"><article className="crimson-card"><div className="crimson-card-top"><h3>Matriarch</h3><span className="crimson-pill">Heavy Pearls</span></div><strong className="crimson-big-stat">{number(m.pearlsCollected)}</strong><p className="crimson-muted">Historical pearls collected</p><div className="crimson-gates"><div><span>Last attempt (API timestamp)</span><strong>{number(m.lastAttempt)}</strong></div><div><span>Refresh entries</span><strong>{m.recentRefreshes?.length??"Unknown"}</strong></div></div><p className="crimson-muted">Today's availability cannot be confirmed from these fields alone.</p></article>
+  <div className="crimson-two-grid"><article className="crimson-card"><div className="crimson-card-top"><h3>Matriarch</h3><span className="crimson-pill">Heavy Pearls</span></div><strong className="crimson-big-stat">{number(m.pearlsCollected)}</strong><p className="crimson-muted">Historical pearls collected</p><div className="crimson-gates"><div><span>Last attempt (API timestamp)</span><strong>{number(m.lastAttempt)}</strong></div><div><span>Refresh entries</span><strong>{m.recentRefreshes?.length??"Unknown"}</strong></div></div><p className="crimson-muted">Today&apos;s availability cannot be confirmed from these fields alone.</p></article>
   <article className="crimson-card"><div className="crimson-card-top"><h3>Daily Faction Quests</h3><span className="crimson-pill">{q.available?"Reported":"Unavailable"}</span></div><strong className="crimson-big-stat">{q.assignments.length}</strong><p className="crimson-muted">Quest assignment IDs in API</p><p className="crimson-muted">{q.assignments.length?q.assignments.map(title).join(" · "):"No assignments reported. This does not prove no quests are available."}</p></article></div>
   <div className="crimson-card"><SectionHeader kicker="Reported task data" heading="Faction Dailies"/><div className="crimson-daily-grid">{q.entries.map(e=><div className="crimson-quest-step" key={e.id}><div><strong>{e.label}</strong><small>{e.available?"Reported progress: "+number(e.progress):"No quest record"}</small></div><span className="crimson-pill">{e.status??"Unknown"}</span></div>)}</div>{q.questRewardsClaimed.length?<p className="crimson-muted">Explicit claimed reward keys: {q.questRewardsClaimed.join(", ")}</p>:null}{q.extraKeys.length?<details className="crimson-details"><summary>Other reported quest keys ({q.extraKeys.length})</summary><p className="crimson-muted">{q.extraKeys.join(", ")}</p></details>:null}</div>
  </div>;
