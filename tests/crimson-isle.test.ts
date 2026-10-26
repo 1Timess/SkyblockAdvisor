@@ -135,3 +135,17 @@ test("missing faction and clear history cannot be translated into definite unloc
  assert.equal(result.unlocks.kuudraTiers[1].reputation,"UNKNOWN");
  assert.equal(result.unlocks.kuudraTiers[1].previousTier,"UNKNOWN");
 });
+
+test("later Crimson Isle objectives are recorded without falsely completing faction chapters",()=>{
+ const progress=buildCrimsonIsleProgress(memberSchema.parse({
+  objectives:{
+   talk_to_elle_5:{status:"COMPLETE",completed_at:12345},
+   talk_to_elle_9:{status:"COMPLETE",completed_at:12346},
+   talk_to_elle_10:{status:"ACTIVE",progress:0},
+   talk_to_dean_4:{status:"COMPLETE",completed_at:12348},
+  },
+ }));
+ assert.deepEqual(progress.quests.laterObjectives.map(x=>x.id),["talk_to_dean_4","talk_to_elle_5","talk_to_elle_9","talk_to_elle_10"]);
+ assert.equal(progress.quests.laterObjectives.filter(x=>x.status==="COMPLETE").length,3);
+ assert.equal(progress.quests.branches.find(x=>x.id==="mages")?.completionVerified,false);
+});

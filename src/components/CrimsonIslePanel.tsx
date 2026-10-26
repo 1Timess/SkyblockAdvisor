@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { NormalizedSkyBlockProfile } from "@/schemas/normalized-profile";
+import { CRIMSON_STORY_CHAPTERS } from "@/server/crimson-isle/quests";
 
 type Progress = NormalizedSkyBlockProfile["crimsonIsle"];
 type Armor = Progress["equipment"]["pieces"][number];
@@ -58,7 +59,15 @@ function Factions({progress}:{progress:Progress}){
    </div>)}
   </div>:<p className="crimson-muted">No storyline milestones reported for this profile.</p>}
   {progress.quests.storyEvidence.historicallyAccessedKuudra?<p className="crimson-story-milestone"><span className="crimson-status crimson-status--good">Reached</span> Kuudra access milestone</p>:null}
-  <p className="crimson-muted crimson-story-footnote">Only recorded milestones are shown. Later faction story completion is not currently tracked.</p>
+  <div className="crimson-story-later">
+   <div className="crimson-card-top"><div><p className="section-kicker">Beyond the introduction</p><h3>Faction Questlines</h3></div></div>
+   <p className="crimson-muted">Each faction has a substantial storyline ending at Kuudra. These are the documented chapters; their individual completion cannot yet be verified from the API mappings.</p>
+   <div className="crimson-two-grid">{(["mages","barbarians"] as const).map(faction=><div className="crimson-story-branch" key={faction}>
+    <div className="crimson-card-top"><h4>{faction==="mages"?"Mage Storyline":"Barbarian Storyline"}</h4>{progress.faction.selected?.toLowerCase().includes(faction==="mages"?"mage":"barbarian")?<span className="crimson-pill">Current faction</span>:null}</div>
+    <ol>{CRIMSON_STORY_CHAPTERS[faction].map(chapter=><li key={chapter.id}><strong>{chapter.label}</strong><small>{chapter.detail}</small></li>)}</ol>
+   </div>)}</div>
+   {progress.quests.laterObjectives.length?<p className="crimson-story-proof">{progress.quests.laterObjectives.filter(step=>step.status==="COMPLETE").length} additional recorded storyline conversations completed. Their exact chapter mapping remains unverified.</p>:null}
+  </div>
  </article>
  </div>;
 }

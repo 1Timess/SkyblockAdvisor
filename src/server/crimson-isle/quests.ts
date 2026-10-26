@@ -4,6 +4,23 @@ import type { RawMember } from "../hypixel/types";
 // Reference captures: dungeon-hub/hypixel-wrapper full-profiles (6e08d322...)
 // and Elfouille/Sky_Track objectives snapshots (Feb 2026).
 // The full Mage/Barbarian branch sequence is NOT documented by the profile API.
+export const CRIMSON_STORY_CHAPTERS = {
+ mages:[
+  {id:"joining",label:"Join the Mages",detail:"Meet the Dean and Queen Nyx"},
+  {id:"research",label:"Stolen research",detail:"Follow Elle, recover research and meet the Mage Council"},
+  {id:"apprentice",label:"Find the apprentice",detail:"Locate the missing apprentice with Captain Ahone"},
+  {id:"errands",label:"Help Scarleton",detail:"Gather materials, rescue chickens and catch a Volcanic Stonefish"},
+  {id:"bosses",label:"Miniboss assignments",detail:"Collect drops from Bladesoul, Ashfang and Barbarian Duke X"},
+  {id:"kuudra",label:"Kuudra and conclusion",detail:"Defeat Kuudra, then speak with the Dean"},
+ ],
+ barbarians:[
+  {id:"joining",label:"Join the Barbarians",detail:"Help Ugo and meet Chief Scorn"},
+  {id:"research",label:"Stolen research",detail:"Enter the Cathedral and retrieve the Dean's research"},
+  {id:"training",label:"Barbarian training",detail:"Dojo tests, Mage Outlaw and Magma Boss"},
+  {id:"errands",label:"Help Dragontail",detail:"Bring fish to Lasea and a Heavy Pearl to Gris"},
+  {id:"kuudra",label:"Kuudra and conclusion",detail:"Defeat Kuudra, then speak with Chief Scorn"},
+ ],
+} as const;
 type RawMap=Record<string,unknown>;
 const record=(v:unknown):RawMap=>v!==null&&typeof v==="object"&&!Array.isArray(v)?v as RawMap:{};
 const string=(v:unknown):string|null=>typeof v==="string"&&v.length>0?v:null;
@@ -43,9 +60,12 @@ export function buildCrimsonQuests(member:RawMember) {
  const historicStorylineAccess=firstClear!==null&&firstClear>0;
  const reported=storyline.filter(step=>step.available);
  const additionalObjectiveKeys=Object.keys(objectives).filter(key=>
-   !STEP_CATALOG.some(step=>step.id===key) &&
-   /^(talk_to_elle(?:_\d+)?|help_elle|talk_to_dean_\d+|faction_villagers)$/.test(key)
- ).sort();
+  !STEP_CATALOG.some(step=>step.id===key)&&
+  /^(talk_to_elle(?:_\\d+)?|talk_to_dean_\\d+)$/.test(key)
+ ).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+ const laterObjectives=additionalObjectiveKeys.map(id=>({
+  id,status:questStatus(objectives[id]),completedAt:numeric(record(objectives[id]).completed_at),
+ }));
  const branchNames=["opening","mages","barbarians"];
  const branches=branchNames.map(branch=>{
   const steps=storyline.filter(step=>step.branch===branch);
@@ -69,7 +89,7 @@ export function buildCrimsonQuests(member:RawMember) {
  return {
   questApiAvailable:member.objectives!==undefined,
   netherQuestApiAvailable:nether.quests!==undefined,
-  storyline,branches,unknownStorylineKeys:additionalObjectiveKeys,
+  storyline,branches,unknownStorylineKeys:additionalObjectiveKeys,laterObjectives,
   objectiveSignals:[...tutorial].filter(key=>/elle|faction|kuudra|nether/i.test(key)).sort(),
   storyEvidence:{reportedSteps:reported.length,completedSteps:reported.filter(step=>step.status==="COMPLETE").length,
    activeSteps:reported.filter(step=>step.status==="ACTIVE").length,
