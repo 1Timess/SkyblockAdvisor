@@ -50,7 +50,6 @@ function chapterProgress(member:RawMember,objectives:RawMap,kuudra:RawMap){
  const clear=numeric(kuudra.none);
  const basicCleared=clear!==null&&clear>0;
  const sameFaction=affiliation!==null&&affiliation===selected;
- const clearlyReachedBranch=string(record(objectives.faction_villagers).status)==="COMPLETE";
  const statusOf=(key:string):ChapterState=>questStatus(objectives[key])==="COMPLETE"?"COMPLETE":questStatus(objectives[key])==="ACTIVE"?"IN_PROGRESS":"UNKNOWN";
  const branches=(["mages","barbarians"] as const).map(faction=>{
   const factionEvidence=faction===selected&&sameFaction&&basicCleared;
@@ -61,9 +60,9 @@ function chapterProgress(member:RawMember,objectives:RawMap,kuudra:RawMap){
    if(factionEvidence&&!final){state="COMPLETE";evidence="PREREQUISITE";}
    // Kuudra clear confirms boss defeated, but not the final NPC hand-in.
    if(factionEvidence&&final){state="IN_PROGRESS";evidence="PREREQUISITE";}
-   // Explicit faction choice is a strong direct milestone for joining, but
-   // never establish entry from reputation alone.
-   if(chapter.id==="joining"&&mentioned&&clearlyReachedBranch){
+   // Selected or recorded faction membership is direct evidence that the
+   // player joined; reputation alone would not establish that.
+   if(chapter.id==="joining"&&mentioned){
      state="COMPLETE";evidence="DIRECT";
    }
    // Standalone quest objective captures can corroborate chapter activity,
