@@ -404,3 +404,7 @@ button { cursor: pointer; }
 @media(max-width:1230px){.crimson-layout{grid-template-columns:180px minmax(0,1fr)}.crimson-top-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.crimson-quest-grid{grid-template-columns:1fr 1fr}.crimson-test-grid{grid-template-columns:1fr 1fr}.crimson-collection-list{grid-template-columns:1fr}}
 @media(max-width:920px){.crimson-layout{grid-template-columns:1fr}.crimson-subnav{position:static;display:flex;flex-direction:row;overflow-x:auto;gap:8px}.crimson-nav-item{flex:0 0 auto;min-width:155px}.crimson-mobile-subtitle{display:none}.crimson-detail{position:static}}
 @media(max-width:620px){.crimson-metric-row,.crimson-top-metrics,.crimson-two-grid,.crimson-tier-grid,.crimson-test-grid,.crimson-quest-grid,.crimson-workspace,.crimson-daily-grid{grid-template-columns:1fr}.crimson-quality-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.crimson-metric-row article>strong{font-size:19px}.crimson-collection-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:420px}.crimson-detail{position:static}}
+
+/* Verified Crimson Isle story evidence */
+.crimson-quest-evidence{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 17px;margin:14px 0}.crimson-story-proof{margin:16px 0 8px;border:1px solid rgba(99,214,160,.26);background:rgba(99,214,160,.065);border-radius:11px;color:rgba(233,255,243,.88);font-size:12px;line-height:1.6;padding:13px 15px}
+@media(max-width:700px){.crimson-quest-evidence{grid-template-columns:1fr}}
