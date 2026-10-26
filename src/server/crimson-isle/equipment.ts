@@ -1,4 +1,5 @@
 import type { ProcessedItem } from "../../schemas/items";
+import { armorUpgradePath, type MarketQuotes } from "./upgrade-costs";
 
 const FAMILIES=["CRIMSON","AURORA","TERROR","FERVOR","HOLLOW"] as const;
 const TIERS=[{prefix:"",label:"Basic",combat:22,kuudra:"none",maxStars:10},
@@ -16,7 +17,7 @@ export function kuudraArmorTierRequirements(tierIndex:number, combatLevel:number
   combatMet:combatLevel===null?null:combatLevel>=target.combat,
   kuudraClearMet:clearsCount===null?null:clearsCount>0};
 }
-export function buildKuudraArmorProgress(items:readonly ProcessedItem[], combatLevel:number|null, clears:ArmorClearEvidence) {
+export function buildKuudraArmorProgress(items:readonly ProcessedItem[], combatLevel:number|null, clears:ArmorClearEvidence, quotes:MarketQuotes={}) {
  const pieces=items.flatMap(item=>{
   if(!item.id)return [];
   const id=item.id.toUpperCase();
@@ -31,6 +32,7 @@ export function buildKuudraArmorProgress(items:readonly ProcessedItem[], combatL
    const canPrestige=index<TIERS.length-1&&validStars!==null&&validStars>=10;
    const next=TIERS[index+1];
    const sourceRequirements=kuudraArmorTierRequirements(index,combatLevel,clears)!;
+   const costs=armorUpgradePath(id,validStars,quotes);
    const targetRequirements=next?kuudraArmorTierRequirements(index+1,combatLevel,clears):null;
    return [{
     id:item.id,uuid:item.uuid,name:item.name,source:item.source,slot:slot.toLowerCase(),family:family.toLowerCase(),
@@ -39,8 +41,8 @@ export function buildKuudraArmorProgress(items:readonly ProcessedItem[], combatL
     starsUntilNext:validStars===null?null:Math.max(0,tier.maxStars-validStars),
     nextTier:next?.label??null,prestigeStarRequirement:next?10:null,prestigeStarMet:canPrestige,
     currentRequirements:sourceRequirements,nextTierRequirements:targetRequirements,
-    // No legacy attribute assumptions. Upgrade costs intentionally pending item-specific tables.
-    upgradeCostKnown:false,
+    upgradeCostKnown:costs.nextCost?.recipeComplete??false,
+    nextUpgrade:costs.nextStep,toNextUpgrade:costs.nextCost,toInfernal15:costs.toMax,
    }];
   }
   return [];

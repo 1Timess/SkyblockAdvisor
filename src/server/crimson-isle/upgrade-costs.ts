@@ -36,7 +36,7 @@ function starStep(id:string,tier:number,fromStars:number):UpgradeStep {
  const cost=item?.stars?.[String(toStars)];
  const extra=item?.items?.[String(toStars)]??[];
  const parsed=extra.map(parseIngredient);
- const recipeComplete=item?.type==="Crimson"&&Number.isSafeInteger(cost)&&cost>0&&parsed.every(v=>v!==null);
+ const recipeComplete=item?.type==="Crimson"&&typeof cost==="number"&&Number.isSafeInteger(cost)&&cost>0&&parsed.every(v=>v!==null);
  return {action:"STAR",fromTier:LABELS[tier],toTier:LABELS[tier],fromStars,toStars,
   requirements:recipeComplete?[{id:"ESSENCE_CRIMSON",quantity:cost},...(parsed as Ingredient[])]:[],
   recipeComplete:!!recipeComplete,source:"NEU essencecosts.json"};

@@ -20,6 +20,7 @@ import { buildMinionProgress } from "../../minions/progression";
 import { buildBestiaryProgress } from "../../bestiary/progression";
 import { buildCrimsonIsleProgress } from "../../crimson-isle/progression";
 import { buildKuudraArmorProgress } from "../../crimson-isle/equipment";
+import { loadMarketSnapshot } from "../../market/snapshot-store";
 import { buildCollectionsProgress, type CollectionResource } from "../../collections/profile-progress";
 import { buildEconomy } from "./economy";
 import { buildExtendedPlayerState } from "../domains/player-state";
@@ -110,6 +111,8 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   const items = decoded.flatMap(result => result.items);
   warnings.push(...decoded.flatMap(result => result.warnings));
   const extended = buildExtendedPlayerState(member);
+  // Reuse the shared Bazaar + AH snapshot; only load prices on the Crimson Isle tab.
+  const crimsonMarket = requestedTab === "crimson-isle" ? await loadMarketSnapshot().catch(() => null) : null;
   const result = {
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
     profileCreatedAt: member.first_join ?? null,
@@ -125,7 +128,8 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
       equipment:buildKuudraArmorProgress(items,
         buildSkills(member, warnings).combat?.level ?? null,
         Object.fromEntries(Object.entries((member.nether_island_player_data?.kuudra_completed_tiers ?? {}) as Record<string,unknown>)
-          .map(([key,value])=>[key,typeof value==="number"&&Number.isFinite(value)?value:null])))},
+          .map(([key,value])=>[key,typeof value==="number"&&Number.isFinite(value)?value:null])),
+        crimsonMarket?.quotes??{})},
     minions: buildMinionProgress(selected, catalogResult.items, !catalogResult.error && requestedTab === "minions"),
     playerStats: extended.playerStats, bestiary: { ...extended.bestiary, progression: buildBestiaryProgress(member) }, otherProgression: extended.otherProgression,
     warnings, meta: { fetchedAt: new Date().toISOString() },

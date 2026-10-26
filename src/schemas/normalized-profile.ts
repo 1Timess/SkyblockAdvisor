@@ -155,6 +155,24 @@ const crimsonArmorRequirementsSchema=z.object({
  combatLevelRequired:z.number().int().positive(),kuudraTierRequired:z.string(),
  combatMet:z.boolean().nullable(),kuudraClearMet:z.boolean().nullable(),
 });
+const crimsonUpgradeIngredientSchema=z.object({
+ id:z.string(),quantity:z.number().int().positive(),unitPrice:z.number().nonnegative().nullable(),
+ estimatedCoins:z.number().nonnegative().nullable(),
+ basis:z.enum(["LOWEST_BIN","MEDIAN_LOWEST_FIVE","BAZAAR","OTHER"]).nullable(),
+ observedAt:z.string().nullable(),
+});
+const crimsonCostSummarySchema=z.object({
+ steps:z.number().int().nonnegative(),recipeComplete:z.boolean(),
+ ingredients:z.array(crimsonUpgradeIngredientSchema),directCoins:z.number().nonnegative(),
+ estimatedMaterialCoins:z.number().nonnegative().nullable(),
+ estimatedTotalCoins:z.number().nonnegative().nullable(),missingPriceIds:z.array(z.string()),
+});
+const crimsonUpgradeStepSchema=z.object({
+ action:z.enum(["STAR","PRESTIGE"]),fromTier:z.string(),toTier:z.string(),
+ fromStars:z.number().int().nonnegative(),toStars:z.number().int().nonnegative(),
+ requirements:z.array(z.object({id:z.string(),quantity:z.number().int().positive()})),
+ recipeComplete:z.boolean(),source:z.string(),
+});
 const crimsonEquipmentSchema=z.object({available:z.boolean(),trackedPieces:z.number().int().nonnegative(),
  pieces:z.array(z.object({
  id:z.string(),uuid:z.string().nullable(),name:z.string(),source:z.string(),
@@ -163,7 +181,8 @@ const crimsonEquipmentSchema=z.object({available:z.boolean(),trackedPieces:z.num
  starsUntilNext:z.number().int().nonnegative().nullable(),nextTier:z.string().nullable(),
  prestigeStarRequirement:z.number().int().positive().nullable(),prestigeStarMet:z.boolean(),
  currentRequirements:crimsonArmorRequirementsSchema,nextTierRequirements:crimsonArmorRequirementsSchema.nullable(),
- upgradeCostKnown:z.boolean(),
+ upgradeCostKnown:z.boolean(),nextUpgrade:crimsonUpgradeStepSchema.nullable(),
+ toNextUpgrade:crimsonCostSummarySchema.nullable(),toInfernal15:crimsonCostSummarySchema.nullable(),
  }))});
 const crimsonProgressSchema=z.object({
  available:z.boolean(),
