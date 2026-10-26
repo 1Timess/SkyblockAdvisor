@@ -90,7 +90,7 @@ function Dojo({progress}:{progress:Progress}){
 }
 function Trophies({progress}:{progress:Progress}){
  const t=progress.trophyFishing;
- const [quality,setQuality]=useState<"bronze"|"silver"|"gold"|"diamond">("bronze");
+ const [quality,setQuality]=useState("bronze");
  const [search,setSearch]=useState("");
  const [selected,setSelected]=useState<string|null>(null);
  const fish=useMemo(()=>t.fish.filter(f=>f.name.toLowerCase().includes(search.toLowerCase())),[t.fish,search]);
