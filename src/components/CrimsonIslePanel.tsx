@@ -33,7 +33,6 @@ function Status({label}:{label:string}) {
  return <span className={"crimson-status "+(good?"crimson-status--good":caution?"crimson-status--warn":"")}>{label==="HISTORICALLY_CLEARED"?"Cleared":label==="KNOWN_GATE_UNMET"?"Gate unmet":label==="NOT_VERIFIED"?"Unverified":evidenceLabel(label)==="Unknown"&&label!=="UNKNOWN"?title(label):evidenceLabel(label)}</span>;
 }
 function Factions({progress}:{progress:Progress}){
- const q=progress.quests;
  return <div className="crimson-section">
  <SectionHeader kicker="Political standing" heading="Factions" description="Reputation gates are measurable; a reputation rank does not certify storyline completion."/>
  <div className="crimson-two-grid">{progress.faction.factions.map(f=>{
@@ -47,16 +46,7 @@ function Factions({progress}:{progress:Progress}){
    <p className="crimson-muted">{next&&f.reputation!==null?number(Math.max(0,next.required-f.reputation))+" reputation to "+next.name: f.reputation===null?"Reputation not reported": "Highest known reputation threshold reached"}</p>
   </article>;
  })}</div>
- <div className="crimson-card">
- <SectionHeader kicker="Explicit quest evidence" heading="Faction Storyline" description="Only reported quest flags are shown as completed. Mapped steps are not the full storyline."/>
- {!q.questApiAvailable?<p className="crimson-notice">The profile API did not report top-level quest states. Storyline progress cannot be determined.</p>:null}
- <div className="crimson-quest-grid">{q.branches.map(branch=><div key={branch.id} className="crimson-quest-group">
-  <div className="crimson-card-top"><h3>{branch.id==="opening"?"Introduction":title(branch.id)}</h3><span className="crimson-subtle">{branch.observedComplete}/{branch.totalMappedSteps} mapped steps</span></div>
-  {q.storyline.filter(step=>step.branch===branch.id).map(step=><div className="crimson-quest-step" key={step.id}><div><strong>{step.label}</strong><small>{step.available?"Quest state reported":"No quest flag reported"}</small></div><Status label={step.status}/></div>)}
-  <p className="crimson-muted">{branch.completionVerified?"Branch completion verified":"Full storyline completion not verified"}</p>
- </div>)}</div>
- {q.unknownStorylineKeys.length?<details className="crimson-details"><summary>{q.unknownStorylineKeys.length} additional relevant quest IDs</summary><p className="crimson-muted">{q.unknownStorylineKeys.join(", ")}</p></details>:null}
- </div>
+ <p className="crimson-muted">Faction storyline completion is not scored yet. The current API quest identifiers still need a verified mapping, so missing records are not treated as unfinished quests.</p>
  </div>;
 }
 function Kuudra({progress}:{progress:Progress}){
