@@ -61,7 +61,7 @@ export function buildCrimsonQuests(member:RawMember) {
  const reported=storyline.filter(step=>step.available);
  const additionalObjectiveKeys=Object.keys(objectives).filter(key=>
   !STEP_CATALOG.some(step=>step.id===key)&&
-  /^(talk_to_elle(?:_\\d+)?|talk_to_dean_\\d+)$/.test(key)
+  /^(talk_to_elle(?:_\d+)?|talk_to_dean_\d+)$/.test(key)
  ).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
  const laterObjectives=additionalObjectiveKeys.map(id=>({
   id,status:questStatus(objectives[id]),completedAt:numeric(record(objectives[id]).completed_at),
