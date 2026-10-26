@@ -66,7 +66,13 @@ function Factions({progress}:{progress:Progress}){
     <div className="crimson-card-top"><h4>{faction==="mages"?"Mage Storyline":"Barbarian Storyline"}</h4>{progress.faction.selected?.toLowerCase().includes(faction==="mages"?"mage":"barbarian")?<span className="crimson-pill">Current faction</span>:null}</div>
     <ol>{CRIMSON_STORY_CHAPTERS[faction].map(chapter=><li key={chapter.id}><strong>{chapter.label}</strong><small>{chapter.detail}</small></li>)}</ol>
    </div>)}</div>
-   {progress.quests.laterObjectives.length?<p className="crimson-story-proof">{progress.quests.laterObjectives.filter(step=>step.status==="COMPLETE").length} additional recorded storyline conversations completed. Their exact chapter mapping remains unverified.</p>:null}
+   {progress.quests.laterObjectives.length?<div className="crimson-story-records">
+    <div className="crimson-card-top"><h4>Additional Storyline Milestones</h4><span className="crimson-subtle">{progress.quests.laterObjectives.filter(step=>step.status==="COMPLETE").length} recorded complete</span></div>
+    <div className="crimson-quest-evidence">{progress.quests.laterObjectives.map(step=><div key={step.id} className="crimson-quest-step">
+     <strong>{step.label}</strong><Status label={step.status}/>
+    </div>)}</div>
+    <p className="crimson-muted">These completion states come from your profile. The conversation numbers do not establish which named faction chapter was finished.</p>
+   </div>:null}
   </div>
  </article>
  </div>;

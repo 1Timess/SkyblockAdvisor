@@ -417,3 +417,5 @@ button { cursor: pointer; }
 
 /* Later Crimson Isle storyline guide */
 .crimson-story-later{margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}.crimson-story-later>.crimson-muted{margin:8px 0 16px}.crimson-story-branch{min-width:0;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:17px;background:rgba(255,255,255,.025)}.crimson-story-branch h4{color:white;font-size:14px;margin:0}.crimson-story-branch ol{margin:0;padding-left:23px}.crimson-story-branch li{padding:8px 0;color:rgba(255,255,255,.8);font-size:12px}.crimson-story-branch li strong,.crimson-story-branch li small{display:block}.crimson-story-branch li small{color:rgba(255,255,255,.53);font-size:11px;margin-top:4px;line-height:1.5}
+
+.crimson-story-records{margin-top:18px;border-top:1px solid rgba(255,255,255,.1);padding-top:18px}.crimson-story-records h4{font-size:14px;color:#fff;margin:0}.crimson-story-records .crimson-quest-evidence{margin:7px 0 11px}

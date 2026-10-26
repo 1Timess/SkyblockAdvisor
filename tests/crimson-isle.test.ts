@@ -149,3 +149,12 @@ test("later Crimson Isle objectives are recorded without falsely completing fact
  assert.equal(progress.quests.laterObjectives.filter(x=>x.status==="COMPLETE").length,3);
  assert.equal(progress.quests.branches.find(x=>x.id==="mages")?.completionVerified,false);
 });
+
+test("later dialogue entries preserve API completion with readable NPC labels",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({objectives:{
+  talk_to_elle_10:{status:"COMPLETE",completed_at:9000},
+  talk_to_dean_4:{status:"ACTIVE",progress:0},
+ }}));
+ assert.deepEqual(result.quests.laterObjectives.map(o=>o.label),["Dean conversation 4","Elle conversation 10"]);
+ assert.deepEqual(result.quests.laterObjectives.map(o=>o.status),["ACTIVE","COMPLETE"]);
+});

@@ -63,9 +63,12 @@ export function buildCrimsonQuests(member:RawMember) {
   !STEP_CATALOG.some(step=>step.id===key)&&
   /^(talk_to_elle(?:_\d+)?|talk_to_dean_\d+)$/.test(key)
  ).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
- const laterObjectives=additionalObjectiveKeys.map(id=>({
-  id,status:questStatus(objectives[id]),completedAt:numeric(record(objectives[id]).completed_at),
- }));
+ const laterObjectives=additionalObjectiveKeys.map(id=>{
+  const person=id.startsWith("talk_to_dean_")?"Dean":"Elle";
+  const conversation=id.match(/_(\d+)$/)?.[1]??null;
+  return {id,label:person+" conversation"+(conversation?" "+conversation:""),
+   person,status:questStatus(objectives[id]),completedAt:numeric(record(objectives[id]).completed_at)};
+ });
  const branchNames=["opening","mages","barbarians"];
  const branches=branchNames.map(branch=>{
   const steps=storyline.filter(step=>step.branch===branch);
