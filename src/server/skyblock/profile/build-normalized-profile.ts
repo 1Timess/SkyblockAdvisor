@@ -20,6 +20,7 @@ import { buildMinionProgress } from "../../minions/progression";
 import { buildBestiaryProgress } from "../../bestiary/progression";
 import { buildCrimsonIsleProgress } from "../../crimson-isle/progression";
 import { buildRiftProgress } from "../../rift/progression";
+import { buildRiftEquipment,decodeRiftItems } from "../../rift/equipment";
 import { buildKuudraArmorProgress } from "../../crimson-isle/equipment";
 import { loadMarketSnapshot } from "../../market/snapshot-store";
 import { buildCollectionsProgress, type CollectionResource } from "../../collections/profile-progress";
@@ -50,7 +51,7 @@ export async function listProfiles(input: string, sources: Sources = defaults) {
 export async function buildNormalizedProfile(input: { usernameOrUuid: string; requestedProfile?: string; requestedTab?: string; includeAccessoryPrices?: boolean }, sources: Sources = defaults) {
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
-  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" || input.requestedTab === "crimson-isle" || input.requestedTab === "slayer" ? input.requestedTab : "overview";
+  const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" || input.requestedTab === "crimson-isle" || input.requestedTab === "slayer" || input.requestedTab === "rift" ? input.requestedTab : "overview";
   const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
   const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills" || requestedTab === "crimson-isle";
   const needsPets = requestedTab === "pets" || requestedTab === "skills";
@@ -112,6 +113,15 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   const items = decoded.flatMap(result => result.items);
   warnings.push(...decoded.flatMap(result => result.warnings));
   const extended = buildExtendedPlayerState(member);
+  const riftBase = buildRiftProgress(member);
+  // Only decode Rift NBT when the Rift tab requests it; do not merge these
+  // inventories into ordinary SkyBlock equipment or accessory collections.
+  const riftItems = requestedTab === "rift" ? await decodeRiftItems(member,warnings) : [];
+  const riftEquipment = buildRiftEquipment(riftItems,{
+    soulCount:riftBase.enigma.soulCount,
+    charmCount:riftBase.unlocks.recognizedSecuredCount,
+    cloakPurchased:riftBase.enigma.boughtCloak,
+  });
   // Reuse the shared Bazaar + AH snapshot; only load prices on the Crimson Isle tab.
   const crimsonMarket = requestedTab === "crimson-isle" ? await loadMarketSnapshot().catch(() => null) : null;
   const result = {
@@ -125,7 +135,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     attributes: extended.attributes, shards: extended.shards, collections: extended.collections,
     unlockedCollectionTiers: extended.unlockedCollectionTiers, craftedGenerators: extended.craftedGenerators,
     collectionsProgress: buildCollectionsProgress(selected, identity.uuid, collectionsResource),
-    riftProgress:buildRiftProgress(member),
+    riftProgress:{...riftBase,equipment:riftEquipment},
     crimsonIsle:{...buildCrimsonIsleProgress(member),
       equipment:buildKuudraArmorProgress(items,
         buildSkills(member, warnings).combat?.level ?? null,

@@ -1,0 +1,45 @@
+{
+  "checked": "2026-10-26",
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Enigma_Cloak",
+  "costs": [
+    {
+      "id": "enigma_cloak",
+      "name": "Enigma Cloak",
+      "requires": {
+        "item": "ENIGMA_CLOAK",
+        "cost": [
+          {
+            "currency": "MOTES",
+            "quantity": 100
+          }
+        ],
+        "status": "EXACT"
+      },
+      "prerequisite": "Speak to Enigma in the Rift",
+      "tradeable": false
+    },
+    {
+      "id": "rift_necklace",
+      "name": "Rift Necklace",
+      "requires": {
+        "item": "RIFT_NECKLACE_INSIDE",
+        "cost": [],
+        "status": "EXACT"
+      },
+      "prerequisite": "Secure Supreme Timecharm and claim from Elise",
+      "tradeable": false
+    }
+  ],
+  "unpricedUpgrades": [
+    {
+      "id": "enigma_four_souls",
+      "name": "Enigma 4-Soul attribute upgrades",
+      "reason": "Purchase cost per upgrade not verified"
+    },
+    {
+      "id": "other_rift_gear",
+      "name": "Other Rift equipment recipes",
+      "reason": "Item-specific Mote and materials not yet independently verified"
+    }
+  ]
+}

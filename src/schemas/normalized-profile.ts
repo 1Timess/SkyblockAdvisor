@@ -258,8 +258,25 @@ const riftUnlockSchema=z.object({
   collectedApiIds:z.array(z.string()).nullable(),locationsIndividuallyMatched:z.boolean()}),
  boundaries:z.object({reported:z.boolean(),reportedIds:z.array(z.string()).nullable()}),
 });
+const riftEquipmentSchema=z.object({
+ sources:z.array(z.object({id:z.string(),source:z.string(),reported:z.boolean()})),
+ items:z.array(z.object({id:z.string().nullable(),name:z.string(),count:z.number().int().nonnegative(),
+  source:z.string(),slotIndex:z.number().int().nonnegative(),equipped:z.boolean(),
+  rarity:z.string().nullable(),lore:z.array(z.string())})),
+ observedItemCount:z.number().int().nonnegative(),
+ time:z.object({baseSeconds:z.number().int().nonnegative(),
+  contributions:z.array(z.object({id:z.string(),name:z.string(),equipped:z.boolean(),
+    seconds:z.number().int().nonnegative().nullable(),rule:z.string(),source:z.string()})),
+  knownEquippedSubtotalSeconds:z.number().int().nonnegative().nullable(),
+  totalRiftTimeSeconds:z.number().int().nonnegative().nullable(),
+  complete:z.boolean(),reason:z.string()}),
+ costs:z.array(z.object({id:z.string(),name:z.string(),itemId:z.string(),owned:z.boolean(),
+  prerequisite:z.string(),tradeable:z.boolean(),costStatus:z.literal("EXACT"),
+  materials:z.array(z.object({currency:z.string(),quantity:z.number().nonnegative()}))})),
+ unpricedUpgrades:z.array(z.object({id:z.string(),name:z.string(),reason:z.string()})),
+});
 const riftProgressSchema=z.object({
- available:z.boolean(),
+ available:z.boolean(),equipment:riftEquipmentSchema,
  gallery:z.object({reported:z.boolean(),eliseStep:z.number().int().nonnegative().nullable(),
   securedTrophies:z.array(z.object({type:z.string(),timestamp:z.number().int().nonnegative().nullable(),
    visits:z.number().int().nonnegative().nullable()})).nullable(),
