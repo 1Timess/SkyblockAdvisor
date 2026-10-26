@@ -408,3 +408,9 @@ button { cursor: pointer; }
 /* Verified Crimson Isle story evidence */
 .crimson-quest-evidence{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 17px;margin:14px 0}.crimson-story-proof{margin:16px 0 8px;border:1px solid rgba(99,214,160,.26);background:rgba(99,214,160,.065);border-radius:11px;color:rgba(233,255,243,.88);font-size:12px;line-height:1.6;padding:13px 15px}
 @media(max-width:700px){.crimson-quest-evidence{grid-template-columns:1fr}}
+
+/* Player-facing Crimson Isle storyline milestones */
+.crimson-quest-evidence .crimson-quest-step{padding:13px 0;align-items:center}
+.crimson-quest-evidence .crimson-quest-step>strong{flex:1;min-width:0;font-size:13px;font-weight:600}
+.crimson-story-milestone{display:flex;gap:9px;align-items:center;color:rgba(233,255,243,.85);font-size:12px;margin:14px 0 0}
+.crimson-story-footnote{margin:15px 0 0;font-size:11px}
