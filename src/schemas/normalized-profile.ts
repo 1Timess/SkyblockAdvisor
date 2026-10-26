@@ -240,6 +240,24 @@ const crimsonProgressSchema=z.object({
 });
 const riftEvidenceSchema=z.object({id:z.string(),reported:z.boolean(),boolean:z.boolean().nullable(),
  count:z.number().int().nonnegative().nullable(),entries:z.array(z.string()).nullable()});
+const riftUnlockSchema=z.object({
+ reference:z.object({timecharms:z.number().int(),enigmaSouls:z.number().int(),
+  soulApiIdsMapped:z.boolean(),sourceChecked:z.string()}),
+ timecharms:z.array(z.object({id:z.string(),name:z.string(),region:z.string(),how:z.string(),
+  itemId:z.string(),status:z.enum(["SECURED","MISSING","UNKNOWN"])})),
+ recognizedSecuredCount:z.number().int().nonnegative().nullable(),
+ unknownGalleryTypes:z.array(z.string()),
+ regions:z.array(z.object({id:z.string(),name:z.string(),note:z.string(),
+  requiredTimecharms:z.array(z.string()),timeRequirementSeconds:z.number().int().nonnegative().nullable(),
+  additionalRequirements:z.array(z.string()),
+  charmGates:z.array(z.object({id:z.string(),fulfilled:z.boolean().nullable()})),
+  status:z.enum(["MET","UNMET","UNKNOWN"]),eligibilityConfirmed:z.boolean(),availableNow:z.boolean().nullable()})),
+ enigma:z.object({catalogue:z.array(z.object({key:z.string(),name:z.string(),region:z.string(),
+  status:z.literal("UNKNOWN")})),foundCount:z.number().int().nonnegative().nullable(),
+  remainingCount:z.number().int().nonnegative().nullable(),
+  collectedApiIds:z.array(z.string()).nullable(),locationsIndividuallyMatched:z.boolean()}),
+ boundaries:z.object({reported:z.boolean(),reportedIds:z.array(z.string()).nullable()}),
+});
 const riftProgressSchema=z.object({
  available:z.boolean(),
  gallery:z.object({reported:z.boolean(),eliseStep:z.number().int().nonnegative().nullable(),
@@ -254,6 +272,7 @@ const riftProgressSchema=z.object({
   lastFree:z.number().int().nonnegative().nullable(),chargeTrackTimestamp:z.number().int().nonnegative().nullable()}),
  boundaries:z.object({reported:z.boolean(),ids:z.array(z.string()).nullable(),count:z.number().int().nonnegative().nullable()}),
  regions:z.array(z.object({id:z.string(),label:z.string(),dataReported:z.boolean(),accessConfirmed:z.boolean()})),
+ unlocks:riftUnlockSchema,
  activities:z.array(riftEvidenceSchema),
  inventory:z.object({reported:z.boolean(),availableSources:z.array(z.string())}),
  vampireSlayer:z.object({reported:z.boolean(),xp:z.number().int().nonnegative().nullable()}),

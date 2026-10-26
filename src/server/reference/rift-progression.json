@@ -1,0 +1,538 @@
+{
+  "source": {
+    "timecharms": "https://hypixelskyblock.minecraft.wiki/w/Rift_Timecharms",
+    "souls": "https://hypixelskyblock.minecraft.wiki/w/Enigma_Souls",
+    "regions": "https://hypixelskyblock.minecraft.wiki/w/Rift",
+    "checked": "2026-10-26"
+  },
+  "timecharms": [
+    {
+      "id": "wyldly_supreme",
+      "name": "Supreme Timecharm",
+      "region": "black_lagoon",
+      "how": "Defeat Leech Supreme and secure the charm",
+      "itemId": "RIFT_TROPHY_WYLDLY_SUPREME",
+      "aliases": [
+        "wyldly_supreme",
+        "RIFT_TROPHY_WYLDLY_SUPREME"
+      ]
+    },
+    {
+      "id": "chicken_n_egg",
+      "name": "Chicken N Egg Timecharm",
+      "region": "dreadfarm",
+      "how": "Complete the Dreadfarm egg progression",
+      "itemId": "RIFT_TROPHY_CHICKEN_N_EGG",
+      "aliases": [
+        "chicken_n_egg",
+        "RIFT_TROPHY_CHICKEN_N_EGG"
+      ]
+    },
+    {
+      "id": "mirrored",
+      "name": "Mirrorverse Timecharm",
+      "region": "west_village",
+      "how": "Finish the Mirrorverse and obtain the charm from Dr. Emmett",
+      "itemId": "RIFT_TROPHY_MIRRORED",
+      "aliases": [
+        "mirrored",
+        "RIFT_TROPHY_MIRRORED"
+      ]
+    },
+    {
+      "id": "citizen",
+      "name": "SkyBlock Citizen Timecharm",
+      "region": "village_plaza",
+      "how": "Help Barry and the Village Plaza residents",
+      "itemId": "RIFT_TROPHY_CITIZEN",
+      "aliases": [
+        "citizen",
+        "RIFT_TROPHY_CITIZEN"
+      ]
+    },
+    {
+      "id": "lazy_living",
+      "name": "Living Timecharm",
+      "region": "living_cave",
+      "how": "Obtain the Living Timecharm from the Living Cave progression",
+      "itemId": "RIFT_TROPHY_LAZY_LIVING",
+      "aliases": [
+        "lazy_living",
+        "RIFT_TROPHY_LAZY_LIVING"
+      ]
+    },
+    {
+      "id": "slime",
+      "name": "Globulate Timecharm",
+      "region": "colosseum",
+      "how": "Defeat Bacte and obtain the Globulate Timecharm",
+      "itemId": "RIFT_TROPHY_SLIME",
+      "aliases": [
+        "slime",
+        "RIFT_TROPHY_SLIME"
+      ]
+    },
+    {
+      "id": "vampiric",
+      "name": "Vampiric Timecharm",
+      "region": "stillgore_chateau",
+      "how": "Progress through Stillgore Château and Vampire Slayer",
+      "itemId": "RIFT_TROPHY_VAMPIRIC",
+      "aliases": [
+        "vampiric",
+        "RIFT_TROPHY_VAMPIRIC"
+      ]
+    },
+    {
+      "id": "mountain",
+      "name": "Celestial Timecharm",
+      "region": "mountaintop",
+      "how": "Obtain the charm from Shen Citrinitas in the Cerebral Citadel",
+      "itemId": "RIFT_TROPHY_MOUNTAIN",
+      "aliases": [
+        "mountain",
+        "RIFT_TROPHY_MOUNTAIN"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "id": "wyld_woods",
+      "name": "Wyld Woods",
+      "requiredTimecharms": [],
+      "timeRequirementSeconds": null,
+      "additionalRequirements": [],
+      "note": "Initial Rift area"
+    },
+    {
+      "id": "black_lagoon",
+      "name": "Black Lagoon",
+      "requiredTimecharms": [],
+      "timeRequirementSeconds": 240,
+      "additionalRequirements": [
+        "Talk to Tel Kar"
+      ],
+      "note": "Accessible by dialogue and a Rift Time crossing"
+    },
+    {
+      "id": "west_village",
+      "name": "West Village",
+      "requiredTimecharms": [
+        "wyldly_supreme"
+      ],
+      "timeRequirementSeconds": 180,
+      "additionalRequirements": [],
+      "note": "Supreme Timecharm grants access"
+    },
+    {
+      "id": "dreadfarm",
+      "name": "Dreadfarm",
+      "requiredTimecharms": [
+        "wyldly_supreme"
+      ],
+      "timeRequirementSeconds": null,
+      "additionalRequirements": [],
+      "note": "Supreme Timecharm grants access"
+    },
+    {
+      "id": "mirrorverse",
+      "name": "Mirrorverse",
+      "requiredTimecharms": [
+        "wyldly_supreme"
+      ],
+      "timeRequirementSeconds": 180,
+      "additionalRequirements": [],
+      "note": "Rift Time pauses inside"
+    },
+    {
+      "id": "village_plaza",
+      "name": "Village Plaza",
+      "requiredTimecharms": [
+        "chicken_n_egg",
+        "mirrored"
+      ],
+      "timeRequirementSeconds": 480,
+      "additionalRequirements": [],
+      "note": "Requires both timecharms"
+    },
+    {
+      "id": "living_cave",
+      "name": "Living Cave",
+      "requiredTimecharms": [
+        "citizen"
+      ],
+      "timeRequirementSeconds": 300,
+      "additionalRequirements": [],
+      "note": "Requires the SkyBlock Citizen Timecharm"
+    },
+    {
+      "id": "colosseum",
+      "name": "Colosseum",
+      "requiredTimecharms": [
+        "lazy_living"
+      ],
+      "timeRequirementSeconds": 900,
+      "additionalRequirements": [],
+      "note": "Requires the Living Timecharm"
+    },
+    {
+      "id": "barrier_street",
+      "name": "Barrier Street",
+      "requiredTimecharms": [
+        "slime"
+      ],
+      "timeRequirementSeconds": 600,
+      "additionalRequirements": [],
+      "note": "Requires the Globulate Timecharm"
+    },
+    {
+      "id": "stillgore_chateau",
+      "name": "Stillgore Château",
+      "requiredTimecharms": [
+        "slime"
+      ],
+      "timeRequirementSeconds": null,
+      "additionalRequirements": [
+        "Rift Boat and Photon Pathway entry"
+      ],
+      "note": "Boat and pathway conditions cannot be inferred from the Gallery alone"
+    },
+    {
+      "id": "mountaintop",
+      "name": "The Mountaintop",
+      "requiredTimecharms": [
+        "vampiric"
+      ],
+      "timeRequirementSeconds": 540,
+      "additionalRequirements": [],
+      "note": "Requires Vampiric Timecharm and at least 9 minutes of remaining Rift Time"
+    },
+    {
+      "id": "wizardman_bureau",
+      "name": "Wizardman Bureau",
+      "requiredTimecharms": [
+        "mountain"
+      ],
+      "timeRequirementSeconds": null,
+      "additionalRequirements": [
+        "Reach Wizardman Bureau through the Mountaintop"
+      ],
+      "note": "Celestial Timecharm grants access"
+    }
+  ],
+  "souls": [
+    {
+      "key": "wyld_woods:1",
+      "name": "Tough Bark",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:2",
+      "name": "Next to Enigma",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:3",
+      "name": "Woods Flower Pot",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:4",
+      "name": "Wither Cage",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:5",
+      "name": "Pressurized",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:6",
+      "name": "Two Plates",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:7",
+      "name": "Fleespook",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:8",
+      "name": "Up in the Sky",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "wyld_woods:9",
+      "name": "Between Branches",
+      "region": "wyld_woods",
+      "apiId": null
+    },
+    {
+      "key": "black_lagoon:1",
+      "name": "Tel Kar",
+      "region": "black_lagoon",
+      "apiId": null
+    },
+    {
+      "key": "black_lagoon:2",
+      "name": "Lagoon Cave",
+      "region": "black_lagoon",
+      "apiId": null
+    },
+    {
+      "key": "black_lagoon:3",
+      "name": "Mushroom Guy",
+      "region": "black_lagoon",
+      "apiId": null
+    },
+    {
+      "key": "black_lagoon:4",
+      "name": "Roy",
+      "region": "black_lagoon",
+      "apiId": null
+    },
+    {
+      "key": "black_lagoon:5",
+      "name": "Spinning Runes",
+      "region": "black_lagoon",
+      "apiId": null
+    },
+    {
+      "key": "west_village:1",
+      "name": "Hot Dog Contest",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "west_village:2",
+      "name": "Fake Neuroscience",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "west_village:3",
+      "name": "2 Players Soul",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "west_village:4",
+      "name": "Cake House #1",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "west_village:5",
+      "name": "Cake House #2",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "west_village:6",
+      "name": "Dolphin Parkour",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "west_village:7",
+      "name": "Between Roofs",
+      "region": "west_village",
+      "apiId": null
+    },
+    {
+      "key": "dreadfarm:1",
+      "name": "Farm Flower Pot",
+      "region": "dreadfarm",
+      "apiId": null
+    },
+    {
+      "key": "dreadfarm:2",
+      "name": "Beanstalk",
+      "region": "dreadfarm",
+      "apiId": null
+    },
+    {
+      "key": "dreadfarm:3",
+      "name": "Buttons",
+      "region": "dreadfarm",
+      "apiId": null
+    },
+    {
+      "key": "dreadfarm:4",
+      "name": "Farm Balloons",
+      "region": "dreadfarm",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:1",
+      "name": "Rabbit in the Hat",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:2",
+      "name": "Back to Basics",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:3",
+      "name": "Buy BZT Today",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:4",
+      "name": "Plaza Fleespook",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:5",
+      "name": "Plaza Balloons",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:6",
+      "name": "Lonely Ävaeìkx",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:7",
+      "name": "Between Cooler Roofs",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "village_plaza:8",
+      "name": "Horsing Around",
+      "region": "village_plaza",
+      "apiId": null
+    },
+    {
+      "key": "living_cave:1",
+      "name": "Behind a Living Wall",
+      "region": "living_cave",
+      "apiId": null
+    },
+    {
+      "key": "living_cave:2",
+      "name": "Flowery Message",
+      "region": "living_cave",
+      "apiId": null
+    },
+    {
+      "key": "colosseum:1",
+      "name": "Full Circle",
+      "region": "colosseum",
+      "apiId": null
+    },
+    {
+      "key": "stillgore_chateau:1",
+      "name": "Standing there",
+      "region": "stillgore_chateau",
+      "apiId": null
+    },
+    {
+      "key": "stillgore_chateau:2",
+      "name": "Between Towers",
+      "region": "stillgore_chateau",
+      "apiId": null
+    },
+    {
+      "key": "stillgore_chateau:3",
+      "name": "Castle Fleespook",
+      "region": "stillgore_chateau",
+      "apiId": null
+    },
+    {
+      "key": "stillgore_chateau:4",
+      "name": "Castle Flower Pot",
+      "region": "stillgore_chateau",
+      "apiId": null
+    },
+    {
+      "key": "stillgore_chateau:5",
+      "name": "Castle Balloons",
+      "region": "stillgore_chateau",
+      "apiId": null
+    },
+    {
+      "key": "stillgore_chateau:6",
+      "name": "Fairylosopher",
+      "region": "stillgore_chateau",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:1",
+      "name": "Mountain Balloons",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:2",
+      "name": "Rose's End Flower Pot",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:3",
+      "name": "Ikrus",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:4",
+      "name": "Leap of Faith",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:5",
+      "name": "Fleespook",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:6",
+      "name": "Sun Gecko",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:7",
+      "name": "Ubik's Averages",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:8",
+      "name": "Ubik's Boxes",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:9",
+      "name": "Ubik's Tit for Tats",
+      "region": "mountaintop",
+      "apiId": null
+    },
+    {
+      "key": "mountaintop:10",
+      "name": "Walk of Fame",
+      "region": "mountaintop",
+      "apiId": null
+    }
+  ],
+  "soulApiIdCoverage": "NOT_MAPPED"
+}

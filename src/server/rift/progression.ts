@@ -1,4 +1,5 @@
 import type { RawMember } from "../hypixel/types";
+import { buildRiftUnlocks } from "./unlocks";
 
 type AnyRecord = Record<string,unknown>;
 const obj=(value:unknown):AnyRecord => value!==null&&typeof value==="object"&&!Array.isArray(value)?value as AnyRecord:{};
@@ -82,6 +83,7 @@ export function buildRiftProgress(member:RawMember){
    lastFree:count(access.last_free),chargeTrackTimestamp:count(access.charge_track_timestamp)},
   boundaries:{reported:root.lifetime_purchased_boundaries!==undefined,ids:purchased,count:purchased?.length??null},
   regions:regionSignals,activities,
+  unlocks:buildRiftUnlocks(uniqueTrophyTypes,souls,purchased),
   inventory:{reported:root.inventory!==undefined,
    availableSources:["inv_contents","inv_armor","equipment_contents","ender_chest_contents"]
     .filter(name=>typeof obj(riftInventory[name]).data==="string")},

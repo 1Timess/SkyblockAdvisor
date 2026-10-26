@@ -54,3 +54,56 @@ test("Vampire Slayer is sourced from existing Slayer field, not guessed from Rif
  assert.equal(p.vampireSlayer.reported,true);assert.equal(p.vampireSlayer.xp,840);
  assert.equal(build({rift:{}}).vampireSlayer.xp,null);
 });
+
+test("eight wiki Timecharms map lowercase and item-id variants, including Mountaintop",()=>{
+ const p=build({rift:{gallery:{secured_trophies:[
+  {type:"wyldly_supreme"},{type:"RIFT_TROPHY_CHICKEN_N_EGG"},
+  {type:"mirrored"},{type:"citizen"},{type:"lazy_living"},
+  {type:"slime"},{type:"vampiric"},{type:"mountain"},
+ ]}}});
+ assert.equal(p.unlocks.reference.timecharms,8);
+ assert.equal(p.unlocks.recognizedSecuredCount,8);
+ assert.ok(p.unlocks.timecharms.every(c=>c.status==="SECURED"));
+ assert.equal(p.unlocks.timecharms.find(c=>c.id==="mountain")?.name,"Celestial Timecharm");
+ assert.equal(p.unlocks.unknownGalleryTypes.length,0);
+});
+test("missing Gallery state is unknown rather than declaring every charm missing",()=>{
+ const p=build({rift:{}});
+ assert.equal(p.unlocks.recognizedSecuredCount,null);
+ assert.ok(p.unlocks.timecharms.every(c=>c.status==="UNKNOWN"));
+ assert.equal(p.unlocks.regions.find(r=>r.id==="village_plaza")?.status,"UNKNOWN");
+});
+test("region prerequisites require all the necessary Timecharms",()=>{
+ const p=build({rift:{gallery:{secured_trophies:[{type:"mirrored"}]}}});
+ const village=p.unlocks.regions.find(r=>r.id==="village_plaza")!;
+ assert.deepEqual(village.requiredTimecharms,["chicken_n_egg","mirrored"]);
+ assert.equal(village.status,"UNMET");
+ assert.equal(village.availableNow,null);
+ const west=p.unlocks.regions.find(r=>r.id==="west_village")!;
+ assert.equal(west.status,"UNMET");
+});
+test("all charm requirements met does not prove current Rift Time or boat requirements",()=>{
+ const p=build({rift:{gallery:{secured_trophies:[
+  {type:"mirrored"},{type:"chicken_n_egg"},{type:"slime"},{type:"vampiric"},
+ ]}}});
+ const village=p.unlocks.regions.find(r=>r.id==="village_plaza")!;
+ assert.equal(village.status,"MET");
+ assert.equal(village.eligibilityConfirmed,false);
+ assert.equal(village.timeRequirementSeconds,480);
+ assert.equal(p.unlocks.regions.find(r=>r.id==="mountaintop")?.status,"MET");
+ assert.equal(p.unlocks.regions.find(r=>r.id==="stillgore_chateau")?.eligibilityConfirmed,false);
+});
+test("Enigma reference holds 52 named locations but never invents API identity mappings",()=>{
+ const p=build({rift:{enigma:{found_souls:["api_soul_1","api_soul_2"]}}});
+ assert.equal(p.unlocks.reference.enigmaSouls,52);
+ assert.equal(p.unlocks.enigma.catalogue.length,52);
+ assert.equal(p.unlocks.enigma.foundCount,2);
+ assert.equal(p.unlocks.enigma.remainingCount,50);
+ assert.equal(p.unlocks.enigma.locationsIndividuallyMatched,false);
+ assert.ok(p.unlocks.enigma.catalogue.every(e=>e.status==="UNKNOWN"));
+});
+test("unrecognized trophy types are retained but excluded from verified secured count",()=>{
+ const p=build({rift:{gallery:{secured_trophies:[{type:"not_a_real_charm"},{type:"vampiric"}]}}});
+ assert.deepEqual(p.unlocks.unknownGalleryTypes,["not_a_real_charm"]);
+ assert.equal(p.unlocks.recognizedSecuredCount,1);
+});
