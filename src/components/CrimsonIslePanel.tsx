@@ -50,7 +50,7 @@ function Factions({progress}:{progress:Progress}){
  <article className="crimson-card">
   <div className="crimson-card-top">
    <div><p className="section-kicker">Story progression</p><h3>Crimson Isle Storyline</h3></div>
-   {progress.quests.storyEvidence.reportedSteps>0?<span className="crimson-subtle">{progress.quests.storyEvidence.completedSteps} completed</span>:null}
+   {progress.quests.storyEvidence.reportedSteps>0?<span className="crimson-subtle">{progress.quests.storyEvidence.completedSteps} introductory steps completed</span>:null}
   </div>
   {progress.quests.storyEvidence.reportedSteps>0?<div className="crimson-quest-evidence">
    {progress.quests.storyline.filter(step=>step.available).map(step=><div className="crimson-quest-step" key={step.id}>
@@ -64,7 +64,7 @@ function Factions({progress}:{progress:Progress}){
    <p className="crimson-muted">Each faction has a substantial storyline ending at Kuudra. These are the documented chapters; their individual completion cannot yet be verified from the API mappings.</p>
    <div className="crimson-two-grid">{(["mages","barbarians"] as const).map(faction=><div className="crimson-story-branch" key={faction}>
     <div className="crimson-card-top"><h4>{faction==="mages"?"Mage Storyline":"Barbarian Storyline"}</h4>{progress.faction.selected?.toLowerCase().includes(faction==="mages"?"mage":"barbarian")?<span className="crimson-pill">Current faction</span>:null}</div>
-    <ol>{CRIMSON_STORY_CHAPTERS[faction].map(chapter=><li key={chapter.id}><strong>{chapter.label}</strong><small>{chapter.detail}</small></li>)}</ol>
+    <p className="crimson-muted">Chapter-by-chapter completion is not available from the verified objective mapping.</p><ol>{CRIMSON_STORY_CHAPTERS[faction].map(chapter=><li key={chapter.id}><strong>{chapter.label}</strong><small>{chapter.detail}</small></li>)}</ol>
    </div>)}</div>
    {progress.quests.laterObjectives.length?<div className="crimson-story-records">
     <div className="crimson-card-top"><h4>Additional Storyline Milestones</h4><span className="crimson-subtle">{progress.quests.laterObjectives.filter(step=>step.status==="COMPLETE").length} recorded complete</span></div>
