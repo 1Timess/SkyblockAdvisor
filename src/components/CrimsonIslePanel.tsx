@@ -47,18 +47,18 @@ function Factions({progress}:{progress:Progress}){
   </article>;
  })}</div>
  <article className="crimson-card">
-  <div className="crimson-card-top"><div><p className="section-kicker">Hypixel objective evidence</p><h3>Crimson Isle Storyline</h3></div>
-   {progress.quests.storyEvidence.historicallyAccessedKuudra?<span className="crimson-status crimson-status--good">Kuudra accessed</span>:null}</div>
-  <p className="crimson-muted">These steps come from observed Hypixel objective IDs, not inferred quest names. Absent records are omitted, not treated as unfinished.</p>
+  <div className="crimson-card-top">
+   <div><p className="section-kicker">Story progression</p><h3>Crimson Isle Storyline</h3></div>
+   {progress.quests.storyEvidence.reportedSteps>0?<span className="crimson-subtle">{progress.quests.storyEvidence.completedSteps} completed</span>:null}
+  </div>
   {progress.quests.storyEvidence.reportedSteps>0?<div className="crimson-quest-evidence">
    {progress.quests.storyline.filter(step=>step.available).map(step=><div className="crimson-quest-step" key={step.id}>
-    <div><strong>{step.label}</strong><small>{step.id}{step.progress!==null?" · Progress "+number(step.progress):""}</small></div>
+    <strong>{step.label}</strong>
     <Status label={step.status}/>
    </div>)}
-  </div>:<p className="crimson-muted">No mapped storyline objectives were reported in this response.</p>}
-  {progress.quests.storyEvidence.historicallyAccessedKuudra?<p className="crimson-story-proof">A recorded Basic Kuudra clear independently verifies that this profile previously reached the storyline&apos;s Kuudra-access milestone. It does not establish that both faction branches are finished.</p>:null}
-  {progress.quests.unknownStorylineKeys.length?<details className="crimson-details"><summary>Other relevant objective IDs ({progress.quests.unknownStorylineKeys.length})</summary><p className="crimson-muted">{progress.quests.unknownStorylineKeys.join(", ")}</p></details>:null}
-  <p className="crimson-muted">Mage and Barbarian branch completion is not scored until their objective IDs are independently verified.</p>
+  </div>:<p className="crimson-muted">No storyline milestones reported for this profile.</p>}
+  {progress.quests.storyEvidence.historicallyAccessedKuudra?<p className="crimson-story-milestone"><span className="crimson-status crimson-status--good">Reached</span> Kuudra access milestone</p>:null}
+  <p className="crimson-muted crimson-story-footnote">Only recorded milestones are shown. Later faction story completion is not currently tracked.</p>
  </article>
  </div>;
 }
