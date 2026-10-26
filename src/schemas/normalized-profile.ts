@@ -138,18 +138,21 @@ const collectionsTabSchema=z.object({
 });
 const crimsonQuestSchema=z.object({
  questApiAvailable:z.boolean(),netherQuestApiAvailable:z.boolean(),
- storyline:z.array(z.object({
-  id:z.string(),label:z.string(),branch:z.string(),status:z.enum(["COMPLETE","ACTIVE","UNKNOWN"]),
-  available:z.boolean(),activatedAt:z.number().nullable(),completedAt:z.number().nullable(),
+ storyline:z.array(z.object({id:z.string(),label:z.string(),branch:z.string(),
+  status:z.enum(["COMPLETE","ACTIVE","INACTIVE","UNKNOWN"]),available:z.boolean(),
+  progress:z.number().nullable(),completedAt:z.number().nullable(),
  })),
  branches:z.array(z.object({id:z.string(),reported:z.boolean(),allKnownStepsComplete:z.boolean(),
   observedComplete:z.number().int().nonnegative(),totalMappedSteps:z.number().int().nonnegative(),
   completionVerified:z.boolean()})),
  unknownStorylineKeys:z.array(z.string()),objectiveSignals:z.array(z.string()),
+ storyEvidence:z.object({reportedSteps:z.number().int().nonnegative(),
+  completedSteps:z.number().int().nonnegative(),activeSteps:z.number().int().nonnegative(),
+  historicallyAccessedKuudra:z.boolean()}),
  daily:z.object({available:z.boolean(),assignments:z.array(z.string()),
   entries:z.array(z.object({id:z.string(),label:z.string(),available:z.boolean(),
    status:z.string().nullable(),progress:z.number().nullable(),completedAt:z.number().nullable()})),
-  extraKeys:z.array(z.string()),questRewardsClaimed:z.array(z.string())}),
+  extraKeys:z.array(z.string()),rewardEntries:z.array(z.object({id:z.string(),reward:z.string()}))}),
 });
 const crimsonArmorRequirementsSchema=z.object({
  combatLevelRequired:z.number().int().positive(),kuudraTierRequired:z.string(),

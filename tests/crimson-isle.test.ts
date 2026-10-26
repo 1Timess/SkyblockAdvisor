@@ -61,46 +61,57 @@ test("Matriarch history does not imply current daily availability",()=>{
  assert.deepEqual(result.matriarch.recentRefreshes,[4,5]);
 });
 
-test("Crimson storyline reads explicit top-level quest status and does not infer branch completion",()=>{
+test("real API objective IDs produce reported storyline milestones, not invented branch completions",()=>{
  const result=buildCrimsonIsleProgress(memberSchema.parse({
-  quests:{
-   select_mage_faction:{status:"COMPLETE",completed_at:123},
-   meet_dean_at_academy:{status:"ACTIVE",activated_at:456},
-   talk_to_elle_9:{status:"COMPLETE",completed_at:789},
+  quests:{select_mage_faction:{status:"COMPLETE"}},
+  objectives:{
+   talk_to_elle_1:{status:"COMPLETE",completed_at:1234},
+   help_elle:{status:"COMPLETE",completed_at:1235},
+   talk_to_elle_2:{status:"ACTIVE",progress:2},
+   collect_nether_items:{status:"INACTIVE",progress:0},
+   talk_to_dean_4:{status:"COMPLETE",completed_at:1236},
+   tutorial:["zone_dragontail_town_blacksmith"]
   },
-  objectives:{tutorial:["OBJECTIVE_HELP_ELLE","KILL_KUUDRA_NONE"]},
-  nether_island_player_data:{selected_faction:"mages",mages_reputation:12000},
+  nether_island_player_data:{selected_faction:"mages",mages_reputation:12000,
+   kuudra_completed_tiers:{none:1}},
  }));
- assert.equal(result.quests.questApiAvailable,true);
- assert.equal(result.quests.storyline.find(x=>x.id==="select_mage_faction")?.status,"COMPLETE");
- assert.equal(result.quests.storyline.find(x=>x.id==="meet_dean_at_academy")?.status,"ACTIVE");
- assert.equal(result.quests.branches.find(x=>x.id==="mages")?.completionVerified,false);
- assert.ok(result.quests.unknownStorylineKeys.includes("talk_to_elle_9"));
- assert.ok(result.quests.objectiveSignals.includes("OBJECTIVE_HELP_ELLE"));
- assert.equal(result.kuudra.tiers[1].storyVerified,false);
+ const q=result.quests;
+ assert.equal(q.storyEvidence.reportedSteps,4);
+ assert.equal(q.storyEvidence.completedSteps,2);
+ assert.equal(q.storyEvidence.historicallyAccessedKuudra,true);
+ assert.equal(q.storyline.find(x=>x.id==="talk_to_elle_1")?.status,"COMPLETE");
+ assert.equal(q.storyline.find(x=>x.id==="talk_to_elle_2")?.status,"ACTIVE");
+ assert.ok(q.unknownStorylineKeys.includes("talk_to_dean_4"));
+ assert.equal(q.branches.find(x=>x.id==="mages")?.completionVerified,false);
+ assert.ok(!q.storyline.some(x=>x.id==="select_mage_faction"));
 });
-test("daily faction quests retain only reported assignments and statuses",()=>{
+test("captured faction daily API fields are decoded without mislabeling rewards as claims",()=>{
  const result=buildCrimsonIsleProgress(memberSchema.parse({
   nether_island_player_data:{quests:{quest_data:{
-    quest_list:["fetch","dojo"],fetch:{status:"ACTIVE",progress:2},
-    dojo:{status:"COMPLETE",completed_at:9000},unknown_future:{status:"ACTIVE"},
-   },quest_rewards:{fetch:true,dojo:false}}},
+   quest_list:["crimson_isle_rescue_c","crimson_isle_fight_kuudra_none_tier_c"],
+   fishing:{status:"INACTIVE",progress:0,completed_at:0},
+   fetch:{status:"INACTIVE",progress:0,completed_at:0},
+   rescue:{status:"ACTIVE",progress:1},
+   dojo:{status:"COMPLETE",completed_at:9000},
+   boss:{status:"INACTIVE",progress:0},future_quest:{status:"ACTIVE"},
+  },quest_rewards:{PYROCLASTIC_SCALE:1,crimson_isle_flyfish_d:"PYROCLASTIC_SCALE"}}},
  }));
- assert.deepEqual(result.quests.daily.assignments,["fetch","dojo"]);
- assert.equal(result.quests.daily.entries.find(x=>x.id==="fetch")?.progress,2);
+ assert.deepEqual(result.quests.daily.assignments,["crimson_isle_rescue_c","crimson_isle_fight_kuudra_none_tier_c"]);
+ assert.equal(result.quests.daily.entries.find(x=>x.id==="rescue")?.status,"ACTIVE");
  assert.equal(result.quests.daily.entries.find(x=>x.id==="dojo")?.status,"COMPLETE");
- assert.deepEqual(result.quests.daily.questRewardsClaimed,["fetch"]);
- assert.ok(result.quests.daily.extraKeys.includes("unknown_future"));
+ assert.equal(result.quests.daily.rewardEntries.find(x=>x.id==="crimson_isle_flyfish_d")?.reward,"PYROCLASTIC_SCALE");
+ assert.ok(result.quests.daily.extraKeys.includes("future_quest"));
 });
-test("unknown and absent story quest payloads do not become completed",()=>{
- const result=buildCrimsonIsleProgress(memberSchema.parse({quests:{
-  select_barbarian_faction:{status:"IN_PROGRESS"},give_heavy_pearl_to_gris:true,
- }}));
- assert.equal(result.quests.storyline.find(x=>x.id==="select_barbarian_faction")?.status,"UNKNOWN");
- assert.equal(result.quests.storyline.find(x=>x.id==="give_heavy_pearl_to_gris")?.status,"UNKNOWN");
+test("absent objectives stay unknown and no made-up quest status survives",()=>{
+ const result=buildCrimsonIsleProgress(memberSchema.parse({
+  quests:{select_barbarian_faction:{status:"COMPLETE"}},
+  objectives:{tutorial:["zone_scarleton_community_center"]},
+ }));
+ assert.equal(result.quests.storyEvidence.reportedSteps,0);
+ assert.equal(result.quests.storyEvidence.historicallyAccessedKuudra,false);
+ assert.ok(result.quests.storyline.every(x=>x.status==="UNKNOWN"&&!x.available));
  assert.equal(result.quests.branches.find(x=>x.id==="barbarians")?.completionVerified,false);
 });
-
 test("Kuudra prerequisite gates distinguish documented completions, missing storyline evidence and locked tiers",()=>{
  const result=buildCrimsonIsleProgress(memberSchema.parse({nether_island_player_data:{
   selected_faction:"mages",mages_reputation:3500,

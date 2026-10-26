@@ -46,7 +46,20 @@ function Factions({progress}:{progress:Progress}){
    <p className="crimson-muted">{next&&f.reputation!==null?number(Math.max(0,next.required-f.reputation))+" reputation to "+next.name: f.reputation===null?"Reputation not reported": "Highest known reputation threshold reached"}</p>
   </article>;
  })}</div>
- <p className="crimson-muted">Faction storyline completion is not scored yet. The current API quest identifiers still need a verified mapping, so missing records are not treated as unfinished quests.</p>
+ <article className="crimson-card">
+  <div className="crimson-card-top"><div><p className="section-kicker">Hypixel objective evidence</p><h3>Crimson Isle Storyline</h3></div>
+   {progress.quests.storyEvidence.historicallyAccessedKuudra?<span className="crimson-status crimson-status--good">Kuudra accessed</span>:null}</div>
+  <p className="crimson-muted">These steps come from observed Hypixel objective IDs, not inferred quest names. Absent records are omitted, not treated as unfinished.</p>
+  {progress.quests.storyEvidence.reportedSteps>0?<div className="crimson-quest-evidence">
+   {progress.quests.storyline.filter(step=>step.available).map(step=><div className="crimson-quest-step" key={step.id}>
+    <div><strong>{step.label}</strong><small>{step.id}{step.progress!==null?" · Progress "+number(step.progress):""}</small></div>
+    <Status label={step.status}/>
+   </div>)}
+  </div>:<p className="crimson-muted">No mapped storyline objectives were reported in this response.</p>}
+  {progress.quests.storyEvidence.historicallyAccessedKuudra?<p className="crimson-story-proof">A recorded Basic Kuudra clear independently verifies that this profile previously reached the storyline's Kuudra-access milestone. It does not establish that both faction branches are finished.</p>:null}
+  {progress.quests.unknownStorylineKeys.length?<details className="crimson-details"><summary>Other relevant objective IDs ({progress.quests.unknownStorylineKeys.length})</summary><p className="crimson-muted">{progress.quests.unknownStorylineKeys.join(", ")}</p></details>:null}
+  <p className="crimson-muted">Mage and Barbarian branch completion is not scored until their objective IDs are independently verified.</p>
+ </article>
  </div>;
 }
 function Kuudra({progress}:{progress:Progress}){

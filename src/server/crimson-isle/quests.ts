@@ -1,69 +1,80 @@
 import type { RawMember } from "../hypixel/types";
 
-// Source-of-truth is explicit Hypixel quest status. Story order labels are backed
-// by the current official Wiki; unrecognized flags and ambiguous states remain visible.
+// Only actual objective IDs observed in public Hypixel profile payloads are mapped.
+// Reference captures: dungeon-hub/hypixel-wrapper full-profiles (6e08d322...)
+// and Elfouille/Sky_Track objectives snapshots (Feb 2026).
+// The full Mage/Barbarian branch sequence is NOT documented by the profile API.
 type RawMap=Record<string,unknown>;
 const record=(v:unknown):RawMap=>v!==null&&typeof v==="object"&&!Array.isArray(v)?v as RawMap:{};
 const string=(v:unknown):string|null=>typeof v==="string"&&v.length>0?v:null;
 const numeric=(v:unknown):number|null=>typeof v==="number"&&Number.isFinite(v)&&v>=0?v:null;
 const STEP_CATALOG=[
- {id:"find_elle",label:"Find Elle",branch:"opening"},
- {id:"talk_to_elle_1",label:"Speak to Elle",branch:"opening"},
- {id:"select_mage_faction",label:"Join the Mage Faction",branch:"mages"},
- {id:"meet_dean_at_academy",label:"Meet the Dean",branch:"mages"},
- {id:"collect_items_for_dean",label:"Collect the Dean's items",branch:"mages"},
- {id:"select_barbarian_faction",label:"Join the Barbarian Faction",branch:"barbarians"},
- {id:"give_heavy_pearl_to_gris",label:"Give a Heavy Pearl to Gris",branch:"barbarians"},
+ {id:"talk_to_elle_1",label:"Find and speak to Elle",branch:"opening"},
+ {id:"help_elle",label:"Help Elle",branch:"opening"},
+ {id:"talk_to_elle_2",label:"Continue speaking to Elle",branch:"opening"},
+ {id:"collect_nether_items",label:"Gather Nether materials",branch:"opening"},
+ {id:"explore_nether_island",label:"Explore Crimson Isle",branch:"opening"},
+ {id:"faction_villagers",label:"Speak to faction representatives",branch:"opening"},
 ] as const;
 const DAILY_CATEGORIES=[
- ["fetch","Fetch"],["fishing","Fishing"],["wanted_mini_boss","Wanted Miniboss"],
+ ["fetch","Fetch"],["fishing","Fishing"],["rescue","Rescue"],
  ["dojo","Dojo"],["boss","Boss"],
 ] as const;
-type QuestStatus="COMPLETE"|"ACTIVE"|"UNKNOWN";
-function questStatus(value:unknown):QuestStatus{
- const valueMap=record(value),raw=string(valueMap.status)?.toUpperCase();
- return raw==="COMPLETE"?"COMPLETE":raw==="ACTIVE"?"ACTIVE":"UNKNOWN";
+type QuestStatus="COMPLETE"|"ACTIVE"|"INACTIVE"|"UNKNOWN";
+function questStatus(value:unknown):QuestStatus {
+ const raw=string(record(value).status)?.toUpperCase();
+ return raw==="COMPLETE"||raw==="ACTIVE"||raw==="INACTIVE"?raw:"UNKNOWN";
 }
 export function buildCrimsonQuests(member:RawMember) {
- const top=record(member.quests);
+ const objectives=record(member.objectives);
+ const tutorial=new Set(Array.isArray(objectives.tutorial)?objectives.tutorial.filter((x):x is string=>typeof x==="string"):[]);
  const nether=record(member.nether_island_player_data);
  const netherQuests=record(nether.quests);
  const questData=record(netherQuests.quest_data);
- const objectives=record(member.objectives);
- const objectiveTutorial=new Set(Array.isArray(objectives.tutorial)?objectives.tutorial.filter((x):x is string=>typeof x==="string"):[]);
  const storyline=STEP_CATALOG.map(step=>{
-  const raw=top[step.id],status=questStatus(raw);
-  const fields=record(raw);
-  return {...step,status,available:raw!==undefined,activatedAt:numeric(fields.activated_at),
-   completedAt:numeric(fields.completed_at)};
+  const raw=objectives[step.id], fields=record(raw);
+  return {...step,status:questStatus(raw),available:raw!==undefined,
+   progress:numeric(fields.progress),completedAt:numeric(fields.completed_at)};
  });
- const unknownStorylineKeys=Object.keys(top).filter(key=>
-  !STEP_CATALOG.some(step=>step.id===key) &&
-  /elle|dean|chief|ugo|lasea|gris|mage_faction|barbarian_faction|kuudra|heavy_pearl|sulphur/i.test(key)
+ // Recorded Kuudra completions are historical evidence of completing the
+ // storyline entry prerequisite, not evidence of completing both branches.
+ const kuudra=record(nether.kuudra_completed_tiers);
+ const firstClear=numeric(kuudra.none);
+ const historicStorylineAccess=firstClear!==null&&firstClear>0;
+ const reported=storyline.filter(step=>step.available);
+ const additionalObjectiveKeys=Object.keys(objectives).filter(key=>
+   !STEP_CATALOG.some(step=>step.id===key) &&
+   /^(talk_to_elle(?:_\d+)?|help_elle|talk_to_dean_\d+|faction_villagers)$/.test(key)
  ).sort();
- const daily=DAILY_CATEGORIES.map(([id,label])=>{
-  const raw=questData[id],entry=record(raw);
-  return {id,label,available:raw!==undefined,status:string(entry.status),progress:numeric(entry.progress),
-   completedAt:numeric(entry.completed_at)};
- });
- const dailyList=Array.isArray(questData.quest_list)?questData.quest_list.filter((x):x is string=>typeof x==="string"):[];
- const dailyExtraKeys=Object.keys(questData).filter(key=>key!=="quest_list"&&!DAILY_CATEGORIES.some(([id])=>id===key));
- const questRewards=record(netherQuests.quest_rewards);
- const claimedQuestRewards=Object.keys(questRewards).filter(key=>questRewards[key]===true).sort();
- // A Kuudra completion is not proof that the final Elle/Chief/Dean conversation happened.
- const branches=["opening","mages","barbarians"].map(branch=>{
+ const branchNames=["opening","mages","barbarians"];
+ const branches=branchNames.map(branch=>{
   const steps=storyline.filter(step=>step.branch===branch);
-  const reported=steps.some(step=>step.available);
-  const allComplete=steps.length>0&&steps.every(step=>step.status==="COMPLETE");
-  return {id:branch,reported,allKnownStepsComplete:allComplete,
-   observedComplete:steps.filter(step=>step.status==="COMPLETE").length,
+  const recorded=steps.filter(step=>step.available);
+  return {id:branch,reported:recorded.length>0,
+   allKnownStepsComplete:recorded.length>0&&recorded.length===steps.length&&recorded.every(step=>step.status==="COMPLETE"),
+   observedComplete:recorded.filter(step=>step.status==="COMPLETE").length,
    totalMappedSteps:steps.length,completionVerified:false};
  });
+ const assignments=Array.isArray(questData.quest_list)
+  ?questData.quest_list.filter((v):v is string=>typeof v==="string"):[];
+ const daily=DAILY_CATEGORIES.map(([id,label])=>{
+  const raw=questData[id],entry=record(raw);
+  return {id,label,available:raw!==undefined,status:string(entry.status),
+   progress:numeric(entry.progress),completedAt:numeric(entry.completed_at)};
+ });
+ const rewards=record(netherQuests.quest_rewards);
+ const rewardEntries=Object.entries(rewards).filter(([,value])=>typeof value==="string"||typeof value==="number")
+  .map(([id,value])=>({id,reward:String(value)})).sort((a,b)=>a.id.localeCompare(b.id));
+ const extraKeys=Object.keys(questData).filter(key=>key!=="quest_list"&&!DAILY_CATEGORIES.some(([id])=>id===key));
  return {
-  questApiAvailable:member.quests!==undefined,netherQuestApiAvailable:nether.quests!==undefined,
-  storyline,branches,unknownStorylineKeys,
-  objectiveSignals:[...objectiveTutorial].filter(x=>/elle|faction|kuudra|nether/i.test(x)).sort(),
-  daily:{available:netherQuests.quest_data!==undefined,assignments:dailyList,entries:daily,
-   extraKeys:dailyExtraKeys.sort(),questRewardsClaimed:claimedQuestRewards},
+  questApiAvailable:member.objectives!==undefined,
+  netherQuestApiAvailable:nether.quests!==undefined,
+  storyline,branches,unknownStorylineKeys:additionalObjectiveKeys,
+  objectiveSignals:[...tutorial].filter(key=>/elle|faction|kuudra|nether/i.test(key)).sort(),
+  storyEvidence:{reportedSteps:reported.length,completedSteps:reported.filter(step=>step.status==="COMPLETE").length,
+   activeSteps:reported.filter(step=>step.status==="ACTIVE").length,
+   historicallyAccessedKuudra:historicStorylineAccess},
+  daily:{available:netherQuests.quest_data!==undefined,assignments,entries:daily,
+   extraKeys:extraKeys.sort(),rewardEntries},
  };
 }
