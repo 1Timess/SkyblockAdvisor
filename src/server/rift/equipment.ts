@@ -35,6 +35,15 @@ export function buildRiftEquipment(items:readonly ProcessedItem[],known:{
  const equipped=items.filter(item=>EQUIPPED_SOURCES.has(item.source));
  const cloak=equipped.some(item=>item.id==="ENIGMA_CLOAK");
  const necklace=equipped.some(item=>item.id==="RIFT_NECKLACE_INSIDE");
+ const fixedTimeGear=[
+  {id:"SILKRIDER_SAFETY_BELT",name:"Silkrider Safety Belt",seconds:60,source:"https://hypixelskyblock.minecraft.wiki/w/Silkrider_Safety_Belt"},
+  {id:"LEECH_BELT",name:"Leech Belt",seconds:80,source:"https://hypixelskyblock.minecraft.wiki/w/Leech_Belt"},
+  {id:"VERMIN_BELT",name:"Vermin Belt",seconds:100,source:"https://hypixelskyblock.minecraft.wiki/w/Vermin_Belt"},
+  {id:"DISINFESTOR_GLOVES",name:"Disinfestor Gloves",seconds:30,source:"https://hypixelskyblock.minecraft.wiki/w/Disinfestor_Gloves"},
+  {id:"SHENS_RINGALIA",name:"Shen\'s Ringalia",seconds:50,source:"https://hypixelskyblock.minecraft.wiki/w/Shen%27s_Ringalia"},
+  // Golden Belt also modifies total Rift Time by 5%; that percentage remains unmodeled.
+  {id:"GOLDEN_BELT",name:"Golden Belt",seconds:100,source:"https://hypixelskyblock.minecraft.wiki/w/Golden_Belt"},
+ ];
  const contributions=[
   {id:"enigma_cloak",name:"Enigma Cloak",equipped:cloak,
    seconds:cloak&&known.soulCount!==null&&known.soulCount<=52?20*known.soulCount:null,
@@ -42,6 +51,9 @@ export function buildRiftEquipment(items:readonly ProcessedItem[],known:{
   {id:"rift_necklace",name:"Rift Necklace",equipped:necklace,
    seconds:necklace&&known.charmCount!==null&&known.charmCount<=8?NECKLACE_BY_CHARMS[known.charmCount]:null,
    rule:"Gallery Timecharm count (1–8)",source:"https://hypixelskyblock.minecraft.wiki/w/Rift_Necklace"},
+  ...fixedTimeGear.map(gear=>({id:gear.id.toLowerCase(),name:gear.name,
+   equipped:equipped.some(item=>item.id===gear.id),seconds:gear.seconds,
+   rule:"Fixed equipped Rift Time bonus",source:gear.source})),
  ];
  const active=contributions.filter(c=>c.equipped);
  const subtotal=active.every(c=>c.seconds!==null)
