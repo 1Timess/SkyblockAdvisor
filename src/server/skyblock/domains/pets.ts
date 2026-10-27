@@ -126,20 +126,6 @@ function getNeuPetTexture(itemId: string) {
   return texture;
 }
 
-const PET_ITEM_RARITY_INDEX: Record<string, number> = {
-  common: 0,
-  uncommon: 1,
-  rare: 2,
-  epic: 3,
-  legendary: 4,
-  mythic: 5,
-};
-
-function getCanonicalPetItemId(type: string, rarity: string) {
-  const index = PET_ITEM_RARITY_INDEX[rarity.toLowerCase()];
-  return index === undefined ? null : `${type.toUpperCase()};${index}`;
-}
-
 function getPetTexture(type: string, rarity: string, skin: string | null) {
   if (skin) {
     const skinTexture = getNeuPetTexture("PET_SKIN_" + skin);
