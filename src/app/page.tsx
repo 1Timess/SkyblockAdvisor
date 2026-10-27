@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ProfileSearchForm } from "@/components/ProfileSearchForm";
 
 const features = [
@@ -37,7 +38,7 @@ export default function Home() {
         <nav className="nav" aria-label="Primary navigation">
           <div className="nav__inner">
             <a className="nav__brand" href="#search" aria-label="Statixel home">
-              <img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
+              <Image unoptimized width={64} height={64} className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
               <span className="nav__wordmark">Statixel</span>
             </a>
 
@@ -125,7 +126,7 @@ export default function Home() {
           <div className="footer__inner">
             <div className="footer__brand">
               <a className="nav__brand" href="#search" aria-label="Statixel home">
-                <img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
+                <Image unoptimized width={64} height={64} className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
                 <span className="nav__wordmark">Statixel</span>
               </a>
               <p>Understand your SkyBlock profile. Then decide where to go next.</p>
