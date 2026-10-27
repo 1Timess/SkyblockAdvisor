@@ -12,7 +12,7 @@ test("Rift armor catalogue contains the verified named time-progression slots",(
  for(const piece of armor){
   assert.ok("riftTimeSeconds" in piece && typeof piece.riftTimeSeconds==="number" && piece.riftTimeSeconds>0);
   assert.ok("itemId" in piece && typeof piece.itemId==="string");
-  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED","METHOD_VERIFIED_COST_UNKNOWN","SHOP_COST_VERIFIED","EXCHANGE_COST_VERIFIED"].includes(piece.acquisitionStatus));
+  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED","METHOD_VERIFIED_COST_UNKNOWN","SHOP_COST_VERIFIED","EXCHANGE_COST_VERIFIED","QUEST_REWARD_VERIFIED"].includes(piece.acquisitionStatus));
   assert.ok(["UNKNOWN","NON_TRANSFERABLE"].includes(piece.transferability));
   assert.ok(piece.playerTradeable===null || piece.playerTradeable===false);
  }
@@ -57,4 +57,18 @@ test("Wyld Armor Mote prices sum to 4050 and exchange uses no invented coins",()
  const chest=catalogue.armor.find(x=>x.itemId==="ETALPTSEHC_NORI");
  assert.ok(chest && "acquisition" in chest && "materials" in chest.acquisition);
  assert.deepEqual(chest.acquisition.materials,[{currency:"WYLD_CHESTPLATE",quantity:1},{currency:"SHADOW_CRUX",quantity:12}]);
+});
+
+test("Exact noncraft Rift exchanges preserve Motes and predecessor equipment",()=>{
+ for(const [id,expected] of [
+  ["DETRANSFIGURED_MASK",[{currency:"AGARICUS_CAP_CAP",quantity:1},{currency:"MOTES",quantity:1500}]],
+  ["EXCEEDINGLY_COMFY_SNEAKERS",[{currency:"GUNTHER_SNEAKERS",quantity:1},{currency:"MOTES",quantity:49999}]]
+ ] as const){
+  const entry=catalogue.armor.find(x=>x.itemId===id);
+  assert.ok(entry && "acquisition" in entry && "materials" in entry.acquisition);
+  assert.deepEqual(entry.acquisition.materials,expected);
+ }
+ const wizard=catalogue.armor.find(x=>x.itemId==="WIZARD_FACE");
+ assert.ok(wizard && "acquisition" in wizard);
+ assert.equal(wizard.acquisition.costStatus,"REWARD_NO_PURCHASE");
 });
