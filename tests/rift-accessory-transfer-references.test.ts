@@ -21,7 +21,7 @@ test("NEU accessory IDs and exact Bluetooth Ring craft are recognized",()=>{
  const bluetooth=accessories.fixedSeconds.find(x=>x.name==="Bluetooth Ring");
  assert.equal(bluetooth?.internalItemId,"BLUETOOTH_RING");
  assert.ok(bluetooth && "recipe" in bluetooth);
- assert.deepEqual(bluetooth.recipe.ingredients,[{itemId:"METAL_HEART",quantity:32}]);
+ assert.deepEqual(bluetooth.recipe?.ingredients,[{itemId:"METAL_HEART",quantity:32}]);
  assert.equal(accessories.fixedSeconds.find(x=>x.name==="Ring of Broken Love")?.internalItemId,"RING_OF_BROKEN_LOVE");
 });
 
@@ -48,7 +48,7 @@ test("Future Calories item ID and recipe use NEU ingredient identifiers",()=>{
  const entry=accessories.fixedSeconds.find(x=>x.name==="Future Calories Talisman");
  assert.equal(entry?.internalItemId,"FUTURE_CALORIES");
  assert.ok(entry && "recipe" in entry);
- assert.deepEqual(entry.recipe.ingredients,[
+ assert.deepEqual(entry.recipe?.ingredients,[
   {itemId:"PRE_DIGESTION_FISH",quantity:1},
   {itemId:"MAGMA_FISH_SILVER",quantity:48},
   {itemId:"ENCHANTED_RAW_FISH",quantity:384},
