@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { listProfiles } from "@/server/skyblock/profile/build-normalized-profile";
 import { AppError } from "@/server/errors";
@@ -9,7 +10,7 @@ function SiteNav() {
   return (
     <nav className="profile-nav">
       <Link className="nav__brand" href="/#search" aria-label="Statixel home">
-        <img className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
+        <Image unoptimized width={64} height={64} className="nav__logo" src="/statixel/brand/statixellogowhitetransparent.png" alt="" />
         <span className="nav__wordmark">Statixel</span>
       </Link>
       <div className="profile-nav__links">
@@ -91,7 +92,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <Link className={`profile-choice${profile.selected ? " profile-choice--selected" : ""}`} href={{ pathname: "/profile", query: { username: result.identity.username, profile: profile.id } }} key={profile.id}>
                   <div className="profile-choice__top">
                     <div className="profile-choice__identity">
-                      {icon ? <img className="profile-choice__icon" src={icon} alt="" /> : null}
+                      {icon ? <Image unoptimized width={64} height={64} className="profile-choice__icon" src={icon} alt="" /> : null}
                       <span className="profile-choice__name">{profile.cuteName}</span>
                     </div>
                     {profile.selected ? <span className="profile-choice__selected" aria-label="Default profile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg></span> : null}
