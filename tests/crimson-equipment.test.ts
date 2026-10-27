@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { buildKuudraArmorProgress,kuudraArmorTierRequirements } from "../src/server/crimson-isle/equipment";
-import { armorUpgradePath, priceUpgradeSteps } from "../src/server/crimson-isle/upgrade-costs";
+import { armorUpgradePath } from "../src/server/crimson-isle/upgrade-costs";
 import type { ProcessedItem } from "../src/schemas/items";
 import { buildCrimsonIsleProgress } from "../src/server/crimson-isle/progression";
 import { memberSchema } from "../src/server/hypixel/types";
