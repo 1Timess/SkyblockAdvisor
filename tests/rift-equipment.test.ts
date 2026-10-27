@@ -78,3 +78,12 @@ test("Golden Belt fixed bonus does not imply percentage Rift Time is fully model
  assert.equal(p.time.totalRiftTimeSeconds,null);
  assert.equal(p.time.complete,false);
 });
+
+test("Unequipped fixed Rift gear exposes no active time contribution",()=>{
+ const p=buildRiftEquipment([item("VERMIN_BELT","rift:inventory")],
+  {soulCount:null,charmCount:null,cloakPurchased:null});
+ const belt=p.time.contributions.find(c=>c.id==="vermin_belt");
+ assert.equal(belt?.equipped,false);
+ assert.equal(belt?.seconds,null);
+ assert.equal(p.time.knownEquippedSubtotalSeconds,0);
+});
