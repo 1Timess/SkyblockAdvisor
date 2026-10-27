@@ -3,6 +3,7 @@ import type {ProcessedItem,ProfileWarning} from "../../schemas/items";
 import {decodeInventory} from "../skyblock/nbt/decode-inventory";
 import {processItem} from "../skyblock/items/process-item";
 import costs from "../reference/rift-costs.json";
+import gearCatalogue from "../reference/rift-gear-catalogue.json";
 
 const SOURCES=[
  ["inv_armor","rift:armor"],["equipment_contents","rift:equipment"],
@@ -51,6 +52,12 @@ export function buildRiftEquipment(items:readonly ProcessedItem[],known:{
   {id:"rift_necklace",name:"Rift Necklace",equipped:necklace,
    seconds:necklace&&known.charmCount!==null&&known.charmCount<=8?NECKLACE_BY_CHARMS[known.charmCount]:null,
    rule:"Gallery Timecharm count (1–8)",source:"https://hypixelskyblock.minecraft.wiki/w/Rift_Necklace"},
+  ...gearCatalogue.armor.filter(gear=>"itemId" in gear && typeof gear.itemId==="string").map(gear=>{
+   const active=equipped.some(item=>item.id===gear.itemId&&item.source==="rift:armor");
+   return {id:gear.itemId!.toLowerCase(),name:gear.name,equipped:active,
+    seconds:active?gear.riftTimeSeconds:null,
+    rule:"Fixed equipped Rift armor time bonus",source:WIKI};
+  }),
   ...fixedTimeGear.map(gear=>({id:gear.id.toLowerCase(),name:gear.name,
    equipped:equipped.some(item=>item.id===gear.id),
    seconds:equipped.some(item=>item.id===gear.id)?gear.seconds:null,
