@@ -5,12 +5,13 @@ import costs from "../src/server/reference/rift-costs.json";
 
 test("Rift armor catalogue contains the verified named time-progression slots",()=>{
  const armor=catalogue.armor.filter(x=>x.slot!=="set");
- assert.equal(armor.length,17);
+ assert.equal(armor.length,21);
  for(const slot of ["helmet","chestplate","leggings","boots"]){
   assert.ok(armor.some(x=>x.slot===slot));
  }
  for(const piece of armor){
   assert.ok("riftTimeSeconds" in piece && typeof piece.riftTimeSeconds==="number" && piece.riftTimeSeconds>0);
+  assert.ok("itemId" in piece && typeof piece.itemId==="string");
   assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED"].includes(piece.acquisitionStatus));
   assert.equal(piece.transferability,"UNKNOWN");
   assert.equal(piece.playerTradeable,null);
