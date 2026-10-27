@@ -1,9 +1,11 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function ProfileSearchForm() {
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -15,7 +17,7 @@ export function ProfileSearchForm() {
     setIsPending(true);
 
     window.setTimeout(() => {
-      window.location.assign(`/search?username=${encodeURIComponent(username)}`);
+      router.push(`/search?username=${encodeURIComponent(username)}`);
     }, 200);
   }
 
