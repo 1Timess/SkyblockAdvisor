@@ -12,7 +12,7 @@ test("Rift armor catalogue contains the verified named time-progression slots",(
  for(const piece of armor){
   assert.ok("riftTimeSeconds" in piece && typeof piece.riftTimeSeconds==="number" && piece.riftTimeSeconds>0);
   assert.ok("itemId" in piece && typeof piece.itemId==="string");
-  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED"].includes(piece.acquisitionStatus));
+  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED","METHOD_VERIFIED_COST_UNKNOWN"].includes(piece.acquisitionStatus));
   assert.equal(piece.transferability,"UNKNOWN");
   assert.equal(piece.playerTradeable,null);
  }
