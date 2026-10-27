@@ -52,7 +52,8 @@ export function buildRiftEquipment(items:readonly ProcessedItem[],known:{
    seconds:necklace&&known.charmCount!==null&&known.charmCount<=8?NECKLACE_BY_CHARMS[known.charmCount]:null,
    rule:"Gallery Timecharm count (1–8)",source:"https://hypixelskyblock.minecraft.wiki/w/Rift_Necklace"},
   ...fixedTimeGear.map(gear=>({id:gear.id.toLowerCase(),name:gear.name,
-   equipped:equipped.some(item=>item.id===gear.id),seconds:gear.seconds,
+   equipped:equipped.some(item=>item.id===gear.id),
+   seconds:equipped.some(item=>item.id===gear.id)?gear.seconds:null,
    rule:"Fixed equipped Rift Time bonus",source:gear.source})),
  ];
  const active=contributions.filter(c=>c.equipped);
