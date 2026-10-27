@@ -26,10 +26,26 @@
       "name": "Not-Dead-Gehog Mask",
       "slot": "helmet",
       "riftTimeSeconds": 30,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "NOT_DEADGEHOG_MASK",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "DEADGEHOG_SPINE",
+            "quantity": 10
+          },
+          {
+            "itemId": "WYLD_HELMET",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Agaricus Cap Cap",
@@ -69,10 +85,26 @@
       "name": "Anti-Bite Scarf",
       "slot": "helmet",
       "riftTimeSeconds": 100,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "ANTI_BITE_SCARF",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "COVEN_SEAL",
+            "quantity": 32
+          },
+          {
+            "itemId": "DETRANSFIGURED_MASK",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Wizard Face",
@@ -92,7 +124,9 @@
       "acquisitionStatus": "UNVERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "ETALPTSEHC_NORI",
+      "itemIdSource": "NEU"
     },
     {
       "name": "Orange Chestplate",
@@ -170,10 +204,34 @@
       "name": "Femurgrowth Leggings",
       "slot": "leggings",
       "riftTimeSeconds": 65,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "FEMURGROWTH_LEGGINGS",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "SHADOW_CRUX",
+            "quantity": 8
+          },
+          {
+            "itemId": "CHICKEN_LEGGS",
+            "quantity": 1
+          },
+          {
+            "itemId": "VOLT_CRUX",
+            "quantity": 8
+          },
+          {
+            "itemId": "BACTE_FRAGMENT",
+            "quantity": 8
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Leggings of the Coven",
@@ -188,10 +246,26 @@
       "name": "Wizardman Leggings",
       "slot": "leggings",
       "riftTimeSeconds": 100,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "WIZARDMAN_LEGGINGS",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "TIGHT_PANTS_FRAGMENT",
+            "quantity": 4
+          },
+          {
+            "itemId": "LEGGINGS_OF_THE_COVEN",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Gunther's Sneakers",
@@ -215,10 +289,26 @@
       "name": "Snake-in-a-Boot",
       "slot": "boots",
       "riftTimeSeconds": 60,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "SNAKE_IN_A_BOOT",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "METAL_HEART",
+            "quantity": 15
+          },
+          {
+            "itemId": "EXCEEDINGLY_COMFY_SNEAKERS",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Ugly Boots",
