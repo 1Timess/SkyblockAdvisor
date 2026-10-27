@@ -5,7 +5,8 @@
     "Rift accessories must be present in the Rift inventory; do not treat all normal SkyBlock accessory bag contents as active.",
     "Crux-family scaling depends on milestones and cannot be deduced from an item name alone.",
     "Percentage modifiers cannot be added directly to the fixed-second subtotal.",
-    "Only entries with internalItemId verified in NEU can be used for item-ID joins."
+    "Only entries with internalItemId verified in NEU can be used for item-ID joins.",
+    "Crux chain crafting ingredients are incremental costs; previous-tier costs must not be summed again as new ingredients."
   ],
   "fixedSeconds": [
     {
@@ -71,11 +72,30 @@
     {
       "name": "Future Calories Talisman",
       "seconds": 21,
-      "internalItemId": null,
-      "acquisitionStatus": "UNVERIFIED",
-      "riftTransferable": null,
-      "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "internalItemId": "FUTURE_CALORIES",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
+      "riftTransferable": true,
+      "playerTradeable": true,
+      "soulbound": "NONE",
+      "internalItemIdSource": "Official Wiki",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "PRE_DIGESTION_FISH",
+            "quantity": 1
+          },
+          {
+            "itemId": "SILVER_MAGMAFISH",
+            "quantity": 48
+          },
+          {
+            "itemId": "ENCHANTED_RAW_FISH",
+            "quantity": 384
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Future_Calories_Talisman"
+      }
     },
     {
       "name": "Harmonious Surgery Toolkit",
@@ -217,50 +237,165 @@
       "name": "Crux Talisman",
       "baseSeconds": 10,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_1",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "SHY_CRUX",
+            "quantity": 8
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Talisman"
+      }
     },
     {
       "name": "Crux Ring",
       "baseSeconds": 20,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_2",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "CRUX_TALISMAN_1",
+            "quantity": 1
+          },
+          {
+            "itemId": "SHADOW_CRUX",
+            "quantity": 16
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Ring"
+      }
     },
     {
       "name": "Crux Artifact",
       "baseSeconds": 35,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_3",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "CRUX_TALISMAN_2",
+            "quantity": 1
+          },
+          {
+            "itemId": "VOLT_CRUX",
+            "quantity": 16
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Artifact"
+      }
     },
     {
       "name": "Crux Relic",
       "baseSeconds": 55,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_4",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "CRUX_TALISMAN_3",
+            "quantity": 1
+          },
+          {
+            "itemId": "SCRIBE_CRUX",
+            "quantity": 16
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Relic"
+      }
     },
     {
       "name": "Crux Heirloom",
       "baseSeconds": 70,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_5",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "CRUX_TALISMAN_4",
+            "quantity": 1
+          },
+          {
+            "itemId": "FROSTY_CRUX",
+            "quantity": 24
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Heirloom"
+      }
     },
     {
       "name": "Crux Chronomicon",
       "baseSeconds": 100,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_6",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "CRUX_TALISMAN_5",
+            "quantity": 1
+          },
+          {
+            "itemId": "SPLATTER_CRUX",
+            "quantity": 32
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Chronomicon"
+      }
     },
     {
       "name": "Celestial Starstone",
       "baseSeconds": 130,
       "milestoneBonusMaxSeconds": 140,
-      "internalItemId": null,
-      "activationStatus": "UNVERIFIED"
+      "internalItemId": "CRUX_TALISMAN_7",
+      "activationStatus": "MILESTONE_COUNT_UNKNOWN",
+      "internalItemIdSource": "Official Wiki",
+      "playerTradeable": false,
+      "riftTransferable": false,
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "CRUX_TALISMAN_6",
+            "quantity": 1
+          },
+          {
+            "itemId": "PUFF_CRUX",
+            "quantity": 128
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Celestial_Starstone"
+      }
     }
   ],
   "percentage": [
