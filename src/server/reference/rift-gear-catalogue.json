@@ -2,7 +2,7 @@
   "checked": "2026-10-27",
   "sources": [
     "https://hypixelskyblock.minecraft.wiki/w/Rift_Time",
-    "https://hypixelskyblock.minecraft.wiki/w/Rift_Dimension",
+    "https://hypixelskyblock.minecraft.wiki/w/Rift",
     "https://hypixelskyblock.minecraft.wiki/w/Golden_Belt"
   ],
   "notes": [
@@ -196,7 +196,10 @@
     {
       "name": "Scarf's Studies",
       "riftTransferable": true,
-      "source": "https://hypixelskyblock.minecraft.wiki/w/Scarf%27s_Studies"
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Scarf%27s_Studies",
+      "itemId": "SCARF_STUDIES",
+      "playerTradeable": true,
+      "auctionable": true
     }
   ]
 }
