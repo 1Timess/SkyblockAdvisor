@@ -230,7 +230,8 @@ button { cursor: pointer; }
 .profile-switcher__item:hover{color:#fff;background:rgba(255,255,255,.07)}
 .profile-switcher__item--active{color:#fff;border-color:rgba(114,169,255,.38);background:rgba(114,169,255,.11)}
 .profile-switcher__icon{width:22px;height:22px;object-fit:contain}
-.profile-tabs{display:flex;align-items:center;gap:clamp(18px,1.6vw,30px);overflow:auto;margin-top:28px;border-bottom:1px solid rgba(255,255,255,.13);white-space:nowrap}
+.profile-tabs{display:flex;align-items:center;gap:clamp(18px,1.6vw,30px);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;margin-top:28px;border-bottom:1px solid rgba(255,255,255,.13);white-space:nowrap}
+.profile-tabs::-webkit-scrollbar{display:none}
 .profile-tabs__item{position:relative;padding:0 0 13px;color:rgba(255,255,255,.55);font-size:14px;font-weight:650}
 .profile-tabs__item--active{color:#fff}
 .profile-tabs__item--active::after{position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:#63d6a0;box-shadow:0 0 14px rgba(99,214,160,.45);content:""}
