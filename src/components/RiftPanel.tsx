@@ -7,11 +7,11 @@ type Rift=NormalizedSkyBlockProfile["riftProgress"];
 type Section="timecharms"|"souls"|"regions"|"equipment"|"time"|"activities";
 const tabs:{id:Section;label:string;subtitle:string}[]=[
  {id:"timecharms",label:"Timecharms",subtitle:"Gallery progress"},
- {id:"souls",label:"Enigma Souls",subtitle:"Collection evidence"},
- {id:"regions",label:"Region Unlocks",subtitle:"Verified requirements"},
- {id:"equipment",label:"Equipment",subtitle:"Items and acquisition"},
+ {id:"souls",label:"Enigma Souls",subtitle:"Soul locations"},
+ {id:"regions",label:"Region Unlocks",subtitle:"Region requirements"},
+ {id:"equipment",label:"Equipment",subtitle:"Gear and upgrades"},
  {id:"time",label:"Rift Time",subtitle:"Known contributions"},
- {id:"activities",label:"Activities",subtitle:"API activity records"},
+ {id:"activities",label:"Activities",subtitle:"Quests and discoveries"},
 ];
 const n=(v:number|null)=>v===null?"Unknown":v.toLocaleString("en-US");
 const readable=(value:string)=>value.replaceAll("_"," ").replace(/\b\w/g,c=>c.toUpperCase());
@@ -40,14 +40,14 @@ function Souls({progress}:{progress:Rift}){
 }
 function Regions({progress}:{progress:Rift}){
  return <div className="crimson-section"><Heading eyebrow="Exploration gates" title="Rift Regions" note="Known requirements for reaching each area. Entrance availability may depend on additional conditions."/>
- <div className="crimson-two-grid">{progress.unlocks.regions.map(region=><article key={region.id} className="crimson-card">
+ {([{title:"Known requirements met",items:progress.unlocks.regions.filter(r=>r.status==="MET")},{title:"Requirements remaining or unknown",items:progress.unlocks.regions.filter(r=>r.status!=="MET")}]).map(group=><div className="rift-group" key={group.title}><h3 className="rift-group-title">{group.title} <span>{group.items.length}</span></h3><div className="crimson-two-grid">{group.items.map(region=><article key={region.id} className="crimson-card">
  <div className="crimson-card-top"><h3>{region.name}</h3><span className={status(region.status)}>{region.status==="MET"?"Known gates met":region.status==="UNMET"?"Known gate unmet":"Unknown"}</span></div>
  <p className="crimson-muted">{region.note}</p>
  {region.requiredTimecharms.length?<p><strong>Required Timecharms:</strong> {region.requiredTimecharms.map(readable).join(", ")}</p>:null}
  {region.timeRequirementSeconds!==null?<p><strong>Entrance Rift Time:</strong> {region.timeRequirementSeconds}s remaining</p>:null}
  {region.additionalRequirements.map((req,i)=><p key={i} className="crimson-muted">{req}</p>)}
  
- </article>)}</div></div>;
+ </article>)}</div></div>)}</div>;
 }
 function Equipment({progress}:{progress:Rift}){
  const eq=progress.equipment;const [showStored,setShowStored]=useState(false);
@@ -98,7 +98,7 @@ export function RiftPanel({progress}:{progress:Rift}){
  return <section className="crimson-page" aria-label="Rift progression">
  <header className="crimson-hero"><div><p className="section-kicker">Otherworld progression</p><h2>The Rift</h2><p>Timecharms, Enigma Souls, region gates, equipment, and Rift Time—based on verifiable profile evidence.</p></div></header>
  {!progress.available?<p className="crimson-notice">Rift member data is unavailable. Reference information may still be shown, but completion cannot be confirmed.</p>:null}
- <div className="crimson-metric-row crimson-top-metrics"><article><span>Timecharms secured</span><strong>{n(progress.unlocks.recognizedSecuredCount)} / {progress.unlocks.reference.timecharms}</strong></article><article><span>Enigma Souls found</span><strong>{n(progress.enigma.soulCount)} / {progress.unlocks.reference.enigmaSouls}</strong></article><article><span>Rift inventory</span><strong>{progress.inventory.reported?"Reported":"Unknown"}</strong></article><article><span>Vampire Slayer XP</span><strong>{n(progress.vampireSlayer.xp)}</strong></article></div>
+ <div className="crimson-metric-row crimson-top-metrics"><article><span>Timecharms secured</span><strong>{n(progress.unlocks.recognizedSecuredCount)} / {progress.unlocks.reference.timecharms}</strong></article><article><span>Enigma Souls found</span><strong>{n(progress.enigma.soulCount)} / {progress.unlocks.reference.enigmaSouls}</strong></article><article><span>Equipped Rift items</span><strong>{progress.equipment.items.filter(i=>i.equipped).length}</strong></article><article><span>Vampire Slayer XP</span><strong>{n(progress.vampireSlayer.xp)}</strong></article></div>
  <div className="crimson-layout"><nav className="crimson-subnav" aria-label="Rift sections">{tabs.map(tab=><button key={tab.id} type="button" className={"crimson-nav-item "+(section===tab.id?"selected":"")} aria-current={section===tab.id?"page":undefined} onClick={()=>setSection(tab.id)}><strong>{tab.label}</strong><span>{tab.subtitle}</span></button>)}</nav>
  <div className="crimson-main" key={section}><p className="crimson-mobile-subtitle">{tabs.find(t=>t.id===section)?.subtitle}</p>
  {section==="timecharms"?<Charms progress={progress}/>:section==="souls"?<Souls progress={progress}/>:section==="regions"?<Regions progress={progress}/>:section==="equipment"?<Equipment progress={progress}/>:section==="time"?<Time progress={progress}/>:<Activities progress={progress}/>}
