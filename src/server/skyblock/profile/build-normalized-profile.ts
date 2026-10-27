@@ -25,6 +25,7 @@ import { buildKuudraArmorProgress } from "../../crimson-isle/equipment";
 import { loadMarketSnapshot } from "../../market/snapshot-store";
 import { buildCollectionsProgress, type CollectionResource } from "../../collections/profile-progress";
 import { buildEconomy } from "./economy";
+import { buildMiscValuation } from "./misc-valuation";
 import { buildExtendedPlayerState } from "../domains/player-state";
 import { buildOwnedEnchantingState } from "../../enchanting/owned-state";
 
@@ -52,7 +53,7 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
   const warnings: ProfileWarning[] = [];
   const identity = await sources.resolvePlayer(input.usernameOrUuid);
   const requestedTab = input.requestedTab === "gear" || input.requestedTab === "accessories" || input.requestedTab === "pets" || input.requestedTab === "skills" || input.requestedTab === "dungeons" || input.requestedTab === "minions" || input.requestedTab === "bestiary" || input.requestedTab === "collections" || input.requestedTab === "crimson-isle" || input.requestedTab === "slayer" || input.requestedTab === "rift" || input.requestedTab === "misc" ? input.requestedTab : "overview";
-  const needsAccessories = requestedTab === "overview" || requestedTab === "accessories";
+  const needsAccessories = requestedTab === "overview" || requestedTab === "accessories" || requestedTab === "misc";
   const needsGear = requestedTab === "overview" || requestedTab === "gear" || requestedTab === "skills" || requestedTab === "crimson-isle" || requestedTab === "misc";
   const needsPets = requestedTab === "pets" || requestedTab === "skills";
   const [profiles, catalogResult, collectionsResource] = await Promise.all([
@@ -123,11 +124,13 @@ export async function buildNormalizedProfile(input: { usernameOrUuid: string; re
     cloakPurchased:riftBase.enigma.boughtCloak,
   },riftBase.inventory.availableSources);
   // Reuse the shared Bazaar + AH snapshot; only load prices on the Crimson Isle tab.
-  const crimsonMarket = requestedTab === "crimson-isle" ? await loadMarketSnapshot().catch(() => null) : null;
+  const marketSnapshot = requestedTab === "crimson-isle" || requestedTab === "misc" ? await loadMarketSnapshot().catch(() => null) : null;
+  const crimsonMarket = requestedTab === "crimson-isle" ? marketSnapshot : null;
   const result = {
     identity, profile: { ...summarizeProfile(selected), availableProfiles: profiles.map(summarizeProfile) },
-    profileCreatedAt: member.first_join ?? null,
+    profileCreatedAt: selected.created_at ?? member.profile?.first_join ?? member.first_join ?? null,
     economy: buildEconomy(member, selected, warnings), gear: buildGear(items, member.loadout), inventoryItems: items.map(toProfileItem),
+    miscValuation: buildMiscValuation(requestedTab==="misc"?items:[],marketSnapshot),
     accessories: buildAccessories(items, member, accessoryCatalog, warnings, normalizedAccessoryPrices),
     pets: await buildPets(member, warnings, needsPets),
     progression: { skills: buildSkills(member, warnings), slayers: buildSlayers(member, warnings), dungeons: buildDungeons(member, warnings),
