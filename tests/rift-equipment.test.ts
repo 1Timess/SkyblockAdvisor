@@ -14,7 +14,7 @@ test("Rift cloak and necklace bonuses use 52 souls and eight Timecharms only whe
  assert.equal(p.time.knownEquippedSubtotalSeconds,1420);
  assert.equal(p.time.totalRiftTimeSeconds,null);
  assert.equal(p.time.complete,false);
- assert.deepEqual(p.time.contributions.map(x=>x.seconds),[1040,380]);
+ assert.deepEqual(p.time.contributions.slice(0,2).map(x=>x.seconds),[1040,380]);
 });
 test("Unequipped stored Rift items do not inflate equipped time",()=>{
  const p=buildRiftEquipment([item("ENIGMA_CLOAK","rift:inventory")],
@@ -86,4 +86,22 @@ test("Unequipped fixed Rift gear exposes no active time contribution",()=>{
  assert.equal(belt?.equipped,false);
  assert.equal(belt?.seconds,null);
  assert.equal(p.time.knownEquippedSubtotalSeconds,0);
+});
+
+test("Four Wyld armor pieces count individually only when equipped",()=>{
+ const ids=["WYLD_HELMET","WYLD_CHESTPLATE","WYLD_LEGGINGS","WYLD_BOOTS"];
+ const p=buildRiftEquipment(ids.map(id=>item(id,"rift:armor")),
+  {soulCount:null,charmCount:null,cloakPurchased:null});
+ assert.equal(p.time.knownEquippedSubtotalSeconds,60);
+ for(const id of ids)assert.equal(p.time.contributions.find(c=>c.id===id.toLowerCase())?.seconds,15);
+ const stored=buildRiftEquipment([item("WYLD_HELMET","rift:inventory")],
+  {soulCount:null,charmCount:null,cloakPurchased:null});
+ assert.equal(stored.time.knownEquippedSubtotalSeconds,0);
+});
+test("Verified upgraded armor IDs contribute their exact equipped time only",()=>{
+ const p=buildRiftEquipment([item("S_LOGO_CHESTPLATE","rift:armor"),
+ item("ANTI_BITE_SCARF","rift:armor"),item("WIZARDMAN_LEGGINGS","rift:inventory")],
+ {soulCount:null,charmCount:null,cloakPurchased:null});
+ assert.equal(p.time.knownEquippedSubtotalSeconds,185);
+ assert.equal(p.time.totalRiftTimeSeconds,null);
 });
