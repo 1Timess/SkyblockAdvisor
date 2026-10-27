@@ -50,3 +50,31 @@ test("empty but supplied Rift inventory source is still reported as accessible",
  assert.equal(p.sources.find(x=>x.id==="equipment_contents")?.reported,true);
  assert.equal(p.sources.find(x=>x.id==="inv_contents")?.reported,false);
 });
+
+test("Rift barter recipes retain item costs instead of inventing coin equivalents",()=>{
+ const p=buildRiftEquipment([],{soulCount:null,charmCount:null,cloakPurchased:null});
+ const leech=p.costs.find(c=>c.id==="leech_belt")!;
+ assert.deepEqual(leech.materials,[{currency:"SILKRIDER_SAFETY_BELT",quantity:1},{currency:"LEECH_SUPREME_FRAGMENT",quantity:8}]);
+ assert.equal(leech.tradeable,false);
+ const ringalia=p.costs.find(c=>c.id==="shens_ringalia")!;
+ assert.deepEqual(ringalia.materials,[{currency:"MOTES",quantity:25000},{currency:"PUFF_CRUX",quantity:64},
+  {currency:"YOUNGITE",quantity:20},{currency:"TIMITE",quantity:20},
+  {currency:"OBSOLITE",quantity:20},{currency:"DISINFESTOR_GLOVES",quantity:1}]);
+ assert.equal(ringalia.tradeable,false);
+});
+test("Only equipped fixed Rift gear contributes to known time subtotal",()=>{
+ const p=buildRiftEquipment([item("LEECH_BELT","rift:equipment"),
+  item("DISINFESTOR_GLOVES","rift:equipment"),
+  item("SHENS_RINGALIA","rift:inventory")],{soulCount:null,charmCount:null,cloakPurchased:null});
+ assert.equal(p.time.knownEquippedSubtotalSeconds,110);
+ assert.equal(p.time.totalRiftTimeSeconds,null);
+ assert.equal(p.time.complete,false);
+ assert.equal(p.time.contributions.find(c=>c.id==="shens_ringalia")?.equipped,false);
+});
+test("Golden Belt fixed bonus does not imply percentage Rift Time is fully modeled",()=>{
+ const p=buildRiftEquipment([item("GOLDEN_BELT","rift:equipment")],
+  {soulCount:null,charmCount:null,cloakPurchased:null});
+ assert.equal(p.time.knownEquippedSubtotalSeconds,100);
+ assert.equal(p.time.totalRiftTimeSeconds,null);
+ assert.equal(p.time.complete,false);
+});
