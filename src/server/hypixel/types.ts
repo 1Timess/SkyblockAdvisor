@@ -25,7 +25,7 @@ export const memberSchema = z.object({
   // Preserve the changing Experimentation payload for evidence-first normalization.
   experimentation: z.unknown().optional(),
   currencies: z.object({ coin_purse: number.optional() }).optional(),
-  profile: z.object({ bank_account: number.optional() }).optional(),
+  profile: z.object({ bank_account: number.optional(), first_join: tolerantNumber }).passthrough().optional(),
   player_data: z.object({ experience: z.record(z.string(), number).optional(),
     unlocked_coll_tiers: z.array(z.string()).optional().catch(undefined), crafted_generators: z.array(z.string()).optional().catch(undefined),
   }).passthrough().optional(),
@@ -115,7 +115,7 @@ export const memberSchema = z.object({
   }).passthrough().optional(),
 });
 export const rawProfileSchema = z.object({
-  profile_id: z.string(), cute_name: z.string(), selected: z.boolean().optional(), game_mode: z.string().optional(),
+  profile_id: z.string(), cute_name: z.string(), created_at: tolerantNumber, selected: z.boolean().optional(), game_mode: z.string().optional(),
   members: z.record(z.string(), z.unknown()),
   community_upgrades: z.object({ upgrade_states: z.array(z.object({
     upgrade: z.string(), tier: number.optional(), started_ms: number.optional(), claimed_ms: number.optional(),
