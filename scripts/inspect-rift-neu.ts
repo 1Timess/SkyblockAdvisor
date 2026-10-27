@@ -5,7 +5,7 @@ import gear from "../src/server/reference/rift-gear-catalogue.json";
 import accessories from "../src/server/reference/rift-accessories.json";
 import { neuItemSchema } from "../src/schemas/neu";
 
-const clean = (s:string)=>s.replace(/§./g,"").replace(/\\u00a7./g,"").trim().toLowerCase();
+const clean = (s:string)=>s.replace(/§./g,"").trim().toLowerCase();
 const targetNames=[...gear.armor.filter(e=>e.slot!=="set").map(e=>e.name),
  ...accessories.fixedSeconds.map(e=>e.name), ...accessories.scalingSeconds.map(e=>e.name)];
 type RecipeResult={status:"CRAFTING"|"NO_CRAFTING_GRID";ingredients:{itemId:string;quantity:number}[]};
@@ -18,7 +18,7 @@ function crafting(item:ReturnType<typeof neuItemSchema.parse>):RecipeResult{
   for(const [,raw] of cells){
    if(raw===""||raw==null)continue;
    if(typeof raw!=="string"){valid=false;break;}
-   const match=/^(.+):(\\d+)$/.exec(raw);
+   const match=/^(.+):([0-9]+)$/.exec(raw);
    if(!match){valid=false;break;}
    const n=Number(match[2]);
    if(!Number.isSafeInteger(n)||n<=0){valid=false;break;}
