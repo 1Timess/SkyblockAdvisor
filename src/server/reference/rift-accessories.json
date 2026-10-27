@@ -142,11 +142,16 @@
       "name": "Ring of Eternal Love",
       "seconds": 80,
       "internalItemId": "RING_OF_ETERNAL_LOVE",
-      "acquisitionStatus": "UNVERIFIED",
-      "riftTransferable": null,
-      "playerTradeable": null,
+      "acquisitionStatus": "QUEST_REWARD_VERIFIED",
+      "riftTransferable": false,
+      "playerTradeable": false,
       "soulbound": "UNKNOWN",
-      "internalItemIdSource": "NEU"
+      "internalItemIdSource": "NEU",
+      "acquisition": {
+        "method": "Reward from Joliet after solving Detective Amog's second reverse-murder case",
+        "costStatus": "REWARD_NO_PURCHASE",
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Ring_of_Eternal_Love"
+      }
     },
     {
       "name": "Scarf's Studies",
