@@ -61,9 +61,12 @@ function Equipment({progress}:{progress:Rift}){
 }
 function Time({progress}:{progress:Rift}){
  const t=progress.equipment.time;
- return <div className="crimson-section"><Heading eyebrow="Duration" title="Rift Time" note="The known equipped subtotal is not the player's full available Rift Time."/>
- <div className="crimson-metric-row"><article><span>Base time</span><strong>{t.baseSeconds}s</strong></article><article><span>Known equipped bonuses</span><strong>{t.knownEquippedSubtotalSeconds===null?"Unknown":t.knownEquippedSubtotalSeconds+"s"}</strong></article><article><span>Complete Rift Time</span><strong>{n(t.totalRiftTimeSeconds)}</strong></article></div>
- <p className="crimson-notice">{t.reason}. Percentage effects and temporary buffs are not added to the subtotal.</p>
+ const knownBonuses=t.contributions.filter(c=>c.equipped&&c.seconds!==null).reduce((sum,c)=>sum+c.seconds!,0);
+ const accounted=t.baseSeconds+knownBonuses;
+ const hasUnresolvedEquipped=t.contributions.some(c=>c.equipped&&c.seconds===null);
+ return <div className="crimson-section"><Heading eyebrow="Duration" title="Rift Time" note="Your base Rift Time plus the equipped bonuses we can verify."/>
+ <div className="crimson-metric-row"><article><span>Accounted Rift Time</span><strong>{accounted.toLocaleString("en-US")}s</strong><small>{hasUnresolvedEquipped?"Additional equipped bonuses may apply":"Base time + known equipped bonuses"}</small></article><article><span>Base time</span><strong>{t.baseSeconds}s</strong></article><article><span>Known equipped bonuses</span><strong>+{knownBonuses.toLocaleString("en-US")}s</strong></article></div>
+ <p className="crimson-notice">This is the time we can account for, not necessarily your full Rift Time. Other item effects, percentage bonuses, and temporary buffs may increase or change it.</p>
  <div className="crimson-two-grid">{t.contributions.filter(c=>c.equipped).map(c=><article className="crimson-card" key={c.id}><div className="crimson-card-top"><h3>{c.name}</h3><strong>{c.seconds===null?"Unknown": "+"+c.seconds+"s"}</strong></div><p className="crimson-muted">{c.rule}</p></article>)}</div>
  </div>;
 }
