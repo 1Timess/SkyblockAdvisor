@@ -11,11 +11,22 @@
     {
       "name": "Bluetooth Ring",
       "seconds": 30,
-      "internalItemId": null,
+      "internalItemId": "BLUETOOTH_RING",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "METAL_HEART",
+            "quantity": 32
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Blood Donor Talisman",
@@ -92,11 +103,12 @@
     {
       "name": "Ring of Broken Love",
       "seconds": 80,
-      "internalItemId": null,
+      "internalItemId": "RING_OF_BROKEN_LOVE",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Ring of Eternal Love",
