@@ -110,12 +110,17 @@
       "name": "Used Detransfigured Face",
       "slot": "helmet",
       "riftTimeSeconds": 80,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "METHOD_VERIFIED_COST_UNKNOWN",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
       "itemId": "DETRANSFIGURED_MASK",
-      "itemIdSource": "NEU"
+      "itemIdSource": "NEU",
+      "acquisition": {
+        "method": "Quest reward from Detransfigured Seraphine at the Barry Center",
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Location",
+        "costStatus": "UNKNOWN"
+      }
     },
     {
       "name": "Anti-Bite Scarf",
@@ -400,12 +405,17 @@
       "name": "Exceedingly Comfy Sneakers",
       "slot": "boots",
       "riftTimeSeconds": 45,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "METHOD_VERIFIED_COST_UNKNOWN",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
       "itemId": "EXCEEDINGLY_COMFY_SNEAKERS",
-      "itemIdSource": "NEU"
+      "itemIdSource": "NEU",
+      "acquisition": {
+        "method": "Sold by Seymour at Taylor's in Village Plaza; exact cost not verified",
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Location",
+        "costStatus": "UNKNOWN"
+      }
     },
     {
       "name": "Snake-in-a-Boot",
