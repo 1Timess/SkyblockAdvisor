@@ -46,16 +46,16 @@ test("NEU crafting grid totals are preserved without converting materials to coi
  for(const [name,ingredients] of Object.entries(expected)){
   const entry=catalogue.armor.find(x=>x.name===name);
   assert.ok(entry && "recipe" in entry);
-  assert.deepEqual(entry.recipe.ingredients,ingredients);
+  assert.deepEqual(entry.recipe?.ingredients,ingredients);
  }
 });
 
 test("Wyld Armor Mote prices sum to 4050 and exchange uses no invented coins",()=>{
  const wyld=catalogue.armor.filter(x=>x.itemId.startsWith("WYLD_"));
  assert.equal(wyld.length,4);
- assert.equal(wyld.reduce((sum,e)=>sum+("acquisition" in e&&"materials" in e.acquisition?e.acquisition.materials[0].quantity:0),0),4050);
+ assert.equal(wyld.reduce((sum,e)=>sum+("acquisition" in e&&e.acquisition&&"materials" in e.acquisition?e.acquisition.materials?.[0]?.quantity??0:0),0),4050);
  const chest=catalogue.armor.find(x=>x.itemId==="ETALPTSEHC_NORI");
- assert.ok(chest && "acquisition" in chest && "materials" in chest.acquisition);
+ assert.ok(chest && "acquisition" in chest && chest.acquisition && "materials" in chest.acquisition);
  assert.deepEqual(chest.acquisition.materials,[{currency:"WYLD_CHESTPLATE",quantity:1},{currency:"SHADOW_CRUX",quantity:12}]);
 });
 
@@ -65,10 +65,10 @@ test("Exact noncraft Rift exchanges preserve Motes and predecessor equipment",()
   ["EXCEEDINGLY_COMFY_SNEAKERS",[{currency:"GUNTHER_SNEAKERS",quantity:1},{currency:"MOTES",quantity:49999}]]
  ] as const){
   const entry=catalogue.armor.find(x=>x.itemId===id);
-  assert.ok(entry && "acquisition" in entry && "materials" in entry.acquisition);
+  assert.ok(entry && "acquisition" in entry && entry.acquisition && "materials" in entry.acquisition);
   assert.deepEqual(entry.acquisition.materials,expected);
  }
  const wizard=catalogue.armor.find(x=>x.itemId==="WIZARD_FACE");
  assert.ok(wizard && "acquisition" in wizard);
- assert.equal(wizard.acquisition.costStatus,"REWARD_NO_PURCHASE");
+ assert.equal(wizard.acquisition?.costStatus,"REWARD_NO_PURCHASE");
 });
