@@ -39,24 +39,25 @@ function Souls({progress}:{progress:Rift}){
  </div>;
 }
 function Regions({progress}:{progress:Rift}){
- return <div className="crimson-section"><Heading eyebrow="Exploration gates" title="Rift Regions" note="A satisfied Timecharm gate does not prove access. Other entrance conditions and current Rift Time may be unknown."/>
+ return <div className="crimson-section"><Heading eyebrow="Exploration gates" title="Rift Regions" note="Known requirements for reaching each area. Entrance availability may depend on additional conditions."/>
  <div className="crimson-two-grid">{progress.unlocks.regions.map(region=><article key={region.id} className="crimson-card">
  <div className="crimson-card-top"><h3>{region.name}</h3><span className={status(region.status)}>{region.status==="MET"?"Known gates met":region.status==="UNMET"?"Known gate unmet":"Unknown"}</span></div>
  <p className="crimson-muted">{region.note}</p>
  {region.requiredTimecharms.length?<p><strong>Required Timecharms:</strong> {region.requiredTimecharms.map(readable).join(", ")}</p>:null}
  {region.timeRequirementSeconds!==null?<p><strong>Entrance Rift Time:</strong> {region.timeRequirementSeconds}s remaining</p>:null}
  {region.additionalRequirements.map((req,i)=><p key={i} className="crimson-muted">{req}</p>)}
- <small>Accessible now: {region.availableNow===null?"Not verified":region.availableNow?"Yes":"No"}</small>
+ 
  </article>)}</div></div>;
 }
 function Equipment({progress}:{progress:Rift}){
- const eq=progress.equipment;
- return <div className="crimson-section"><Heading eyebrow="Rift loadout" title="Equipment & Acquisition" note="Observed inventory, not inferred ownership. Recipes preserve Motes and materials rather than substituting coin prices."/>
- <div className="crimson-metric-row"><article><span>Observed items</span><strong>{eq.observedItemCount}</strong></article><article><span>Available inventory sources</span><strong>{eq.sources.filter(s=>s.reported).length} / {eq.sources.length}</strong></article></div>
- <div className="crimson-card"><h3>Equipped and stored Rift items</h3>
- {eq.items.length?<div className="crimson-two-grid">{eq.items.map((item,i)=><div className="crimson-card" key={item.source+":"+item.slotIndex+":"+i}><div className="crimson-card-top"><h3>{item.name}</h3><span className={status(item.equipped?"MET":"UNKNOWN")}>{item.equipped?"Equipped":"Stored"}</span></div><p className="crimson-muted">{readable(item.source.replace("rift:",""))} · {item.rarity??"Rarity unknown"}</p></div>)}</div>:<p className="crimson-muted">No Rift items decoded from the available sources. This does not prove the player owns none.</p>}</div>
- <div className="crimson-two-grid">{eq.costs.map(cost=><article className="crimson-card" key={cost.id}><div className="crimson-card-top"><h3>{cost.name}</h3><span className={status(cost.owned?"MET":"UNKNOWN")}>{cost.owned?"Observed owned":"Not observed"}</span></div><p className="crimson-muted">{cost.prerequisite}</p><p>{cost.materials.length?cost.materials.map(m=>m.quantity.toLocaleString("en-US")+" "+readable(m.currency)).join(" · "):"Reward or claim; no purchase ingredients listed"}</p><small>Cost evidence: {cost.costStatus}</small></article>)}</div>
- {eq.unpricedUpgrades.map(x=><p className="crimson-notice" key={x.id}>{x.name}: {x.reason}</p>)}</div>;
+ const eq=progress.equipment;const [showStored,setShowStored]=useState(false);
+ const items=eq.items.filter(i=>i.equipped||showStored);
+ const groups=[{title:"Upgrades to obtain",items:eq.costs.filter(c=>!c.owned)},{title:"Already owned",items:eq.costs.filter(c=>c.owned)}];
+ return <div className="crimson-section"><Heading eyebrow="Rift loadout" title="Equipment & Upgrades" note="See your gear and what you need for the next upgrades."/>
+ <div className="crimson-card"><div className="crimson-card-top"><h3>Rift gear</h3><button type="button" className="rift-toggle" onClick={()=>setShowStored(!showStored)}>{showStored?"Hide stored gear":"Show stored gear"}</button></div>
+ {items.length?<div className="crimson-two-grid">{items.map((item,i)=><article className="crimson-card" key={item.source+":"+item.slotIndex+":"+i}><div className="crimson-card-top"><h3>{item.name}</h3><span className={status(item.equipped?"MET":"UNKNOWN")}>{item.equipped?"Equipped":"Stored"}</span></div><p className="crimson-muted">{item.rarity?readable(item.rarity):"Rarity unknown"}</p></article>)}</div>:<p className="crimson-muted">No equipped gear found in the available Rift inventory data.</p>}</div>
+ {groups.map(group=><div key={group.title} className="rift-group"><h3 className="rift-group-title">{group.title} <span>{group.items.length}</span></h3><div className="crimson-two-grid">{group.items.map(cost=><article className="crimson-card" key={cost.id}><div className="crimson-card-top"><h3>{cost.name}</h3><span className={status(cost.owned?"MET":"UNKNOWN")}>{cost.owned?"Owned":"Not observed"}</span></div><p className="crimson-muted">{cost.prerequisite}</p><p>{cost.materials.length?cost.materials.map(m=>m.quantity.toLocaleString("en-US")+" "+material(m.currency)).join(" · "):"Claim or reward — no purchase materials"}</p></article>)}</div></div>)}
+ </div>;
 }
 function Time({progress}:{progress:Rift}){
  const t=progress.equipment.time;
@@ -66,10 +67,30 @@ function Time({progress}:{progress:Rift}){
  <div className="crimson-two-grid">{t.contributions.filter(c=>c.equipped).map(c=><article className="crimson-card" key={c.id}><div className="crimson-card-top"><h3>{c.name}</h3><strong>{c.seconds===null?"Unknown": "+"+c.seconds+"s"}</strong></div><p className="crimson-muted">{c.rule}</p></article>)}</div>
  </div>;
 }
+const activityNames:Record<string,string>={
+ "wyld_woods.sirius_q_a_chain_done":"Sirius's Questions Finished",
+ "wyld_woods.sirius_completed_q_a":"Sirius's Q&A",
+ "wyld_woods.sirius_claimed_doubloon":"Sirius's Doubloon",
+ "wyld_woods.talked_threebrothers":"Three Brothers",
+ "wyld_woods.bughunter_step":"Bughunter Progress",
+ "black_lagoon.talked_to_edwin":"Talked to Edwin",
+ "black_lagoon.received_science_paper":"Science Paper Received",
+ "black_lagoon.delivered_science_paper":"Science Paper Delivered",
+ "black_lagoon.completed_step":"Black Lagoon Progress",
+ "west_village.crazy_kloon.quest_complete":"Crazy Kloon Quest",
+ "west_village.crazy_kloon.hacked_terminals":"Crazy Kloon Terminals",
+ "west_village.mirrorverse.visited_rooms":"Mirrorverse Rooms Visited",
+ "west_village.mirrorverse.claimed_chest_items":"Mirrorverse Chests",
+ "west_village.mirrorverse.claimed_reward":"Mirrorverse Reward"
+};
+const activityName=(id:string)=>activityNames[id]??readable(id.split(".").at(-1)??id);
 function Activities({progress}:{progress:Rift}){
- return <div className="crimson-section"><Heading eyebrow="Profile evidence" title="Rift Activities" note="Reported activity data is not by itself proof that a region or quest has been unlocked."/>
- <div className="crimson-metric-row"><article><span>Rift access record</span><strong>{progress.access.reported?"Present":"Unknown"}</strong></article><article><span>Vampire Slayer XP</span><strong>{n(progress.vampireSlayer.xp)}</strong></article><article><span>Purchased boundaries</span><strong>{n(progress.boundaries.count)}</strong></article></div>
- <div className="crimson-two-grid">{progress.activities.map(a=><article className="crimson-card" key={a.id}><div className="crimson-card-top"><h3>{readable(a.id)}</h3><span className={status(a.reported?"MET":"UNKNOWN")}>{a.reported?"Reported":"Unknown"}</span></div>{a.count!==null?<p>{a.count.toLocaleString("en-US")} recorded</p>:null}{a.entries?.length?<p className="crimson-muted">{a.entries.slice(0,6).join(", ")}{a.entries.length>6?" …":""}</p>:null}</article>)}</div>
+ const [showOther,setShowOther]=useState(false);
+ const reported=progress.activities.filter(a=>a.reported),other=progress.activities.filter(a=>!a.reported);
+ return <div className="crimson-section"><Heading eyebrow="Exploration" title="Rift Activities" note="Recorded activity and exploration history, grouped by whether information is available."/>
+ <div className="crimson-metric-row"><article><span>Activities recorded</span><strong>{reported.length}</strong></article><article><span>Vampire Slayer XP</span><strong>{n(progress.vampireSlayer.xp)}</strong></article><article><span>Purchased boundaries</span><strong>{n(progress.boundaries.count)}</strong></article></div>
+ <h3 className="rift-group-title">Recorded activities <span>{reported.length}</span></h3><div className="crimson-two-grid">{reported.map(entry=><article key={entry.id} className="crimson-card"><div className="crimson-card-top"><h3>{activityName(entry.id)}</h3><span className={status("MET")}>Recorded</span></div><p className="crimson-muted">{area(entry.id.split(".")[0])}</p>{entry.count!==null?<p>{entry.count.toLocaleString("en-US")} recorded</p>:null}</article>)}</div>
+ {other.length?<><button type="button" className="rift-toggle" aria-expanded={showOther} onClick={()=>setShowOther(!showOther)}>{showOther?"Hide unavailable activity records":`Show ${other.length} activities without records`}</button>{showOther?<div className="crimson-two-grid">{other.map(entry=><article key={entry.id} className="crimson-card"><h3>{activityName(entry.id)}</h3><p className="crimson-muted">{area(entry.id.split(".")[0])} · Progress unavailable</p></article>)}</div>:null}</>:null}
  </div>;
 }
 export function RiftPanel({progress}:{progress:Rift}){
