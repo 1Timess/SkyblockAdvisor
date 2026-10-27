@@ -11,7 +11,7 @@ test("Rift armor catalogue contains the verified named time-progression slots",(
  }
  for(const piece of armor){
   assert.ok("riftTimeSeconds" in piece && typeof piece.riftTimeSeconds==="number" && piece.riftTimeSeconds>0);
-  assert.equal(piece.acquisitionStatus,"UNVERIFIED");
+  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED"].includes(piece.acquisitionStatus));
   assert.equal(piece.transferability,"UNKNOWN");
   assert.equal(piece.playerTradeable,null);
  }
@@ -32,5 +32,19 @@ test("Rift recipe costs stay native to material and Mote denominations",()=>{
    assert.notEqual(component.currency,"COINS");
    assert.ok(component.quantity>=0);
   }
+ }
+});
+
+test("NEU crafting grid totals are preserved without converting materials to coins",()=>{
+ const expected:Record<string,Array<{itemId:string;quantity:number}>>={
+  "Agaricus Cap Cap":[{itemId:"AGARICUS_CAP",quantity:60},{itemId:"NOT_DEADGEHOG_MASK",quantity:1}],
+  "Chicken Leggs":[{itemId:"VOLT_CRUX",quantity:16},{itemId:"WYLD_LEGGINGS",quantity:1},{itemId:"METAPHORIC_EGG",quantity:32}],
+  "Orange Chestplate":[{itemId:"HALF_EATEN_CARROT",quantity:448},{itemId:"ETALPTSEHC_NORI",quantity:1}],
+  "Ugly Boots":[{itemId:"UGLY_BOOTS_FRAGMENT",quantity:4},{itemId:"SNAKE_IN_A_BOOT",quantity:1}]
+ };
+ for(const [name,ingredients] of Object.entries(expected)){
+  const entry=catalogue.armor.find(x=>x.name===name);
+  assert.ok(entry && "recipe" in entry);
+  assert.deepEqual(entry.recipe.ingredients,ingredients);
  }
 });
