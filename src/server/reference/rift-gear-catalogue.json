@@ -3,7 +3,8 @@
   "sources": [
     "https://hypixelskyblock.minecraft.wiki/w/Rift_Time",
     "https://hypixelskyblock.minecraft.wiki/w/Rift",
-    "https://hypixelskyblock.minecraft.wiki/w/Golden_Belt"
+    "https://hypixelskyblock.minecraft.wiki/w/Golden_Belt",
+    "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items"
   ],
   "notes": [
     "Catalogue names are not internal item IDs and must not be used as inventory lookup keys.",
@@ -34,10 +35,26 @@
       "name": "Agaricus Cap Cap",
       "slot": "helmet",
       "riftTimeSeconds": 50,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "AGARICUS_CAP_CAP",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "AGARICUS_CAP",
+            "quantity": 60
+          },
+          {
+            "itemId": "NOT_DEADGEHOG_MASK",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Used Detransfigured Face",
@@ -64,7 +81,9 @@
       "acquisitionStatus": "UNVERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "WIZARD_FACE",
+      "itemIdSource": "NEU"
     },
     {
       "name": "etalptsehC norI",
@@ -79,10 +98,26 @@
       "name": "Orange Chestplate",
       "slot": "chestplate",
       "riftTimeSeconds": 45,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "ORANGE_CHESTPLATE",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "HALF_EATEN_CARROT",
+            "quantity": 448
+          },
+          {
+            "itemId": "ETALPTSEHC_NORI",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Lively Sepulture Chestplate",
@@ -106,10 +141,30 @@
       "name": "Chicken Leggs",
       "slot": "leggings",
       "riftTimeSeconds": 35,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "CHICKEN_LEGGS",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "VOLT_CRUX",
+            "quantity": 16
+          },
+          {
+            "itemId": "WYLD_LEGGINGS",
+            "quantity": 1
+          },
+          {
+            "itemId": "METAPHORIC_EGG",
+            "quantity": 32
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Femurgrowth Leggings",
@@ -169,10 +224,26 @@
       "name": "Ugly Boots",
       "slot": "boots",
       "riftTimeSeconds": 80,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "UGLY_BOOTS",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "UGLY_BOOTS_FRAGMENT",
+            "quantity": 4
+          },
+          {
+            "itemId": "SNAKE_IN_A_BOOT",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     }
   ],
   "rewardEquipment": [
