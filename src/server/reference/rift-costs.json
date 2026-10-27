@@ -1,5 +1,5 @@
 {
-  "checked": "2026-10-26",
+  "checked": "2026-10-27",
   "source": "https://hypixelskyblock.minecraft.wiki/w/Enigma_Cloak",
   "costs": [
     {
@@ -28,6 +28,110 @@
       },
       "prerequisite": "Secure Supreme Timecharm and claim from Elise",
       "tradeable": false
+    },
+    {
+      "id": "silkrider_safety_belt",
+      "name": "Silkrider Safety Belt",
+      "requires": {
+        "item": "SILKRIDER_SAFETY_BELT",
+        "cost": [
+          {
+            "currency": "BOTTLED_ODONATA",
+            "quantity": 8
+          }
+        ],
+        "status": "EXACT"
+      },
+      "prerequisite": "Exchange with Argofay Bughunter",
+      "tradeable": false
+    },
+    {
+      "id": "leech_belt",
+      "name": "Leech Belt",
+      "requires": {
+        "item": "LEECH_BELT",
+        "cost": [
+          {
+            "currency": "SILKRIDER_SAFETY_BELT",
+            "quantity": 1
+          },
+          {
+            "currency": "LEECH_SUPREME_FRAGMENT",
+            "quantity": 8
+          }
+        ],
+        "status": "EXACT"
+      },
+      "prerequisite": "Craft from Silkrider Safety Belt and Leech Supreme Fragments",
+      "tradeable": false
+    },
+    {
+      "id": "vermin_belt",
+      "name": "Vermin Belt",
+      "requires": {
+        "item": "VERMIN_BELT",
+        "cost": [
+          {
+            "currency": "LEECH_BELT",
+            "quantity": 1
+          }
+        ],
+        "status": "EXACT"
+      },
+      "prerequisite": "Exchange with Neuroscientist Kat after depositing 15 Flies in the Vermin Bin",
+      "tradeable": false
+    },
+    {
+      "id": "disinfestor_gloves",
+      "name": "Disinfestor Gloves",
+      "requires": {
+        "item": "DISINFESTOR_GLOVES",
+        "cost": [
+          {
+            "currency": "SHADOW_CRUX",
+            "quantity": 12
+          }
+        ],
+        "status": "EXACT"
+      },
+      "prerequisite": "Neuroscientist Kat; deposit 4 Flies, 4 Spiders, and 4 Silverfish in the Vermin Bin",
+      "tradeable": false
+    },
+    {
+      "id": "shens_ringalia",
+      "name": "Shen's Ringalia",
+      "requires": {
+        "item": "SHENS_RINGALIA",
+        "cost": [
+          {
+            "currency": "MOTES",
+            "quantity": 25000
+          },
+          {
+            "currency": "PUFF_CRUX",
+            "quantity": 64
+          },
+          {
+            "currency": "YOUNGITE",
+            "quantity": 20
+          },
+          {
+            "currency": "TIMITE",
+            "quantity": 20
+          },
+          {
+            "currency": "OBSOLITE",
+            "quantity": 20
+          },
+          {
+            "currency": "DISINFESTOR_GLOVES",
+            "quantity": 1
+          }
+        ],
+        "status": "EXACT"
+      },
+      "prerequisite": "Complete Eleanor's Puzzle; purchase from Madame Eleanor Q. Goldsworth X",
+      "tradeable": false
     }
   ],
   "unpricedUpgrades": [
@@ -37,9 +141,22 @@
       "reason": "Purchase cost per upgrade not verified"
     },
     {
-      "id": "other_rift_gear",
-      "name": "Other Rift equipment recipes",
-      "reason": "Item-specific Mote and materials not yet independently verified"
+      "id": "remaining_rift_gear",
+      "name": "Remaining Rift equipment and armor",
+      "reason": "Item-specific recipes and unlocks have not yet been independently verified"
+    },
+    {
+      "id": "golden_belt",
+      "name": "Golden Belt",
+      "reason": "Claimed after Cerebral Citadel Fifth Sequence; no material purchase cost applies"
     }
-  ]
+  ],
+  "sources": {
+    "silkrider_safety_belt": "https://hypixelskyblock.minecraft.wiki/w/Silkrider_Safety_Belt",
+    "leech_belt": "https://hypixelskyblock.minecraft.wiki/w/Leech_Belt",
+    "vermin_belt": "https://hypixelskyblock.minecraft.wiki/w/Vermin_Belt",
+    "disinfestor_gloves": "https://hypixelskyblock.minecraft.wiki/w/Disinfestor_Gloves",
+    "shens_ringalia": "https://hypixelskyblock.minecraft.wiki/w/Shen%27s_Ringalia",
+    "golden_belt": "https://hypixelskyblock.minecraft.wiki/w/Golden_Belt"
+  }
 }
