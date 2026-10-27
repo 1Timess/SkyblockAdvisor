@@ -79,7 +79,9 @@
       "acquisitionStatus": "UNVERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "DETRANSFIGURED_MASK",
+      "itemIdSource": "NEU"
     },
     {
       "name": "Anti-Bite Scarf",
@@ -157,10 +159,34 @@
       "name": "Lively Sepulture Chestplate",
       "slot": "chestplate",
       "riftTimeSeconds": 65,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "LIVELY_SEPULTURE_CHESTPLATE",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "METAL_HEART",
+            "quantity": 64
+          },
+          {
+            "itemId": "WILTED_BERBERIS_BUNCH",
+            "quantity": 24
+          },
+          {
+            "itemId": "ORANGE_CHESTPLATE",
+            "quantity": 1
+          },
+          {
+            "itemId": "BLOODBADGE",
+            "quantity": 12
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "W Logo",
@@ -237,10 +263,34 @@
       "name": "Leggings of the Coven",
       "slot": "leggings",
       "riftTimeSeconds": 80,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "LEGGINGS_OF_THE_COVEN",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "FEMURGROWTH_LEGGINGS",
+            "quantity": 1
+          },
+          {
+            "itemId": "BLOODBADGE",
+            "quantity": 1
+          },
+          {
+            "itemId": "LEGGINGS_OF_THE_PACK",
+            "quantity": 1
+          },
+          {
+            "itemId": "METAL_HEART",
+            "quantity": 24
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Wizardman Leggings",
@@ -271,10 +321,30 @@
       "name": "Gunther's Sneakers",
       "slot": "boots",
       "riftTimeSeconds": 30,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "GUNTHER_SNEAKERS",
+      "itemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "SHADOW_CRUX",
+            "quantity": 8
+          },
+          {
+            "itemId": "GUNTHESIZER_LICHEN",
+            "quantity": 1
+          },
+          {
+            "itemId": "WYLD_BOOTS",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Exceedingly Comfy Sneakers",
@@ -283,7 +353,9 @@
       "acquisitionStatus": "UNVERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "itemId": "EXCEEDINGLY_COMFY_SNEAKERS",
+      "itemIdSource": "NEU"
     },
     {
       "name": "Snake-in-a-Boot",
