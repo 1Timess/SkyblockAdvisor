@@ -18,10 +18,21 @@
       "itemId": "WYLD_BOOTS",
       "itemIdSource": "NEU",
       "riftTimeSeconds": 15,
-      "acquisitionStatus": "UNVERIFIED",
-      "transferability": "UNKNOWN",
-      "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "acquisitionStatus": "SHOP_COST_VERIFIED",
+      "transferability": "NON_TRANSFERABLE",
+      "playerTradeable": false,
+      "soulbound": "UNKNOWN",
+      "acquisition": {
+        "method": "Argofay Trafficker in Wyld Woods",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "MOTES",
+            "quantity": 50
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Wyld_Armor"
+      }
     },
     {
       "name": "Wyld Leggings",
@@ -29,10 +40,21 @@
       "itemId": "WYLD_LEGGINGS",
       "itemIdSource": "NEU",
       "riftTimeSeconds": 15,
-      "acquisitionStatus": "UNVERIFIED",
-      "transferability": "UNKNOWN",
-      "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "acquisitionStatus": "SHOP_COST_VERIFIED",
+      "transferability": "NON_TRANSFERABLE",
+      "playerTradeable": false,
+      "soulbound": "UNKNOWN",
+      "acquisition": {
+        "method": "Argofay Trafficker in Wyld Woods",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "MOTES",
+            "quantity": 1000
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Wyld_Armor"
+      }
     },
     {
       "name": "Wyld Chain Top",
@@ -40,10 +62,21 @@
       "itemId": "WYLD_CHESTPLATE",
       "itemIdSource": "NEU",
       "riftTimeSeconds": 15,
-      "acquisitionStatus": "UNVERIFIED",
-      "transferability": "UNKNOWN",
-      "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "acquisitionStatus": "SHOP_COST_VERIFIED",
+      "transferability": "NON_TRANSFERABLE",
+      "playerTradeable": false,
+      "soulbound": "UNKNOWN",
+      "acquisition": {
+        "method": "Argofay Trafficker in Wyld Woods",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "MOTES",
+            "quantity": 2000
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Wyld_Armor"
+      }
     },
     {
       "name": "Wyld Helmet on a Helmet",
@@ -51,10 +84,21 @@
       "itemId": "WYLD_HELMET",
       "itemIdSource": "NEU",
       "riftTimeSeconds": 15,
-      "acquisitionStatus": "UNVERIFIED",
-      "transferability": "UNKNOWN",
-      "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "acquisitionStatus": "SHOP_COST_VERIFIED",
+      "transferability": "NON_TRANSFERABLE",
+      "playerTradeable": false,
+      "soulbound": "UNKNOWN",
+      "acquisition": {
+        "method": "Argofay Trafficker in Wyld Woods",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "MOTES",
+            "quantity": 1000
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Wyld_Armor"
+      }
     },
     {
       "name": "Not-Dead-Gehog Mask",
@@ -162,12 +206,27 @@
       "name": "etalptsehC norI",
       "slot": "chestplate",
       "riftTimeSeconds": 30,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "EXCHANGE_COST_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
       "itemId": "ETALPTSEHC_NORI",
-      "itemIdSource": "NEU"
+      "itemIdSource": "NEU",
+      "acquisition": {
+        "method": "Dr. Emmett after completing Mirrorverse",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "WYLD_CHESTPLATE",
+            "quantity": 1
+          },
+          {
+            "currency": "SHADOW_CRUX",
+            "quantity": 12
+          }
+        ],
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Wyld_Armor"
+      }
     },
     {
       "name": "Orange Chestplate",
