@@ -6,7 +6,8 @@
     "Crux-family scaling depends on milestones and cannot be deduced from an item name alone.",
     "Percentage modifiers cannot be added directly to the fixed-second subtotal.",
     "Only entries with internalItemId verified in NEU can be used for item-ID joins.",
-    "Crux chain crafting ingredients are incremental costs; previous-tier costs must not be summed again as new ingredients."
+    "Crux chain crafting ingredients are incremental costs; previous-tier costs must not be summed again as new ingredients.",
+    "NEU ingredient IDs verified for Future Calories and Crux recipes; display names may differ from ingredient IDs."
   ],
   "fixedSeconds": [
     {
@@ -86,7 +87,7 @@
             "quantity": 1
           },
           {
-            "itemId": "SILVER_MAGMAFISH",
+            "itemId": "MAGMA_FISH_SILVER",
             "quantity": 48
           },
           {
@@ -246,7 +247,7 @@
         "type": "crafting",
         "ingredients": [
           {
-            "itemId": "SHY_CRUX",
+            "itemId": "SHAME_CRUX",
             "quantity": 8
           }
         ],
