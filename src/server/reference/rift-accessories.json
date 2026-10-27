@@ -14,7 +14,7 @@
       "name": "Bluetooth Ring",
       "seconds": 30,
       "internalItemId": "BLUETOOTH_RING",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
@@ -34,31 +34,49 @@
       "name": "Blood Donor Talisman",
       "seconds": 5,
       "internalItemId": "BLOOD_DONOR_TALISMAN",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "UNLOCK_REQUIREMENT_VERIFIED_COST_UNKNOWN",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
-      "internalItemIdSource": "NEU"
+      "internalItemIdSource": "NEU",
+      "acquisition": {
+        "method": "Hemovibe unlock",
+        "requirement": "Hemovibe II",
+        "costStatus": "UNKNOWN",
+        "source": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items"
+      }
     },
     {
       "name": "Blood Donor Ring",
       "seconds": 10,
       "internalItemId": "BLOOD_DONOR_RING",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "UNLOCK_REQUIREMENT_VERIFIED_COST_UNKNOWN",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
-      "internalItemIdSource": "NEU"
+      "internalItemIdSource": "NEU",
+      "acquisition": {
+        "method": "Hemovibe unlock",
+        "requirement": "Hemovibe VI",
+        "costStatus": "UNKNOWN",
+        "source": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items"
+      }
     },
     {
       "name": "Blood Donor Artifact",
       "seconds": 15,
       "internalItemId": "BLOOD_DONOR_ARTIFACT",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "UNLOCK_REQUIREMENT_VERIFIED_COST_UNKNOWN",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
-      "internalItemIdSource": "NEU"
+      "internalItemIdSource": "NEU",
+      "acquisition": {
+        "method": "Hemovibe unlock",
+        "requirement": "Hemovibe IX",
+        "costStatus": "UNKNOWN",
+        "source": "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items"
+      }
     },
     {
       "name": "Defective Monitor",
@@ -167,7 +185,7 @@
       "name": "Scarf's Thesis",
       "seconds": 11,
       "internalItemId": "SCARF_THESIS",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
@@ -187,7 +205,7 @@
       "name": "Scarf's Grimoire",
       "seconds": 12,
       "internalItemId": "SCARF_GRIMOIRE",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
@@ -207,7 +225,7 @@
       "name": "Vampire Dentist Relic",
       "seconds": 30,
       "internalItemId": "VAMPIRE_DENTIST_RELIC",
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
@@ -257,7 +275,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Talisman"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     },
     {
       "name": "Crux Ring",
@@ -281,7 +300,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Ring"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     },
     {
       "name": "Crux Artifact",
@@ -305,7 +325,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Artifact"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     },
     {
       "name": "Crux Relic",
@@ -329,7 +350,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Relic"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     },
     {
       "name": "Crux Heirloom",
@@ -353,7 +375,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Heirloom"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     },
     {
       "name": "Crux Chronomicon",
@@ -377,7 +400,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Crux_Chronomicon"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     },
     {
       "name": "Celestial Starstone",
@@ -401,7 +425,8 @@
           }
         ],
         "source": "https://hypixelskyblock.minecraft.wiki/w/Celestial_Starstone"
-      }
+      },
+      "acquisitionStatus": "CRAFTING_RECIPE_VERIFIED"
     }
   ],
   "percentage": [
