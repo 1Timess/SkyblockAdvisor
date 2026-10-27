@@ -154,16 +154,26 @@
       "name": "Used Detransfigured Face",
       "slot": "helmet",
       "riftTimeSeconds": 80,
-      "acquisitionStatus": "METHOD_VERIFIED_COST_UNKNOWN",
+      "acquisitionStatus": "EXCHANGE_COST_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
       "itemId": "DETRANSFIGURED_MASK",
       "itemIdSource": "NEU",
       "acquisition": {
-        "method": "Quest reward from Detransfigured Seraphine at the Barry Center",
-        "source": "https://hypixelskyblock.minecraft.wiki/w/Location",
-        "costStatus": "UNKNOWN"
+        "method": "Transfigured Seraphine after completing Anti-Morph Potion quest",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "AGARICUS_CAP_CAP",
+            "quantity": 1
+          },
+          {
+            "currency": "MOTES",
+            "quantity": 1500
+          }
+        ],
+        "source": "https://wiki.scd.wtf/Used_Detransfigured_Face"
       }
     },
     {
@@ -195,12 +205,17 @@
       "name": "Wizard Face",
       "slot": "helmet",
       "riftTimeSeconds": 130,
-      "acquisitionStatus": "UNVERIFIED",
+      "acquisitionStatus": "QUEST_REWARD_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
       "itemId": "WIZARD_FACE",
-      "itemIdSource": "NEU"
+      "itemIdSource": "NEU",
+      "acquisition": {
+        "method": "Speak to Wizardman in Wizardman Bureau while wearing W Logo, Wizardman Leggings, and Ugly Boots",
+        "costStatus": "REWARD_NO_PURCHASE",
+        "source": "https://hypixelskyblock.minecraft.wiki/w/Location"
+      }
     },
     {
       "name": "etalptsehC norI",
@@ -464,16 +479,26 @@
       "name": "Exceedingly Comfy Sneakers",
       "slot": "boots",
       "riftTimeSeconds": 45,
-      "acquisitionStatus": "METHOD_VERIFIED_COST_UNKNOWN",
+      "acquisitionStatus": "EXCHANGE_COST_VERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
       "soulbound": "UNKNOWN",
       "itemId": "EXCEEDINGLY_COMFY_SNEAKERS",
       "itemIdSource": "NEU",
       "acquisition": {
-        "method": "Sold by Seymour at Taylor's in Village Plaza; exact cost not verified",
-        "source": "https://hypixelskyblock.minecraft.wiki/w/Location",
-        "costStatus": "UNKNOWN"
+        "method": "Seymour at Taylor's in Village Plaza",
+        "costStatus": "EXACT",
+        "materials": [
+          {
+            "currency": "GUNTHER_SNEAKERS",
+            "quantity": 1
+          },
+          {
+            "currency": "MOTES",
+            "quantity": 49999
+          }
+        ],
+        "source": "https://wiki.hypixel.net/Motes"
       }
     },
     {
