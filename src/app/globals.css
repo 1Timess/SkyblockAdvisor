@@ -432,3 +432,19 @@ button { cursor: pointer; }
 .rift-toggle{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;margin:12px 0;border:1px solid rgba(255,255,255,.19);border-radius:9px;background:rgba(255,255,255,.07);color:#ecf2fa;font-size:12px;font-weight:650;cursor:pointer}
 .rift-toggle:hover{background:rgba(255,255,255,.12)}
 .rift-toggle:focus-visible{outline:2px solid #9dcaff;outline-offset:2px}
+
+/* Misc profile highlight reel */
+.misc-page .misc-tile{display:flex;flex-direction:column;gap:10px;min-width:0}
+.misc-page .misc-tile>strong{font-size:clamp(20px,2vw,30px);color:#f5f8ff;overflow-wrap:anywhere;line-height:1.18}
+.misc-page .misc-tile>p{margin:0}
+.misc-page .profile-section-heading{margin-top:28px}
+.misc-ranked-list{padding:0;margin:14px 0 0;list-style:none}
+.misc-ranked-list li{display:flex;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,.07);padding:12px 2px;color:#e9edf6;font-size:13px}
+.misc-ranked-list li>span:nth-child(2){flex:1;min-width:0;overflow-wrap:anywhere}
+.misc-ranked-list li>strong{font-variant-numeric:tabular-nums;white-space:nowrap}
+.misc-rank{width:23px;text-align:center;flex-shrink:0;color:#98a8c2}
+.misc-item-list{display:grid;gap:0;margin-top:12px}
+.misc-item-list>div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);font-size:12px}
+.misc-item-list>div strong{overflow-wrap:anywhere}
+.misc-item-list>div span{white-space:nowrap}
+@media(max-width:600px){.misc-item-list>div{flex-direction:column;gap:3px}.misc-item-list>div span{white-space:normal}}
