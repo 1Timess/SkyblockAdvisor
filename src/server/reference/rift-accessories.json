@@ -1,0 +1,231 @@
+{
+  "checked": "2026-10-27",
+  "source": "https://hypixelskyblock.minecraft.wiki/w/Rift_Time",
+  "notes": [
+    "This is a display-name reference, not a verified internal item-ID mapping.",
+    "Rift accessories must be present in the Rift inventory; do not treat all normal SkyBlock accessory bag contents as active.",
+    "Crux-family scaling depends on milestones and cannot be deduced from an item name alone.",
+    "Percentage modifiers cannot be added directly to the fixed-second subtotal."
+  ],
+  "fixedSeconds": [
+    {
+      "name": "Bluetooth Ring",
+      "seconds": 30,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Blood Donor Talisman",
+      "seconds": 5,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Blood Donor Ring",
+      "seconds": 10,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Blood Donor Artifact",
+      "seconds": 15,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Defective Monitor",
+      "seconds": 60,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Future Calories Talisman",
+      "seconds": 21,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Harmonious Surgery Toolkit",
+      "seconds": 10,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Hocus-Pocus Cipher",
+      "seconds": 65,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Punchcard Artifact",
+      "seconds": 30,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Ring of Broken Love",
+      "seconds": 80,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Ring of Eternal Love",
+      "seconds": 80,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Scarf's Studies",
+      "seconds": 10,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Scarf's Thesis",
+      "seconds": 11,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Scarf's Grimoire",
+      "seconds": 12,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Vampire Dentist Relic",
+      "seconds": 30,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Warding Trinket",
+      "seconds": 40,
+      "internalItemId": null,
+      "acquisitionStatus": "UNVERIFIED",
+      "riftTransferable": null,
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    }
+  ],
+  "scalingSeconds": [
+    {
+      "name": "Crux Talisman",
+      "baseSeconds": 10,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    },
+    {
+      "name": "Crux Ring",
+      "baseSeconds": 20,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    },
+    {
+      "name": "Crux Artifact",
+      "baseSeconds": 35,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    },
+    {
+      "name": "Crux Relic",
+      "baseSeconds": 55,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    },
+    {
+      "name": "Crux Heirloom",
+      "baseSeconds": 70,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    },
+    {
+      "name": "Crux Chronomicon",
+      "baseSeconds": 100,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    },
+    {
+      "name": "Celestial Starstone",
+      "baseSeconds": 130,
+      "milestoneBonusMaxSeconds": 140,
+      "internalItemId": null,
+      "activationStatus": "UNVERIFIED"
+    }
+  ],
+  "percentage": [
+    {
+      "name": "IQ Point",
+      "percent": 1
+    },
+    {
+      "name": "2 IQ Points",
+      "percent": 2
+    }
+  ],
+  "special": [
+    {
+      "name": "Punchcard Artifact",
+      "effect": "Has additional interaction-dependent Rift Time; 30 seconds is the static item bonus only"
+    },
+    {
+      "name": "Scarf's Studies",
+      "internalItemId": "SCARF_STUDIES",
+      "riftTransferable": true,
+      "playerTradeable": true,
+      "auctionable": true,
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Scarf%27s_Studies"
+    }
+  ]
+}
