@@ -305,6 +305,7 @@ export const normalizedProfileSchema = z.object({
       armor: z.object({ equippedSet: z.number().nullable(), sets: z.record(z.string(), z.record(z.string(), profileItemSchema)) }),
       equipment: z.object({ equippedSet: z.number().nullable(), sets: z.record(z.string(), z.record(z.string(), profileItemSchema)) }) }) }),
   inventoryItems: z.array(profileItemSchema),
+  miscValuation: z.object({ items:z.array(z.object({id:z.string(),name:z.string(),source:z.string(),quantity:z.number(),baseUnitPrice:z.number(),baseStackValue:z.number(),basis:z.string(),confidence:z.string(),observedAt:z.string(),modified:z.boolean()})),pricedCount:z.number(),unpricedCount:z.number(),snapshotAt:z.string().nullable(),limitation:z.string()}),
   accessories: accessorySchema,
   pets: z.object({ owned: z.array(petSchema), activePet: petSchema.nullable() }),
   progression: z.object({ skills: z.record(z.string(), levelSchema), slayers: z.record(z.string(), slayerSchema), dungeons: dungeonSchema,
