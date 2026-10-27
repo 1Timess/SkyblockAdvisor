@@ -1,0 +1,202 @@
+{
+  "checked": "2026-10-27",
+  "sources": [
+    "https://hypixelskyblock.minecraft.wiki/w/Rift_Time",
+    "https://hypixelskyblock.minecraft.wiki/w/Rift_Dimension",
+    "https://hypixelskyblock.minecraft.wiki/w/Golden_Belt"
+  ],
+  "notes": [
+    "Catalogue names are not internal item IDs and must not be used as inventory lookup keys.",
+    "Transferability is not the same as player trading or soulbinding.",
+    "Unverified recipe costs are intentionally absent; no coin equivalents are fabricated."
+  ],
+  "armor": [
+    {
+      "name": "Wyld Armor",
+      "slot": "set",
+      "riftTimeSecondsPerPiece": 15,
+      "pieces": 4,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Not-Dead-Gehog Mask",
+      "slot": "helmet",
+      "riftTimeSeconds": 30,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Agaricus Cap Cap",
+      "slot": "helmet",
+      "riftTimeSeconds": 50,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Used Detransfigured Face",
+      "slot": "helmet",
+      "riftTimeSeconds": 80,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Anti-Bite Scarf",
+      "slot": "helmet",
+      "riftTimeSeconds": 100,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Wizard Face",
+      "slot": "helmet",
+      "riftTimeSeconds": 130,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "etalptsehC norI",
+      "slot": "chestplate",
+      "riftTimeSeconds": 30,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Orange Chestplate",
+      "slot": "chestplate",
+      "riftTimeSeconds": 45,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Lively Sepulture Chestplate",
+      "slot": "chestplate",
+      "riftTimeSeconds": 65,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "W Logo",
+      "slot": "chestplate",
+      "riftTimeSeconds": 85,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Chicken Leggs",
+      "slot": "leggings",
+      "riftTimeSeconds": 35,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Femurgrowth Leggings",
+      "slot": "leggings",
+      "riftTimeSeconds": 65,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Leggings of the Coven",
+      "slot": "leggings",
+      "riftTimeSeconds": 80,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Wizardman Leggings",
+      "slot": "leggings",
+      "riftTimeSeconds": 100,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Gunther's Sneakers",
+      "slot": "boots",
+      "riftTimeSeconds": 30,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Exceedingly Comfy Sneakers",
+      "slot": "boots",
+      "riftTimeSeconds": 45,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Snake-in-a-Boot",
+      "slot": "boots",
+      "riftTimeSeconds": 60,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Ugly Boots",
+      "slot": "boots",
+      "riftTimeSeconds": 80,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    }
+  ],
+  "rewardEquipment": [
+    {
+      "name": "Golden Belt",
+      "itemId": "GOLDEN_BELT",
+      "slot": "belt",
+      "acquisition": "Claim from Shen Magnum Opus for completing the Fifth Sequence in Cerebral Citadel",
+      "costStatus": "REWARD_NO_PURCHASE",
+      "riftTimeSeconds": 100,
+      "riftTimeMultiplierPercent": 5,
+      "riftTimeDrainIncreasePercent": 3,
+      "riftTransferable": false,
+      "playerTradeable": false,
+      "auctionable": false,
+      "soulbound": "UNKNOWN",
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Golden_Belt"
+    }
+  ],
+  "riftTransferExceptions": [
+    {
+      "name": "Scarf's Studies",
+      "riftTransferable": true,
+      "source": "https://hypixelskyblock.minecraft.wiki/w/Scarf%27s_Studies"
+    }
+  ]
+}
