@@ -2,10 +2,10 @@
   "checked": "2026-10-27",
   "source": "https://hypixelskyblock.minecraft.wiki/w/Rift_Time",
   "notes": [
-    "This is a display-name reference, not a verified internal item-ID mapping.",
     "Rift accessories must be present in the Rift inventory; do not treat all normal SkyBlock accessory bag contents as active.",
     "Crux-family scaling depends on milestones and cannot be deduced from an item name alone.",
-    "Percentage modifiers cannot be added directly to the fixed-second subtotal."
+    "Percentage modifiers cannot be added directly to the fixed-second subtotal.",
+    "Only entries with internalItemId verified in NEU can be used for item-ID joins."
   ],
   "fixedSeconds": [
     {
@@ -31,38 +31,42 @@
     {
       "name": "Blood Donor Talisman",
       "seconds": 5,
-      "internalItemId": null,
+      "internalItemId": "BLOOD_DONOR_TALISMAN",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Blood Donor Ring",
       "seconds": 10,
-      "internalItemId": null,
+      "internalItemId": "BLOOD_DONOR_RING",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Blood Donor Artifact",
       "seconds": 15,
-      "internalItemId": null,
+      "internalItemId": "BLOOD_DONOR_ARTIFACT",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Defective Monitor",
       "seconds": 60,
-      "internalItemId": null,
+      "internalItemId": "DEFECTIVE_MONITOR",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Future Calories Talisman",
@@ -76,29 +80,32 @@
     {
       "name": "Harmonious Surgery Toolkit",
       "seconds": 10,
-      "internalItemId": null,
+      "internalItemId": "HARMONIOUS_SURGERY_TOOLKIT",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Hocus-Pocus Cipher",
       "seconds": 65,
-      "internalItemId": null,
+      "internalItemId": "HOCUS_POCUS_CIPHER",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Punchcard Artifact",
       "seconds": 30,
-      "internalItemId": null,
+      "internalItemId": "PUNCHCARD_ARTIFACT",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Ring of Broken Love",
@@ -113,56 +120,96 @@
     {
       "name": "Ring of Eternal Love",
       "seconds": 80,
-      "internalItemId": null,
+      "internalItemId": "RING_OF_ETERNAL_LOVE",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Scarf's Studies",
       "seconds": 10,
-      "internalItemId": null,
+      "internalItemId": "SCARF_STUDIES",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     },
     {
       "name": "Scarf's Thesis",
       "seconds": 11,
-      "internalItemId": null,
+      "internalItemId": "SCARF_THESIS",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "SCARF_STUDIES",
+            "quantity": 4
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Scarf's Grimoire",
       "seconds": 12,
-      "internalItemId": null,
+      "internalItemId": "SCARF_GRIMOIRE",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "SCARF_THESIS",
+            "quantity": 4
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Vampire Dentist Relic",
       "seconds": 30,
-      "internalItemId": null,
+      "internalItemId": "VAMPIRE_DENTIST_RELIC",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU",
+      "recipe": {
+        "type": "crafting",
+        "ingredients": [
+          {
+            "itemId": "BLOODBADGE",
+            "quantity": 8
+          },
+          {
+            "itemId": "UNFANGED_VAMPIRE_PART",
+            "quantity": 1
+          }
+        ],
+        "source": "NEU"
+      }
     },
     {
       "name": "Warding Trinket",
       "seconds": 40,
-      "internalItemId": null,
+      "internalItemId": "WARDING_TRINKET",
       "acquisitionStatus": "UNVERIFIED",
       "riftTransferable": null,
       "playerTradeable": null,
-      "soulbound": "UNKNOWN"
+      "soulbound": "UNKNOWN",
+      "internalItemIdSource": "NEU"
     }
   ],
   "scalingSeconds": [
