@@ -12,9 +12,9 @@ test("Rift armor catalogue contains the verified named time-progression slots",(
  for(const piece of armor){
   assert.ok("riftTimeSeconds" in piece && typeof piece.riftTimeSeconds==="number" && piece.riftTimeSeconds>0);
   assert.ok("itemId" in piece && typeof piece.itemId==="string");
-  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED","METHOD_VERIFIED_COST_UNKNOWN"].includes(piece.acquisitionStatus));
-  assert.equal(piece.transferability,"UNKNOWN");
-  assert.equal(piece.playerTradeable,null);
+  assert.ok(["UNVERIFIED","CRAFTING_RECIPE_VERIFIED","METHOD_VERIFIED_COST_UNKNOWN","SHOP_COST_VERIFIED","EXCHANGE_COST_VERIFIED"].includes(piece.acquisitionStatus));
+  assert.ok(["UNKNOWN","NON_TRANSFERABLE"].includes(piece.transferability));
+  assert.ok(piece.playerTradeable===null || piece.playerTradeable===false);
  }
 });
 test("Rift trade and Rift Transfer are explicitly separate concepts",()=>{
@@ -48,4 +48,13 @@ test("NEU crafting grid totals are preserved without converting materials to coi
   assert.ok(entry && "recipe" in entry);
   assert.deepEqual(entry.recipe.ingredients,ingredients);
  }
+});
+
+test("Wyld Armor Mote prices sum to 4050 and exchange uses no invented coins",()=>{
+ const wyld=catalogue.armor.filter(x=>x.itemId.startsWith("WYLD_"));
+ assert.equal(wyld.length,4);
+ assert.equal(wyld.reduce((sum,e)=>sum+("acquisition" in e&&"materials" in e.acquisition?e.acquisition.materials[0].quantity:0),0),4050);
+ const chest=catalogue.armor.find(x=>x.itemId==="ETALPTSEHC_NORI");
+ assert.ok(chest && "acquisition" in chest && "materials" in chest.acquisition);
+ assert.deepEqual(chest.acquisition.materials,[{currency:"WYLD_CHESTPLATE",quantity:1},{currency:"SHADOW_CRUX",quantity:12}]);
 });
