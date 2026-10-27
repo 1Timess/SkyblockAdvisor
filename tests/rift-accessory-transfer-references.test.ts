@@ -14,5 +14,13 @@ test("Rift accessory reference separates fixed, scaling and percentage effects",
  assert.equal(accessories.fixedSeconds.find(x=>x.name==="Bluetooth Ring")?.seconds,30);
  assert.equal(accessories.scalingSeconds.find(x=>x.name==="Crux Talisman")?.baseSeconds,10);
  assert.equal(accessories.percentage.find(x=>x.name==="IQ Point")?.percent,1);
- assert.ok(accessories.fixedSeconds.every(x=>x.internalItemId===null));
+ assert.ok(accessories.fixedSeconds.every(x=>x.internalItemId===null || typeof x.internalItemId==="string"));
+});
+
+test("NEU accessory IDs and exact Bluetooth Ring craft are recognized",()=>{
+ const bluetooth=accessories.fixedSeconds.find(x=>x.name==="Bluetooth Ring");
+ assert.equal(bluetooth?.internalItemId,"BLUETOOTH_RING");
+ assert.ok(bluetooth && "recipe" in bluetooth);
+ assert.deepEqual(bluetooth.recipe.ingredients,[{itemId:"METAL_HEART",quantity:32}]);
+ assert.equal(accessories.fixedSeconds.find(x=>x.name==="Ring of Broken Love")?.internalItemId,"RING_OF_BROKEN_LOVE");
 });
