@@ -27,8 +27,7 @@ export function MiscPanel({profile}:{profile:Profile}){
  const totalKills=kills.length?fmt(sum(kills)):"—";
  const totalDeaths=deaths.length?fmt(sum(deaths)):"—";
  const firstSeen=profile.profileCreatedAt===null?"Unavailable":new Date(profile.profileCreatedAt).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
- const owned=profile.inventoryItems.filter(item=>item.id&&item.count>0);
- const rare=owned.filter(item=>item.rarity==="divine"||item.rarity==="supreme"||item.rarity==="mythic"||item.rarity==="legendary").slice(0,10);
+ const valuation=profile.miscValuation;
  const topKill=kills[0],topDeath=deaths[0];
  return <section className="crimson-page misc-page" aria-label="Miscellaneous profile highlights">
  <header className="crimson-hero"><div><p className="section-kicker">Your SkyBlock story</p><h2>Miscellaneous</h2><p>Personal records, surprising statistics, and memorable details from your profile.</p></div></header>
@@ -50,9 +49,11 @@ export function MiscPanel({profile}:{profile:Profile}){
  <Ranked title="Most defeated mobs" entries={kills} empty="No mob kill breakdown available."/>
  <Ranked title="What killed you most" entries={deaths} empty="No death breakdown available."/>
  <Ranked title="Fishing discoveries" entries={fished} empty="No item fishing counts available."/>
- <section className="crimson-card"><h3>Noteworthy owned items</h3><p className="crimson-muted">A selection of higher-rarity items in the inventory sources we could read. These are not ranked by coin value.</p>
- {rare.length?<div className="misc-item-list">{rare.map((item,i)=><div key={item.uuid??`${item.source}:${item.id}:${i}`}><strong>{item.name}</strong><span className="crimson-muted">{display(item.rarity??"unknown")}{item.count>1?` · ×${item.count}`:""}</span></div>)}</div>:<p className="crimson-muted">No higher-rarity items detected in the available inventory sources.</p>}
- <p className="crimson-muted">Most expensive owned item is not shown until item prices, upgrades, and inventory coverage can be valued reliably.</p></section>
+ <section className="crimson-card"><h3>Highest estimated base-value items</h3>
+ <p className="crimson-muted">Ranked by available market prices for each item's base ID, including items in the Ender Chest, backpacks, accessory bag, wardrobe and vault.</p>
+ {valuation.items.length?<div className="misc-item-list">{valuation.items.slice(0,10).map((item,i)=><div key={item.source+":"+item.id+":"+i}><strong>{i+1}. {item.name}</strong><span className="crimson-muted">{fmt(item.baseStackValue)} coins{item.quantity>1?` · ×${item.quantity}`:""}{item.modified?" · Upgrades not priced":""}</span></div>)}</div>:<p className="crimson-muted">No usable market quotes for the currently available inventory items.</p>}
+ <p className="crimson-muted">Price coverage: {valuation.pricedCount} valued · {valuation.unpricedCount} without a price. {valuation.snapshotAt?"Snapshot: "+new Date(valuation.snapshotAt).toLocaleDateString("en-US"):"No market snapshot available."}</p>
+ <p className="crimson-muted">{valuation.limitation}</p></section>
  </div>
  </section>;
 }
