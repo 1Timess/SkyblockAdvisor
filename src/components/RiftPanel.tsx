@@ -19,20 +19,24 @@ const status=(value:string)=>value==="SECURED"||value==="MET"?"crimson-status cr
 function Heading({eyebrow,title,note}:{eyebrow:string;title:string;note:string}){
  return <div className="profile-section-heading"><div><p className="section-kicker">{eyebrow}</p><h2>{title}</h2><p className="crimson-muted">{note}</p></div></div>;
 }
+const area=(id:string)=>({"wyld_woods":"Wyld Woods","black_lagoon":"Black Lagoon","west_village":"West Village","dreadfarm":"Dreadfarm","village_plaza":"Village Plaza","living_cave":"Living Cave","colosseum":"Colosseum","stillgore_chateau":"Stillgore Château","mountaintop":"Mountaintop"} as Record<string,string>)[id]??readable(id);
+const material=(id:string)=>id==="MOTES"?"Motes":readable(id);
 function Charms({progress}:{progress:Rift}){
- return <div className="crimson-section"><Heading eyebrow="Gallery" title="Timecharms" note="Secured means the Gallery API records the trophy, not merely that an item was seen."/>
- <div className="crimson-two-grid">{progress.unlocks.timecharms.map(charm=><article className="crimson-card" key={charm.id}>
- <div className="crimson-card-top"><h3>{charm.name}</h3><span className={status(charm.status)}>{charm.status==="MISSING"?"Not secured":readable(charm.status)}</span></div>
- <p className="crimson-muted">{charm.region}</p><p>{charm.how}</p>
- </article>)}</div>
- {progress.unlocks.unknownGalleryTypes.length>0?<p className="crimson-notice">Unrecognized Gallery trophy identifiers: {progress.unlocks.unknownGalleryTypes.join(", ")}</p>:null}</div>;
+ const secured=progress.unlocks.timecharms.filter(c=>c.status==="SECURED");
+ const remaining=progress.unlocks.timecharms.filter(c=>c.status!=="SECURED");
+ return <div className="crimson-section"><Heading eyebrow="Gallery" title="Timecharms" note="Track the Timecharms you've secured and find the ones still missing."/>
+ {([{title:"Still to collect",items:remaining},{title:"Secured",items:secured}]).map(group=><div key={group.title} className="rift-group"><h3 className="rift-group-title">{group.title} <span>{group.items.length}</span></h3><div className="crimson-two-grid">{group.items.map(charm=><article className="crimson-card" key={charm.id}><div className="crimson-card-top"><h3>{charm.name}</h3><span className={status(charm.status)}>{charm.status==="SECURED"?"Secured":charm.status==="MISSING"?"Not secured":"Unknown"}</span></div><p className="crimson-muted">{area(charm.region)}</p><p>{charm.how}</p></article>)}</div></div>)}
+ </div>;
 }
 function Souls({progress}:{progress:Rift}){
- const e=progress.unlocks.enigma;
- return <div className="crimson-section"><Heading eyebrow="Exploration" title="Enigma Souls" note="Total counts come from the API. Individual wiki locations cannot yet be mapped to collected API identifiers."/>
- <div className="crimson-metric-row"><article><span>Collected</span><strong>{n(e.foundCount)}</strong></article><article><span>Remaining in reference</span><strong>{n(e.remainingCount)}</strong></article><article><span>Reference locations</span><strong>{e.catalogue.length}</strong></article></div>
- <p className="crimson-notice">Individual soul completion is not verified; location rows below are reference-only.</p>
- <div className="crimson-two-grid">{e.catalogue.map(soul=><article key={soul.key} className="crimson-card"><div className="crimson-card-top"><h3>{soul.name}</h3><span className={status("UNKNOWN")}>Unknown</span></div><p className="crimson-muted">{soul.region}</p></article>)}</div></div>;
+ const e=progress.unlocks.enigma;const [show,setShow]=useState(false);
+ const areas=[...new Set(e.catalogue.map(s=>s.region))];
+ return <div className="crimson-section"><Heading eyebrow="Exploration" title="Enigma Souls" note="Your collected total is tracked, but individual collected locations cannot be identified yet."/>
+ <div className="crimson-metric-row"><article><span>Collected</span><strong>{n(e.foundCount)}</strong></article><article><span>Remaining</span><strong>{n(e.remainingCount)}</strong></article><article><span>Known locations</span><strong>{e.catalogue.length}</strong></article></div>
+ <p className="crimson-muted">The location guide is for finding souls, not a checklist of which ones you already collected.</p>
+ <button type="button" className="rift-toggle" aria-expanded={show} onClick={()=>setShow(!show)}>{show?"Hide location guide":"Browse soul locations"}</button>
+ {show?areas.map(region=><div key={region} className="rift-group"><h3 className="rift-group-title">{area(region)}</h3><div className="crimson-two-grid">{e.catalogue.filter(s=>s.region===region).map(soul=><article key={soul.key} className="crimson-card"><h3>{soul.name}</h3></article>)}</div></div>):null}
+ </div>;
 }
 function Regions({progress}:{progress:Rift}){
  return <div className="crimson-section"><Heading eyebrow="Exploration gates" title="Rift Regions" note="A satisfied Timecharm gate does not prove access. Other entrance conditions and current Rift Time may be unknown."/>
