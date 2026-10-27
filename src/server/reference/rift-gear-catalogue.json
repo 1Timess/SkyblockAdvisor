@@ -7,16 +7,50 @@
     "https://github.com/NotEnoughUpdates/NotEnoughUpdates-REPO/tree/master/items"
   ],
   "notes": [
-    "Catalogue names are not internal item IDs and must not be used as inventory lookup keys.",
     "Transferability is not the same as player trading or soulbinding.",
-    "Unverified recipe costs are intentionally absent; no coin equivalents are fabricated."
+    "Unverified recipe costs are intentionally absent; no coin equivalents are fabricated.",
+    "Individual armor ID fields are verified against NEU; incomplete acquisition fields remain explicit."
   ],
   "armor": [
     {
-      "name": "Wyld Armor",
-      "slot": "set",
-      "riftTimeSecondsPerPiece": 15,
-      "pieces": 4,
+      "name": "Wyld Boots",
+      "slot": "boots",
+      "itemId": "WYLD_BOOTS",
+      "itemIdSource": "NEU",
+      "riftTimeSeconds": 15,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Wyld Leggings",
+      "slot": "leggings",
+      "itemId": "WYLD_LEGGINGS",
+      "itemIdSource": "NEU",
+      "riftTimeSeconds": 15,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Wyld Chain Top",
+      "slot": "chestplate",
+      "itemId": "WYLD_CHESTPLATE",
+      "itemIdSource": "NEU",
+      "riftTimeSeconds": 15,
+      "acquisitionStatus": "UNVERIFIED",
+      "transferability": "UNKNOWN",
+      "playerTradeable": null,
+      "soulbound": "UNKNOWN"
+    },
+    {
+      "name": "Wyld Helmet on a Helmet",
+      "slot": "helmet",
+      "itemId": "WYLD_HELMET",
+      "itemIdSource": "NEU",
+      "riftTimeSeconds": 15,
       "acquisitionStatus": "UNVERIFIED",
       "transferability": "UNKNOWN",
       "playerTradeable": null,
