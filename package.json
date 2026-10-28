@@ -55,7 +55,11 @@
   },
   "dependencies": {
     "adm-zip": "^0.6.1",
+    "better-auth": "^1.7.14",
+    "dotenv": "^18.0.9",
+    "drizzle-orm": "^0.45.4",
     "next": "16.3.5",
+    "pg": "^8.23.1",
     "prismarine-nbt": "~2.8.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -65,8 +69,10 @@
   "devDependencies": {
     "@types/adm-zip": "^0.5.8",
     "@types/node": "latest",
+    "@types/pg": "^8.23.1",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "drizzle-kit": "^0.31.11",
     "eslint": "latest",
     "eslint-config-next": "16.3.5",
     "tsx": "latest",
