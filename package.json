@@ -54,6 +54,7 @@
     "inspect:rift-neu": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/inspect-rift-neu.ts"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.7.14",
     "adm-zip": "^0.6.1",
     "better-auth": "^1.7.14",
     "dotenv": "^18.0.9",
