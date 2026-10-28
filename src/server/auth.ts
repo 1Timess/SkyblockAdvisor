@@ -18,6 +18,8 @@ export const auth = betterAuth({
   database: drizzleAdapter(getDatabase(), { provider: "pg", schema }),
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
+    autoSignIn: false,
     // Registration is closed until verified email delivery and abuse controls exist.
     disableSignUp: true,
   },
