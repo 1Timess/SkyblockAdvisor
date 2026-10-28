@@ -4,12 +4,24 @@ Statixel uses Resend's HTTPS API for email verification and password recovery. B
 
 ## Development setup
 
-Create a Resend account and an API key with only the sending permission. Put `RESEND_API_KEY` and `RESEND_FROM_EMAIL` in your untracked `.env.local`. Never commit or paste the key. For testing, use a sender address Resend permits for your account, such as its documented test sender `onboarding@resend.dev`. Test sender restrictions apply: it is not a public-registration solution.
+Create a Resend API key with sending permissions and place `RESEND_API_KEY` and `RESEND_FROM_EMAIL` in the untracked `.env.local`. Do not commit or paste the key.
 
-The email module requires both values explicitly and reports delivery failures without logging authentication links or provider response bodies. It contains no user-facing email test endpoint.
+Without a verified sending domain, Resend's documented test sender `onboarding@resend.dev` is restricted to approved testing recipients. It is not suitable for public account registration.
+
+## One-message delivery smoke test
+
+Set `RESEND_TEST_TO` in your untracked `.env.local` to an inbox that Resend permits you to send to. Then run:
+
+```powershell
+node --conditions=react-server --env-file=.env.local --import tsx scripts/validate-account-email.ts
+```
+
+This makes **one actual email API request**. It includes no links, passwords, tokens or secrets in the message. A successful API response proves the provider accepted the request, **not** that the message arrived in the inbox. Verify receipt independently. The script sends only to the explicitly configured test recipient and does not create any account or modify PostgreSQL.
+
+Never publish the API key or add the smoke test to normal CI; it depends on external delivery and consumes an email allowance.
 
 ## Production gate
 
-Before turning off `emailAndPassword.disableSignUp`, verify a sending domain with Resend, validate actual email delivery and reset flows, configure bot challenges and registration throttling, test resend and account-enumeration behavior, and confirm the global Vera usage controls.
+Before turning off `emailAndPassword.disableSignUp`, verify a sending domain with Resend; validate end-to-end verification and reset token flows; configure signup throttling and bot protection; and complete authorization and abuse testing.
 
-Do not confuse callback configuration with successful end-to-end delivery. Keep registration disabled until these checks pass.
+Do not confuse email transport success with a validated registration system.
