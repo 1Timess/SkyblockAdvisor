@@ -19,6 +19,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(getDatabase(), { provider: "pg", schema }),
   emailVerification: {
     sendOnSignUp: true,
+    sendOnSignIn: true,
     autoSignInAfterVerification: false,
     sendVerificationEmail: async ({ user, url }) => {
       await sendAccountEmail({
