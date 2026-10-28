@@ -3,6 +3,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
 import { getDatabase } from "@/server/db";
 import * as schema from "@/server/db/schema";
+import { sendAccountEmail } from "@/server/email/send-account-email";
 
 function authSecret() {
   const value = process.env.BETTER_AUTH_SECRET?.trim();
@@ -16,10 +17,29 @@ export const auth = betterAuth({
   appName: "Statixel",
   secret: authSecret(),
   database: drizzleAdapter(getDatabase(), { provider: "pg", schema }),
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: false,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendAccountEmail({
+        to: user.email,
+        subject: "Verify your Statixel email",
+        text: `Verify your email address using this link: ${url}`,
+      });
+    },
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
     autoSignIn: false,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendAccountEmail({
+        to: user.email,
+        subject: "Reset your Statixel password",
+        text: `Reset your password using this link: ${url}`,
+      });
+    },
     // Registration is closed until verified email delivery and abuse controls exist.
     disableSignUp: true,
   },
