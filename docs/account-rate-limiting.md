@@ -1,31 +1,29 @@
-# Persistent authentication rate limits — staged migration
+# Persistent authentication rate limits
 
-## State
+The `rateLimit` PostgreSQL table is defined in Drizzle and its migration has been applied locally and committed. Better Auth now enables database storage in development and production, with a default limit of **60 requests per 60 seconds**.
 
-This pass defines the Better Auth `rateLimit` table in the existing PostgreSQL Drizzle schema. **It does not enable database-backed rate limiting yet.** Enabling storage before the table exists would break requests.
+Endpoint rules (all per Better Auth's request identity):
+- Signup: 5 requests per hour, but signup remains disabled.
+- Email/password sign-in: 10 per minute.
+- Password reset request: 5 per hour.
+- Verification email request: 5 per hour.
 
-Better Auth's documented model consists of an ID primary key, unique key, integer count, and millisecond-epoch lastRequest (bigint). The table name and columns are part of the library contract; they are not Statixel-specific analytics records.
+These values are starting thresholds, not validated production abuse protections. Requests that receive a 429 include the rate-limit retry header.
 
-## Local database migration
+## Local smoke test
 
-First pull the latest `main`. Then, while `.env.local` still points at the Statixel Docker database, generate a migration without applying it:
-
-```powershell
-npx drizzle-kit generate
-```
-
-Check the generated SQL carefully. It should only create the rate-limit table and its unique key constraint. Do not run `drizzle-kit push` or regenerate the existing initial migration.
-
-After reviewing the SQL, run `npx drizzle-kit migrate`, then inspect the new table:
+Pull the latest `main`, restart the Next.js development server and verify that `.env.local` has the official always-pass Cloudflare testing secret and `BETTER_AUTH_URL=http://localhost:3000`. Then run:
 
 ```powershell
-docker compose exec postgres psql -U statixel -d statixel -c '\d "rateLimit"'
+node --env-file=.env.local --import tsx scripts/validate-account-rate-limit.ts
 ```
 
-Commit the generated SQL **and** `drizzle/meta` snapshots. Ignore unrelated local validation files and `next-env.d.ts`.
+The test sends 12 invalid sign-in attempts to localhost and requires an HTTP 429. It uses no real account credentials and does not create users. Running it can temporarily throttle your own local login attempts.
 
-## Next code pass
+If no 429 occurs, report the results rather than increasing request counts. It does not verify expiration, concurrency, email/account-specific throttles, proxy header trust or shared-IP fairness.
 
-Once migration and validation succeed, configure Better Auth's `rateLimit` object with `storage: "database"`, `enabled: true`, and narrowly scoped custom endpoint rules. Test actual 429 behavior and expiration before declaring protection operational.
+## Production security considerations
 
-Network identity behind reverse proxies must be treated separately. Do not trust unverified forwarding headers. Shared-IP false positives and rotating-IP bypass are out of scope for the table-only migration.
+Better Auth's rate limiter uses network identity from request headers. Before deployment, configure a trusted reverse proxy and restrict direct access to the application; explicitly configure trusted proxy IP/header handling. A client-controlled `X-Forwarded-For` header must not be treated as authoritative.
+
+PostgreSQL-backed throttling is a baseline, not protection against VPN rotation, residential proxies, coordinated signup farms, or unrestricted Vera spending. Public registration remains disabled.
