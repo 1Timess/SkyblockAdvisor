@@ -47,3 +47,5 @@ main().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : "Rate limit test failed.");
   process.exitCode = 1;
 });
+
+export {};

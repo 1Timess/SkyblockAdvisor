@@ -58,3 +58,5 @@ main().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : "Turnstile probe failed.");
   process.exitCode = 1;
 });
+
+export {};
