@@ -1,6 +1,7 @@
 import "server-only";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth";
+import { captcha } from "better-auth/plugins";
 import { getDatabase } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { sendAccountEmail } from "@/server/email/send-account-email";
@@ -17,6 +18,14 @@ export const auth = betterAuth({
   appName: "Statixel",
   secret: authSecret(),
   database: drizzleAdapter(getDatabase(), { provider: "pg", schema }),
+  // Registration stays disabled. Turnstile is activated only when configured.
+  plugins: process.env.TURNSTILE_SECRET_KEY?.trim()
+    ? [captcha({
+        provider: "cloudflare-turnstile",
+        secretKey: process.env.TURNSTILE_SECRET_KEY.trim(),
+        endpoints: ["/sign-up/email", "/sign-in/email", "/request-password-reset"],
+      })]
+    : [],
   emailVerification: {
     sendOnSignUp: true,
     sendOnSignIn: true,
