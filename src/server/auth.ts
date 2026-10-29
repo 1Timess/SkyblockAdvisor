@@ -18,6 +18,19 @@ export const auth = betterAuth({
   appName: "Statixel",
   secret: authSecret(),
   database: drizzleAdapter(getDatabase(), { provider: "pg", schema }),
+  rateLimit: {
+    enabled: true,
+    storage: "database",
+    modelName: "rateLimit",
+    window: 60,
+    max: 60,
+    customRules: {
+      "/sign-up/email": { window: 3600, max: 5 },
+      "/sign-in/email": { window: 60, max: 10 },
+      "/request-password-reset": { window: 3600, max: 5 },
+      "/send-verification-email": { window: 3600, max: 5 },
+    },
+  },
   // Registration stays disabled. Turnstile is activated only when configured.
   plugins: process.env.TURNSTILE_SECRET_KEY?.trim()
     ? [captcha({
